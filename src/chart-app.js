@@ -18,13 +18,22 @@ function scaleValue(value, min, max, start, end) {
   return start + ((value - min) / (max - min)) * (end - start);
 }
 
-function getBubbleRadius(value, min, max) {
+function scaleSqrtValue(value, min, max, start, end) {
   if (max === min) {
-    return 28;
+    return (start + end) / 2;
   }
 
   const normalized = (value - min) / (max - min);
-  return 20 + normalized * 26;
+  return start + Math.sqrt(Math.max(0, normalized)) * (end - start);
+}
+
+function getBubbleRadius(value, min, max) {
+  if (max === min) {
+    return 22;
+  }
+
+  const normalized = (value - min) / (max - min);
+  return 16 + normalized * 20;
 }
 
 export function renderMarketScopeBubbleChart(container, rows) {
@@ -32,9 +41,9 @@ export function renderMarketScopeBubbleChart(container, rows) {
     return;
   }
 
-  const width = 520;
-  const height = 360;
-  const margin = { top: 24, right: 20, bottom: 52, left: 60 };
+  const width = 560;
+  const height = 376;
+  const margin = { top: 44, right: 28, bottom: 62, left: 78 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
 
@@ -56,10 +65,15 @@ export function renderMarketScopeBubbleChart(container, rows) {
     "aria-label": "竞品品牌半拉链布局深度、增长与规模气泡图"
   });
 
-  const gridTicks = 5;
-  for (let i = 0; i <= gridTicks; i += 1) {
-    const yValue = yMin + ((yMax - yMin) / gridTicks) * i;
-    const y = margin.top + plotHeight - (plotHeight / gridTicks) * i;
+  const yTickValues = [50, 150, 300, 500].filter((value) => value <= yMax);
+  yTickValues.forEach((yValue) => {
+    const y = scaleSqrtValue(
+      yValue,
+      yMin,
+      yMax,
+      margin.top + plotHeight,
+      margin.top
+    );
 
     svg.appendChild(
       createSvgElement("line", {
@@ -79,7 +93,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
     });
     tickLabel.textContent = formatPercentTick(yValue);
     svg.appendChild(tickLabel);
-  }
+  });
 
   const xTickCount = Math.max(4, Math.ceil(xMax / 20));
   for (let i = 0; i <= xTickCount; i += 1) {
@@ -128,7 +142,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
 
   const xAxisTitle = createSvgElement("text", {
     x: margin.left + plotWidth / 2,
-    y: height - 12,
+    y: height - 10,
     class: "bubble-axis-title",
     "text-anchor": "middle"
   });
@@ -136,14 +150,34 @@ export function renderMarketScopeBubbleChart(container, rows) {
   svg.appendChild(xAxisTitle);
 
   const yAxisTitle = createSvgElement("text", {
-    x: 18,
+    x: 28,
     y: margin.top + plotHeight / 2,
     class: "bubble-axis-title",
-    transform: `rotate(-90 18 ${margin.top + plotHeight / 2})`,
+    transform: `rotate(-90 28 ${margin.top + plotHeight / 2})`,
     "text-anchor": "middle"
   });
-  yAxisTitle.textContent = "半拉链 GMV YoY%";
+  yAxisTitle.textContent = "YOY%";
   svg.appendChild(yAxisTitle);
+
+  const legendGroup = createSvgElement("g", {
+    transform: `translate(${width - 146}, 12)`
+  });
+  legendGroup.appendChild(
+    createSvgElement("circle", {
+      cx: 9,
+      cy: 10,
+      r: 7,
+      class: "bubble-legend-circle"
+    })
+  );
+  const legendText = createSvgElement("text", {
+    x: 24,
+    y: 14,
+    class: "bubble-legend-text"
+  });
+  legendText.textContent = "气泡大小表示半拉链GMV";
+  legendGroup.appendChild(legendText);
+  svg.appendChild(legendGroup);
 
   rows.forEach((row) => {
     const cx = scaleValue(
@@ -153,7 +187,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
       margin.left,
       margin.left + plotWidth
     );
-    const cy = scaleValue(
+    const stretchedCy = scaleSqrtValue(
       row.halfZipYoy,
       yMin,
       yMax,
@@ -164,7 +198,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
 
     const bubble = createSvgElement("circle", {
       cx,
-      cy,
+      cy: stretchedCy,
       r,
       class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`
     });
@@ -172,24 +206,28 @@ export function renderMarketScopeBubbleChart(container, rows) {
 
     const brandLabel = createSvgElement("text", {
       x: cx,
-      y: cy - r - 6,
+      y: stretchedCy - r - 6,
       class: "bubble-label",
       "text-anchor": "middle"
     });
     brandLabel.textContent = row.brand.split("/")[0];
     svg.appendChild(brandLabel);
+
+    if (row.brand.includes("SALOMON")) {
+      const annotation = createSvgElement("text", {
+        x: cx + r + 12,
+        y: stretchedCy - r + 14,
+        class: "bubble-annotation"
+      });
+      annotation.textContent = "SALOMON 为低基数高增长的离群点";
+      svg.appendChild(annotation);
+    }
   });
 
   container.innerHTML = "";
   const wrap = document.createElement("div");
   wrap.className = "bubble-chart-wrap";
   wrap.appendChild(svg);
-
-  const note = document.createElement("p");
-  note.className = "bubble-note";
-  note.textContent =
-    "x 轴看品牌对半拉链的布局深度，y 轴看半拉链 GMV 增长，气泡大小代表 25AW 半拉链 GMV。SALOMON 为低基数高增长的离群点。";
-  wrap.appendChild(note);
 
   container.appendChild(wrap);
 }

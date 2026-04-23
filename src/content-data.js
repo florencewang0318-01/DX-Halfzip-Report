@@ -95,6 +95,18 @@ function formatPercent(value) {
   return `${value > 0 ? "+" : ""}${rounded}%`;
 }
 
+function formatYoyLabel(value) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "n/a";
+  }
+
+  const rounded = Math.round(value);
+  if (rounded === 0) {
+    return "0%";
+  }
+  return `${rounded > 0 ? "+" : ""}${rounded.toLocaleString("en-US")}%`;
+}
+
 function getMarketScopeDisplayBrandName(brand) {
   if (brand === "lululemon/露露乐蒙") {
     return "LULULEMON/露露乐蒙";
@@ -208,24 +220,30 @@ export const FEMALE_OPPORTUNITY_BRAND_GENDER = Array.from(
         gender,
         gmv25: current.gmv,
         count25: current.count,
+        gmv24: previous.gmv,
+        count24: previous.count,
         yoy: computeYoy(current.gmv, previous.gmv)
       };
     });
 
     const totalGmv25 = cells.reduce((sum, item) => sum + item.gmv25, 0);
+    const totalGmv24 = cells.reduce((sum, item) => sum + item.gmv24, 0);
     return {
       brand,
       totalGmv25,
+      totalGmv24,
       cells: cells.map((cell) => ({
         ...cell,
         share: totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0,
+        share24: totalGmv24 ? (cell.gmv24 / totalGmv24) * 100 : 0,
         shareLabel: `${Math.round(totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0)}%`,
         yoyLabel:
-          cell.yoy === null
-            ? "n/a"
-            : `${cell.yoy > 0 ? "+" : ""}${
-                Math.abs(cell.yoy) > 999 ? ">999" : Math.round(cell.yoy)
-              }%`
+          brand === "KOLON SPORT/可隆" && cell.gender === "男女"
+            ? `${(totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0) - (totalGmv24 ? (cell.gmv24 / totalGmv24) * 100 : 0) >= 0 ? "+" : ""}${Math.round(
+                (totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0) -
+                  (totalGmv24 ? (cell.gmv24 / totalGmv24) * 100 : 0)
+              )}pct`
+            : formatYoyLabel(cell.yoy)
       }))
     };
   })

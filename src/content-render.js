@@ -21,8 +21,8 @@ function renderShareCell(label, value) {
     <div class="share-meter" aria-label="半拉链占内搭总体 ${label}">
       <div class="share-meter-track">
         <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
-        <span class="share-meter-label">${label}</span>
       </div>
+      <span class="share-meter-value">${label}</span>
     </div>
   `;
 }
@@ -82,14 +82,46 @@ function getYoyClass(label) {
 
 function getGenderFillClass(gender) {
   if (gender === "女") {
-    return "gender-cell-fill is-female";
+    return "is-female";
   }
 
   if (gender === "男") {
-    return "gender-cell-fill is-male";
+    return "is-male";
   }
 
-  return "gender-cell-fill is-unisex";
+  return "is-unisex";
+}
+
+function renderGenderBreakdownBrand(row) {
+  if (row.brand.includes("SALOMON")) {
+    return `
+      <div class="gender-breakdown-brand-main">SALOMON/萨洛蒙*</div>
+      <div class="gender-breakdown-brand-sub">(仅 2 SKU)</div>
+    `;
+  }
+
+  return `<div class="gender-breakdown-brand-main">${row.brand}</div>`;
+}
+
+function renderGenderBreakdownYoy(row, cell, width) {
+  if (width < 10) {
+    return "";
+  }
+
+  if (row.brand.includes("SALOMON") && cell.gender === "女") {
+    return `
+      <span class="gender-segment-yoy-inline gender-segment-yoy-new">
+        <span class="gender-segment-yoy-new-text">new</span>
+        <span class="gender-segment-yoy-sku">+1 SKU</span>
+      </span>
+    `;
+  }
+
+  if (cell.yoyLabel === "n/a") {
+    return "";
+  }
+
+  return `<span class="${getYoyClass(cell.yoyLabel)} gender-segment-yoy-inline">${cell.yoyLabel}</span>`;
 }
 
 export function renderFemaleOpportunityGenderMatrix(container, rows) {
@@ -97,44 +129,56 @@ export function renderFemaleOpportunityGenderMatrix(container, rows) {
     return;
   }
 
-  const header = `
-    <div class="gender-matrix-header">
-      <div class="gender-matrix-head">品牌</div>
-      <div class="gender-matrix-head">Female</div>
-      <div class="gender-matrix-head">Male</div>
-      <div class="gender-matrix-head">Unisex</div>
+  const legend = `
+    <div class="gender-breakdown-legend">
+      <div class="gender-breakdown-legend-item">
+        <span class="gender-breakdown-swatch is-female"></span>
+        <span>Female</span>
+      </div>
+      <div class="gender-breakdown-legend-item">
+        <span class="gender-breakdown-swatch is-male"></span>
+        <span>Male</span>
+      </div>
+      <div class="gender-breakdown-legend-item">
+        <span class="gender-breakdown-swatch is-unisex"></span>
+        <span>Unisex</span>
+      </div>
     </div>
   `;
 
   const body = rows
     .map((row) => {
-      const cells = row.cells
-        .map(
-          (cell) => `
-            <div class="gender-cell">
-              <div class="gender-cell-track">
-                <div class="${getGenderFillClass(cell.gender)}" style="width: ${Math.max(
-            6,
-            Math.round(cell.share)
-          )}%;"></div>
-              </div>
-              <div class="gender-cell-meta">
-                <span class="gender-cell-share">${cell.shareLabel}</span>
-                <span class="${getYoyClass(cell.yoyLabel)}">${cell.yoyLabel}</span>
-              </div>
-            </div>
-          `
-        )
+      const orderedCells = ["女", "男", "男女"]
+        .map((gender) => row.cells.find((cell) => cell.gender === gender))
+        .filter(Boolean);
+
+      const segments = orderedCells
+        .map((cell) => {
+          const width = Math.max(0, Number(cell.share || 0));
+          const showShare = width >= 7;
+          const yoyMarkup = renderGenderBreakdownYoy(row, cell, width);
+          const content =
+            showShare || yoyMarkup
+              ? `
+                <div class="gender-segment-content">
+                  ${showShare ? `<span class="gender-segment-share">${cell.shareLabel}</span>` : ""}
+                  ${yoyMarkup}
+                </div>
+              `
+              : "";
+
+          return `<div class="gender-segment ${getGenderFillClass(cell.gender)}" style="width: ${width}%;">${content}</div>`;
+        })
         .join("");
 
       return `
-        <div class="gender-matrix-row">
-          <div class="gender-matrix-brand">${row.brand}</div>
-          ${cells}
+        <div class="gender-breakdown-row">
+          <div class="gender-breakdown-brand">${renderGenderBreakdownBrand(row)}</div>
+          <div class="gender-breakdown-track">${segments}</div>
         </div>
       `;
     })
     .join("");
 
-  container.innerHTML = `<div class="gender-brand-matrix">${header}${body}</div>`;
+  container.innerHTML = `<div class="gender-brand-matrix">${legend}<div class="gender-breakdown-rows">${body}</div></div>`;
 }

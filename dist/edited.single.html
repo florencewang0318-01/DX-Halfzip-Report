@@ -461,7 +461,7 @@ a {
 }
 
 .section-bullets {
-  margin: 14px 0 0 18px;
+  margin: 10px 0 0 18px;
   display: grid;
   gap: 4px;
   max-width: none;
@@ -486,6 +486,10 @@ a {
 
 .page-competitor-scope .evidence-grid.two-up {
   grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+}
+
+.page-gender-breakdown .chart-grid.emphasis-left {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
 }
 
 .three-up {
@@ -592,11 +596,19 @@ a {
 }
 
 .page-competitor-scope .data-table-card {
-  max-width: 430px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .page-competitor-scope .bubble-chart-card {
   min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .paired-chart-page .page-foot {
@@ -641,16 +653,20 @@ a {
 
 .brand-compare-table th:nth-child(1),
 .brand-compare-table td:nth-child(1) {
-  width: 39%;
+  width: 35%;
 }
 
 .brand-compare-table th:nth-child(2),
 .brand-compare-table td:nth-child(2),
-.brand-compare-table th:nth-child(3),
-.brand-compare-table td:nth-child(3),
 .brand-compare-table th:nth-child(4),
 .brand-compare-table td:nth-child(4) {
-  width: 20.33%;
+  width: 16%;
+}
+
+.brand-compare-table th:nth-child(3),
+.brand-compare-table td:nth-child(3),
+.brand-compare-table td.share-cell {
+  width: 33%;
 }
 
 .brand-compare-table td:nth-child(2),
@@ -687,16 +703,19 @@ a {
 
 .share-meter {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
   width: 100%;
 }
 
 .share-meter-track {
   position: relative;
-  width: min(100%, 96px);
+  flex: 1;
+  min-width: 0;
   height: 12px;
   border-radius: 999px;
-  background: #ece6da;
+  background: linear-gradient(180deg, #edf1f7 0%, #e4eaf3 100%);
   overflow: hidden;
 }
 
@@ -706,27 +725,23 @@ a {
   top: 0;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #b8843c 0%, #d6a158 100%);
+  background: linear-gradient(90deg, #8fa8d8 0%, #adc0e4 100%);
 }
 
-.share-meter-label {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 8px;
+.share-meter-value {
+  flex: 0 0 auto;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
   font-weight: 600;
-  font-size: 11px;
-  line-height: 1;
+  font-size: 13px;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
 .bubble-chart-wrap {
-  display: grid;
-  gap: 10px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .bubble-chart-svg {
@@ -757,14 +772,14 @@ a {
 }
 
 .bubble-point {
-  fill: rgba(199, 145, 67, 0.24);
-  stroke: rgba(183, 130, 57, 0.82);
+  fill: rgba(111, 143, 203, 0.18);
+  stroke: rgba(111, 143, 203, 0.74);
   stroke-width: 1.4;
 }
 
 .bubble-point.is-outlier {
-  fill: rgba(37, 99, 235, 0.16);
-  stroke: rgba(37, 99, 235, 0.66);
+  fill: rgba(132, 152, 214, 0.22);
+  stroke: rgba(109, 130, 194, 0.80);
 }
 
 .bubble-label {
@@ -779,106 +794,184 @@ a {
   line-height: 1.6;
 }
 
+.bubble-legend-circle {
+  fill: rgba(111, 143, 203, 0.18);
+  stroke: rgba(111, 143, 203, 0.70);
+  stroke-width: 1.2;
+}
+
+.bubble-legend-text {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.bubble-annotation {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+
 .gender-brand-matrix {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
-.gender-matrix-header,
-.gender-matrix-row {
-  display: grid;
-  grid-template-columns: 200px repeat(3, minmax(0, 1fr));
-  column-gap: 14px;
+.gender-breakdown-legend {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  width: calc(100% - 182px);
+  max-width: calc(100% - 182px);
+  margin-left: 182px;
+  padding: 0;
 }
 
-.gender-matrix-header {
-  padding: 0 0 8px;
-  border-bottom: 1px solid var(--line-strong);
+.gender-breakdown-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-.gender-matrix-head {
-  font-size: 11px;
-  line-height: 1.45;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--muted);
+.gender-breakdown-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-.gender-matrix-head:first-child {
-  text-align: left;
+.gender-breakdown-swatch.is-female {
+  background: linear-gradient(180deg, #efd0e4 0%, #e5bdd7 100%);
 }
 
-.gender-matrix-head:not(:first-child) {
-  text-align: center;
+.gender-breakdown-swatch.is-male {
+  background: linear-gradient(180deg, #b5c6e5 0%, #a8bcdf 100%);
 }
 
-.gender-matrix-row {
-  padding: 10px 0;
+.gender-breakdown-swatch.is-unisex {
+  background: #fae9b6;
+}
+
+.gender-breakdown-rows {
+  display: grid;
+  gap: 9px;
+  padding: 12px 8px 0;
+}
+
+.gender-breakdown-row {
+  display: grid;
+  grid-template-columns: 164px minmax(0, 1fr);
+  column-gap: 18px;
+  align-items: center;
+  padding: 5px 0 10px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 
-.gender-matrix-row:last-child {
+.gender-breakdown-row:last-child {
   border-bottom: none;
 }
 
-.gender-matrix-brand {
-  font-weight: 700;
+.gender-breakdown-brand {
   color: var(--accent);
-  line-height: 1.45;
+  line-height: 1.2;
+}
+
+.gender-breakdown-brand-main {
+  font-weight: 700;
+  font-size: 13px;
   white-space: nowrap;
 }
 
-.gender-cell {
-  display: grid;
-  gap: 6px;
+.gender-breakdown-brand-sub {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9aa0aa;
+  white-space: nowrap;
 }
 
-.gender-cell-track {
-  position: relative;
+.gender-breakdown-track {
+  display: flex;
   width: 100%;
-  height: 10px;
-  border-radius: 999px;
+  height: 40px;
+  border-radius: 8px;
   overflow: hidden;
-  background: #ede7dc;
+  background: linear-gradient(180deg, #f5f7fa 0%, #eef2f6 100%);
+  border: 1px solid rgba(223, 230, 240, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
-.gender-cell-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
+.gender-segment {
   height: 100%;
-  border-radius: 999px;
-}
-
-.gender-cell-fill.is-female {
-  background: linear-gradient(90deg, #c58a57 0%, #dda67b 100%);
-}
-
-.gender-cell-fill.is-male {
-  background: linear-gradient(90deg, #7c8f7c 0%, #95a693 100%);
-}
-
-.gender-cell-fill.is-unisex {
-  background: linear-gradient(90deg, #8b8070 0%, #a19384 100%);
-}
-
-.gender-cell-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  min-width: 0;
+  border-radius: 0;
 }
 
-.gender-cell-share {
-  font-size: 12px;
-  font-weight: 700;
+.gender-segment.is-female {
+  background: linear-gradient(90deg, #ecc9e0 0%, #e2b8d4 100%);
+}
+
+.gender-segment.is-male {
+  background: linear-gradient(90deg, rgba(143, 168, 216, 0.72) 0%, rgba(173, 192, 228, 0.72) 100%);
+}
+
+.gender-segment.is-unisex {
+  background: linear-gradient(90deg, #faedc2 0%, #f4e2a5 100%);
+}
+
+.gender-segment-content {
+  display: grid;
+  gap: 3px;
+  place-items: center;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.gender-segment-share {
+  font-size: 14px;
+  font-weight: 800;
   color: var(--accent);
 }
 
-.gender-cell-yoy {
+.gender-segment-yoy-inline {
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.gender-segment-yoy-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gender-segment-yoy-new-text {
+  color: var(--green);
+  font-size: 13px;
+}
+
+.gender-segment-yoy-sku {
+  color: #8b93a1;
   font-size: 11px;
-  font-weight: 700;
+}
+
+.gender-breakdown-panel .panel-title {
+  margin-bottom: 8px;
+}
+
+.gender-breakdown-panel .gender-matrix-card {
+  padding-top: 10px;
 }
 
 .gender-cell-yoy.is-positive {
@@ -956,8 +1049,14 @@ a {
     height: auto;
   }
 
+  .gender-breakdown-legend {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
   .gender-matrix-header,
-  .gender-matrix-row {
+  .gender-breakdown-row {
     grid-template-columns: 1fr;
     row-gap: 10px;
   }
@@ -1014,7 +1113,7 @@ a {
           <button class="nav-group-toggle" type="button" data-target="#competitor-scope" aria-label="Jump to market sections">Market</button>
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#competitor-scope">Competitor Scope</a>
-            <a class="nav-dropdown-item" href="#female-opportunity">Female Opportunity</a>
+            <a class="nav-dropdown-item" href="#female-opportunity">Gender Breakdown</a>
             <a class="nav-dropdown-item" href="#price-architecture">Price Architecture</a>
           </div>
         </div>
@@ -1092,24 +1191,24 @@ a {
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="female-opportunity" data-page-label="Female Opportunity">
+    <section class="sheet report-section paired-chart-page page-gender-breakdown" id="female-opportunity" data-page-label="Gender Breakdown">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">02</span><span>Female Opportunity</span></div>
-              <h2 class="section-title">女性向机会不在简单缩小男款，而在建立“轻保暖 + 修身层搭 + 更友好长度”的独立产品语言</h2>
+              <div class="section-kicker"><span class="section-badge">02</span><span>Gender Breakdown</span></div>
+              <h2 class="section-title">半拉链内搭的性别结构已分化成独立配置，而不再只是默认男性功能层</h2>
               <ul class="section-bullets">
-                <li>现有竞品女款占比已不低，但女性差异化仍主要停留在颜色和少量长度变化，结构创新不足。</li>
-                <li>现有样本中短款与半短款仅 18 款，说明女性时装化层搭方向仍是可进入空间。</li>
-                <li>建议把女性页作为 deck 的核心章节之一，而不是附属在通用结构之后。</li>
+                <li>各品牌的半拉链内搭已经出现明确的性别配比差异，说明品牌在内搭层的目标人群判断并不一致。</li>
+                <li>除了占比本身，更重要的是看各性别结构对应的 YoY 变化，判断品牌资源是否继续向某一人群倾斜。</li>
+                <li>这一页先把性别分布结构讲清楚，再为后续女性向商品开发方向提供依据。</li>
               </ul>
             </div>
           </div>
 
           <div class="chart-grid evidence-grid emphasis-left reveal">
-            <article class="chart-panel panel panel-large">
-              <h3 class="panel-title">各品牌半拉链在不同性别上的分布与 YoY</h3>
+            <article class="chart-panel panel panel-large gender-breakdown-panel">
+              <h3 class="panel-title">各品牌半拉链性别结构与 YoY</h3>
               <div id="female-opportunity-gender-chart" class="gender-matrix-card"></div>
             </article>
             <article class="chart-panel panel">
@@ -1531,6 +1630,18 @@ function formatPercent(value) {
   return `${value > 0 ? "+" : ""}${rounded}%`;
 }
 
+function formatYoyLabel(value) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "n/a";
+  }
+
+  const rounded = Math.round(value);
+  if (rounded === 0) {
+    return "0%";
+  }
+  return `${rounded > 0 ? "+" : ""}${rounded.toLocaleString("en-US")}%`;
+}
+
 function getMarketScopeDisplayBrandName(brand) {
   if (brand === "lululemon/露露乐蒙") {
     return "LULULEMON/露露乐蒙";
@@ -1644,24 +1755,30 @@ const FEMALE_OPPORTUNITY_BRAND_GENDER = Array.from(
         gender,
         gmv25: current.gmv,
         count25: current.count,
+        gmv24: previous.gmv,
+        count24: previous.count,
         yoy: computeYoy(current.gmv, previous.gmv)
       };
     });
 
     const totalGmv25 = cells.reduce((sum, item) => sum + item.gmv25, 0);
+    const totalGmv24 = cells.reduce((sum, item) => sum + item.gmv24, 0);
     return {
       brand,
       totalGmv25,
+      totalGmv24,
       cells: cells.map((cell) => ({
         ...cell,
         share: totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0,
+        share24: totalGmv24 ? (cell.gmv24 / totalGmv24) * 100 : 0,
         shareLabel: `${Math.round(totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0)}%`,
         yoyLabel:
-          cell.yoy === null
-            ? "n/a"
-            : `${cell.yoy > 0 ? "+" : ""}${
-                Math.abs(cell.yoy) > 999 ? ">999" : Math.round(cell.yoy)
-              }%`
+          brand === "KOLON SPORT/可隆" && cell.gender === "男女"
+            ? `${(totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0) - (totalGmv24 ? (cell.gmv24 / totalGmv24) * 100 : 0) >= 0 ? "+" : ""}${Math.round(
+                (totalGmv25 ? (cell.gmv25 / totalGmv25) * 100 : 0) -
+                  (totalGmv24 ? (cell.gmv24 / totalGmv24) * 100 : 0)
+              )}pct`
+            : formatYoyLabel(cell.yoy)
       }))
     };
   })
@@ -1714,8 +1831,8 @@ function renderShareCell(label, value) {
     <div class="share-meter" aria-label="半拉链占内搭总体 ${label}">
       <div class="share-meter-track">
         <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
-        <span class="share-meter-label">${label}</span>
       </div>
+      <span class="share-meter-value">${label}</span>
     </div>
   `;
 }
@@ -1775,14 +1892,46 @@ function getYoyClass(label) {
 
 function getGenderFillClass(gender) {
   if (gender === "女") {
-    return "gender-cell-fill is-female";
+    return "is-female";
   }
 
   if (gender === "男") {
-    return "gender-cell-fill is-male";
+    return "is-male";
   }
 
-  return "gender-cell-fill is-unisex";
+  return "is-unisex";
+}
+
+function renderGenderBreakdownBrand(row) {
+  if (row.brand.includes("SALOMON")) {
+    return `
+      <div class="gender-breakdown-brand-main">SALOMON/萨洛蒙*</div>
+      <div class="gender-breakdown-brand-sub">(仅 2 SKU)</div>
+    `;
+  }
+
+  return `<div class="gender-breakdown-brand-main">${row.brand}</div>`;
+}
+
+function renderGenderBreakdownYoy(row, cell, width) {
+  if (width < 10) {
+    return "";
+  }
+
+  if (row.brand.includes("SALOMON") && cell.gender === "女") {
+    return `
+      <span class="gender-segment-yoy-inline gender-segment-yoy-new">
+        <span class="gender-segment-yoy-new-text">new</span>
+        <span class="gender-segment-yoy-sku">+1 SKU</span>
+      </span>
+    `;
+  }
+
+  if (cell.yoyLabel === "n/a") {
+    return "";
+  }
+
+  return `<span class="${getYoyClass(cell.yoyLabel)} gender-segment-yoy-inline">${cell.yoyLabel}</span>`;
 }
 
 function renderFemaleOpportunityGenderMatrix(container, rows) {
@@ -1790,46 +1939,58 @@ function renderFemaleOpportunityGenderMatrix(container, rows) {
     return;
   }
 
-  const header = `
-    <div class="gender-matrix-header">
-      <div class="gender-matrix-head">品牌</div>
-      <div class="gender-matrix-head">Female</div>
-      <div class="gender-matrix-head">Male</div>
-      <div class="gender-matrix-head">Unisex</div>
+  const legend = `
+    <div class="gender-breakdown-legend">
+      <div class="gender-breakdown-legend-item">
+        <span class="gender-breakdown-swatch is-female"></span>
+        <span>Female</span>
+      </div>
+      <div class="gender-breakdown-legend-item">
+        <span class="gender-breakdown-swatch is-male"></span>
+        <span>Male</span>
+      </div>
+      <div class="gender-breakdown-legend-item">
+        <span class="gender-breakdown-swatch is-unisex"></span>
+        <span>Unisex</span>
+      </div>
     </div>
   `;
 
   const body = rows
     .map((row) => {
-      const cells = row.cells
-        .map(
-          (cell) => `
-            <div class="gender-cell">
-              <div class="gender-cell-track">
-                <div class="${getGenderFillClass(cell.gender)}" style="width: ${Math.max(
-            6,
-            Math.round(cell.share)
-          )}%;"></div>
-              </div>
-              <div class="gender-cell-meta">
-                <span class="gender-cell-share">${cell.shareLabel}</span>
-                <span class="${getYoyClass(cell.yoyLabel)}">${cell.yoyLabel}</span>
-              </div>
-            </div>
-          `
-        )
+      const orderedCells = ["女", "男", "男女"]
+        .map((gender) => row.cells.find((cell) => cell.gender === gender))
+        .filter(Boolean);
+
+      const segments = orderedCells
+        .map((cell) => {
+          const width = Math.max(0, Number(cell.share || 0));
+          const showShare = width >= 7;
+          const yoyMarkup = renderGenderBreakdownYoy(row, cell, width);
+          const content =
+            showShare || yoyMarkup
+              ? `
+                <div class="gender-segment-content">
+                  ${showShare ? `<span class="gender-segment-share">${cell.shareLabel}</span>` : ""}
+                  ${yoyMarkup}
+                </div>
+              `
+              : "";
+
+          return `<div class="gender-segment ${getGenderFillClass(cell.gender)}" style="width: ${width}%;">${content}</div>`;
+        })
         .join("");
 
       return `
-        <div class="gender-matrix-row">
-          <div class="gender-matrix-brand">${row.brand}</div>
-          ${cells}
+        <div class="gender-breakdown-row">
+          <div class="gender-breakdown-brand">${renderGenderBreakdownBrand(row)}</div>
+          <div class="gender-breakdown-track">${segments}</div>
         </div>
       `;
     })
     .join("");
 
-  container.innerHTML = `<div class="gender-brand-matrix">${header}${body}</div>`;
+  container.innerHTML = `<div class="gender-brand-matrix">${legend}<div class="gender-breakdown-rows">${body}</div></div>`;
 }
 
 
@@ -1854,13 +2015,22 @@ function scaleValue(value, min, max, start, end) {
   return start + ((value - min) / (max - min)) * (end - start);
 }
 
-function getBubbleRadius(value, min, max) {
+function scaleSqrtValue(value, min, max, start, end) {
   if (max === min) {
-    return 28;
+    return (start + end) / 2;
   }
 
   const normalized = (value - min) / (max - min);
-  return 20 + normalized * 26;
+  return start + Math.sqrt(Math.max(0, normalized)) * (end - start);
+}
+
+function getBubbleRadius(value, min, max) {
+  if (max === min) {
+    return 22;
+  }
+
+  const normalized = (value - min) / (max - min);
+  return 16 + normalized * 20;
 }
 
 function renderMarketScopeBubbleChart(container, rows) {
@@ -1868,9 +2038,9 @@ function renderMarketScopeBubbleChart(container, rows) {
     return;
   }
 
-  const width = 520;
-  const height = 360;
-  const margin = { top: 24, right: 20, bottom: 52, left: 60 };
+  const width = 560;
+  const height = 376;
+  const margin = { top: 44, right: 28, bottom: 62, left: 78 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
 
@@ -1892,10 +2062,15 @@ function renderMarketScopeBubbleChart(container, rows) {
     "aria-label": "竞品品牌半拉链布局深度、增长与规模气泡图"
   });
 
-  const gridTicks = 5;
-  for (let i = 0; i <= gridTicks; i += 1) {
-    const yValue = yMin + ((yMax - yMin) / gridTicks) * i;
-    const y = margin.top + plotHeight - (plotHeight / gridTicks) * i;
+  const yTickValues = [50, 150, 300, 500].filter((value) => value <= yMax);
+  yTickValues.forEach((yValue) => {
+    const y = scaleSqrtValue(
+      yValue,
+      yMin,
+      yMax,
+      margin.top + plotHeight,
+      margin.top
+    );
 
     svg.appendChild(
       createSvgElement("line", {
@@ -1915,7 +2090,7 @@ function renderMarketScopeBubbleChart(container, rows) {
     });
     tickLabel.textContent = formatPercentTick(yValue);
     svg.appendChild(tickLabel);
-  }
+  });
 
   const xTickCount = Math.max(4, Math.ceil(xMax / 20));
   for (let i = 0; i <= xTickCount; i += 1) {
@@ -1964,7 +2139,7 @@ function renderMarketScopeBubbleChart(container, rows) {
 
   const xAxisTitle = createSvgElement("text", {
     x: margin.left + plotWidth / 2,
-    y: height - 12,
+    y: height - 10,
     class: "bubble-axis-title",
     "text-anchor": "middle"
   });
@@ -1972,14 +2147,34 @@ function renderMarketScopeBubbleChart(container, rows) {
   svg.appendChild(xAxisTitle);
 
   const yAxisTitle = createSvgElement("text", {
-    x: 18,
+    x: 28,
     y: margin.top + plotHeight / 2,
     class: "bubble-axis-title",
-    transform: `rotate(-90 18 ${margin.top + plotHeight / 2})`,
+    transform: `rotate(-90 28 ${margin.top + plotHeight / 2})`,
     "text-anchor": "middle"
   });
-  yAxisTitle.textContent = "半拉链 GMV YoY%";
+  yAxisTitle.textContent = "YOY%";
   svg.appendChild(yAxisTitle);
+
+  const legendGroup = createSvgElement("g", {
+    transform: `translate(${width - 146}, 12)`
+  });
+  legendGroup.appendChild(
+    createSvgElement("circle", {
+      cx: 9,
+      cy: 10,
+      r: 7,
+      class: "bubble-legend-circle"
+    })
+  );
+  const legendText = createSvgElement("text", {
+    x: 24,
+    y: 14,
+    class: "bubble-legend-text"
+  });
+  legendText.textContent = "气泡大小表示半拉链GMV";
+  legendGroup.appendChild(legendText);
+  svg.appendChild(legendGroup);
 
   rows.forEach((row) => {
     const cx = scaleValue(
@@ -1989,7 +2184,7 @@ function renderMarketScopeBubbleChart(container, rows) {
       margin.left,
       margin.left + plotWidth
     );
-    const cy = scaleValue(
+    const stretchedCy = scaleSqrtValue(
       row.halfZipYoy,
       yMin,
       yMax,
@@ -2000,7 +2195,7 @@ function renderMarketScopeBubbleChart(container, rows) {
 
     const bubble = createSvgElement("circle", {
       cx,
-      cy,
+      cy: stretchedCy,
       r,
       class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`
     });
@@ -2008,24 +2203,28 @@ function renderMarketScopeBubbleChart(container, rows) {
 
     const brandLabel = createSvgElement("text", {
       x: cx,
-      y: cy - r - 6,
+      y: stretchedCy - r - 6,
       class: "bubble-label",
       "text-anchor": "middle"
     });
     brandLabel.textContent = row.brand.split("/")[0];
     svg.appendChild(brandLabel);
+
+    if (row.brand.includes("SALOMON")) {
+      const annotation = createSvgElement("text", {
+        x: cx + r + 12,
+        y: stretchedCy - r + 14,
+        class: "bubble-annotation"
+      });
+      annotation.textContent = "SALOMON 为低基数高增长的离群点";
+      svg.appendChild(annotation);
+    }
   });
 
   container.innerHTML = "";
   const wrap = document.createElement("div");
   wrap.className = "bubble-chart-wrap";
   wrap.appendChild(svg);
-
-  const note = document.createElement("p");
-  note.className = "bubble-note";
-  note.textContent =
-    "x 轴看品牌对半拉链的布局深度，y 轴看半拉链 GMV 增长，气泡大小代表 25AW 半拉链 GMV。SALOMON 为低基数高增长的离群点。";
-  wrap.appendChild(note);
 
   container.appendChild(wrap);
 }

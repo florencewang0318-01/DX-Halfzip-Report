@@ -481,6 +481,10 @@ a {
   grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
 }
 
+.page-gender-breakdown .chart-grid.emphasis-left {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
 .three-up {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -585,11 +589,19 @@ a {
 }
 
 .page-competitor-scope .data-table-card {
-  max-width: 430px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .page-competitor-scope .bubble-chart-card {
   min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .paired-chart-page .page-foot {
@@ -634,16 +646,20 @@ a {
 
 .brand-compare-table th:nth-child(1),
 .brand-compare-table td:nth-child(1) {
-  width: 39%;
+  width: 35%;
 }
 
 .brand-compare-table th:nth-child(2),
 .brand-compare-table td:nth-child(2),
-.brand-compare-table th:nth-child(3),
-.brand-compare-table td:nth-child(3),
 .brand-compare-table th:nth-child(4),
 .brand-compare-table td:nth-child(4) {
-  width: 20.33%;
+  width: 16%;
+}
+
+.brand-compare-table th:nth-child(3),
+.brand-compare-table td:nth-child(3),
+.brand-compare-table td.share-cell {
+  width: 33%;
 }
 
 .brand-compare-table td:nth-child(2),
@@ -680,16 +696,19 @@ a {
 
 .share-meter {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
   width: 100%;
 }
 
 .share-meter-track {
   position: relative;
-  width: min(100%, 96px);
+  flex: 1;
+  min-width: 0;
   height: 12px;
   border-radius: 999px;
-  background: #ece6da;
+  background: linear-gradient(180deg, #edf1f7 0%, #e4eaf3 100%);
   overflow: hidden;
 }
 
@@ -699,27 +718,23 @@ a {
   top: 0;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #b8843c 0%, #d6a158 100%);
+  background: linear-gradient(90deg, #8fa8d8 0%, #adc0e4 100%);
 }
 
-.share-meter-label {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 8px;
+.share-meter-value {
+  flex: 0 0 auto;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
   font-weight: 600;
-  font-size: 11px;
-  line-height: 1;
+  font-size: 13px;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
 .bubble-chart-wrap {
-  display: grid;
-  gap: 10px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .bubble-chart-svg {
@@ -750,14 +765,14 @@ a {
 }
 
 .bubble-point {
-  fill: rgba(199, 145, 67, 0.24);
-  stroke: rgba(183, 130, 57, 0.82);
+  fill: rgba(111, 143, 203, 0.18);
+  stroke: rgba(111, 143, 203, 0.74);
   stroke-width: 1.4;
 }
 
 .bubble-point.is-outlier {
-  fill: rgba(37, 99, 235, 0.16);
-  stroke: rgba(37, 99, 235, 0.66);
+  fill: rgba(132, 152, 214, 0.22);
+  stroke: rgba(109, 130, 194, 0.80);
 }
 
 .bubble-label {
@@ -772,106 +787,184 @@ a {
   line-height: 1.6;
 }
 
+.bubble-legend-circle {
+  fill: rgba(111, 143, 203, 0.18);
+  stroke: rgba(111, 143, 203, 0.70);
+  stroke-width: 1.2;
+}
+
+.bubble-legend-text {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.bubble-annotation {
+  fill: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+
 .gender-brand-matrix {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
-.gender-matrix-header,
-.gender-matrix-row {
-  display: grid;
-  grid-template-columns: 200px repeat(3, minmax(0, 1fr));
-  column-gap: 14px;
+.gender-breakdown-legend {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  width: calc(100% - 182px);
+  max-width: calc(100% - 182px);
+  margin-left: 182px;
+  padding: 0;
 }
 
-.gender-matrix-header {
-  padding: 0 0 8px;
-  border-bottom: 1px solid var(--line-strong);
+.gender-breakdown-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-.gender-matrix-head {
-  font-size: 11px;
-  line-height: 1.45;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--muted);
+.gender-breakdown-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-.gender-matrix-head:first-child {
-  text-align: left;
+.gender-breakdown-swatch.is-female {
+  background: linear-gradient(180deg, #efd0e4 0%, #e5bdd7 100%);
 }
 
-.gender-matrix-head:not(:first-child) {
-  text-align: center;
+.gender-breakdown-swatch.is-male {
+  background: linear-gradient(180deg, #b5c6e5 0%, #a8bcdf 100%);
 }
 
-.gender-matrix-row {
-  padding: 10px 0;
+.gender-breakdown-swatch.is-unisex {
+  background: #fae9b6;
+}
+
+.gender-breakdown-rows {
+  display: grid;
+  gap: 9px;
+  padding: 12px 8px 0;
+}
+
+.gender-breakdown-row {
+  display: grid;
+  grid-template-columns: 164px minmax(0, 1fr);
+  column-gap: 18px;
+  align-items: center;
+  padding: 5px 0 10px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 
-.gender-matrix-row:last-child {
+.gender-breakdown-row:last-child {
   border-bottom: none;
 }
 
-.gender-matrix-brand {
-  font-weight: 700;
+.gender-breakdown-brand {
   color: var(--accent);
-  line-height: 1.45;
+  line-height: 1.2;
+}
+
+.gender-breakdown-brand-main {
+  font-weight: 700;
+  font-size: 13px;
   white-space: nowrap;
 }
 
-.gender-cell {
-  display: grid;
-  gap: 6px;
+.gender-breakdown-brand-sub {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9aa0aa;
+  white-space: nowrap;
 }
 
-.gender-cell-track {
-  position: relative;
+.gender-breakdown-track {
+  display: flex;
   width: 100%;
-  height: 10px;
-  border-radius: 999px;
+  height: 40px;
+  border-radius: 8px;
   overflow: hidden;
-  background: #ede7dc;
+  background: linear-gradient(180deg, #f5f7fa 0%, #eef2f6 100%);
+  border: 1px solid rgba(223, 230, 240, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
-.gender-cell-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
+.gender-segment {
   height: 100%;
-  border-radius: 999px;
-}
-
-.gender-cell-fill.is-female {
-  background: linear-gradient(90deg, #c58a57 0%, #dda67b 100%);
-}
-
-.gender-cell-fill.is-male {
-  background: linear-gradient(90deg, #7c8f7c 0%, #95a693 100%);
-}
-
-.gender-cell-fill.is-unisex {
-  background: linear-gradient(90deg, #8b8070 0%, #a19384 100%);
-}
-
-.gender-cell-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  min-width: 0;
+  border-radius: 0;
 }
 
-.gender-cell-share {
-  font-size: 12px;
-  font-weight: 700;
+.gender-segment.is-female {
+  background: linear-gradient(90deg, #ecc9e0 0%, #e2b8d4 100%);
+}
+
+.gender-segment.is-male {
+  background: linear-gradient(90deg, rgba(143, 168, 216, 0.72) 0%, rgba(173, 192, 228, 0.72) 100%);
+}
+
+.gender-segment.is-unisex {
+  background: linear-gradient(90deg, #faedc2 0%, #f4e2a5 100%);
+}
+
+.gender-segment-content {
+  display: grid;
+  gap: 3px;
+  place-items: center;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.gender-segment-share {
+  font-size: 14px;
+  font-weight: 800;
   color: var(--accent);
 }
 
-.gender-cell-yoy {
+.gender-segment-yoy-inline {
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.gender-segment-yoy-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gender-segment-yoy-new-text {
+  color: var(--green);
+  font-size: 13px;
+}
+
+.gender-segment-yoy-sku {
+  color: #8b93a1;
   font-size: 11px;
-  font-weight: 700;
+}
+
+.gender-breakdown-panel .panel-title {
+  margin-bottom: 8px;
+}
+
+.gender-breakdown-panel .gender-matrix-card {
+  padding-top: 10px;
 }
 
 .gender-cell-yoy.is-positive {
@@ -949,8 +1042,14 @@ a {
     height: auto;
   }
 
+  .gender-breakdown-legend {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
   .gender-matrix-header,
-  .gender-matrix-row {
+  .gender-breakdown-row {
     grid-template-columns: 1fr;
     row-gap: 10px;
   }
