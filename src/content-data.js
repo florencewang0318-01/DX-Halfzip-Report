@@ -130,12 +130,46 @@ function summarizeHalfZipByBrandGender(rows) {
       brand,
       gender,
       gmv: 0,
-      count: 0
+      count: 0,
+      units: 0,
+      weightedDealPriceTotal: 0,
+      weightedDealPriceUnits: 0,
+      fallbackDealPriceTotal: 0,
+      fallbackDealPriceCount: 0,
+      avgDealPrice: 0
     };
 
-    current.gmv += toNumber(row["销售额"]);
+    const sales = toNumber(row["销售额"]);
+    const units = toNumber(row["销量"]);
+    const dealPrice = toNumber(row["成交均价"] ?? row["成交价格"]);
+
+    current.gmv += sales;
     current.count += 1;
+
+    if (units > 0) {
+      current.units += units;
+    }
+
+    if (dealPrice > 0 && units > 0) {
+      current.weightedDealPriceTotal += dealPrice * units;
+      current.weightedDealPriceUnits += units;
+    } else if (dealPrice > 0) {
+      current.fallbackDealPriceTotal += dealPrice;
+      current.fallbackDealPriceCount += 1;
+    }
+
     summary.set(key, current);
+  });
+
+  summary.forEach((item) => {
+    if (item.weightedDealPriceUnits > 0) {
+      item.avgDealPrice = item.weightedDealPriceTotal / item.weightedDealPriceUnits;
+      return;
+    }
+
+    if (item.fallbackDealPriceCount > 0) {
+      item.avgDealPrice = item.fallbackDealPriceTotal / item.fallbackDealPriceCount;
+    }
   });
 
   return summary;
@@ -220,6 +254,8 @@ export const FEMALE_OPPORTUNITY_BRAND_GENDER = Array.from(
         gender,
         gmv25: current.gmv,
         count25: current.count,
+        units25: current.units,
+        avgDealPrice: current.avgDealPrice,
         gmv24: previous.gmv,
         count24: previous.count,
         yoy: computeYoy(current.gmv, previous.gmv)
@@ -248,6 +284,32 @@ export const FEMALE_OPPORTUNITY_BRAND_GENDER = Array.from(
     };
   })
   .sort((a, b) => b.totalGmv25 - a.totalGmv25);
+
+export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.flatMap((row, brandIndex) =>
+  row.cells
+    .filter(
+      (cell) =>
+        cell.gmv25 > 0 &&
+        !(row.brand === "DESCENTE/迪桑特" && cell.gender === "男女")
+    )
+    .map((cell) => ({
+      brand: row.brand,
+      brandLabel: row.brand.split("/")[0],
+      brandIndex,
+      gender: cell.gender,
+      avgDealPrice: cell.avgDealPrice,
+      yoy: cell.yoy,
+      yoyMetric:
+        cell.yoyLabel === "n/a"
+          ? null
+          : Number(String(cell.yoyLabel).replace(/[^\d.-]/g, "")),
+      yoyLabel: cell.yoyLabel,
+      gmv: cell.gmv25,
+      share: cell.share,
+      shareLabel: cell.shareLabel,
+      skuCount: cell.count25
+    }))
+);
 
 export const MARKET_SCOPE_PAGE_DRAFT = {
   chapter: "01 Competitor Scope",

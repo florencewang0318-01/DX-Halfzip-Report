@@ -1,12 +1,16 @@
 import {
   FEMALE_OPPORTUNITY_BRAND_GENDER,
+  GENDER_BREAKDOWN_PRICE_BUBBLES,
   MARKET_SCOPE_BRAND_COMPARE
 } from "./content-data.js";
 import {
   renderBrandCompareTable,
   renderFemaleOpportunityGenderMatrix
 } from "./content-render.js";
-import { renderMarketScopeBubbleChart } from "./chart-app.js";
+import {
+  renderGenderBreakdownPriceBubbleChart,
+  renderMarketScopeBubbleChart
+} from "./chart-app.js";
 
 const SECTION_SELECTOR = ".report-section[id]";
 
@@ -158,7 +162,9 @@ function bootstrapMarketScopePage() {
 
 function bootstrapFemaleOpportunityPage() {
   const matrixContainer = document.querySelector("#female-opportunity-gender-chart");
+  const priceChartContainer = document.querySelector("#gender-breakdown-price-chart");
   renderFemaleOpportunityGenderMatrix(matrixContainer, FEMALE_OPPORTUNITY_BRAND_GENDER);
+  renderGenderBreakdownPriceBubbleChart(priceChartContainer, GENDER_BREAKDOWN_PRICE_BUBBLES);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
