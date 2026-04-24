@@ -13,6 +13,8 @@ import {
 } from "./chart-app.js";
 
 const SECTION_SELECTOR = ".report-section[id]";
+const GENDER_BREAKDOWN_SELECTOR = "#female-opportunity";
+const ALL_GENDERS = ["女", "男", "男女"];
 
 function getTopbarHeight() {
   const topbar = document.querySelector("#topbar");
@@ -165,6 +167,206 @@ function bootstrapFemaleOpportunityPage() {
   const priceChartContainer = document.querySelector("#gender-breakdown-price-chart");
   renderFemaleOpportunityGenderMatrix(matrixContainer, FEMALE_OPPORTUNITY_BRAND_GENDER);
   renderGenderBreakdownPriceBubbleChart(priceChartContainer, GENDER_BREAKDOWN_PRICE_BUBBLES);
+  setupGenderBreakdownInteractions();
+}
+
+function ensureGenderBreakdownTooltip() {
+  let tooltip = document.querySelector("#genderBreakdownTooltip");
+  if (tooltip) {
+    return tooltip;
+  }
+
+  tooltip = document.createElement("div");
+  tooltip.id = "genderBreakdownTooltip";
+  tooltip.className = "gender-breakdown-tooltip";
+  document.body.appendChild(tooltip);
+  return tooltip;
+}
+
+function getGenderLegendCopy(gender) {
+  if (gender === "女") {
+    return "Female";
+  }
+
+  if (gender === "男") {
+    return "Male";
+  }
+
+  return "Unisex";
+}
+
+function formatPriceLabel(value) {
+  const numeric = Number(value ?? 0);
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return "n/a";
+  }
+
+  return `¥${Math.round(numeric).toLocaleString("en-US")}`;
+}
+
+function createBubbleTooltipContent(target) {
+  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
+  const yoy = target.dataset.yoy ?? "n/a";
+  const price = formatPriceLabel(target.dataset.price);
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
+    <div class="gender-breakdown-tooltip-line">YOY% <strong>${yoy}</strong></div>
+    <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+  `;
+}
+
+function createSegmentTooltipContent(target) {
+  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
+  const price = formatPriceLabel(target.dataset.price);
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
+    <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+  `;
+}
+
+function placeTooltip(tooltip, x, y) {
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const nextX = Math.min(x + 16, viewportWidth - tooltipRect.width - 16);
+  const nextY = Math.min(y + 16, viewportHeight - tooltipRect.height - 16);
+
+  tooltip.style.left = `${Math.max(12, nextX)}px`;
+  tooltip.style.top = `${Math.max(12, nextY)}px`;
+}
+
+function showGenderBreakdownTooltip(tooltip, html, x, y) {
+  tooltip.innerHTML = html;
+  tooltip.classList.add("is-visible");
+  placeTooltip(tooltip, x, y);
+}
+
+function hideGenderBreakdownTooltip(tooltip) {
+  tooltip.classList.remove("is-visible");
+}
+
+function setupGenderBreakdownInteractions() {
+  const section = document.querySelector(GENDER_BREAKDOWN_SELECTOR);
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  const visibleGenders = new Set(ALL_GENDERS);
+  let activeKey = null;
+
+  const getSegments = () => Array.from(section.querySelectorAll(".gender-segment[data-brand][data-gender]"));
+  const getNodes = () => Array.from(section.querySelectorAll(".gender-price-node[data-brand][data-gender]"));
+  const getLegendButtons = () => Array.from(section.querySelectorAll(".gender-legend-toggle[data-gender]"));
+
+  const applyGenderVisibility = () => {
+    getLegendButtons().forEach((button) => {
+      const isVisible = visibleGenders.has(button.dataset.gender);
+      button.classList.toggle("is-muted", !isVisible);
+      button.setAttribute("aria-pressed", String(isVisible));
+    });
+
+    getSegments().forEach((segment) => {
+      segment.classList.toggle("is-hidden", !visibleGenders.has(segment.dataset.gender));
+    });
+
+    getNodes().forEach((node) => {
+      node.classList.toggle("is-hidden", !visibleGenders.has(node.dataset.gender));
+    });
+  };
+
+  const applyActiveState = () => {
+    const segments = getSegments();
+    const nodes = getNodes();
+    const hasActive = Boolean(activeKey);
+
+    segments.forEach((segment) => {
+      const key = `${segment.dataset.brand}__${segment.dataset.gender}`;
+      const isMatch = activeKey === key;
+      segment.classList.toggle("is-active", isMatch);
+      segment.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    nodes.forEach((node) => {
+      const key = `${node.dataset.brand}__${node.dataset.gender}`;
+      const isMatch = activeKey === key;
+      node.classList.toggle("is-active", isMatch);
+      node.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+  };
+
+  const clearActiveState = () => {
+    activeKey = null;
+    applyActiveState();
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const activateItem = (target, sourceType, event) => {
+    activeKey = `${target.dataset.brand}__${target.dataset.gender}`;
+    applyActiveState();
+
+    if (sourceType === "bubble") {
+      showGenderBreakdownTooltip(
+        tooltip,
+        createBubbleTooltipContent(target),
+        event?.clientX ?? target.getBoundingClientRect().right,
+        event?.clientY ?? target.getBoundingClientRect().top
+      );
+      return;
+    }
+
+    const rect = target.getBoundingClientRect();
+    showGenderBreakdownTooltip(
+      tooltip,
+      createSegmentTooltipContent(target),
+      event?.clientX ?? rect.left + rect.width / 2,
+      event?.clientY ?? rect.top
+    );
+  };
+
+  getLegendButtons().forEach((button) => {
+    button.addEventListener("click", () => {
+      const gender = button.dataset.gender;
+      if (!gender) {
+        return;
+      }
+
+      if (visibleGenders.has(gender)) {
+        if (visibleGenders.size === 1) {
+          return;
+        }
+        visibleGenders.delete(gender);
+      } else {
+        visibleGenders.add(gender);
+      }
+
+      clearActiveState();
+      applyGenderVisibility();
+    });
+  });
+
+  getSegments().forEach((segment) => {
+    segment.addEventListener("mouseenter", (event) => activateItem(segment, "segment", event));
+    segment.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
+    segment.addEventListener("mouseleave", clearActiveState);
+    segment.addEventListener("focus", (event) => activateItem(segment, "segment", event));
+    segment.addEventListener("blur", clearActiveState);
+  });
+
+  getNodes().forEach((node) => {
+    node.addEventListener("mouseenter", (event) => activateItem(node, "bubble", event));
+    node.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
+    node.addEventListener("mouseleave", clearActiveState);
+    node.addEventListener("focus", (event) => activateItem(node, "bubble", event));
+    node.addEventListener("blur", clearActiveState);
+  });
+
+  applyGenderVisibility();
+  applyActiveState();
 }
 
 window.addEventListener("DOMContentLoaded", () => {

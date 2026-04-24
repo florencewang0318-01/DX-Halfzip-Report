@@ -103,6 +103,18 @@ function renderGenderBreakdownBrand(row) {
   return `<div class="gender-breakdown-brand-main">${row.brand}</div>`;
 }
 
+function getGenderLegendLabel(gender) {
+  if (gender === "女") {
+    return "Female";
+  }
+
+  if (gender === "男") {
+    return "Male";
+  }
+
+  return "Unisex";
+}
+
 function renderGenderBreakdownYoy(row, cell, width) {
   if (width < 10) {
     return "";
@@ -131,18 +143,18 @@ export function renderFemaleOpportunityGenderMatrix(container, rows) {
 
   const legend = `
     <div class="gender-breakdown-legend">
-      <div class="gender-breakdown-legend-item">
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-female"></span>
         <span>Female</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
         <span class="gender-breakdown-swatch is-male"></span>
         <span>Male</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-unisex"></span>
         <span>Unisex</span>
-      </div>
+      </button>
     </div>
   `;
 
@@ -167,7 +179,19 @@ export function renderFemaleOpportunityGenderMatrix(container, rows) {
               `
               : "";
 
-          return `<div class="gender-segment ${getGenderFillClass(cell.gender)}" style="width: ${width}%;">${content}</div>`;
+          return `
+            <div
+              class="gender-segment ${getGenderFillClass(cell.gender)}"
+              style="width: ${width}%;"
+              data-brand="${row.brand}"
+              data-gender="${cell.gender}"
+              data-price="${Math.round(cell.avgDealPrice || 0)}"
+              data-yoy="${cell.yoyLabel}"
+              data-gender-label="${getGenderLegendLabel(cell.gender)}"
+            >
+              ${content}
+            </div>
+          `;
         })
         .join("");
 

@@ -839,6 +839,15 @@ a {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.01em;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.gender-breakdown-legend-item.is-muted {
+  opacity: 0.32;
 }
 
 .gender-breakdown-swatch {
@@ -917,6 +926,8 @@ a {
   justify-content: center;
   min-width: 0;
   border-radius: 0;
+  cursor: pointer;
+  transition: opacity 160ms ease, filter 160ms ease, box-shadow 160ms ease;
 }
 
 .gender-segment.is-female {
@@ -1000,6 +1011,11 @@ a {
   margin-top: 18px;
 }
 
+.gender-price-node {
+  cursor: pointer;
+  transition: opacity 160ms ease;
+}
+
 .gender-price-grid-line,
 .gender-price-row-line {
   stroke: rgba(223, 231, 241, 0.82);
@@ -1056,7 +1072,7 @@ a {
 
 .gender-price-size-note {
   position: absolute;
-  top: 28px;
+  top: 22px;
   right: 18px;
   margin: 0;
   color: #9aa3b2;
@@ -1068,6 +1084,72 @@ a {
 
 .gender-price-legend .gender-breakdown-legend-item {
   font-size: 13px;
+}
+
+.gender-segment.is-hidden,
+.gender-price-node.is-hidden {
+  display: none;
+}
+
+.gender-segment.is-dimmed,
+.gender-price-node.is-dimmed {
+  opacity: 0.16;
+}
+
+.gender-segment.is-active {
+  filter: saturate(1.06) brightness(1.02);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.36), 0 0 0 1px rgba(30, 41, 59, 0.08);
+}
+
+.gender-price-node.is-active .gender-price-bubble-core {
+  stroke-width: 2.2;
+  filter: url(#gender-price-bubble-shadow);
+}
+
+.gender-price-node.is-active .gender-price-brand-label {
+  font-weight: 800;
+}
+
+.gender-breakdown-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1200;
+  min-width: 148px;
+  max-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.gender-breakdown-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gender-breakdown-tooltip-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.gender-breakdown-tooltip-line {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.gender-breakdown-tooltip-line strong {
+  font-weight: 800;
+  color: var(--accent);
 }
 
 .gender-cell-yoy.is-positive {
@@ -2068,6 +2150,18 @@ function renderGenderBreakdownBrand(row) {
   return `<div class="gender-breakdown-brand-main">${row.brand}</div>`;
 }
 
+function getGenderLegendLabel(gender) {
+  if (gender === "女") {
+    return "Female";
+  }
+
+  if (gender === "男") {
+    return "Male";
+  }
+
+  return "Unisex";
+}
+
 function renderGenderBreakdownYoy(row, cell, width) {
   if (width < 10) {
     return "";
@@ -2096,18 +2190,18 @@ function renderFemaleOpportunityGenderMatrix(container, rows) {
 
   const legend = `
     <div class="gender-breakdown-legend">
-      <div class="gender-breakdown-legend-item">
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-female"></span>
         <span>Female</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
         <span class="gender-breakdown-swatch is-male"></span>
         <span>Male</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-unisex"></span>
         <span>Unisex</span>
-      </div>
+      </button>
     </div>
   `;
 
@@ -2132,7 +2226,19 @@ function renderFemaleOpportunityGenderMatrix(container, rows) {
               `
               : "";
 
-          return `<div class="gender-segment ${getGenderFillClass(cell.gender)}" style="width: ${width}%;">${content}</div>`;
+          return `
+            <div
+              class="gender-segment ${getGenderFillClass(cell.gender)}"
+              style="width: ${width}%;"
+              data-brand="${row.brand}"
+              data-gender="${cell.gender}"
+              data-price="${Math.round(cell.avgDealPrice || 0)}"
+              data-yoy="${cell.yoyLabel}"
+              data-gender-label="${getGenderLegendLabel(cell.gender)}"
+            >
+              ${content}
+            </div>
+          `;
         })
         .join("");
 
@@ -2190,11 +2296,11 @@ function getBubbleRadius(value, min, max) {
 
 function getCompactBubbleRadius(value, min, max) {
   if (max === min) {
-    return 18;
+    return 19;
   }
 
   const normalized = (value - min) / (max - min);
-  return 11 + normalized * 17;
+  return 12 + normalized * 18;
 }
 
 function createStop(offset, color, opacity = 1) {
@@ -2647,6 +2753,16 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
     const r = getCompactBubbleRadius(row.gmv, gmvMin, gmvMax);
     const palette = getGenderBubblePalette(row.gender);
 
+    const nodeGroup = createSvgElement("g", {
+      class: "gender-price-node",
+      "data-brand": row.brand,
+      "data-gender": row.gender,
+      "data-price": `${Math.round(row.avgDealPrice)}`,
+      "data-yoy": row.yoyLabel,
+      "data-gender-label": getGenderLabel(row.gender),
+      tabindex: "0"
+    });
+
     const bubble = createSvgElement("circle", {
       cx,
       cy,
@@ -2654,17 +2770,19 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
       fill: `url(#gender-bubble-gradient-${index})`,
       stroke: palette.edge,
       "stroke-width": 1.35,
-      filter: "url(#gender-price-bubble-shadow)"
+      filter: "url(#gender-price-bubble-shadow)",
+      class: "gender-price-bubble-core"
     });
-    svg.appendChild(bubble);
+    nodeGroup.appendChild(bubble);
 
     const highlight = createSvgElement("circle", {
       cx: cx - r * 0.28,
       cy: cy - r * 0.34,
       r: Math.max(4, r * 0.34),
-      fill: "rgba(255,255,255,0.42)"
+      fill: "rgba(255,255,255,0.42)",
+      class: "gender-price-bubble-highlight"
     });
-    svg.appendChild(highlight);
+    nodeGroup.appendChild(highlight);
 
     const labelKey = `${row.brand}__${row.gender}`;
     const labelOffset = labelOffsetMap[labelKey] ?? { dx: 12, dy: -8, anchor: "start" };
@@ -2675,7 +2793,8 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
       "text-anchor": labelOffset.anchor
     });
     label.textContent = row.brandLabel;
-    svg.appendChild(label);
+    nodeGroup.appendChild(label);
+    svg.appendChild(nodeGroup);
   });
 
   container.innerHTML = "";
@@ -2683,18 +2802,18 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
   wrap.className = "gender-price-bubble-wrap";
   wrap.innerHTML = `
     <div class="gender-breakdown-legend gender-price-legend">
-      <div class="gender-breakdown-legend-item">
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-female"></span>
         <span>Female</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
         <span class="gender-breakdown-swatch is-male"></span>
         <span>Male</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-unisex"></span>
         <span>Unisex</span>
-      </div>
+      </button>
     </div>
     <div class="gender-price-size-note">Bubble size = GMV</div>
   `;
@@ -2705,6 +2824,8 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
 
 // src\content-bootstrap.js
 const SECTION_SELECTOR = ".report-section[id]";
+const GENDER_BREAKDOWN_SELECTOR = "#female-opportunity";
+const ALL_GENDERS = ["女", "男", "男女"];
 
 function getTopbarHeight() {
   const topbar = document.querySelector("#topbar");
@@ -2857,6 +2978,206 @@ function bootstrapFemaleOpportunityPage() {
   const priceChartContainer = document.querySelector("#gender-breakdown-price-chart");
   renderFemaleOpportunityGenderMatrix(matrixContainer, FEMALE_OPPORTUNITY_BRAND_GENDER);
   renderGenderBreakdownPriceBubbleChart(priceChartContainer, GENDER_BREAKDOWN_PRICE_BUBBLES);
+  setupGenderBreakdownInteractions();
+}
+
+function ensureGenderBreakdownTooltip() {
+  let tooltip = document.querySelector("#genderBreakdownTooltip");
+  if (tooltip) {
+    return tooltip;
+  }
+
+  tooltip = document.createElement("div");
+  tooltip.id = "genderBreakdownTooltip";
+  tooltip.className = "gender-breakdown-tooltip";
+  document.body.appendChild(tooltip);
+  return tooltip;
+}
+
+function getGenderLegendCopy(gender) {
+  if (gender === "女") {
+    return "Female";
+  }
+
+  if (gender === "男") {
+    return "Male";
+  }
+
+  return "Unisex";
+}
+
+function formatPriceLabel(value) {
+  const numeric = Number(value ?? 0);
+  if (!Number.isFinite(numeric) || numeric <= 0) {
+    return "n/a";
+  }
+
+  return `¥${Math.round(numeric).toLocaleString("en-US")}`;
+}
+
+function createBubbleTooltipContent(target) {
+  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
+  const yoy = target.dataset.yoy ?? "n/a";
+  const price = formatPriceLabel(target.dataset.price);
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
+    <div class="gender-breakdown-tooltip-line">YOY% <strong>${yoy}</strong></div>
+    <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+  `;
+}
+
+function createSegmentTooltipContent(target) {
+  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
+  const price = formatPriceLabel(target.dataset.price);
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
+    <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+  `;
+}
+
+function placeTooltip(tooltip, x, y) {
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const nextX = Math.min(x + 16, viewportWidth - tooltipRect.width - 16);
+  const nextY = Math.min(y + 16, viewportHeight - tooltipRect.height - 16);
+
+  tooltip.style.left = `${Math.max(12, nextX)}px`;
+  tooltip.style.top = `${Math.max(12, nextY)}px`;
+}
+
+function showGenderBreakdownTooltip(tooltip, html, x, y) {
+  tooltip.innerHTML = html;
+  tooltip.classList.add("is-visible");
+  placeTooltip(tooltip, x, y);
+}
+
+function hideGenderBreakdownTooltip(tooltip) {
+  tooltip.classList.remove("is-visible");
+}
+
+function setupGenderBreakdownInteractions() {
+  const section = document.querySelector(GENDER_BREAKDOWN_SELECTOR);
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  const visibleGenders = new Set(ALL_GENDERS);
+  let activeKey = null;
+
+  const getSegments = () => Array.from(section.querySelectorAll(".gender-segment[data-brand][data-gender]"));
+  const getNodes = () => Array.from(section.querySelectorAll(".gender-price-node[data-brand][data-gender]"));
+  const getLegendButtons = () => Array.from(section.querySelectorAll(".gender-legend-toggle[data-gender]"));
+
+  const applyGenderVisibility = () => {
+    getLegendButtons().forEach((button) => {
+      const isVisible = visibleGenders.has(button.dataset.gender);
+      button.classList.toggle("is-muted", !isVisible);
+      button.setAttribute("aria-pressed", String(isVisible));
+    });
+
+    getSegments().forEach((segment) => {
+      segment.classList.toggle("is-hidden", !visibleGenders.has(segment.dataset.gender));
+    });
+
+    getNodes().forEach((node) => {
+      node.classList.toggle("is-hidden", !visibleGenders.has(node.dataset.gender));
+    });
+  };
+
+  const applyActiveState = () => {
+    const segments = getSegments();
+    const nodes = getNodes();
+    const hasActive = Boolean(activeKey);
+
+    segments.forEach((segment) => {
+      const key = `${segment.dataset.brand}__${segment.dataset.gender}`;
+      const isMatch = activeKey === key;
+      segment.classList.toggle("is-active", isMatch);
+      segment.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    nodes.forEach((node) => {
+      const key = `${node.dataset.brand}__${node.dataset.gender}`;
+      const isMatch = activeKey === key;
+      node.classList.toggle("is-active", isMatch);
+      node.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+  };
+
+  const clearActiveState = () => {
+    activeKey = null;
+    applyActiveState();
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const activateItem = (target, sourceType, event) => {
+    activeKey = `${target.dataset.brand}__${target.dataset.gender}`;
+    applyActiveState();
+
+    if (sourceType === "bubble") {
+      showGenderBreakdownTooltip(
+        tooltip,
+        createBubbleTooltipContent(target),
+        event?.clientX ?? target.getBoundingClientRect().right,
+        event?.clientY ?? target.getBoundingClientRect().top
+      );
+      return;
+    }
+
+    const rect = target.getBoundingClientRect();
+    showGenderBreakdownTooltip(
+      tooltip,
+      createSegmentTooltipContent(target),
+      event?.clientX ?? rect.left + rect.width / 2,
+      event?.clientY ?? rect.top
+    );
+  };
+
+  getLegendButtons().forEach((button) => {
+    button.addEventListener("click", () => {
+      const gender = button.dataset.gender;
+      if (!gender) {
+        return;
+      }
+
+      if (visibleGenders.has(gender)) {
+        if (visibleGenders.size === 1) {
+          return;
+        }
+        visibleGenders.delete(gender);
+      } else {
+        visibleGenders.add(gender);
+      }
+
+      clearActiveState();
+      applyGenderVisibility();
+    });
+  });
+
+  getSegments().forEach((segment) => {
+    segment.addEventListener("mouseenter", (event) => activateItem(segment, "segment", event));
+    segment.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
+    segment.addEventListener("mouseleave", clearActiveState);
+    segment.addEventListener("focus", (event) => activateItem(segment, "segment", event));
+    segment.addEventListener("blur", clearActiveState);
+  });
+
+  getNodes().forEach((node) => {
+    node.addEventListener("mouseenter", (event) => activateItem(node, "bubble", event));
+    node.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
+    node.addEventListener("mouseleave", clearActiveState);
+    node.addEventListener("focus", (event) => activateItem(node, "bubble", event));
+    node.addEventListener("blur", clearActiveState);
+  });
+
+  applyGenderVisibility();
+  applyActiveState();
 }
 
 window.addEventListener("DOMContentLoaded", () => {

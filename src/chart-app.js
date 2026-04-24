@@ -38,11 +38,11 @@ function getBubbleRadius(value, min, max) {
 
 function getCompactBubbleRadius(value, min, max) {
   if (max === min) {
-    return 18;
+    return 19;
   }
 
   const normalized = (value - min) / (max - min);
-  return 11 + normalized * 17;
+  return 12 + normalized * 18;
 }
 
 function createStop(offset, color, opacity = 1) {
@@ -495,6 +495,16 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
     const r = getCompactBubbleRadius(row.gmv, gmvMin, gmvMax);
     const palette = getGenderBubblePalette(row.gender);
 
+    const nodeGroup = createSvgElement("g", {
+      class: "gender-price-node",
+      "data-brand": row.brand,
+      "data-gender": row.gender,
+      "data-price": `${Math.round(row.avgDealPrice)}`,
+      "data-yoy": row.yoyLabel,
+      "data-gender-label": getGenderLabel(row.gender),
+      tabindex: "0"
+    });
+
     const bubble = createSvgElement("circle", {
       cx,
       cy,
@@ -502,17 +512,19 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
       fill: `url(#gender-bubble-gradient-${index})`,
       stroke: palette.edge,
       "stroke-width": 1.35,
-      filter: "url(#gender-price-bubble-shadow)"
+      filter: "url(#gender-price-bubble-shadow)",
+      class: "gender-price-bubble-core"
     });
-    svg.appendChild(bubble);
+    nodeGroup.appendChild(bubble);
 
     const highlight = createSvgElement("circle", {
       cx: cx - r * 0.28,
       cy: cy - r * 0.34,
       r: Math.max(4, r * 0.34),
-      fill: "rgba(255,255,255,0.42)"
+      fill: "rgba(255,255,255,0.42)",
+      class: "gender-price-bubble-highlight"
     });
-    svg.appendChild(highlight);
+    nodeGroup.appendChild(highlight);
 
     const labelKey = `${row.brand}__${row.gender}`;
     const labelOffset = labelOffsetMap[labelKey] ?? { dx: 12, dy: -8, anchor: "start" };
@@ -523,7 +535,8 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
       "text-anchor": labelOffset.anchor
     });
     label.textContent = row.brandLabel;
-    svg.appendChild(label);
+    nodeGroup.appendChild(label);
+    svg.appendChild(nodeGroup);
   });
 
   container.innerHTML = "";
@@ -531,18 +544,18 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   wrap.className = "gender-price-bubble-wrap";
   wrap.innerHTML = `
     <div class="gender-breakdown-legend gender-price-legend">
-      <div class="gender-breakdown-legend-item">
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-female"></span>
         <span>Female</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
         <span class="gender-breakdown-swatch is-male"></span>
         <span>Male</span>
-      </div>
-      <div class="gender-breakdown-legend-item">
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
         <span class="gender-breakdown-swatch is-unisex"></span>
         <span>Unisex</span>
-      </div>
+      </button>
     </div>
     <div class="gender-price-size-note">Bubble size = GMV</div>
   `;
