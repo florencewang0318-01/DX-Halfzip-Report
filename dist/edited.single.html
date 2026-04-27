@@ -988,6 +988,10 @@ a {
   opacity: 0.32;
 }
 
+.gender-breakdown-legend-item.is-static {
+  cursor: default;
+}
+
 .gender-breakdown-swatch {
   width: 11px;
   height: 11px;
@@ -1295,6 +1299,308 @@ a {
   color: var(--muted);
 }
 
+.silhouette-structure-panel .panel-title,
+.silhouette-growth-panel .panel-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.silhouette-structure-card,
+.silhouette-growth-card {
+  padding-top: 8px;
+}
+
+.silhouette-matrix-wrap {
+  width: calc(100% - 26px);
+  margin-top: 6px;
+  margin-right: 18px;
+  margin-left: 8px;
+}
+
+.silhouette-matrix-legend,
+.silhouette-growth-legend {
+  justify-content: flex-end;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-bottom: 6px;
+  gap: 14px;
+}
+
+.silhouette-matrix-grid {
+  display: grid;
+  grid-template-columns: 72px repeat(3, minmax(0, 1fr));
+  align-items: center;
+  row-gap: 0;
+  column-gap: 0;
+}
+
+.silhouette-matrix-corner {
+  position: relative;
+  height: 54px;
+}
+
+.silhouette-matrix-axis-length,
+.silhouette-matrix-axis-fit {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.silhouette-matrix-axis-length {
+  top: 2px;
+  left: 40px;
+}
+
+.silhouette-matrix-axis-fit {
+  left: 16px;
+  bottom: 6px;
+}
+
+.silhouette-matrix-axis-diagonal {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  width: 56px;
+  height: 1px;
+  background: rgba(71, 85, 105, 0.7);
+  transform: rotate(27deg);
+  transform-origin: left center;
+}
+
+.silhouette-matrix-length-header,
+.silhouette-matrix-fit-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(71, 85, 105, 0.92);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.silhouette-matrix-length-header {
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.silhouette-matrix-fit-header {
+  text-align: left;
+  padding-right: 2px;
+}
+
+.silhouette-matrix-cell {
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 9px 10px 8px;
+  border-radius: 0;
+  background: rgba(247, 249, 253, 0.72);
+  border-right: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.silhouette-matrix-cell.is-empty {
+  background: rgba(249, 251, 254, 0.8);
+}
+
+.silhouette-matrix-cell[data-interactive="true"] {
+  cursor: pointer;
+}
+
+.silhouette-matrix-cell[data-interactive="true"].is-active {
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.42), 0 10px 20px rgba(148, 163, 184, 0.18);
+  filter: saturate(1.04);
+}
+
+.silhouette-matrix-empty {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.72);
+}
+
+.silhouette-matrix-cell.is-female {
+  background: linear-gradient(
+    180deg,
+    rgba(239, 208, 228, calc(0.32 + var(--heat-intensity) * 0.48)) 0%,
+    rgba(225, 182, 210, calc(0.26 + var(--heat-intensity) * 0.46)) 100%
+  );
+}
+
+.silhouette-matrix-cell.is-male {
+  background: linear-gradient(
+    180deg,
+    rgba(201, 215, 239, calc(0.28 + var(--heat-intensity) * 0.50)) 0%,
+    rgba(169, 188, 223, calc(0.22 + var(--heat-intensity) * 0.48)) 100%
+  );
+}
+
+.silhouette-matrix-cell.is-unisex {
+  background: linear-gradient(
+    180deg,
+    rgba(247, 233, 184, calc(0.30 + var(--heat-intensity) * 0.50)) 0%,
+    rgba(234, 217, 137, calc(0.24 + var(--heat-intensity) * 0.46)) 100%
+  );
+}
+
+.silhouette-matrix-cell.is-low-share.is-female {
+  background: linear-gradient(180deg, rgba(239, 208, 228, 0.34) 0%, rgba(225, 182, 210, 0.26) 100%);
+}
+
+.silhouette-matrix-cell.is-low-share.is-male {
+  background: linear-gradient(180deg, rgba(201, 215, 239, 0.32) 0%, rgba(169, 188, 223, 0.24) 100%);
+}
+
+.silhouette-matrix-cell.is-low-share.is-unisex {
+  background: linear-gradient(180deg, rgba(247, 233, 184, 0.34) 0%, rgba(234, 217, 137, 0.25) 100%);
+}
+
+.silhouette-matrix-cell.is-emphasis.is-female {
+  background: linear-gradient(180deg, rgba(239, 208, 228, 0.86) 0%, rgba(225, 182, 210, 0.76) 100%);
+}
+
+.silhouette-matrix-cell.is-emphasis.is-male {
+  background: linear-gradient(180deg, rgba(201, 215, 239, 0.90) 0%, rgba(169, 188, 223, 0.82) 100%);
+}
+
+.silhouette-matrix-cell.is-medium-emphasis.is-female {
+  background: linear-gradient(180deg, rgba(239, 208, 228, 0.72) 0%, rgba(225, 182, 210, 0.60) 100%);
+}
+
+.silhouette-matrix-cell.is-medium-emphasis.is-male {
+  background: linear-gradient(180deg, rgba(201, 215, 239, 0.76) 0%, rgba(169, 188, 223, 0.66) 100%);
+}
+
+.silhouette-matrix-cell-head,
+.silhouette-matrix-cell-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.silhouette-matrix-share {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.silhouette-matrix-dominance {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(71, 85, 105, 0.84);
+}
+
+.silhouette-matrix-yoy {
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.silhouette-matrix-yoy.is-positive {
+  color: var(--green);
+}
+
+.silhouette-matrix-yoy.is-negative {
+  color: var(--red);
+}
+
+.silhouette-matrix-yoy.is-neutral {
+  color: var(--muted);
+}
+
+.silhouette-matrix-note,
+.silhouette-growth-note {
+  margin-top: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9aa3b2;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
+}
+
+.silhouette-growth-wrap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.silhouette-growth-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.silhouette-growth-grid-line,
+.silhouette-growth-row-line {
+  stroke: rgba(223, 231, 241, 0.82);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.silhouette-growth-row-line {
+  stroke-dasharray: 4 5;
+}
+
+.silhouette-growth-grid-line.is-zero,
+.silhouette-growth-zero-line {
+  stroke: rgba(148, 163, 184, 0.92);
+}
+
+.silhouette-growth-node {
+  transition: opacity 160ms ease;
+}
+
+.silhouette-growth-yoy {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.silhouette-growth-yoy.is-female {
+  color: #c870ab;
+}
+
+.silhouette-growth-yoy.is-male {
+  color: #7896cb;
+}
+
+.silhouette-growth-yoy.is-unisex {
+  color: #c0a54b;
+}
+
+.silhouette-growth-new {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.silhouette-growth-new.is-female {
+  color: #c870ab;
+}
+
+.silhouette-growth-new.is-male {
+  color: #7896cb;
+}
+
+.silhouette-growth-new.is-unisex {
+  color: #c0a54b;
+}
+
+.silhouette-growth-combo-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.silhouette-growth-tick {
+  font-size: 11px;
+}
+
 .gender-cell-yoy.is-positive {
   color: var(--green);
 }
@@ -1435,7 +1741,6 @@ a {
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#competitor-scope">Competitor Scope</a>
             <a class="nav-dropdown-item" href="#female-opportunity">Gender Breakdown</a>
-            <a class="nav-dropdown-item" href="#price-architecture">Price Architecture</a>
           </div>
         </div>
 
@@ -1443,8 +1748,8 @@ a {
           <button class="nav-group-toggle" type="button" data-target="#silhouette" aria-label="Jump to product sections">Product</button>
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#silhouette">Silhouette</a>
-            <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
             <a class="nav-dropdown-item" href="#function-scene">Function & Scene</a>
+            <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
             <a class="nav-dropdown-item" href="#design-cues">Design Cues</a>
           </div>
         </div>
@@ -1550,17 +1855,53 @@ a {
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="price-architecture" data-page-label="Price Architecture">
+    <section class="sheet report-section paired-chart-page" id="silhouette" data-page-label="Silhouette">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">03</span><span>Price Architecture</span></div>
-              <h2 class="section-title">价格带将决定 27FW 半拉链内搭的竞争姿态，管理层最需要看到的是“我们要站在哪一档”</h2>
+              <div class="section-kicker"><span class="section-badge">03</span><span>Silhouette</span></div>
+              <h2 class="section-title">主流轮廓仍集中在常规衣长，但真正有开发价值的，是不同 fit-length 组合背后的性别偏向与增长差异</h2>
               <ul class="section-bullets">
-                <li>本页不只展示参考价格和成交均价，更要说明不同价格带对应的面料、保暖强度和品牌语义。</li>
-                <li>建议用品牌价格带分层，识别高端性能型、中高价城市运动型、中价功能型三个带宽。</li>
-                <li>输出必须直连开发建议，例如主推价位、形象款价位、引流款价位。</li>
+                <li>左图先回答当前竞品的主流轮廓落在哪些 fit × length 组合里，并用主导性别判断这些组合是谁在驱动。</li>
+                <li>右图再看核心轮廓组合里不同性别的 YoY 变化，识别哪些版型机会正在向女性或中性方向转移。</li>
+                <li>对 Discovery 而言，版型不是基础描述，而是区分专业运动、女性外穿化和通勤兼容性的开发杠杆。</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="chart-grid evidence-grid two-up reveal">
+            <article class="chart-panel panel silhouette-structure-panel">
+              <div class="chart-kicker">Silhouette Matrix</div>
+              <h3 class="panel-title">Fit × Length 主结构矩阵</h3>
+              <div id="silhouette-structure-chart" class="silhouette-structure-card"></div>
+            </article>
+            <article class="chart-panel panel silhouette-growth-panel">
+              <div class="chart-kicker">Growth by Gender</div>
+              <h3 class="panel-title">核心轮廓的性别增长机会</h3>
+              <div id="silhouette-growth-chart" class="silhouette-growth-card"></div>
+            </article>
+          </div>
+
+          <div class="page-foot">
+            <span>Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
+            <span>Page 03</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet report-section paired-chart-page" id="function-scene" data-page-label="Function & Scene">
+      <div class="page">
+        <div class="content-frame">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-kicker"><span class="section-badge">04</span><span>Function & Scene</span></div>
+              <h2 class="section-title">功能卖点正在从单一保暖转向“保暖 + 弹力 + 透气/速干”的复合组合，但最终仍由场景决定话术重心</h2>
+              <ul class="section-bullets">
+                <li>高频功能词已经显现出主排序：弹力、保暖、吸湿速干、透气、四面弹力。</li>
+                <li>功能表达不应只停留在词汇堆砌，需要区分滑雪、徒步、训练、通勤四种使用语言。</li>
+                <li>本页适合作为“从数据到开发话术”的过渡页，为后面的设计方向做承接。</li>
               </ul>
             </div>
           </div>
@@ -1568,67 +1909,18 @@ a {
           <div class="chart-grid evidence-grid two-up reveal">
             <article class="chart-panel panel">
               <div class="chart-kicker">Evidence Block A</div>
-              <h3 class="panel-title">参考价格与成交均价带宽</h3>
+              <h3 class="panel-title">功能词频结构</h3>
               <div class="placeholder">
-                <p>建议图表：各品牌价格带箱线图或散点图</p>
-                <p>建议方法：以参考价格为定位，以成交均价验证真实交易带宽。</p>
+                <p>建议图表：功能词 Top10 条形图</p>
+                <p>建议统一口径：排汗 / 吸湿排汗 / 芯吸 / 速干 等同义词归并。</p>
               </div>
             </article>
             <article class="chart-panel panel">
               <div class="chart-kicker">Evidence Block B</div>
-              <h3 class="panel-title">价格带对应的商品语义</h3>
+              <h3 class="panel-title">场景语言映射</h3>
               <div class="placeholder">
-                <p>建议内容：高价带对应高性能抓绒 / 羊毛混纺，中价带对应弹力速干 / 场景泛化。</p>
-              </div>
-            </article>
-          </div>
-
-          <div class="page-foot">
-            <span>Pending chart build</span>
-            <span>Page 03</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sheet report-section paired-chart-page" id="silhouette" data-page-label="Silhouette">
-      <div class="page">
-        <div class="content-frame">
-          <div class="section-head reveal">
-            <div>
-              <div class="section-kicker"><span class="section-badge">04</span><span>Silhouette</span></div>
-              <h2 class="section-title">当前市场的主轮廓仍是常规衣长与合体版型，但真正可做出差异的，是修身与宽松两端的场景化表达</h2>
-              <ul class="section-bullets">
-                <li>已清洗结构显示：regular常规衣长占绝对主流，版型以 regular合体 与 slim修身 为主。</li>
-                <li>插肩与正肩接近双主流，说明竞品在运动感与利落感之间都有明确表达路径。</li>
-                <li>对 Discovery 而言，版型不是基础信息，而是用来区分专业运动、户外通勤、女性外穿感的关键杠杆。</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="chart-grid evidence-grid three-up reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Silhouette A</div>
-              <h3 class="panel-title">版型结构</h3>
-              <div class="placeholder">
-                <p>建议图表：版型占比条形图</p>
-                <p>重点口径：regular合体、slim修身、Active运动版型、loose宽松、tight紧身。</p>
-              </div>
-            </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Silhouette B</div>
-              <h3 class="panel-title">衣长结构</h3>
-              <div class="placeholder">
-                <p>建议图表：衣长占比图</p>
-                <p>重点口径：regular常规、semi-crop短款、crop短款。</p>
-              </div>
-            </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Silhouette C</div>
-              <h3 class="panel-title">肩型结构</h3>
-              <div class="placeholder">
-                <p>建议图表：插肩 / 正肩 / 落肩 对比图</p>
-                <p>建议注释：插肩偏运动表现，正肩偏利落通勤，微落肩可承接女性外穿化。</p>
+                <p>建议图表：场景 x 功能气泡图</p>
+                <p>建议内容：滑雪偏保暖层搭，徒步偏透气弹力，都市通勤偏轻保暖和外观利落。</p>
               </div>
             </article>
           </div>
@@ -1684,54 +1976,12 @@ a {
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="function-scene" data-page-label="Function & Scene">
-      <div class="page">
-        <div class="content-frame">
-          <div class="section-head reveal">
-            <div>
-              <div class="section-kicker"><span class="section-badge">06</span><span>Function & Scene</span></div>
-              <h2 class="section-title">功能卖点正在从单一保暖转向“保暖 + 弹力 + 透气/速干”的复合组合，但最终仍由场景决定话术重心</h2>
-              <ul class="section-bullets">
-                <li>高频功能词已经显现出主排序：弹力、保暖、吸湿速干、透气、四面弹力。</li>
-                <li>功能表达不应只停留在词汇堆砌，需要区分滑雪、徒步、训练、通勤四种使用语言。</li>
-                <li>本页适合作为“从数据到开发话术”的过渡页，为后面的设计方向做承接。</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="chart-grid evidence-grid two-up reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Evidence Block A</div>
-              <h3 class="panel-title">功能词频结构</h3>
-              <div class="placeholder">
-                <p>建议图表：功能词 Top10 条形图</p>
-                <p>建议统一口径：排汗 / 吸湿排汗 / 芯吸 / 速干 等同义词归并。</p>
-              </div>
-            </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Evidence Block B</div>
-              <h3 class="panel-title">场景语言映射</h3>
-              <div class="placeholder">
-                <p>建议图表：场景 x 功能气泡图</p>
-                <p>建议内容：滑雪偏保暖层搭，徒步偏透气弹力，都市通勤偏轻保暖和外观利落。</p>
-              </div>
-            </article>
-          </div>
-
-          <div class="page-foot">
-            <span>Pending chart build</span>
-            <span>Page 06</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="sheet report-section paired-chart-page" id="design-cues" data-page-label="Design Cues">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">07</span><span>Design Cues</span></div>
+              <div class="section-kicker"><span class="section-badge">06</span><span>Design Cues</span></div>
               <h2 class="section-title">半拉链内搭的设计差异主要来自细节处理，而真正值得借鉴的不是“装饰”，而是能被消费者感知的功能化设计点</h2>
               <ul class="section-bullets">
                 <li>现有样本中高频设计点已经出现清晰线索，如拼接剪裁、高领、拉链口袋、平脚接缝、表面磨毛等。</li>
@@ -1763,7 +2013,7 @@ a {
 
           <div class="page-foot">
             <span>Pending board build</span>
-            <span>Page 07</span>
+            <span>Page 06</span>
           </div>
         </div>
       </div>
@@ -1774,7 +2024,7 @@ a {
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">08</span><span>Brand Compare</span></div>
+              <div class="section-kicker"><span class="section-badge">07</span><span>Brand Compare</span></div>
               <h2 class="section-title">六大竞品的真正价值不在谁卖得更多，而在各自代表了哪一种值得被转译的半拉链内搭逻辑</h2>
               <ul class="section-bullets">
                 <li>始祖鸟和可隆更适合提供高端山系与功能层搭参照，迪桑特、萨洛蒙更适合观察运动化表达，lululemon 更适合观察女性穿着体验。</li>
@@ -1797,7 +2047,7 @@ a {
 
           <div class="page-foot">
             <span>Pending compare build</span>
-            <span>Page 08</span>
+            <span>Page 07</span>
           </div>
         </div>
       </div>
@@ -1808,7 +2058,7 @@ a {
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">09</span><span>Product Direction</span></div>
+              <div class="section-kicker"><span class="section-badge">08</span><span>Product Direction</span></div>
               <h2 class="section-title">27FW 半拉链长袖内搭应做成三层商品结构，用女性机会带动品类升级，而不是只补一个基础功能款</h2>
               <ul class="section-bullets">
                 <li>建议形成“基础引流款 + 核心场景款 + 形象升级款”三级商品矩阵。</li>
@@ -1842,7 +2092,7 @@ a {
 
           <div class="page-foot">
             <span>Direction draft</span>
-            <span>Page 09</span>
+            <span>Page 08</span>
           </div>
         </div>
       </div>
@@ -2030,6 +2280,134 @@ function summarizeHalfZipByBrandGender(rows) {
   return summary;
 }
 
+const SILHOUETTE_FIT_ORDER = ["tight紧身", "slim修身", "regular合体", "Active运动版型", "loose宽松"];
+const SILHOUETTE_LENGTH_ORDER = ["crop短款", "semi-crop短款", "regular常规"];
+const SILHOUETTE_GENDERS = ["女", "男", "男女"];
+
+function normalizeSilhouetteFit(rawFit) {
+  if (!rawFit) {
+    return null;
+  }
+
+  const normalized = String(rawFit).trim();
+  if (SILHOUETTE_FIT_ORDER.includes(normalized)) {
+    return normalized;
+  }
+
+  if (normalized.includes("男：regular") && normalized.includes("女：slim修身")) {
+    return "gender-split";
+  }
+
+  return null;
+}
+
+function normalizeSilhouetteLength(rawLength) {
+  if (!rawLength) {
+    return null;
+  }
+
+  const normalized = String(rawLength).trim();
+  return SILHOUETTE_LENGTH_ORDER.includes(normalized) ? normalized : null;
+}
+
+function formatSilhouetteFitShort(fit) {
+  if (fit === "tight紧身") {
+    return "Tight";
+  }
+
+  if (fit === "slim修身") {
+    return "Slim";
+  }
+
+  if (fit === "regular合体") {
+    return "Regular";
+  }
+
+  if (fit === "Active运动版型") {
+    return "Active";
+  }
+
+  if (fit === "loose宽松") {
+    return "Loose";
+  }
+
+  return fit;
+}
+
+function formatSilhouetteLengthShort(length) {
+  if (length === "crop短款") {
+    return "Crop";
+  }
+
+  if (length === "semi-crop短款") {
+    return "Semi-crop";
+  }
+
+  if (length === "regular常规") {
+    return "Regular";
+  }
+
+  return length;
+}
+
+function createSilhouetteSummary(rows) {
+  const comboMap = new Map();
+  const comboGenderMap = new Map();
+  let trackedCount = 0;
+  let untrackedCount = 0;
+  let trackedGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const fit = normalizeSilhouetteFit(row.fit);
+    const length = normalizeSilhouetteLength(row.length);
+    if (!fit || !length || fit === "gender-split") {
+      untrackedCount += 1;
+      return;
+    }
+
+    const gender = SILHOUETTE_GENDERS.includes(row.gender) ? row.gender : "男女";
+    const comboKey = `${fit}__${length}`;
+    const comboGenderKey = `${fit}__${length}__${gender}`;
+    const gmv = toNumber(row["销售额"]);
+
+    const comboCurrent = comboMap.get(comboKey) ?? {
+      fit,
+      length,
+      count: 0,
+      gmv: 0
+    };
+    comboCurrent.count += 1;
+    comboCurrent.gmv += gmv;
+    comboMap.set(comboKey, comboCurrent);
+
+    const comboGenderCurrent = comboGenderMap.get(comboGenderKey) ?? {
+      fit,
+      length,
+      gender,
+      count: 0,
+      gmv: 0
+    };
+    comboGenderCurrent.count += 1;
+    comboGenderCurrent.gmv += gmv;
+    comboGenderMap.set(comboGenderKey, comboGenderCurrent);
+
+    trackedCount += 1;
+    trackedGmv += gmv;
+  });
+
+  return {
+    comboMap,
+    comboGenderMap,
+    trackedCount,
+    untrackedCount,
+    trackedGmv
+  };
+}
+
 const LS_HZ_INNER_DATASET = {
   workbook: LS_HZ_INNER_WORKBOOK,
   raw: {
@@ -2165,6 +2543,115 @@ const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.flatMap((
       skuCount: cell.count25
     }))
 );
+
+const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
+const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);
+
+const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
+  SILHOUETTE_LENGTH_ORDER.map((length) => {
+    const current = SILHOUETTE_Y25.comboMap.get(`${fit}__${length}`) ?? {
+      count: 0,
+      gmv: 0
+    };
+    const previous = SILHOUETTE_Y24.comboMap.get(`${fit}__${length}`) ?? {
+      count: 0,
+      gmv: 0
+    };
+
+    const genderBreakdown = SILHOUETTE_GENDERS.map((gender) => {
+      const item = SILHOUETTE_Y25.comboGenderMap.get(`${fit}__${length}__${gender}`) ?? {
+        count: 0,
+        gmv: 0
+      };
+      const previousItem = SILHOUETTE_Y24.comboGenderMap.get(`${fit}__${length}__${gender}`) ?? {
+        count: 0,
+        gmv: 0
+      };
+      const yoy = computeYoy(item.gmv, previousItem.gmv);
+
+      return {
+        gender,
+        count: item.count,
+        gmv: item.gmv,
+        gmv24: previousItem.gmv,
+        yoy,
+        yoyLabel: previousItem.gmv > 0 ? formatYoyLabel(yoy) : item.count > 0 ? "new" : "n/a"
+      };
+    });
+
+    const dominantGender = genderBreakdown.reduce(
+      (best, item) => (item.count > best.count ? item : best),
+      { gender: "男女", count: 0, gmv: 0 }
+    );
+
+    const share = SILHOUETTE_Y25.trackedCount ? (current.count / SILHOUETTE_Y25.trackedCount) * 100 : 0;
+    const gmvShare = SILHOUETTE_Y25.trackedGmv ? (current.gmv / SILHOUETTE_Y25.trackedGmv) * 100 : 0;
+    const yoy = computeYoy(current.gmv, previous.gmv);
+
+    return {
+      fit,
+      length,
+      count: current.count,
+      gmv: current.gmv,
+      gmv24: previous.gmv,
+      yoy,
+      yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.count > 0 ? "new" : "n/a",
+      share,
+      shareLabel: `${Math.round(share)}%`,
+      gmvShare,
+      gmvShareLabel: `${Math.round(gmvShare)}%`,
+      dominantGender: dominantGender.count > 0 ? dominantGender.gender : null,
+      dominantGenderShare: current.count ? (dominantGender.count / current.count) * 100 : 0,
+      dominantGenderShareLabel: current.count ? `${Math.round((dominantGender.count / current.count) * 100)}%` : "",
+      genderBreakdown
+    };
+  })
+);
+
+const SILHOUETTE_GROWTH_DATA = SILHOUETTE_MATRIX_DATA
+  .filter((item) => item.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6)
+  .map((item) => {
+    const comboLabel = `${formatSilhouetteFitShort(item.fit)} × ${formatSilhouetteLengthShort(item.length)}`;
+
+    return {
+      fit: item.fit,
+      length: item.length,
+      comboLabel,
+      count: item.count,
+      share: item.share,
+      shareLabel: item.shareLabel,
+      genders: SILHOUETTE_GENDERS.map((gender) => {
+        const current = SILHOUETTE_Y25.comboGenderMap.get(`${item.fit}__${item.length}__${gender}`) ?? {
+          count: 0,
+          gmv: 0
+        };
+        const previous = SILHOUETTE_Y24.comboGenderMap.get(`${item.fit}__${item.length}__${gender}`) ?? {
+          count: 0,
+          gmv: 0
+        };
+        const shareInCombo = item.count ? (current.count / item.count) * 100 : 0;
+        const yoy = computeYoy(current.gmv, previous.gmv);
+
+        return {
+          gender,
+          count25: current.count,
+          gmv25: current.gmv,
+          gmv24: previous.gmv,
+          shareInCombo,
+          shareInComboLabel: `${Math.round(shareInCombo)}%`,
+          yoy,
+          yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.count > 0 ? "new" : "n/a"
+        };
+      })
+    };
+  });
+
+const SILHOUETTE_PAGE_DRAFT = {
+  trackedSampleCount: SILHOUETTE_Y25.trackedCount,
+  untrackedSampleCount: SILHOUETTE_Y25.untrackedCount
+};
 
 const MARKET_SCOPE_PAGE_DRAFT = {
   chapter: "01 Competitor Scope",
@@ -2821,6 +3308,451 @@ function renderMarketScopeBubbleChart(container, rows) {
   container.appendChild(wrap);
 }
 
+function getSilhouetteGenderToken(gender) {
+  if (gender === "女") {
+    return {
+      label: "Female",
+      short: "F",
+      className: "is-female"
+    };
+  }
+
+  if (gender === "男") {
+    return {
+      label: "Male",
+      short: "M",
+      className: "is-male"
+    };
+  }
+
+  return {
+    label: "Unisex",
+    short: "U",
+    className: "is-unisex"
+  };
+}
+
+function formatSilhouetteFitLabel(fit) {
+  if (fit === "tight紧身") {
+    return "Tight";
+  }
+
+  if (fit === "slim修身") {
+    return "Slim";
+  }
+
+  if (fit === "regular合体") {
+    return "Regular";
+  }
+
+  if (fit === "Active运动版型") {
+    return "Active";
+  }
+
+  if (fit === "loose宽松") {
+    return "Loose";
+  }
+
+  return fit;
+}
+
+function formatSilhouetteLengthLabel(length) {
+  if (length === "crop短款") {
+    return "Crop";
+  }
+
+  if (length === "semi-crop短款") {
+    return "Semi-crop";
+  }
+
+  if (length === "regular常规") {
+    return "Regular";
+  }
+
+  return length;
+}
+
+function renderSilhouetteStructureChart(container, rows, meta = {}) {
+  if (!container) {
+    return;
+  }
+
+  const fitOrder = ["regular合体", "Active运动版型", "slim修身", "loose宽松"];
+  const lengthOrder = ["regular常规", "semi-crop短款", "crop短款"];
+  const maxShare = Math.max(...rows.map((row) => row.gmvShare), 0);
+  const getYoyClass = (label) => {
+    if (!label || label === "n/a") {
+      return "is-neutral";
+    }
+
+    if (label === "new" || label.startsWith("+")) {
+      return "is-positive";
+    }
+
+    if (label.startsWith("-")) {
+      return "is-negative";
+    }
+
+    return "is-neutral";
+  };
+  const renderCell = (row) => {
+    if (!row || row.count === 0 || !row.dominantGender) {
+      return `
+        <div class="silhouette-matrix-cell is-empty">
+          <div class="silhouette-matrix-empty">-</div>
+        </div>
+      `;
+    }
+
+    const genderToken = getSilhouetteGenderToken(row.dominantGender);
+    const intensity = maxShare > 0 ? Math.max(0.12, row.gmvShare / maxShare) : 0.12;
+    const isBlankCell = row.gmvShare < 0.5;
+    const isLowShare = row.gmvShare > 0 && row.gmvShare < 5;
+    const isEmphasisCell =
+      row.length === "regular常规" && (row.fit === "regular合体" || row.fit === "Active运动版型" || row.fit === "slim修身");
+    const isMediumEmphasisCell = row.length === "regular常规" && row.fit === "slim修身";
+    const ledCopy =
+      row.dominantGender === "男"
+        ? "Male Led"
+        : row.dominantGender === "女"
+          ? "Female Led"
+          : "Unisex Led";
+    const femaleShare = row.genderBreakdown.find((item) => item.gender === "女");
+    const maleShare = row.genderBreakdown.find((item) => item.gender === "男");
+    const unisexShare = row.genderBreakdown.find((item) => item.gender === "男女");
+    const shareAttrs = [
+      `data-interactive="true"`,
+      `data-fit="${row.fit}"`,
+      `data-length="${row.length}"`,
+      `data-fit-label="${formatSilhouetteFitLabel(row.fit)}"`,
+      `data-length-label="${formatSilhouetteLengthLabel(row.length)}"`,
+      femaleShare?.count
+        ? `data-female-share="${Math.round((femaleShare.count / row.count) * 100)}%"`
+        : "",
+      femaleShare?.count && femaleShare?.yoyLabel && femaleShare.yoyLabel !== "n/a"
+        ? `data-female-yoy="${femaleShare.yoyLabel}"`
+        : "",
+      maleShare?.count
+        ? `data-male-share="${Math.round((maleShare.count / row.count) * 100)}%"`
+        : "",
+      maleShare?.count && maleShare?.yoyLabel && maleShare.yoyLabel !== "n/a"
+        ? `data-male-yoy="${maleShare.yoyLabel}"`
+        : "",
+      unisexShare?.count
+        ? `data-unisex-share="${Math.round((unisexShare.count / row.count) * 100)}%"`
+        : "",
+      unisexShare?.count && unisexShare?.yoyLabel && unisexShare.yoyLabel !== "n/a"
+        ? `data-unisex-yoy="${unisexShare.yoyLabel}"`
+        : ""
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    if (isBlankCell) {
+      return `
+        <div class="silhouette-matrix-cell is-empty">
+          <div class="silhouette-matrix-empty">-</div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="silhouette-matrix-cell ${genderToken.className}${isLowShare ? " is-low-share" : ""}${isEmphasisCell ? " is-emphasis" : ""}${isMediumEmphasisCell ? " is-medium-emphasis" : ""}" style="--heat-intensity:${intensity.toFixed(3)};" ${shareAttrs}>
+        <div class="silhouette-matrix-cell-head">
+          <span class="silhouette-matrix-share">${row.gmvShareLabel}</span>
+          <span class="silhouette-matrix-yoy ${getYoyClass(row.yoyLabel)}">${row.yoyLabel}</span>
+        </div>
+        <div class="silhouette-matrix-cell-foot">
+          <span class="silhouette-matrix-dominance">${ledCopy}</span>
+        </div>
+      </div>
+    `;
+  };
+
+  const bodyMarkup = fitOrder
+    .map((fit) => {
+      const rowCells = lengthOrder
+        .map((length) => renderCell(rows.find((row) => row.fit === fit && row.length === length)))
+        .join("");
+      return `
+        <div class="silhouette-matrix-fit-header">${formatSilhouetteFitLabel(fit)}</div>
+        ${rowCells}
+      `;
+    })
+    .join("");
+
+  container.innerHTML = `
+    <div class="silhouette-matrix-wrap">
+      <div class="gender-breakdown-legend silhouette-matrix-legend">
+        <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female-led</span></span>
+        <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male-led</span></span>
+      </div>
+      <div class="silhouette-matrix-grid">
+        <div class="silhouette-matrix-corner">
+          <span class="silhouette-matrix-axis-length">Length</span>
+          <span class="silhouette-matrix-axis-fit">Fit</span>
+          <span class="silhouette-matrix-axis-diagonal"></span>
+        </div>
+        ${lengthOrder
+          .map(
+            (length) => `<div class="silhouette-matrix-length-header">${formatSilhouetteLengthLabel(length)}</div>`
+          )
+          .join("")}
+        ${bodyMarkup}
+      </div>
+      <div class="silhouette-matrix-note">
+        Cell Depth = Y25 GMV
+        <br>
+        Bottom Tag = Dominant Gender
+        <br>
+        6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON
+      </div>
+    </div>
+  `;
+}
+
+function renderSilhouetteGrowthChart(container, rows) {
+  if (!container) {
+    return;
+  }
+
+  const validRows = rows.filter((row) => row.genders.some((gender) => gender.count25 > 0));
+  if (!validRows.length) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const width = 760;
+  const height = 426;
+  const margin = { top: 58, right: 88, bottom: 54, left: 138 };
+  const plotWidth = width - margin.left - margin.right;
+  const rowGap = 52;
+  const plotHeight = rowGap * (validRows.length - 1);
+  const axisBottom = margin.top + plotHeight;
+  const xMin = -50;
+  const xMax = 110;
+  const ticks = [-50, 0, 50, 100];
+
+  const svg = createSvgElement("svg", {
+    class: "silhouette-growth-svg",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": "核心轮廓的性别增长机会图"
+  });
+
+  const overlay = createChartOverlay();
+  const defs = createSvgElement("defs");
+  const shadowFilter = createSvgElement("filter", {
+    id: "silhouette-growth-shadow",
+    x: "-35%",
+    y: "-35%",
+    width: "170%",
+    height: "170%"
+  });
+  shadowFilter.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: "0",
+      dy: "4",
+      stdDeviation: "5",
+      "flood-color": "#94a3b8",
+      "flood-opacity": "0.16"
+    })
+  );
+  defs.appendChild(shadowFilter);
+
+  validRows.forEach((row, rowIndex) => {
+    row.genders.forEach((genderItem, genderIndex) => {
+      const palette = getGenderBubblePalette(genderItem.gender);
+      const gradient = createSvgElement("radialGradient", {
+        id: `silhouette-growth-gradient-${rowIndex}-${genderIndex}`,
+        cx: "36%",
+        cy: "30%",
+        r: "76%"
+      });
+      gradient.appendChild(createStop("0%", palette.highlight, 0.96));
+      gradient.appendChild(createStop("42%", palette.base, 0.90));
+      gradient.appendChild(createStop("100%", palette.edge, 0.98));
+      defs.appendChild(gradient);
+    });
+  });
+  svg.appendChild(defs);
+
+  const xZero = scaleValue(0, xMin, xMax, margin.left, margin.left + plotWidth);
+  ticks.forEach((tickValue) => {
+    const x = scaleValue(tickValue, xMin, xMax, margin.left, margin.left + plotWidth);
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: x,
+        y1: margin.top - 10,
+        x2: x,
+        y2: axisBottom + 10,
+        class: `silhouette-growth-grid-line${tickValue === 0 ? " is-zero" : ""}`
+      })
+    );
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-x silhouette-growth-tick",
+        text: formatPercentTick(tickValue),
+        x,
+        y: axisBottom + 18,
+        width,
+        height,
+        anchor: "middle",
+        valign: "top"
+      })
+    );
+  });
+
+  validRows.forEach((row, index) => {
+    const y = margin.top + index * rowGap;
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: margin.left,
+        y1: y,
+        x2: margin.left + plotWidth,
+        y2: y,
+        class: "silhouette-growth-row-line"
+      })
+    );
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-y silhouette-growth-combo-label",
+        text: row.comboLabel,
+        x: margin.left - 18,
+        y,
+        width,
+        height,
+        anchor: "end",
+        valign: "middle"
+      })
+    );
+  });
+
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: margin.left,
+      y1: axisBottom,
+      x2: margin.left + plotWidth,
+      y2: axisBottom,
+      class: "gender-price-axis-line"
+    })
+  );
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: xZero,
+      y1: margin.top - 12,
+      x2: xZero,
+      y2: axisBottom + 8,
+      class: "gender-price-axis-line silhouette-growth-zero-line"
+    })
+  );
+
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-x",
+      text: "YOY%",
+      x: margin.left + plotWidth / 2,
+      y: height - 10,
+      width,
+      height,
+      anchor: "middle",
+      valign: "top"
+    })
+  );
+
+  validRows.forEach((row, rowIndex) => {
+    const y = margin.top + rowIndex * rowGap;
+
+    row.genders.forEach((genderItem, genderIndex) => {
+      if (genderItem.count25 <= 0) {
+        return;
+      }
+
+      const token = getSilhouetteGenderToken(genderItem.gender);
+      const palette = getGenderBubblePalette(genderItem.gender);
+      const shareRadius = 9 + (Math.max(0, genderItem.shareInCombo) / 100) * 11;
+
+      if (genderItem.yoyLabel === "new") {
+        overlay.appendChild(
+          createChartOverlayText({
+            className: `chart-overlay-label silhouette-growth-new ${token.className}`,
+            text: `${token.short} new`,
+            x: margin.left + plotWidth + 26,
+            y,
+            width,
+            height,
+            anchor: "start",
+            valign: "middle"
+          })
+        );
+        return;
+      }
+
+      const x = scaleValue(
+        Number(String(genderItem.yoyLabel).replace(/[^\d.-]/g, "")),
+        xMin,
+        xMax,
+        margin.left,
+        margin.left + plotWidth
+      );
+
+      const group = createSvgElement("g", {
+        class: "silhouette-growth-node"
+      });
+      group.appendChild(
+        createSvgElement("circle", {
+          cx: x,
+          cy: y,
+          r: shareRadius,
+          fill: `url(#silhouette-growth-gradient-${rowIndex}-${genderIndex})`,
+          stroke: palette.edge,
+          "stroke-width": 1.2,
+          filter: "url(#silhouette-growth-shadow)"
+        })
+      );
+      group.appendChild(
+        createSvgElement("circle", {
+          cx: x - shareRadius * 0.26,
+          cy: y - shareRadius * 0.30,
+          r: Math.max(3, shareRadius * 0.28),
+          fill: "rgba(255,255,255,0.34)"
+        })
+      );
+      svg.appendChild(group);
+
+      overlay.appendChild(
+        createChartOverlayText({
+          className: `chart-overlay-label silhouette-growth-yoy ${token.className}`,
+          text: `${token.short} ${genderItem.yoyLabel}`,
+          x,
+          y: y - shareRadius - 12,
+          width,
+          height,
+          anchor: "middle",
+          valign: "bottom"
+        })
+      );
+    });
+  });
+
+  container.innerHTML = "";
+  const wrap = document.createElement("div");
+  wrap.className = "silhouette-growth-wrap";
+  wrap.innerHTML = `
+    <div class="gender-breakdown-legend silhouette-growth-legend">
+      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female</span></span>
+      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male</span></span>
+      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-unisex"></span><span>Unisex</span></span>
+    </div>
+    <div class="silhouette-growth-note">Dot size = share within silhouette combo</div>
+  `;
+  wrap.appendChild(svg);
+  wrap.appendChild(overlay);
+  container.appendChild(wrap);
+}
+
 function formatPriceTick(value) {
   return `¥${Math.round(value)}`;
 }
@@ -3293,6 +4225,15 @@ function bootstrapFemaleOpportunityPage() {
   setupGenderBreakdownInteractions();
 }
 
+function bootstrapSilhouettePage() {
+  const structureContainer = document.querySelector("#silhouette-structure-chart");
+  const growthContainer = document.querySelector("#silhouette-growth-chart");
+
+  renderSilhouetteStructureChart(structureContainer, SILHOUETTE_MATRIX_DATA, SILHOUETTE_PAGE_DRAFT);
+  renderSilhouetteGrowthChart(growthContainer, SILHOUETTE_GROWTH_DATA);
+  setupSilhouetteInteractions();
+}
+
 function ensureGenderBreakdownTooltip() {
   let tooltip = document.querySelector("#genderBreakdownTooltip");
   if (tooltip) {
@@ -3350,6 +4291,46 @@ function createSegmentTooltipContent(target) {
   return `
     <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
     <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+  `;
+}
+
+function createSilhouetteTooltipContent(target) {
+  const fit = target.dataset.fitLabel ?? "";
+  const length = target.dataset.lengthLabel ?? "";
+  const title = `${length} X ${fit}`;
+  const lines = [];
+  const buildLine = (label, share, yoy) => {
+    const yoyClass =
+      !yoy || yoy === "n/a"
+        ? "is-neutral"
+        : yoy === "new" || yoy.startsWith("+")
+          ? "is-positive"
+          : yoy.startsWith("-")
+            ? "is-negative"
+            : "is-neutral";
+
+    return `
+      <div class="gender-breakdown-tooltip-line">
+        ${label} <strong>${share}</strong> <strong class="${yoyClass}">${yoy ?? ""}</strong>
+      </div>
+    `;
+  };
+
+  if (target.dataset.femaleShare) {
+    lines.push(buildLine("Female", target.dataset.femaleShare, target.dataset.femaleYoy));
+  }
+
+  if (target.dataset.maleShare) {
+    lines.push(buildLine("Male", target.dataset.maleShare, target.dataset.maleYoy));
+  }
+
+  if (target.dataset.unisexShare) {
+    lines.push(buildLine("Unisex", target.dataset.unisexShare, target.dataset.unisexYoy));
+  }
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${title}</div>
+    ${lines.join("")}
   `;
 }
 
@@ -3500,6 +4481,92 @@ function setupMarketScopeInteractions() {
   applyActiveState();
 }
 
+function setupSilhouetteInteractions() {
+  const section = document.querySelector("#silhouette");
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  let activeCell = null;
+
+  const clearActiveCell = () => {
+    if (activeCell) {
+      activeCell.classList.remove("is-active");
+      activeCell = null;
+    }
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const getInteractiveCell = (startNode) => {
+    if (!(startNode instanceof Element)) {
+      return null;
+    }
+
+    return startNode.closest(".silhouette-matrix-cell[data-interactive='true']");
+  };
+
+  section.addEventListener("pointerover", (event) => {
+    const cell = getInteractiveCell(event.target);
+
+    if (!cell) {
+      clearActiveCell();
+      return;
+    }
+
+    if (activeCell !== cell) {
+      if (activeCell) {
+        activeCell.classList.remove("is-active");
+      }
+    }
+
+    activeCell = cell;
+    activeCell.classList.add("is-active");
+    showGenderBreakdownTooltip(
+      tooltip,
+      createSilhouetteTooltipContent(cell),
+      event.clientX ?? cell.getBoundingClientRect().right,
+      event.clientY ?? cell.getBoundingClientRect().top
+    );
+  });
+
+  section.addEventListener("pointermove", (event) => {
+    const cell = getInteractiveCell(event.target);
+    if (!cell) {
+      clearActiveCell();
+      return;
+    }
+
+    if (activeCell !== cell) {
+      if (activeCell) {
+        activeCell.classList.remove("is-active");
+      }
+      activeCell = cell;
+      activeCell.classList.add("is-active");
+      showGenderBreakdownTooltip(
+        tooltip,
+        createSilhouetteTooltipContent(cell),
+        event.clientX ?? cell.getBoundingClientRect().right,
+        event.clientY ?? cell.getBoundingClientRect().top
+      );
+      return;
+    }
+
+    placeTooltip(tooltip, event.clientX, event.clientY);
+  });
+
+  section.addEventListener("pointerout", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget instanceof Element && getInteractiveCell(nextTarget)) {
+      return;
+    }
+
+    clearActiveCell();
+  });
+
+  section.addEventListener("pointerleave", clearActiveCell);
+}
+
 function setupGenderBreakdownInteractions() {
   const section = document.querySelector(GENDER_BREAKDOWN_SELECTOR);
   if (!section) {
@@ -3642,6 +4709,7 @@ window.addEventListener("DOMContentLoaded", () => {
   setupRevealEffects();
   bootstrapMarketScopePage();
   bootstrapFemaleOpportunityPage();
+  bootstrapSilhouettePage();
   setupScrollState();
 });
 

@@ -1,7 +1,10 @@
 import {
   FEMALE_OPPORTUNITY_BRAND_GENDER,
   GENDER_BREAKDOWN_PRICE_BUBBLES,
-  MARKET_SCOPE_BRAND_COMPARE
+  MARKET_SCOPE_BRAND_COMPARE,
+  SILHOUETTE_GROWTH_DATA,
+  SILHOUETTE_MATRIX_DATA,
+  SILHOUETTE_PAGE_DRAFT
 } from "./content-data.js";
 import {
   renderBrandCompareTable,
@@ -9,7 +12,9 @@ import {
 } from "./content-render.js";
 import {
   renderGenderBreakdownPriceBubbleChart,
-  renderMarketScopeBubbleChart
+  renderMarketScopeBubbleChart,
+  renderSilhouetteGrowthChart,
+  renderSilhouetteStructureChart
 } from "./chart-app.js";
 
 const SECTION_SELECTOR = ".report-section[id]";
@@ -169,6 +174,15 @@ function bootstrapFemaleOpportunityPage() {
   setupGenderBreakdownInteractions();
 }
 
+function bootstrapSilhouettePage() {
+  const structureContainer = document.querySelector("#silhouette-structure-chart");
+  const growthContainer = document.querySelector("#silhouette-growth-chart");
+
+  renderSilhouetteStructureChart(structureContainer, SILHOUETTE_MATRIX_DATA, SILHOUETTE_PAGE_DRAFT);
+  renderSilhouetteGrowthChart(growthContainer, SILHOUETTE_GROWTH_DATA);
+  setupSilhouetteInteractions();
+}
+
 function ensureGenderBreakdownTooltip() {
   let tooltip = document.querySelector("#genderBreakdownTooltip");
   if (tooltip) {
@@ -226,6 +240,46 @@ function createSegmentTooltipContent(target) {
   return `
     <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
     <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+  `;
+}
+
+function createSilhouetteTooltipContent(target) {
+  const fit = target.dataset.fitLabel ?? "";
+  const length = target.dataset.lengthLabel ?? "";
+  const title = `${length} X ${fit}`;
+  const lines = [];
+  const buildLine = (label, share, yoy) => {
+    const yoyClass =
+      !yoy || yoy === "n/a"
+        ? "is-neutral"
+        : yoy === "new" || yoy.startsWith("+")
+          ? "is-positive"
+          : yoy.startsWith("-")
+            ? "is-negative"
+            : "is-neutral";
+
+    return `
+      <div class="gender-breakdown-tooltip-line">
+        ${label} <strong>${share}</strong> <strong class="${yoyClass}">${yoy ?? ""}</strong>
+      </div>
+    `;
+  };
+
+  if (target.dataset.femaleShare) {
+    lines.push(buildLine("Female", target.dataset.femaleShare, target.dataset.femaleYoy));
+  }
+
+  if (target.dataset.maleShare) {
+    lines.push(buildLine("Male", target.dataset.maleShare, target.dataset.maleYoy));
+  }
+
+  if (target.dataset.unisexShare) {
+    lines.push(buildLine("Unisex", target.dataset.unisexShare, target.dataset.unisexYoy));
+  }
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${title}</div>
+    ${lines.join("")}
   `;
 }
 
@@ -376,6 +430,92 @@ function setupMarketScopeInteractions() {
   applyActiveState();
 }
 
+function setupSilhouetteInteractions() {
+  const section = document.querySelector("#silhouette");
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  let activeCell = null;
+
+  const clearActiveCell = () => {
+    if (activeCell) {
+      activeCell.classList.remove("is-active");
+      activeCell = null;
+    }
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const getInteractiveCell = (startNode) => {
+    if (!(startNode instanceof Element)) {
+      return null;
+    }
+
+    return startNode.closest(".silhouette-matrix-cell[data-interactive='true']");
+  };
+
+  section.addEventListener("pointerover", (event) => {
+    const cell = getInteractiveCell(event.target);
+
+    if (!cell) {
+      clearActiveCell();
+      return;
+    }
+
+    if (activeCell !== cell) {
+      if (activeCell) {
+        activeCell.classList.remove("is-active");
+      }
+    }
+
+    activeCell = cell;
+    activeCell.classList.add("is-active");
+    showGenderBreakdownTooltip(
+      tooltip,
+      createSilhouetteTooltipContent(cell),
+      event.clientX ?? cell.getBoundingClientRect().right,
+      event.clientY ?? cell.getBoundingClientRect().top
+    );
+  });
+
+  section.addEventListener("pointermove", (event) => {
+    const cell = getInteractiveCell(event.target);
+    if (!cell) {
+      clearActiveCell();
+      return;
+    }
+
+    if (activeCell !== cell) {
+      if (activeCell) {
+        activeCell.classList.remove("is-active");
+      }
+      activeCell = cell;
+      activeCell.classList.add("is-active");
+      showGenderBreakdownTooltip(
+        tooltip,
+        createSilhouetteTooltipContent(cell),
+        event.clientX ?? cell.getBoundingClientRect().right,
+        event.clientY ?? cell.getBoundingClientRect().top
+      );
+      return;
+    }
+
+    placeTooltip(tooltip, event.clientX, event.clientY);
+  });
+
+  section.addEventListener("pointerout", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget instanceof Element && getInteractiveCell(nextTarget)) {
+      return;
+    }
+
+    clearActiveCell();
+  });
+
+  section.addEventListener("pointerleave", clearActiveCell);
+}
+
 function setupGenderBreakdownInteractions() {
   const section = document.querySelector(GENDER_BREAKDOWN_SELECTOR);
   if (!section) {
@@ -518,5 +658,6 @@ window.addEventListener("DOMContentLoaded", () => {
   setupRevealEffects();
   bootstrapMarketScopePage();
   bootstrapFemaleOpportunityPage();
+  bootstrapSilhouettePage();
   setupScrollState();
 });

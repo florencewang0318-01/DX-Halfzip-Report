@@ -19,7 +19,6 @@
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#competitor-scope">Competitor Scope</a>
             <a class="nav-dropdown-item" href="#female-opportunity">Gender Breakdown</a>
-            <a class="nav-dropdown-item" href="#price-architecture">Price Architecture</a>
           </div>
         </div>
 
@@ -27,8 +26,8 @@
           <button class="nav-group-toggle" type="button" data-target="#silhouette" aria-label="Jump to product sections">Product</button>
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#silhouette">Silhouette</a>
-            <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
             <a class="nav-dropdown-item" href="#function-scene">Function & Scene</a>
+            <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
             <a class="nav-dropdown-item" href="#design-cues">Design Cues</a>
           </div>
         </div>
@@ -134,17 +133,53 @@
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="price-architecture" data-page-label="Price Architecture">
+    <section class="sheet report-section paired-chart-page" id="silhouette" data-page-label="Silhouette">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">03</span><span>Price Architecture</span></div>
-              <h2 class="section-title">价格带将决定 27FW 半拉链内搭的竞争姿态，管理层最需要看到的是“我们要站在哪一档”</h2>
+              <div class="section-kicker"><span class="section-badge">03</span><span>Silhouette</span></div>
+              <h2 class="section-title">主流轮廓仍集中在常规衣长，但真正有开发价值的，是不同 fit-length 组合背后的性别偏向与增长差异</h2>
               <ul class="section-bullets">
-                <li>本页不只展示参考价格和成交均价，更要说明不同价格带对应的面料、保暖强度和品牌语义。</li>
-                <li>建议用品牌价格带分层，识别高端性能型、中高价城市运动型、中价功能型三个带宽。</li>
-                <li>输出必须直连开发建议，例如主推价位、形象款价位、引流款价位。</li>
+                <li>左图先回答当前竞品的主流轮廓落在哪些 fit × length 组合里，并用主导性别判断这些组合是谁在驱动。</li>
+                <li>右图再看核心轮廓组合里不同性别的 YoY 变化，识别哪些版型机会正在向女性或中性方向转移。</li>
+                <li>对 Discovery 而言，版型不是基础描述，而是区分专业运动、女性外穿化和通勤兼容性的开发杠杆。</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="chart-grid evidence-grid two-up reveal">
+            <article class="chart-panel panel silhouette-structure-panel">
+              <div class="chart-kicker">Silhouette Matrix</div>
+              <h3 class="panel-title">Fit × Length 主结构矩阵</h3>
+              <div id="silhouette-structure-chart" class="silhouette-structure-card"></div>
+            </article>
+            <article class="chart-panel panel silhouette-growth-panel">
+              <div class="chart-kicker">Growth by Gender</div>
+              <h3 class="panel-title">核心轮廓的性别增长机会</h3>
+              <div id="silhouette-growth-chart" class="silhouette-growth-card"></div>
+            </article>
+          </div>
+
+          <div class="page-foot">
+            <span>Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
+            <span>Page 03</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sheet report-section paired-chart-page" id="function-scene" data-page-label="Function & Scene">
+      <div class="page">
+        <div class="content-frame">
+          <div class="section-head reveal">
+            <div>
+              <div class="section-kicker"><span class="section-badge">04</span><span>Function & Scene</span></div>
+              <h2 class="section-title">功能卖点正在从单一保暖转向“保暖 + 弹力 + 透气/速干”的复合组合，但最终仍由场景决定话术重心</h2>
+              <ul class="section-bullets">
+                <li>高频功能词已经显现出主排序：弹力、保暖、吸湿速干、透气、四面弹力。</li>
+                <li>功能表达不应只停留在词汇堆砌，需要区分滑雪、徒步、训练、通勤四种使用语言。</li>
+                <li>本页适合作为“从数据到开发话术”的过渡页，为后面的设计方向做承接。</li>
               </ul>
             </div>
           </div>
@@ -152,67 +187,18 @@
           <div class="chart-grid evidence-grid two-up reveal">
             <article class="chart-panel panel">
               <div class="chart-kicker">Evidence Block A</div>
-              <h3 class="panel-title">参考价格与成交均价带宽</h3>
+              <h3 class="panel-title">功能词频结构</h3>
               <div class="placeholder">
-                <p>建议图表：各品牌价格带箱线图或散点图</p>
-                <p>建议方法：以参考价格为定位，以成交均价验证真实交易带宽。</p>
+                <p>建议图表：功能词 Top10 条形图</p>
+                <p>建议统一口径：排汗 / 吸湿排汗 / 芯吸 / 速干 等同义词归并。</p>
               </div>
             </article>
             <article class="chart-panel panel">
               <div class="chart-kicker">Evidence Block B</div>
-              <h3 class="panel-title">价格带对应的商品语义</h3>
+              <h3 class="panel-title">场景语言映射</h3>
               <div class="placeholder">
-                <p>建议内容：高价带对应高性能抓绒 / 羊毛混纺，中价带对应弹力速干 / 场景泛化。</p>
-              </div>
-            </article>
-          </div>
-
-          <div class="page-foot">
-            <span>Pending chart build</span>
-            <span>Page 03</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sheet report-section paired-chart-page" id="silhouette" data-page-label="Silhouette">
-      <div class="page">
-        <div class="content-frame">
-          <div class="section-head reveal">
-            <div>
-              <div class="section-kicker"><span class="section-badge">04</span><span>Silhouette</span></div>
-              <h2 class="section-title">当前市场的主轮廓仍是常规衣长与合体版型，但真正可做出差异的，是修身与宽松两端的场景化表达</h2>
-              <ul class="section-bullets">
-                <li>已清洗结构显示：regular常规衣长占绝对主流，版型以 regular合体 与 slim修身 为主。</li>
-                <li>插肩与正肩接近双主流，说明竞品在运动感与利落感之间都有明确表达路径。</li>
-                <li>对 Discovery 而言，版型不是基础信息，而是用来区分专业运动、户外通勤、女性外穿感的关键杠杆。</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="chart-grid evidence-grid three-up reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Silhouette A</div>
-              <h3 class="panel-title">版型结构</h3>
-              <div class="placeholder">
-                <p>建议图表：版型占比条形图</p>
-                <p>重点口径：regular合体、slim修身、Active运动版型、loose宽松、tight紧身。</p>
-              </div>
-            </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Silhouette B</div>
-              <h3 class="panel-title">衣长结构</h3>
-              <div class="placeholder">
-                <p>建议图表：衣长占比图</p>
-                <p>重点口径：regular常规、semi-crop短款、crop短款。</p>
-              </div>
-            </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Silhouette C</div>
-              <h3 class="panel-title">肩型结构</h3>
-              <div class="placeholder">
-                <p>建议图表：插肩 / 正肩 / 落肩 对比图</p>
-                <p>建议注释：插肩偏运动表现，正肩偏利落通勤，微落肩可承接女性外穿化。</p>
+                <p>建议图表：场景 x 功能气泡图</p>
+                <p>建议内容：滑雪偏保暖层搭，徒步偏透气弹力，都市通勤偏轻保暖和外观利落。</p>
               </div>
             </article>
           </div>
@@ -268,54 +254,12 @@
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="function-scene" data-page-label="Function & Scene">
-      <div class="page">
-        <div class="content-frame">
-          <div class="section-head reveal">
-            <div>
-              <div class="section-kicker"><span class="section-badge">06</span><span>Function & Scene</span></div>
-              <h2 class="section-title">功能卖点正在从单一保暖转向“保暖 + 弹力 + 透气/速干”的复合组合，但最终仍由场景决定话术重心</h2>
-              <ul class="section-bullets">
-                <li>高频功能词已经显现出主排序：弹力、保暖、吸湿速干、透气、四面弹力。</li>
-                <li>功能表达不应只停留在词汇堆砌，需要区分滑雪、徒步、训练、通勤四种使用语言。</li>
-                <li>本页适合作为“从数据到开发话术”的过渡页，为后面的设计方向做承接。</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="chart-grid evidence-grid two-up reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Evidence Block A</div>
-              <h3 class="panel-title">功能词频结构</h3>
-              <div class="placeholder">
-                <p>建议图表：功能词 Top10 条形图</p>
-                <p>建议统一口径：排汗 / 吸湿排汗 / 芯吸 / 速干 等同义词归并。</p>
-              </div>
-            </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Evidence Block B</div>
-              <h3 class="panel-title">场景语言映射</h3>
-              <div class="placeholder">
-                <p>建议图表：场景 x 功能气泡图</p>
-                <p>建议内容：滑雪偏保暖层搭，徒步偏透气弹力，都市通勤偏轻保暖和外观利落。</p>
-              </div>
-            </article>
-          </div>
-
-          <div class="page-foot">
-            <span>Pending chart build</span>
-            <span>Page 06</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="sheet report-section paired-chart-page" id="design-cues" data-page-label="Design Cues">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">07</span><span>Design Cues</span></div>
+              <div class="section-kicker"><span class="section-badge">06</span><span>Design Cues</span></div>
               <h2 class="section-title">半拉链内搭的设计差异主要来自细节处理，而真正值得借鉴的不是“装饰”，而是能被消费者感知的功能化设计点</h2>
               <ul class="section-bullets">
                 <li>现有样本中高频设计点已经出现清晰线索，如拼接剪裁、高领、拉链口袋、平脚接缝、表面磨毛等。</li>
@@ -347,7 +291,7 @@
 
           <div class="page-foot">
             <span>Pending board build</span>
-            <span>Page 07</span>
+            <span>Page 06</span>
           </div>
         </div>
       </div>
@@ -358,7 +302,7 @@
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">08</span><span>Brand Compare</span></div>
+              <div class="section-kicker"><span class="section-badge">07</span><span>Brand Compare</span></div>
               <h2 class="section-title">六大竞品的真正价值不在谁卖得更多，而在各自代表了哪一种值得被转译的半拉链内搭逻辑</h2>
               <ul class="section-bullets">
                 <li>始祖鸟和可隆更适合提供高端山系与功能层搭参照，迪桑特、萨洛蒙更适合观察运动化表达，lululemon 更适合观察女性穿着体验。</li>
@@ -381,7 +325,7 @@
 
           <div class="page-foot">
             <span>Pending compare build</span>
-            <span>Page 08</span>
+            <span>Page 07</span>
           </div>
         </div>
       </div>
@@ -392,7 +336,7 @@
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">09</span><span>Product Direction</span></div>
+              <div class="section-kicker"><span class="section-badge">08</span><span>Product Direction</span></div>
               <h2 class="section-title">27FW 半拉链长袖内搭应做成三层商品结构，用女性机会带动品类升级，而不是只补一个基础功能款</h2>
               <ul class="section-bullets">
                 <li>建议形成“基础引流款 + 核心场景款 + 形象升级款”三级商品矩阵。</li>
@@ -426,7 +370,7 @@
 
           <div class="page-foot">
             <span>Direction draft</span>
-            <span>Page 09</span>
+            <span>Page 08</span>
           </div>
         </div>
       </div>

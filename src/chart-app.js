@@ -412,6 +412,451 @@ export function renderMarketScopeBubbleChart(container, rows) {
   container.appendChild(wrap);
 }
 
+function getSilhouetteGenderToken(gender) {
+  if (gender === "女") {
+    return {
+      label: "Female",
+      short: "F",
+      className: "is-female"
+    };
+  }
+
+  if (gender === "男") {
+    return {
+      label: "Male",
+      short: "M",
+      className: "is-male"
+    };
+  }
+
+  return {
+    label: "Unisex",
+    short: "U",
+    className: "is-unisex"
+  };
+}
+
+function formatSilhouetteFitLabel(fit) {
+  if (fit === "tight紧身") {
+    return "Tight";
+  }
+
+  if (fit === "slim修身") {
+    return "Slim";
+  }
+
+  if (fit === "regular合体") {
+    return "Regular";
+  }
+
+  if (fit === "Active运动版型") {
+    return "Active";
+  }
+
+  if (fit === "loose宽松") {
+    return "Loose";
+  }
+
+  return fit;
+}
+
+function formatSilhouetteLengthLabel(length) {
+  if (length === "crop短款") {
+    return "Crop";
+  }
+
+  if (length === "semi-crop短款") {
+    return "Semi-crop";
+  }
+
+  if (length === "regular常规") {
+    return "Regular";
+  }
+
+  return length;
+}
+
+export function renderSilhouetteStructureChart(container, rows, meta = {}) {
+  if (!container) {
+    return;
+  }
+
+  const fitOrder = ["regular合体", "Active运动版型", "slim修身", "loose宽松"];
+  const lengthOrder = ["regular常规", "semi-crop短款", "crop短款"];
+  const maxShare = Math.max(...rows.map((row) => row.gmvShare), 0);
+  const getYoyClass = (label) => {
+    if (!label || label === "n/a") {
+      return "is-neutral";
+    }
+
+    if (label === "new" || label.startsWith("+")) {
+      return "is-positive";
+    }
+
+    if (label.startsWith("-")) {
+      return "is-negative";
+    }
+
+    return "is-neutral";
+  };
+  const renderCell = (row) => {
+    if (!row || row.count === 0 || !row.dominantGender) {
+      return `
+        <div class="silhouette-matrix-cell is-empty">
+          <div class="silhouette-matrix-empty">-</div>
+        </div>
+      `;
+    }
+
+    const genderToken = getSilhouetteGenderToken(row.dominantGender);
+    const intensity = maxShare > 0 ? Math.max(0.12, row.gmvShare / maxShare) : 0.12;
+    const isBlankCell = row.gmvShare < 0.5;
+    const isLowShare = row.gmvShare > 0 && row.gmvShare < 5;
+    const isEmphasisCell =
+      row.length === "regular常规" && (row.fit === "regular合体" || row.fit === "Active运动版型" || row.fit === "slim修身");
+    const isMediumEmphasisCell = row.length === "regular常规" && row.fit === "slim修身";
+    const ledCopy =
+      row.dominantGender === "男"
+        ? "Male Led"
+        : row.dominantGender === "女"
+          ? "Female Led"
+          : "Unisex Led";
+    const femaleShare = row.genderBreakdown.find((item) => item.gender === "女");
+    const maleShare = row.genderBreakdown.find((item) => item.gender === "男");
+    const unisexShare = row.genderBreakdown.find((item) => item.gender === "男女");
+    const shareAttrs = [
+      `data-interactive="true"`,
+      `data-fit="${row.fit}"`,
+      `data-length="${row.length}"`,
+      `data-fit-label="${formatSilhouetteFitLabel(row.fit)}"`,
+      `data-length-label="${formatSilhouetteLengthLabel(row.length)}"`,
+      femaleShare?.count
+        ? `data-female-share="${Math.round((femaleShare.count / row.count) * 100)}%"`
+        : "",
+      femaleShare?.count && femaleShare?.yoyLabel && femaleShare.yoyLabel !== "n/a"
+        ? `data-female-yoy="${femaleShare.yoyLabel}"`
+        : "",
+      maleShare?.count
+        ? `data-male-share="${Math.round((maleShare.count / row.count) * 100)}%"`
+        : "",
+      maleShare?.count && maleShare?.yoyLabel && maleShare.yoyLabel !== "n/a"
+        ? `data-male-yoy="${maleShare.yoyLabel}"`
+        : "",
+      unisexShare?.count
+        ? `data-unisex-share="${Math.round((unisexShare.count / row.count) * 100)}%"`
+        : "",
+      unisexShare?.count && unisexShare?.yoyLabel && unisexShare.yoyLabel !== "n/a"
+        ? `data-unisex-yoy="${unisexShare.yoyLabel}"`
+        : ""
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    if (isBlankCell) {
+      return `
+        <div class="silhouette-matrix-cell is-empty">
+          <div class="silhouette-matrix-empty">-</div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="silhouette-matrix-cell ${genderToken.className}${isLowShare ? " is-low-share" : ""}${isEmphasisCell ? " is-emphasis" : ""}${isMediumEmphasisCell ? " is-medium-emphasis" : ""}" style="--heat-intensity:${intensity.toFixed(3)};" ${shareAttrs}>
+        <div class="silhouette-matrix-cell-head">
+          <span class="silhouette-matrix-share">${row.gmvShareLabel}</span>
+          <span class="silhouette-matrix-yoy ${getYoyClass(row.yoyLabel)}">${row.yoyLabel}</span>
+        </div>
+        <div class="silhouette-matrix-cell-foot">
+          <span class="silhouette-matrix-dominance">${ledCopy}</span>
+        </div>
+      </div>
+    `;
+  };
+
+  const bodyMarkup = fitOrder
+    .map((fit) => {
+      const rowCells = lengthOrder
+        .map((length) => renderCell(rows.find((row) => row.fit === fit && row.length === length)))
+        .join("");
+      return `
+        <div class="silhouette-matrix-fit-header">${formatSilhouetteFitLabel(fit)}</div>
+        ${rowCells}
+      `;
+    })
+    .join("");
+
+  container.innerHTML = `
+    <div class="silhouette-matrix-wrap">
+      <div class="gender-breakdown-legend silhouette-matrix-legend">
+        <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female-led</span></span>
+        <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male-led</span></span>
+      </div>
+      <div class="silhouette-matrix-grid">
+        <div class="silhouette-matrix-corner">
+          <span class="silhouette-matrix-axis-length">Length</span>
+          <span class="silhouette-matrix-axis-fit">Fit</span>
+          <span class="silhouette-matrix-axis-diagonal"></span>
+        </div>
+        ${lengthOrder
+          .map(
+            (length) => `<div class="silhouette-matrix-length-header">${formatSilhouetteLengthLabel(length)}</div>`
+          )
+          .join("")}
+        ${bodyMarkup}
+      </div>
+      <div class="silhouette-matrix-note">
+        Cell Depth = Y25 GMV
+        <br>
+        Bottom Tag = Dominant Gender
+        <br>
+        6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON
+      </div>
+    </div>
+  `;
+}
+
+export function renderSilhouetteGrowthChart(container, rows) {
+  if (!container) {
+    return;
+  }
+
+  const validRows = rows.filter((row) => row.genders.some((gender) => gender.count25 > 0));
+  if (!validRows.length) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const width = 760;
+  const height = 426;
+  const margin = { top: 58, right: 88, bottom: 54, left: 138 };
+  const plotWidth = width - margin.left - margin.right;
+  const rowGap = 52;
+  const plotHeight = rowGap * (validRows.length - 1);
+  const axisBottom = margin.top + plotHeight;
+  const xMin = -50;
+  const xMax = 110;
+  const ticks = [-50, 0, 50, 100];
+
+  const svg = createSvgElement("svg", {
+    class: "silhouette-growth-svg",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": "核心轮廓的性别增长机会图"
+  });
+
+  const overlay = createChartOverlay();
+  const defs = createSvgElement("defs");
+  const shadowFilter = createSvgElement("filter", {
+    id: "silhouette-growth-shadow",
+    x: "-35%",
+    y: "-35%",
+    width: "170%",
+    height: "170%"
+  });
+  shadowFilter.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: "0",
+      dy: "4",
+      stdDeviation: "5",
+      "flood-color": "#94a3b8",
+      "flood-opacity": "0.16"
+    })
+  );
+  defs.appendChild(shadowFilter);
+
+  validRows.forEach((row, rowIndex) => {
+    row.genders.forEach((genderItem, genderIndex) => {
+      const palette = getGenderBubblePalette(genderItem.gender);
+      const gradient = createSvgElement("radialGradient", {
+        id: `silhouette-growth-gradient-${rowIndex}-${genderIndex}`,
+        cx: "36%",
+        cy: "30%",
+        r: "76%"
+      });
+      gradient.appendChild(createStop("0%", palette.highlight, 0.96));
+      gradient.appendChild(createStop("42%", palette.base, 0.90));
+      gradient.appendChild(createStop("100%", palette.edge, 0.98));
+      defs.appendChild(gradient);
+    });
+  });
+  svg.appendChild(defs);
+
+  const xZero = scaleValue(0, xMin, xMax, margin.left, margin.left + plotWidth);
+  ticks.forEach((tickValue) => {
+    const x = scaleValue(tickValue, xMin, xMax, margin.left, margin.left + plotWidth);
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: x,
+        y1: margin.top - 10,
+        x2: x,
+        y2: axisBottom + 10,
+        class: `silhouette-growth-grid-line${tickValue === 0 ? " is-zero" : ""}`
+      })
+    );
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-x silhouette-growth-tick",
+        text: formatPercentTick(tickValue),
+        x,
+        y: axisBottom + 18,
+        width,
+        height,
+        anchor: "middle",
+        valign: "top"
+      })
+    );
+  });
+
+  validRows.forEach((row, index) => {
+    const y = margin.top + index * rowGap;
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: margin.left,
+        y1: y,
+        x2: margin.left + plotWidth,
+        y2: y,
+        class: "silhouette-growth-row-line"
+      })
+    );
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-y silhouette-growth-combo-label",
+        text: row.comboLabel,
+        x: margin.left - 18,
+        y,
+        width,
+        height,
+        anchor: "end",
+        valign: "middle"
+      })
+    );
+  });
+
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: margin.left,
+      y1: axisBottom,
+      x2: margin.left + plotWidth,
+      y2: axisBottom,
+      class: "gender-price-axis-line"
+    })
+  );
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: xZero,
+      y1: margin.top - 12,
+      x2: xZero,
+      y2: axisBottom + 8,
+      class: "gender-price-axis-line silhouette-growth-zero-line"
+    })
+  );
+
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-x",
+      text: "YOY%",
+      x: margin.left + plotWidth / 2,
+      y: height - 10,
+      width,
+      height,
+      anchor: "middle",
+      valign: "top"
+    })
+  );
+
+  validRows.forEach((row, rowIndex) => {
+    const y = margin.top + rowIndex * rowGap;
+
+    row.genders.forEach((genderItem, genderIndex) => {
+      if (genderItem.count25 <= 0) {
+        return;
+      }
+
+      const token = getSilhouetteGenderToken(genderItem.gender);
+      const palette = getGenderBubblePalette(genderItem.gender);
+      const shareRadius = 9 + (Math.max(0, genderItem.shareInCombo) / 100) * 11;
+
+      if (genderItem.yoyLabel === "new") {
+        overlay.appendChild(
+          createChartOverlayText({
+            className: `chart-overlay-label silhouette-growth-new ${token.className}`,
+            text: `${token.short} new`,
+            x: margin.left + plotWidth + 26,
+            y,
+            width,
+            height,
+            anchor: "start",
+            valign: "middle"
+          })
+        );
+        return;
+      }
+
+      const x = scaleValue(
+        Number(String(genderItem.yoyLabel).replace(/[^\d.-]/g, "")),
+        xMin,
+        xMax,
+        margin.left,
+        margin.left + plotWidth
+      );
+
+      const group = createSvgElement("g", {
+        class: "silhouette-growth-node"
+      });
+      group.appendChild(
+        createSvgElement("circle", {
+          cx: x,
+          cy: y,
+          r: shareRadius,
+          fill: `url(#silhouette-growth-gradient-${rowIndex}-${genderIndex})`,
+          stroke: palette.edge,
+          "stroke-width": 1.2,
+          filter: "url(#silhouette-growth-shadow)"
+        })
+      );
+      group.appendChild(
+        createSvgElement("circle", {
+          cx: x - shareRadius * 0.26,
+          cy: y - shareRadius * 0.30,
+          r: Math.max(3, shareRadius * 0.28),
+          fill: "rgba(255,255,255,0.34)"
+        })
+      );
+      svg.appendChild(group);
+
+      overlay.appendChild(
+        createChartOverlayText({
+          className: `chart-overlay-label silhouette-growth-yoy ${token.className}`,
+          text: `${token.short} ${genderItem.yoyLabel}`,
+          x,
+          y: y - shareRadius - 12,
+          width,
+          height,
+          anchor: "middle",
+          valign: "bottom"
+        })
+      );
+    });
+  });
+
+  container.innerHTML = "";
+  const wrap = document.createElement("div");
+  wrap.className = "silhouette-growth-wrap";
+  wrap.innerHTML = `
+    <div class="gender-breakdown-legend silhouette-growth-legend">
+      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female</span></span>
+      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male</span></span>
+      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-unisex"></span><span>Unisex</span></span>
+    </div>
+    <div class="silhouette-growth-note">Dot size = share within silhouette combo</div>
+  `;
+  wrap.appendChild(svg);
+  wrap.appendChild(overlay);
+  container.appendChild(wrap);
+}
+
 function formatPriceTick(value) {
   return `¥${Math.round(value)}`;
 }

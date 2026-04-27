@@ -175,6 +175,134 @@ function summarizeHalfZipByBrandGender(rows) {
   return summary;
 }
 
+const SILHOUETTE_FIT_ORDER = ["tight紧身", "slim修身", "regular合体", "Active运动版型", "loose宽松"];
+const SILHOUETTE_LENGTH_ORDER = ["crop短款", "semi-crop短款", "regular常规"];
+const SILHOUETTE_GENDERS = ["女", "男", "男女"];
+
+function normalizeSilhouetteFit(rawFit) {
+  if (!rawFit) {
+    return null;
+  }
+
+  const normalized = String(rawFit).trim();
+  if (SILHOUETTE_FIT_ORDER.includes(normalized)) {
+    return normalized;
+  }
+
+  if (normalized.includes("男：regular") && normalized.includes("女：slim修身")) {
+    return "gender-split";
+  }
+
+  return null;
+}
+
+function normalizeSilhouetteLength(rawLength) {
+  if (!rawLength) {
+    return null;
+  }
+
+  const normalized = String(rawLength).trim();
+  return SILHOUETTE_LENGTH_ORDER.includes(normalized) ? normalized : null;
+}
+
+function formatSilhouetteFitShort(fit) {
+  if (fit === "tight紧身") {
+    return "Tight";
+  }
+
+  if (fit === "slim修身") {
+    return "Slim";
+  }
+
+  if (fit === "regular合体") {
+    return "Regular";
+  }
+
+  if (fit === "Active运动版型") {
+    return "Active";
+  }
+
+  if (fit === "loose宽松") {
+    return "Loose";
+  }
+
+  return fit;
+}
+
+function formatSilhouetteLengthShort(length) {
+  if (length === "crop短款") {
+    return "Crop";
+  }
+
+  if (length === "semi-crop短款") {
+    return "Semi-crop";
+  }
+
+  if (length === "regular常规") {
+    return "Regular";
+  }
+
+  return length;
+}
+
+function createSilhouetteSummary(rows) {
+  const comboMap = new Map();
+  const comboGenderMap = new Map();
+  let trackedCount = 0;
+  let untrackedCount = 0;
+  let trackedGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const fit = normalizeSilhouetteFit(row.fit);
+    const length = normalizeSilhouetteLength(row.length);
+    if (!fit || !length || fit === "gender-split") {
+      untrackedCount += 1;
+      return;
+    }
+
+    const gender = SILHOUETTE_GENDERS.includes(row.gender) ? row.gender : "男女";
+    const comboKey = `${fit}__${length}`;
+    const comboGenderKey = `${fit}__${length}__${gender}`;
+    const gmv = toNumber(row["销售额"]);
+
+    const comboCurrent = comboMap.get(comboKey) ?? {
+      fit,
+      length,
+      count: 0,
+      gmv: 0
+    };
+    comboCurrent.count += 1;
+    comboCurrent.gmv += gmv;
+    comboMap.set(comboKey, comboCurrent);
+
+    const comboGenderCurrent = comboGenderMap.get(comboGenderKey) ?? {
+      fit,
+      length,
+      gender,
+      count: 0,
+      gmv: 0
+    };
+    comboGenderCurrent.count += 1;
+    comboGenderCurrent.gmv += gmv;
+    comboGenderMap.set(comboGenderKey, comboGenderCurrent);
+
+    trackedCount += 1;
+    trackedGmv += gmv;
+  });
+
+  return {
+    comboMap,
+    comboGenderMap,
+    trackedCount,
+    untrackedCount,
+    trackedGmv
+  };
+}
+
 export const LS_HZ_INNER_DATASET = {
   workbook: LS_HZ_INNER_WORKBOOK,
   raw: {
@@ -310,6 +438,115 @@ export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.fl
       skuCount: cell.count25
     }))
 );
+
+const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
+const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);
+
+export const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
+  SILHOUETTE_LENGTH_ORDER.map((length) => {
+    const current = SILHOUETTE_Y25.comboMap.get(`${fit}__${length}`) ?? {
+      count: 0,
+      gmv: 0
+    };
+    const previous = SILHOUETTE_Y24.comboMap.get(`${fit}__${length}`) ?? {
+      count: 0,
+      gmv: 0
+    };
+
+    const genderBreakdown = SILHOUETTE_GENDERS.map((gender) => {
+      const item = SILHOUETTE_Y25.comboGenderMap.get(`${fit}__${length}__${gender}`) ?? {
+        count: 0,
+        gmv: 0
+      };
+      const previousItem = SILHOUETTE_Y24.comboGenderMap.get(`${fit}__${length}__${gender}`) ?? {
+        count: 0,
+        gmv: 0
+      };
+      const yoy = computeYoy(item.gmv, previousItem.gmv);
+
+      return {
+        gender,
+        count: item.count,
+        gmv: item.gmv,
+        gmv24: previousItem.gmv,
+        yoy,
+        yoyLabel: previousItem.gmv > 0 ? formatYoyLabel(yoy) : item.count > 0 ? "new" : "n/a"
+      };
+    });
+
+    const dominantGender = genderBreakdown.reduce(
+      (best, item) => (item.count > best.count ? item : best),
+      { gender: "男女", count: 0, gmv: 0 }
+    );
+
+    const share = SILHOUETTE_Y25.trackedCount ? (current.count / SILHOUETTE_Y25.trackedCount) * 100 : 0;
+    const gmvShare = SILHOUETTE_Y25.trackedGmv ? (current.gmv / SILHOUETTE_Y25.trackedGmv) * 100 : 0;
+    const yoy = computeYoy(current.gmv, previous.gmv);
+
+    return {
+      fit,
+      length,
+      count: current.count,
+      gmv: current.gmv,
+      gmv24: previous.gmv,
+      yoy,
+      yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.count > 0 ? "new" : "n/a",
+      share,
+      shareLabel: `${Math.round(share)}%`,
+      gmvShare,
+      gmvShareLabel: `${Math.round(gmvShare)}%`,
+      dominantGender: dominantGender.count > 0 ? dominantGender.gender : null,
+      dominantGenderShare: current.count ? (dominantGender.count / current.count) * 100 : 0,
+      dominantGenderShareLabel: current.count ? `${Math.round((dominantGender.count / current.count) * 100)}%` : "",
+      genderBreakdown
+    };
+  })
+);
+
+export const SILHOUETTE_GROWTH_DATA = SILHOUETTE_MATRIX_DATA
+  .filter((item) => item.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6)
+  .map((item) => {
+    const comboLabel = `${formatSilhouetteFitShort(item.fit)} × ${formatSilhouetteLengthShort(item.length)}`;
+
+    return {
+      fit: item.fit,
+      length: item.length,
+      comboLabel,
+      count: item.count,
+      share: item.share,
+      shareLabel: item.shareLabel,
+      genders: SILHOUETTE_GENDERS.map((gender) => {
+        const current = SILHOUETTE_Y25.comboGenderMap.get(`${item.fit}__${item.length}__${gender}`) ?? {
+          count: 0,
+          gmv: 0
+        };
+        const previous = SILHOUETTE_Y24.comboGenderMap.get(`${item.fit}__${item.length}__${gender}`) ?? {
+          count: 0,
+          gmv: 0
+        };
+        const shareInCombo = item.count ? (current.count / item.count) * 100 : 0;
+        const yoy = computeYoy(current.gmv, previous.gmv);
+
+        return {
+          gender,
+          count25: current.count,
+          gmv25: current.gmv,
+          gmv24: previous.gmv,
+          shareInCombo,
+          shareInComboLabel: `${Math.round(shareInCombo)}%`,
+          yoy,
+          yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.count > 0 ? "new" : "n/a"
+        };
+      })
+    };
+  });
+
+export const SILHOUETTE_PAGE_DRAFT = {
+  trackedSampleCount: SILHOUETTE_Y25.trackedCount,
+  untrackedSampleCount: SILHOUETTE_Y25.untrackedCount
+};
 
 export const MARKET_SCOPE_PAGE_DRAFT = {
   chapter: "01 Competitor Scope",
