@@ -29,11 +29,11 @@ function scaleSqrtValue(value, min, max, start, end) {
 
 function getBubbleRadius(value, min, max) {
   if (max === min) {
-    return 22;
+    return 20;
   }
 
   const normalized = (value - min) / (max - min);
-  return 16 + normalized * 20;
+  return 12 + normalized * 16;
 }
 
 function getCompactBubbleRadius(value, min, max) {
@@ -51,6 +51,48 @@ function createStop(offset, color, opacity = 1) {
     "stop-color": color,
     "stop-opacity": opacity
   });
+}
+
+function toPercent(value, total) {
+  if (!total) {
+    return 0;
+  }
+
+  return (value / total) * 100;
+}
+
+function createChartOverlay() {
+  const overlay = document.createElement("div");
+  overlay.className = "chart-overlay";
+  return overlay;
+}
+
+function createChartOverlayText({
+  className = "",
+  text = "",
+  x = 0,
+  y = 0,
+  width,
+  height,
+  anchor = "middle",
+  valign = "middle",
+  dataset
+}) {
+  const node = document.createElement("div");
+  node.className = `chart-overlay-text ${className}`.trim();
+  node.textContent = text;
+  node.style.left = `${toPercent(x, width)}%`;
+  node.style.top = `${toPercent(y, height)}%`;
+  node.dataset.anchor = anchor;
+  node.dataset.valign = valign;
+
+  if (dataset) {
+    Object.entries(dataset).forEach(([key, value]) => {
+      node.dataset[key] = value;
+    });
+  }
+
+  return node;
 }
 
 function getGenderBubblePalette(gender) {
@@ -85,9 +127,10 @@ export function renderMarketScopeBubbleChart(container, rows) {
     return;
   }
 
-  const width = 560;
-  const height = 376;
-  const margin = { top: 44, right: 28, bottom: 62, left: 78 };
+  const width = 590;
+  const height = 382;
+  const margin = { top: 44, right: 28, bottom: 48, left: 56 };
+  const xAxisLift = 8;
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
 
@@ -109,15 +152,50 @@ export function renderMarketScopeBubbleChart(container, rows) {
     "aria-label": "竞品品牌半拉链布局深度、增长与规模气泡图"
   });
 
+  const defs = createSvgElement("defs");
+  const shadowFilter = createSvgElement("filter", {
+    id: "market-bubble-shadow",
+    x: "-35%",
+    y: "-35%",
+    width: "170%",
+    height: "170%"
+  });
+  shadowFilter.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: "0",
+      dy: "6",
+      stdDeviation: "7",
+      "flood-color": "#94a3b8",
+      "flood-opacity": "0.16"
+    })
+  );
+  defs.appendChild(shadowFilter);
+
+  rows.forEach((row, index) => {
+    const gradient = createSvgElement("radialGradient", {
+      id: `market-bubble-gradient-${index}`,
+      cx: "36%",
+      cy: "30%",
+      r: "76%"
+    });
+    gradient.appendChild(createStop("0%", "#eef4fe", 0.98));
+    gradient.appendChild(createStop("40%", "#9cb5e2", 0.78));
+    gradient.appendChild(createStop("100%", "#7c96d1", 0.94));
+    defs.appendChild(gradient);
+  });
+  svg.appendChild(defs);
+
   const yTickValues = [50, 150, 300, 500].filter((value) => value <= yMax);
+  const overlay = createChartOverlay();
   yTickValues.forEach((yValue) => {
-    const y = scaleSqrtValue(
+    const baseY = scaleSqrtValue(
       yValue,
       yMin,
       yMax,
       margin.top + plotHeight,
       margin.top
     );
+    const y = yValue === 50 ? baseY + 8 : baseY;
 
     svg.appendChild(
       createSvgElement("line", {
@@ -128,15 +206,18 @@ export function renderMarketScopeBubbleChart(container, rows) {
         class: "bubble-grid-line"
       })
     );
-
-    const tickLabel = createSvgElement("text", {
-      x: margin.left - 10,
-      y: y + 4,
-      class: "bubble-tick-label",
-      "text-anchor": "end"
-    });
-    tickLabel.textContent = formatPercentTick(yValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-y",
+        text: formatPercentTick(yValue),
+        x: margin.left - 12,
+        y,
+        width,
+        height,
+        anchor: "end",
+        valign: "middle"
+      })
+    );
   });
 
   const xTickCount = Math.max(4, Math.ceil(xMax / 20));
@@ -149,81 +230,96 @@ export function renderMarketScopeBubbleChart(container, rows) {
         x1: x,
         y1: margin.top,
         x2: x,
-        y2: margin.top + plotHeight,
+        y2: margin.top + plotHeight - xAxisLift,
         class: "bubble-grid-line"
       })
     );
-
-    const tickLabel = createSvgElement("text", {
-      x,
-      y: margin.top + plotHeight + 20,
-      class: "bubble-tick-label",
-      "text-anchor": "middle"
-    });
-    tickLabel.textContent = formatPercentTick(xValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-x",
+        text: formatPercentTick(xValue),
+        x,
+        y: margin.top + plotHeight + 14 - xAxisLift,
+        width,
+        height,
+        anchor: "middle",
+        valign: "top"
+      })
+    );
   }
 
   svg.appendChild(
     createSvgElement("line", {
       x1: margin.left,
-      y1: margin.top + plotHeight,
+      y1: margin.top + plotHeight - xAxisLift,
       x2: margin.left + plotWidth,
-      y2: margin.top + plotHeight,
-      class: "bubble-axis-line"
+      y2: margin.top + plotHeight - xAxisLift,
+      class: "gender-price-axis-line"
     })
   );
 
   svg.appendChild(
     createSvgElement("line", {
       x1: margin.left,
-      y1: margin.top,
+      y1: margin.top + plotHeight - xAxisLift,
       x2: margin.left,
-      y2: margin.top + plotHeight,
-      class: "bubble-axis-line"
+      y2: margin.top,
+      class: "gender-price-axis-line"
     })
   );
 
-  const xAxisTitle = createSvgElement("text", {
-    x: margin.left + plotWidth / 2,
-    y: height - 10,
-    class: "bubble-axis-title",
-    "text-anchor": "middle"
+  const arrowSize = 10;
+  const xArrow = createSvgElement("path", {
+    d: `M ${margin.left + plotWidth - arrowSize} ${margin.top + plotHeight - xAxisLift - arrowSize * 0.6}
+        L ${margin.left + plotWidth} ${margin.top + plotHeight - xAxisLift}
+        L ${margin.left + plotWidth - arrowSize} ${margin.top + plotHeight - xAxisLift + arrowSize * 0.6}`,
+    class: "gender-price-axis-arrow"
   });
-  xAxisTitle.textContent = "半拉链占内搭总体的占比";
-  svg.appendChild(xAxisTitle);
+  svg.appendChild(xArrow);
 
-  const yAxisTitle = createSvgElement("text", {
-    x: 28,
-    y: margin.top + plotHeight / 2,
-    class: "bubble-axis-title",
-    transform: `rotate(-90 28 ${margin.top + plotHeight / 2})`,
-    "text-anchor": "middle"
+  const yArrow = createSvgElement("path", {
+    d: `M ${margin.left - arrowSize * 0.6} ${margin.top + arrowSize}
+        L ${margin.left} ${margin.top}
+        L ${margin.left + arrowSize * 0.6} ${margin.top + arrowSize}`,
+    class: "gender-price-axis-arrow"
   });
-  yAxisTitle.textContent = "YOY%";
-  svg.appendChild(yAxisTitle);
+  svg.appendChild(yArrow);
 
-  const legendGroup = createSvgElement("g", {
-    transform: `translate(${width - 146}, 12)`
-  });
-  legendGroup.appendChild(
-    createSvgElement("circle", {
-      cx: 9,
-      cy: 10,
-      r: 7,
-      class: "bubble-legend-circle"
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-x",
+      text: "半拉链占内搭总体的占比",
+      x: margin.left + plotWidth / 2,
+      y: height - 15 - xAxisLift,
+      width,
+      height,
+      anchor: "middle",
+      valign: "top"
     })
   );
-  const legendText = createSvgElement("text", {
-    x: 24,
-    y: 14,
-    class: "bubble-legend-text"
-  });
-  legendText.textContent = "气泡大小表示半拉链GMV";
-  legendGroup.appendChild(legendText);
-  svg.appendChild(legendGroup);
 
-  rows.forEach((row) => {
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-y",
+      text: "YOY%",
+      x: 8,
+      y: margin.top + plotHeight / 2,
+      width,
+      height,
+      anchor: "middle",
+      valign: "middle"
+    })
+  );
+
+  const legend = document.createElement("div");
+  legend.className = "chart-overlay-legend bubble-chart-legend";
+  legend.innerHTML = `
+    <span class="chart-overlay-legend-circle bubble-legend-circle"></span>
+    <span class="chart-overlay-legend-text bubble-legend-text">气泡大小表示半拉链GMV</span>
+  `;
+  overlay.appendChild(legend);
+
+  rows.forEach((row, index) => {
     const cx = scaleValue(
       row.halfZipShareOfInner,
       xMin,
@@ -240,31 +336,70 @@ export function renderMarketScopeBubbleChart(container, rows) {
     );
     const r = getBubbleRadius(row.halfZipGmv25, gmvMin, gmvMax);
 
+    const bubbleGroup = createSvgElement("g", {
+      class: `bubble-point-group${row.brand.includes("SALOMON") ? " is-outlier" : ""}`,
+      "data-brand": row.brand,
+      "data-share": row.halfZipShareLabel,
+      "data-yoy": row.halfZipYoyLabel,
+      tabindex: "0"
+    });
+
     const bubble = createSvgElement("circle", {
       cx,
       cy: stretchedCy,
       r,
-      class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`
+      class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`,
+      "data-brand": row.brand,
+      "data-share": row.halfZipShareLabel,
+      "data-yoy": row.halfZipYoyLabel,
+      tabindex: "0",
+      fill: `url(#market-bubble-gradient-${index})`,
+      filter: "url(#market-bubble-shadow)"
     });
-    svg.appendChild(bubble);
+    bubbleGroup.appendChild(bubble);
 
-    const brandLabel = createSvgElement("text", {
-      x: cx,
-      y: stretchedCy - r - 6,
-      class: "bubble-label",
-      "text-anchor": "middle"
+    const highlight = createSvgElement("circle", {
+      cx: cx - r * 0.24,
+      cy: stretchedCy - r * 0.28,
+      r: Math.max(3, r * 0.24),
+      fill: "rgba(255,255,255,0.28)",
+      class: "bubble-point-highlight"
     });
-    brandLabel.textContent = row.brand.split("/")[0];
-    svg.appendChild(brandLabel);
+    bubbleGroup.appendChild(highlight);
+    svg.appendChild(bubbleGroup);
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-label is-brand market-scope-brand-label",
+        text: row.brand.split("/")[0],
+        x: cx,
+        y: stretchedCy - r - 6,
+        width,
+        height,
+        anchor: "middle",
+        valign: "bottom",
+        dataset: {
+          brand: row.brand
+        }
+      })
+    );
 
     if (row.brand.includes("SALOMON")) {
-      const annotation = createSvgElement("text", {
-        x: cx + r + 12,
-        y: stretchedCy - r + 14,
-        class: "bubble-annotation"
-      });
-      annotation.textContent = "SALOMON 为低基数高增长的离群点";
-      svg.appendChild(annotation);
+      overlay.appendChild(
+        createChartOverlayText({
+          className: "chart-overlay-annotation bubble-annotation market-scope-annotation",
+          text: "SALOMON 为低基数高增长的离群点",
+          x: cx + r + 12,
+          y: stretchedCy - r + 14,
+          width,
+          height,
+          anchor: "start",
+          valign: "middle",
+          dataset: {
+            brand: row.brand
+          }
+        })
+      );
     }
   });
 
@@ -272,6 +407,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
   const wrap = document.createElement("div");
   wrap.className = "bubble-chart-wrap";
   wrap.appendChild(svg);
+  wrap.appendChild(overlay);
 
   container.appendChild(wrap);
 }
@@ -307,7 +443,7 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
 
   const width = 760;
   const height = 442;
-  const margin = { top: 42, right: 18, bottom: 68, left: 50 };
+  const margin = { top: 62, right: 18, bottom: 68, left: 50 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
   const prices = validRows.map((row) => row.avgDealPrice);
@@ -332,6 +468,7 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
     role: "img",
     "aria-label": "品牌性别与成交价格气泡图"
   });
+  const overlay = createChartOverlay();
 
   const defs = createSvgElement("defs");
   const shadowFilter = createSvgElement("filter", {
@@ -382,14 +519,18 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
       })
     );
 
-    const tickLabel = createSvgElement("text", {
-      x,
-      y: margin.top + plotHeight + 24,
-      class: "gender-price-tick-label",
-      "text-anchor": "middle"
-    });
-    tickLabel.textContent = formatPriceTick(xValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-x",
+        text: formatPriceTick(xValue),
+        x,
+        y: margin.top + plotHeight + 24,
+        width,
+        height,
+        anchor: "middle",
+        valign: "top"
+      })
+    );
   }
 
   yTickValues.forEach((tickValue) => {
@@ -404,14 +545,18 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
       })
     );
 
-    const tickLabel = createSvgElement("text", {
-      x: margin.left - 12,
-      y: y + 4,
-      class: "gender-price-tick-label",
-      "text-anchor": "end"
-    });
-    tickLabel.textContent = formatPercentTick(tickValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-y",
+        text: formatPercentTick(tickValue),
+        x: margin.left - 12,
+        y,
+        width,
+        height,
+        anchor: "end",
+        valign: "middle"
+      })
+    );
   });
 
   const yZero = yMin <= 0 && yMax >= 0
@@ -455,24 +600,31 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   });
   svg.appendChild(yArrow);
 
-  const xAxisTitle = createSvgElement("text", {
-    x: margin.left + plotWidth / 2,
-    y: height - 18,
-    class: "gender-price-axis-title",
-    "text-anchor": "middle"
-  });
-  xAxisTitle.textContent = "成交价格";
-  svg.appendChild(xAxisTitle);
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-x",
+      text: "成交价格",
+      x: margin.left + plotWidth / 2,
+      y: height - 18,
+      width,
+      height,
+      anchor: "middle",
+      valign: "top"
+    })
+  );
 
-  const yAxisTitle = createSvgElement("text", {
-    x: 6,
-    y: margin.top + plotHeight / 2,
-    class: "gender-price-axis-title",
-    transform: `rotate(-90 6 ${margin.top + plotHeight / 2})`,
-    "text-anchor": "middle"
-  });
-  yAxisTitle.textContent = "YOY%";
-  svg.appendChild(yAxisTitle);
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-y",
+      text: "YOY%",
+      x: 6,
+      y: margin.top + plotHeight / 2,
+      width,
+      height,
+      anchor: "middle",
+      valign: "middle"
+    })
+  );
 
   const labelOffsetMap = {
     "DESCENTE/迪桑特__女": { dx: 0, dy: -18, anchor: "middle" },
@@ -528,15 +680,24 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
 
     const labelKey = `${row.brand}__${row.gender}`;
     const labelOffset = labelOffsetMap[labelKey] ?? { dx: 12, dy: -8, anchor: "start" };
-    const label = createSvgElement("text", {
-      x: cx + labelOffset.dx,
-      y: cy + labelOffset.dy,
-      class: "gender-price-brand-label",
-      "text-anchor": labelOffset.anchor
-    });
-    label.textContent = row.brandLabel;
-    nodeGroup.appendChild(label);
     svg.appendChild(nodeGroup);
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-label is-brand gender-price-label-overlay",
+        text: row.brandLabel,
+        x: cx + labelOffset.dx,
+        y: cy + labelOffset.dy,
+        width,
+        height,
+        anchor: labelOffset.anchor,
+        valign: labelOffset.dy > 0 ? "top" : "bottom",
+        dataset: {
+          brand: row.brand,
+          gender: row.gender
+        }
+      })
+    );
   });
 
   container.innerHTML = "";
@@ -560,5 +721,6 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
     <div class="gender-price-size-note">Bubble size = GMV</div>
   `;
   wrap.appendChild(svg);
+  wrap.appendChild(overlay);
   container.appendChild(wrap);
 }

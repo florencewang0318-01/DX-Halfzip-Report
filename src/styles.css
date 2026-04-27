@@ -641,6 +641,30 @@ a {
   vertical-align: middle;
 }
 
+.market-scope-row {
+  transition: background-color 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
+  cursor: pointer;
+}
+
+.market-scope-row.is-dimmed {
+  opacity: 0.22;
+}
+
+.market-scope-row.is-active {
+  background: rgba(241, 245, 255, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(143, 168, 216, 0.22);
+}
+
+.market-scope-row.is-active td {
+  background: rgba(241, 245, 255, 0.92);
+}
+
+.market-scope-row.is-active .brand-name,
+.market-scope-row.is-active .metric-cell,
+.market-scope-row.is-active .share-meter-value {
+  font-weight: 800;
+}
+
 .brand-compare-table tbody tr:last-child td {
   border-bottom: none;
 }
@@ -736,6 +760,8 @@ a {
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+  position: relative;
+  overflow: visible;
 }
 
 .bubble-chart-svg {
@@ -744,42 +770,47 @@ a {
   display: block;
 }
 
-.bubble-tick-label {
-  fill: var(--muted);
-  font-size: 11px;
-}
-
-.bubble-axis-title {
-  fill: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
 .bubble-grid-line {
   stroke: rgba(226, 232, 240, 0.95);
   stroke-width: 1;
-}
-
-.bubble-axis-line {
-  stroke: rgba(17, 24, 39, 0.38);
-  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
 }
 
 .bubble-point {
-  fill: rgba(111, 143, 203, 0.18);
-  stroke: rgba(111, 143, 203, 0.74);
-  stroke-width: 1.4;
+  stroke: rgba(124, 150, 209, 0.72);
+  stroke-width: 1.35;
 }
 
 .bubble-point.is-outlier {
-  fill: rgba(132, 152, 214, 0.22);
-  stroke: rgba(109, 130, 194, 0.80);
+  stroke: rgba(124, 150, 209, 0.78);
 }
 
-.bubble-label {
-  fill: var(--accent);
-  font-size: 11px;
-  font-weight: 700;
+.bubble-point-highlight {
+  pointer-events: none;
+}
+
+.bubble-point-group {
+  transition: opacity 160ms ease;
+  cursor: pointer;
+}
+
+.bubble-point {
+  cursor: pointer;
+}
+
+.bubble-point-group.is-dimmed,
+.market-scope-brand-label.is-dimmed,
+.market-scope-annotation.is-dimmed {
+  opacity: 0.18;
+}
+
+.bubble-point-group.is-active .bubble-point {
+  stroke-width: 2.2;
+  filter: url(#market-bubble-shadow);
+}
+
+.bubble-point-group.is-active .bubble-point-highlight {
+  opacity: 0.96;
 }
 
 .bubble-note {
@@ -788,23 +819,130 @@ a {
   line-height: 1.6;
 }
 
+.bubble-annotation {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.chart-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chart-overlay-text {
+  position: absolute;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+.chart-overlay-tick {
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.chart-overlay-tick[data-anchor="middle"][data-valign="top"] {
+  transform: translateX(-50%);
+}
+
+.chart-overlay-tick[data-anchor="end"][data-valign="middle"] {
+  transform: translate(-100%, -50%);
+}
+
+.chart-overlay-axis-title {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chart-overlay-axis-title.is-x {
+  transform: translateX(-50%);
+}
+
+.chart-overlay-axis-title.is-y {
+  transform: translate(-50%, -50%) rotate(-90deg);
+  transform-origin: center;
+}
+
+.chart-overlay-label.is-brand {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.chart-overlay-label[data-anchor="middle"][data-valign="bottom"] {
+  transform: translate(-50%, -100%);
+}
+
+.chart-overlay-label[data-anchor="middle"][data-valign="top"] {
+  transform: translate(-50%, 0);
+}
+
+.chart-overlay-label[data-anchor="start"][data-valign="bottom"] {
+  transform: translate(0, -100%);
+}
+
+.chart-overlay-label[data-anchor="start"][data-valign="top"] {
+  transform: translate(0, 0);
+}
+
+.chart-overlay-label[data-anchor="end"][data-valign="bottom"] {
+  transform: translate(-100%, -100%);
+}
+
+.chart-overlay-label[data-anchor="end"][data-valign="top"] {
+  transform: translate(-100%, 0);
+}
+
+.chart-overlay-annotation {
+  color: var(--muted);
+}
+
+.market-scope-brand-label.is-active {
+  font-weight: 800;
+}
+
+.chart-overlay-annotation[data-anchor="start"][data-valign="middle"] {
+  transform: translate(0, -50%);
+}
+
+.chart-overlay-legend {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.chart-overlay-legend-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.chart-overlay-legend-text {
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.bubble-chart-legend {
+  top: 12px;
+  right: 34px;
+}
+
 .bubble-legend-circle {
-  fill: rgba(111, 143, 203, 0.18);
-  stroke: rgba(111, 143, 203, 0.70);
-  stroke-width: 1.2;
+  background: rgba(111, 143, 203, 0.18);
+  border: 1.2px solid rgba(111, 143, 203, 0.70);
 }
 
 .bubble-legend-text {
-  fill: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.bubble-annotation {
-  fill: var(--muted);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 11px;
 }
 
 .gender-brand-matrix {
@@ -977,6 +1115,11 @@ a {
   margin-bottom: 8px;
 }
 
+.page-competitor-scope .chart-panel .panel-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
 .gender-breakdown-panel .gender-matrix-card {
   padding-top: 8px;
 }
@@ -1001,7 +1144,6 @@ a {
   height: auto;
   display: block;
   overflow: visible;
-  margin-top: 18px;
 }
 
 .gender-price-node {
@@ -1013,6 +1155,7 @@ a {
 .gender-price-row-line {
   stroke: rgba(223, 231, 241, 0.82);
   stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
 .gender-price-row-line {
@@ -1022,6 +1165,7 @@ a {
 .gender-price-axis-line {
   stroke: rgba(17, 24, 39, 0.72);
   stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
 }
 
 .gender-price-axis-arrow {
@@ -1030,25 +1174,7 @@ a {
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.gender-price-axis-title {
-  fill: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.gender-price-tick-label {
-  fill: #111827;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.gender-price-brand-label {
-  fill: var(--accent);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  vector-effect: non-scaling-stroke;
 }
 
 .gender-price-legend {
@@ -1065,11 +1191,11 @@ a {
 
 .gender-price-size-note {
   position: absolute;
-  top: 22px;
+  top: 18px;
   right: 18px;
   margin: 0;
   color: #9aa3b2;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.03em;
   z-index: 2;
@@ -1080,7 +1206,8 @@ a {
 }
 
 .gender-segment.is-hidden,
-.gender-price-node.is-hidden {
+.gender-price-node.is-hidden,
+.gender-price-label-overlay.is-hidden {
   display: none;
 }
 
@@ -1099,7 +1226,11 @@ a {
   filter: url(#gender-price-bubble-shadow);
 }
 
-.gender-price-node.is-active .gender-price-brand-label {
+.gender-price-label-overlay.is-dimmed {
+  opacity: 0.18;
+}
+
+.gender-price-label-overlay.is-active {
   font-weight: 800;
 }
 
@@ -1143,6 +1274,18 @@ a {
 .gender-breakdown-tooltip-line strong {
   font-weight: 800;
   color: var(--accent);
+}
+
+.gender-breakdown-tooltip-line strong.is-positive {
+  color: var(--green);
+}
+
+.gender-breakdown-tooltip-line strong.is-negative {
+  color: var(--red);
+}
+
+.gender-breakdown-tooltip-line strong.is-neutral {
+  color: var(--muted);
 }
 
 .gender-cell-yoy.is-positive {

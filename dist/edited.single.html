@@ -648,6 +648,30 @@ a {
   vertical-align: middle;
 }
 
+.market-scope-row {
+  transition: background-color 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
+  cursor: pointer;
+}
+
+.market-scope-row.is-dimmed {
+  opacity: 0.22;
+}
+
+.market-scope-row.is-active {
+  background: rgba(241, 245, 255, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(143, 168, 216, 0.22);
+}
+
+.market-scope-row.is-active td {
+  background: rgba(241, 245, 255, 0.92);
+}
+
+.market-scope-row.is-active .brand-name,
+.market-scope-row.is-active .metric-cell,
+.market-scope-row.is-active .share-meter-value {
+  font-weight: 800;
+}
+
 .brand-compare-table tbody tr:last-child td {
   border-bottom: none;
 }
@@ -743,6 +767,8 @@ a {
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+  position: relative;
+  overflow: visible;
 }
 
 .bubble-chart-svg {
@@ -751,42 +777,47 @@ a {
   display: block;
 }
 
-.bubble-tick-label {
-  fill: var(--muted);
-  font-size: 11px;
-}
-
-.bubble-axis-title {
-  fill: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
 .bubble-grid-line {
   stroke: rgba(226, 232, 240, 0.95);
   stroke-width: 1;
-}
-
-.bubble-axis-line {
-  stroke: rgba(17, 24, 39, 0.38);
-  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
 }
 
 .bubble-point {
-  fill: rgba(111, 143, 203, 0.18);
-  stroke: rgba(111, 143, 203, 0.74);
-  stroke-width: 1.4;
+  stroke: rgba(124, 150, 209, 0.72);
+  stroke-width: 1.35;
 }
 
 .bubble-point.is-outlier {
-  fill: rgba(132, 152, 214, 0.22);
-  stroke: rgba(109, 130, 194, 0.80);
+  stroke: rgba(124, 150, 209, 0.78);
 }
 
-.bubble-label {
-  fill: var(--accent);
-  font-size: 11px;
-  font-weight: 700;
+.bubble-point-highlight {
+  pointer-events: none;
+}
+
+.bubble-point-group {
+  transition: opacity 160ms ease;
+  cursor: pointer;
+}
+
+.bubble-point {
+  cursor: pointer;
+}
+
+.bubble-point-group.is-dimmed,
+.market-scope-brand-label.is-dimmed,
+.market-scope-annotation.is-dimmed {
+  opacity: 0.18;
+}
+
+.bubble-point-group.is-active .bubble-point {
+  stroke-width: 2.2;
+  filter: url(#market-bubble-shadow);
+}
+
+.bubble-point-group.is-active .bubble-point-highlight {
+  opacity: 0.96;
 }
 
 .bubble-note {
@@ -795,23 +826,130 @@ a {
   line-height: 1.6;
 }
 
+.bubble-annotation {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.chart-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chart-overlay-text {
+  position: absolute;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+.chart-overlay-tick {
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.chart-overlay-tick[data-anchor="middle"][data-valign="top"] {
+  transform: translateX(-50%);
+}
+
+.chart-overlay-tick[data-anchor="end"][data-valign="middle"] {
+  transform: translate(-100%, -50%);
+}
+
+.chart-overlay-axis-title {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chart-overlay-axis-title.is-x {
+  transform: translateX(-50%);
+}
+
+.chart-overlay-axis-title.is-y {
+  transform: translate(-50%, -50%) rotate(-90deg);
+  transform-origin: center;
+}
+
+.chart-overlay-label.is-brand {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.chart-overlay-label[data-anchor="middle"][data-valign="bottom"] {
+  transform: translate(-50%, -100%);
+}
+
+.chart-overlay-label[data-anchor="middle"][data-valign="top"] {
+  transform: translate(-50%, 0);
+}
+
+.chart-overlay-label[data-anchor="start"][data-valign="bottom"] {
+  transform: translate(0, -100%);
+}
+
+.chart-overlay-label[data-anchor="start"][data-valign="top"] {
+  transform: translate(0, 0);
+}
+
+.chart-overlay-label[data-anchor="end"][data-valign="bottom"] {
+  transform: translate(-100%, -100%);
+}
+
+.chart-overlay-label[data-anchor="end"][data-valign="top"] {
+  transform: translate(-100%, 0);
+}
+
+.chart-overlay-annotation {
+  color: var(--muted);
+}
+
+.market-scope-brand-label.is-active {
+  font-weight: 800;
+}
+
+.chart-overlay-annotation[data-anchor="start"][data-valign="middle"] {
+  transform: translate(0, -50%);
+}
+
+.chart-overlay-legend {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.chart-overlay-legend-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.chart-overlay-legend-text {
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.bubble-chart-legend {
+  top: 12px;
+  right: 34px;
+}
+
 .bubble-legend-circle {
-  fill: rgba(111, 143, 203, 0.18);
-  stroke: rgba(111, 143, 203, 0.70);
-  stroke-width: 1.2;
+  background: rgba(111, 143, 203, 0.18);
+  border: 1.2px solid rgba(111, 143, 203, 0.70);
 }
 
 .bubble-legend-text {
-  fill: var(--muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.bubble-annotation {
-  fill: var(--muted);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 11px;
 }
 
 .gender-brand-matrix {
@@ -984,6 +1122,11 @@ a {
   margin-bottom: 8px;
 }
 
+.page-competitor-scope .chart-panel .panel-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
 .gender-breakdown-panel .gender-matrix-card {
   padding-top: 8px;
 }
@@ -1008,7 +1151,6 @@ a {
   height: auto;
   display: block;
   overflow: visible;
-  margin-top: 18px;
 }
 
 .gender-price-node {
@@ -1020,6 +1162,7 @@ a {
 .gender-price-row-line {
   stroke: rgba(223, 231, 241, 0.82);
   stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
 .gender-price-row-line {
@@ -1029,6 +1172,7 @@ a {
 .gender-price-axis-line {
   stroke: rgba(17, 24, 39, 0.72);
   stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
 }
 
 .gender-price-axis-arrow {
@@ -1037,25 +1181,7 @@ a {
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.gender-price-axis-title {
-  fill: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.gender-price-tick-label {
-  fill: #111827;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.gender-price-brand-label {
-  fill: var(--accent);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  vector-effect: non-scaling-stroke;
 }
 
 .gender-price-legend {
@@ -1072,11 +1198,11 @@ a {
 
 .gender-price-size-note {
   position: absolute;
-  top: 22px;
+  top: 18px;
   right: 18px;
   margin: 0;
   color: #9aa3b2;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.03em;
   z-index: 2;
@@ -1087,7 +1213,8 @@ a {
 }
 
 .gender-segment.is-hidden,
-.gender-price-node.is-hidden {
+.gender-price-node.is-hidden,
+.gender-price-label-overlay.is-hidden {
   display: none;
 }
 
@@ -1106,7 +1233,11 @@ a {
   filter: url(#gender-price-bubble-shadow);
 }
 
-.gender-price-node.is-active .gender-price-brand-label {
+.gender-price-label-overlay.is-dimmed {
+  opacity: 0.18;
+}
+
+.gender-price-label-overlay.is-active {
   font-weight: 800;
 }
 
@@ -1150,6 +1281,18 @@ a {
 .gender-breakdown-tooltip-line strong {
   font-weight: 800;
   color: var(--accent);
+}
+
+.gender-breakdown-tooltip-line strong.is-positive {
+  color: var(--green);
+}
+
+.gender-breakdown-tooltip-line strong.is-negative {
+  color: var(--red);
+}
+
+.gender-breakdown-tooltip-line strong.is-neutral {
+  color: var(--muted);
 }
 
 .gender-cell-yoy.is-positive {
@@ -1352,10 +1495,12 @@ a {
 
           <div class="chart-grid evidence-grid two-up reveal">
             <article class="chart-panel panel">
+              <div class="chart-kicker">Competitor Overview</div>
               <h3 class="panel-title">竞品品牌半拉链表现表</h3>
               <div id="market-scope-brand-table" class="data-table-card"></div>
             </article>
             <article class="chart-panel panel">
+              <div class="chart-kicker">Brand Landscape</div>
               <h3 class="panel-title">布局深度 x 增长 x 规模气泡图</h3>
               <div id="market-scope-bubble-chart" class="bubble-chart-card"></div>
             </article>
@@ -2093,7 +2238,13 @@ function renderBrandCompareTable(container, rows) {
   const body = rows
     .map(
       (row) => `
-        <tr>
+        <tr
+          class="market-scope-row"
+          data-brand="${row.brand}"
+          data-share="${row.halfZipShareLabel}"
+          data-yoy="${row.halfZipYoyLabel}"
+          tabindex="0"
+        >
           <td><div class="brand-name">${row.brand}</div></td>
           <td class="${getMetricClass(row.innerYoy)}">${row.innerYoyLabel}</td>
           <td class="metric-cell share-cell">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner)}</td>
@@ -2287,11 +2438,11 @@ function scaleSqrtValue(value, min, max, start, end) {
 
 function getBubbleRadius(value, min, max) {
   if (max === min) {
-    return 22;
+    return 20;
   }
 
   const normalized = (value - min) / (max - min);
-  return 16 + normalized * 20;
+  return 12 + normalized * 16;
 }
 
 function getCompactBubbleRadius(value, min, max) {
@@ -2309,6 +2460,48 @@ function createStop(offset, color, opacity = 1) {
     "stop-color": color,
     "stop-opacity": opacity
   });
+}
+
+function toPercent(value, total) {
+  if (!total) {
+    return 0;
+  }
+
+  return (value / total) * 100;
+}
+
+function createChartOverlay() {
+  const overlay = document.createElement("div");
+  overlay.className = "chart-overlay";
+  return overlay;
+}
+
+function createChartOverlayText({
+  className = "",
+  text = "",
+  x = 0,
+  y = 0,
+  width,
+  height,
+  anchor = "middle",
+  valign = "middle",
+  dataset
+}) {
+  const node = document.createElement("div");
+  node.className = `chart-overlay-text ${className}`.trim();
+  node.textContent = text;
+  node.style.left = `${toPercent(x, width)}%`;
+  node.style.top = `${toPercent(y, height)}%`;
+  node.dataset.anchor = anchor;
+  node.dataset.valign = valign;
+
+  if (dataset) {
+    Object.entries(dataset).forEach(([key, value]) => {
+      node.dataset[key] = value;
+    });
+  }
+
+  return node;
 }
 
 function getGenderBubblePalette(gender) {
@@ -2343,9 +2536,10 @@ function renderMarketScopeBubbleChart(container, rows) {
     return;
   }
 
-  const width = 560;
-  const height = 376;
-  const margin = { top: 44, right: 28, bottom: 62, left: 78 };
+  const width = 590;
+  const height = 382;
+  const margin = { top: 44, right: 28, bottom: 48, left: 56 };
+  const xAxisLift = 8;
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
 
@@ -2367,15 +2561,50 @@ function renderMarketScopeBubbleChart(container, rows) {
     "aria-label": "竞品品牌半拉链布局深度、增长与规模气泡图"
   });
 
+  const defs = createSvgElement("defs");
+  const shadowFilter = createSvgElement("filter", {
+    id: "market-bubble-shadow",
+    x: "-35%",
+    y: "-35%",
+    width: "170%",
+    height: "170%"
+  });
+  shadowFilter.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: "0",
+      dy: "6",
+      stdDeviation: "7",
+      "flood-color": "#94a3b8",
+      "flood-opacity": "0.16"
+    })
+  );
+  defs.appendChild(shadowFilter);
+
+  rows.forEach((row, index) => {
+    const gradient = createSvgElement("radialGradient", {
+      id: `market-bubble-gradient-${index}`,
+      cx: "36%",
+      cy: "30%",
+      r: "76%"
+    });
+    gradient.appendChild(createStop("0%", "#eef4fe", 0.98));
+    gradient.appendChild(createStop("40%", "#9cb5e2", 0.78));
+    gradient.appendChild(createStop("100%", "#7c96d1", 0.94));
+    defs.appendChild(gradient);
+  });
+  svg.appendChild(defs);
+
   const yTickValues = [50, 150, 300, 500].filter((value) => value <= yMax);
+  const overlay = createChartOverlay();
   yTickValues.forEach((yValue) => {
-    const y = scaleSqrtValue(
+    const baseY = scaleSqrtValue(
       yValue,
       yMin,
       yMax,
       margin.top + plotHeight,
       margin.top
     );
+    const y = yValue === 50 ? baseY + 8 : baseY;
 
     svg.appendChild(
       createSvgElement("line", {
@@ -2386,15 +2615,18 @@ function renderMarketScopeBubbleChart(container, rows) {
         class: "bubble-grid-line"
       })
     );
-
-    const tickLabel = createSvgElement("text", {
-      x: margin.left - 10,
-      y: y + 4,
-      class: "bubble-tick-label",
-      "text-anchor": "end"
-    });
-    tickLabel.textContent = formatPercentTick(yValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-y",
+        text: formatPercentTick(yValue),
+        x: margin.left - 12,
+        y,
+        width,
+        height,
+        anchor: "end",
+        valign: "middle"
+      })
+    );
   });
 
   const xTickCount = Math.max(4, Math.ceil(xMax / 20));
@@ -2407,81 +2639,96 @@ function renderMarketScopeBubbleChart(container, rows) {
         x1: x,
         y1: margin.top,
         x2: x,
-        y2: margin.top + plotHeight,
+        y2: margin.top + plotHeight - xAxisLift,
         class: "bubble-grid-line"
       })
     );
-
-    const tickLabel = createSvgElement("text", {
-      x,
-      y: margin.top + plotHeight + 20,
-      class: "bubble-tick-label",
-      "text-anchor": "middle"
-    });
-    tickLabel.textContent = formatPercentTick(xValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-x",
+        text: formatPercentTick(xValue),
+        x,
+        y: margin.top + plotHeight + 14 - xAxisLift,
+        width,
+        height,
+        anchor: "middle",
+        valign: "top"
+      })
+    );
   }
 
   svg.appendChild(
     createSvgElement("line", {
       x1: margin.left,
-      y1: margin.top + plotHeight,
+      y1: margin.top + plotHeight - xAxisLift,
       x2: margin.left + plotWidth,
-      y2: margin.top + plotHeight,
-      class: "bubble-axis-line"
+      y2: margin.top + plotHeight - xAxisLift,
+      class: "gender-price-axis-line"
     })
   );
 
   svg.appendChild(
     createSvgElement("line", {
       x1: margin.left,
-      y1: margin.top,
+      y1: margin.top + plotHeight - xAxisLift,
       x2: margin.left,
-      y2: margin.top + plotHeight,
-      class: "bubble-axis-line"
+      y2: margin.top,
+      class: "gender-price-axis-line"
     })
   );
 
-  const xAxisTitle = createSvgElement("text", {
-    x: margin.left + plotWidth / 2,
-    y: height - 10,
-    class: "bubble-axis-title",
-    "text-anchor": "middle"
+  const arrowSize = 10;
+  const xArrow = createSvgElement("path", {
+    d: `M ${margin.left + plotWidth - arrowSize} ${margin.top + plotHeight - xAxisLift - arrowSize * 0.6}
+        L ${margin.left + plotWidth} ${margin.top + plotHeight - xAxisLift}
+        L ${margin.left + plotWidth - arrowSize} ${margin.top + plotHeight - xAxisLift + arrowSize * 0.6}`,
+    class: "gender-price-axis-arrow"
   });
-  xAxisTitle.textContent = "半拉链占内搭总体的占比";
-  svg.appendChild(xAxisTitle);
+  svg.appendChild(xArrow);
 
-  const yAxisTitle = createSvgElement("text", {
-    x: 28,
-    y: margin.top + plotHeight / 2,
-    class: "bubble-axis-title",
-    transform: `rotate(-90 28 ${margin.top + plotHeight / 2})`,
-    "text-anchor": "middle"
+  const yArrow = createSvgElement("path", {
+    d: `M ${margin.left - arrowSize * 0.6} ${margin.top + arrowSize}
+        L ${margin.left} ${margin.top}
+        L ${margin.left + arrowSize * 0.6} ${margin.top + arrowSize}`,
+    class: "gender-price-axis-arrow"
   });
-  yAxisTitle.textContent = "YOY%";
-  svg.appendChild(yAxisTitle);
+  svg.appendChild(yArrow);
 
-  const legendGroup = createSvgElement("g", {
-    transform: `translate(${width - 146}, 12)`
-  });
-  legendGroup.appendChild(
-    createSvgElement("circle", {
-      cx: 9,
-      cy: 10,
-      r: 7,
-      class: "bubble-legend-circle"
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-x",
+      text: "半拉链占内搭总体的占比",
+      x: margin.left + plotWidth / 2,
+      y: height - 15 - xAxisLift,
+      width,
+      height,
+      anchor: "middle",
+      valign: "top"
     })
   );
-  const legendText = createSvgElement("text", {
-    x: 24,
-    y: 14,
-    class: "bubble-legend-text"
-  });
-  legendText.textContent = "气泡大小表示半拉链GMV";
-  legendGroup.appendChild(legendText);
-  svg.appendChild(legendGroup);
 
-  rows.forEach((row) => {
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-y",
+      text: "YOY%",
+      x: 8,
+      y: margin.top + plotHeight / 2,
+      width,
+      height,
+      anchor: "middle",
+      valign: "middle"
+    })
+  );
+
+  const legend = document.createElement("div");
+  legend.className = "chart-overlay-legend bubble-chart-legend";
+  legend.innerHTML = `
+    <span class="chart-overlay-legend-circle bubble-legend-circle"></span>
+    <span class="chart-overlay-legend-text bubble-legend-text">气泡大小表示半拉链GMV</span>
+  `;
+  overlay.appendChild(legend);
+
+  rows.forEach((row, index) => {
     const cx = scaleValue(
       row.halfZipShareOfInner,
       xMin,
@@ -2498,31 +2745,70 @@ function renderMarketScopeBubbleChart(container, rows) {
     );
     const r = getBubbleRadius(row.halfZipGmv25, gmvMin, gmvMax);
 
+    const bubbleGroup = createSvgElement("g", {
+      class: `bubble-point-group${row.brand.includes("SALOMON") ? " is-outlier" : ""}`,
+      "data-brand": row.brand,
+      "data-share": row.halfZipShareLabel,
+      "data-yoy": row.halfZipYoyLabel,
+      tabindex: "0"
+    });
+
     const bubble = createSvgElement("circle", {
       cx,
       cy: stretchedCy,
       r,
-      class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`
+      class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`,
+      "data-brand": row.brand,
+      "data-share": row.halfZipShareLabel,
+      "data-yoy": row.halfZipYoyLabel,
+      tabindex: "0",
+      fill: `url(#market-bubble-gradient-${index})`,
+      filter: "url(#market-bubble-shadow)"
     });
-    svg.appendChild(bubble);
+    bubbleGroup.appendChild(bubble);
 
-    const brandLabel = createSvgElement("text", {
-      x: cx,
-      y: stretchedCy - r - 6,
-      class: "bubble-label",
-      "text-anchor": "middle"
+    const highlight = createSvgElement("circle", {
+      cx: cx - r * 0.24,
+      cy: stretchedCy - r * 0.28,
+      r: Math.max(3, r * 0.24),
+      fill: "rgba(255,255,255,0.28)",
+      class: "bubble-point-highlight"
     });
-    brandLabel.textContent = row.brand.split("/")[0];
-    svg.appendChild(brandLabel);
+    bubbleGroup.appendChild(highlight);
+    svg.appendChild(bubbleGroup);
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-label is-brand market-scope-brand-label",
+        text: row.brand.split("/")[0],
+        x: cx,
+        y: stretchedCy - r - 6,
+        width,
+        height,
+        anchor: "middle",
+        valign: "bottom",
+        dataset: {
+          brand: row.brand
+        }
+      })
+    );
 
     if (row.brand.includes("SALOMON")) {
-      const annotation = createSvgElement("text", {
-        x: cx + r + 12,
-        y: stretchedCy - r + 14,
-        class: "bubble-annotation"
-      });
-      annotation.textContent = "SALOMON 为低基数高增长的离群点";
-      svg.appendChild(annotation);
+      overlay.appendChild(
+        createChartOverlayText({
+          className: "chart-overlay-annotation bubble-annotation market-scope-annotation",
+          text: "SALOMON 为低基数高增长的离群点",
+          x: cx + r + 12,
+          y: stretchedCy - r + 14,
+          width,
+          height,
+          anchor: "start",
+          valign: "middle",
+          dataset: {
+            brand: row.brand
+          }
+        })
+      );
     }
   });
 
@@ -2530,6 +2816,7 @@ function renderMarketScopeBubbleChart(container, rows) {
   const wrap = document.createElement("div");
   wrap.className = "bubble-chart-wrap";
   wrap.appendChild(svg);
+  wrap.appendChild(overlay);
 
   container.appendChild(wrap);
 }
@@ -2565,7 +2852,7 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
 
   const width = 760;
   const height = 442;
-  const margin = { top: 42, right: 18, bottom: 68, left: 50 };
+  const margin = { top: 62, right: 18, bottom: 68, left: 50 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
   const prices = validRows.map((row) => row.avgDealPrice);
@@ -2590,6 +2877,7 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
     role: "img",
     "aria-label": "品牌性别与成交价格气泡图"
   });
+  const overlay = createChartOverlay();
 
   const defs = createSvgElement("defs");
   const shadowFilter = createSvgElement("filter", {
@@ -2640,14 +2928,18 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
       })
     );
 
-    const tickLabel = createSvgElement("text", {
-      x,
-      y: margin.top + plotHeight + 24,
-      class: "gender-price-tick-label",
-      "text-anchor": "middle"
-    });
-    tickLabel.textContent = formatPriceTick(xValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-x",
+        text: formatPriceTick(xValue),
+        x,
+        y: margin.top + plotHeight + 24,
+        width,
+        height,
+        anchor: "middle",
+        valign: "top"
+      })
+    );
   }
 
   yTickValues.forEach((tickValue) => {
@@ -2662,14 +2954,18 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
       })
     );
 
-    const tickLabel = createSvgElement("text", {
-      x: margin.left - 12,
-      y: y + 4,
-      class: "gender-price-tick-label",
-      "text-anchor": "end"
-    });
-    tickLabel.textContent = formatPercentTick(tickValue);
-    svg.appendChild(tickLabel);
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-tick is-y",
+        text: formatPercentTick(tickValue),
+        x: margin.left - 12,
+        y,
+        width,
+        height,
+        anchor: "end",
+        valign: "middle"
+      })
+    );
   });
 
   const yZero = yMin <= 0 && yMax >= 0
@@ -2713,24 +3009,31 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
   });
   svg.appendChild(yArrow);
 
-  const xAxisTitle = createSvgElement("text", {
-    x: margin.left + plotWidth / 2,
-    y: height - 18,
-    class: "gender-price-axis-title",
-    "text-anchor": "middle"
-  });
-  xAxisTitle.textContent = "成交价格";
-  svg.appendChild(xAxisTitle);
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-x",
+      text: "成交价格",
+      x: margin.left + plotWidth / 2,
+      y: height - 18,
+      width,
+      height,
+      anchor: "middle",
+      valign: "top"
+    })
+  );
 
-  const yAxisTitle = createSvgElement("text", {
-    x: 6,
-    y: margin.top + plotHeight / 2,
-    class: "gender-price-axis-title",
-    transform: `rotate(-90 6 ${margin.top + plotHeight / 2})`,
-    "text-anchor": "middle"
-  });
-  yAxisTitle.textContent = "YOY%";
-  svg.appendChild(yAxisTitle);
+  overlay.appendChild(
+    createChartOverlayText({
+      className: "chart-overlay-axis-title is-y",
+      text: "YOY%",
+      x: 6,
+      y: margin.top + plotHeight / 2,
+      width,
+      height,
+      anchor: "middle",
+      valign: "middle"
+    })
+  );
 
   const labelOffsetMap = {
     "DESCENTE/迪桑特__女": { dx: 0, dy: -18, anchor: "middle" },
@@ -2786,15 +3089,24 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
 
     const labelKey = `${row.brand}__${row.gender}`;
     const labelOffset = labelOffsetMap[labelKey] ?? { dx: 12, dy: -8, anchor: "start" };
-    const label = createSvgElement("text", {
-      x: cx + labelOffset.dx,
-      y: cy + labelOffset.dy,
-      class: "gender-price-brand-label",
-      "text-anchor": labelOffset.anchor
-    });
-    label.textContent = row.brandLabel;
-    nodeGroup.appendChild(label);
     svg.appendChild(nodeGroup);
+
+    overlay.appendChild(
+      createChartOverlayText({
+        className: "chart-overlay-label is-brand gender-price-label-overlay",
+        text: row.brandLabel,
+        x: cx + labelOffset.dx,
+        y: cy + labelOffset.dy,
+        width,
+        height,
+        anchor: labelOffset.anchor,
+        valign: labelOffset.dy > 0 ? "top" : "bottom",
+        dataset: {
+          brand: row.brand,
+          gender: row.gender
+        }
+      })
+    );
   });
 
   container.innerHTML = "";
@@ -2818,6 +3130,7 @@ function renderGenderBreakdownPriceBubbleChart(container, rows) {
     <div class="gender-price-size-note">Bubble size = GMV</div>
   `;
   wrap.appendChild(svg);
+  wrap.appendChild(overlay);
   container.appendChild(wrap);
 }
 
@@ -2902,7 +3215,6 @@ function setupNavigation() {
       }
 
       event.preventDefault();
-      history.replaceState(null, "", href);
       scrollToSection(href);
     });
   });
@@ -2914,7 +3226,6 @@ function setupNavigation() {
         return;
       }
 
-      history.replaceState(null, "", target);
       scrollToSection(target);
     });
   });
@@ -2971,6 +3282,7 @@ function bootstrapMarketScopePage() {
 
   renderBrandCompareTable(tableContainer, MARKET_SCOPE_BRAND_COMPARE);
   renderMarketScopeBubbleChart(bubbleContainer, MARKET_SCOPE_BRAND_COMPARE);
+  setupMarketScopeInteractions();
 }
 
 function bootstrapFemaleOpportunityPage() {
@@ -3020,10 +3332,12 @@ function createBubbleTooltipContent(target) {
   const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
   const yoy = target.dataset.yoy ?? "n/a";
   const price = formatPriceLabel(target.dataset.price);
+  const yoyClass =
+    yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
 
   return `
     <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
-    <div class="gender-breakdown-tooltip-line">YOY% <strong>${yoy}</strong></div>
+    <div class="gender-breakdown-tooltip-line">YOY% <strong class="${yoyClass}">${yoy}</strong></div>
     <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
   `;
 }
@@ -3060,6 +3374,132 @@ function hideGenderBreakdownTooltip(tooltip) {
   tooltip.classList.remove("is-visible");
 }
 
+function createMarketScopeTooltipContent(target) {
+  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const share = target.dataset.share ?? "n/a";
+  const yoy = target.dataset.yoy ?? "n/a";
+  const yoyClass =
+    yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${brand}</div>
+    <div class="gender-breakdown-tooltip-line">% in inner TTL <strong>${share}</strong></div>
+    <div class="gender-breakdown-tooltip-line">Half-zip YoY <strong class="${yoyClass}">${yoy}</strong></div>
+  `;
+}
+
+function setupMarketScopeInteractions() {
+  const section = document.querySelector("#competitor-scope");
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  let activeBrand = null;
+
+  const getRows = () => Array.from(section.querySelectorAll(".market-scope-row[data-brand]"));
+  const getBubbles = () =>
+    Array.from(section.querySelectorAll(".bubble-point-group[data-brand], .bubble-point[data-brand]"));
+  const getLabels = () =>
+    Array.from(section.querySelectorAll(".market-scope-brand-label[data-brand], .market-scope-annotation[data-brand]"));
+
+  const applyActiveState = () => {
+    const rows = getRows();
+    const bubbles = getBubbles();
+    const labels = getLabels();
+    const hasActive = Boolean(activeBrand);
+
+    rows.forEach((row) => {
+      const isMatch = row.dataset.brand === activeBrand;
+      row.classList.toggle("is-active", isMatch);
+      row.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    bubbles.forEach((bubble) => {
+      const isMatch = bubble.dataset.brand === activeBrand;
+      bubble.classList.toggle("is-active", isMatch);
+      bubble.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    labels.forEach((label) => {
+      const isMatch = label.dataset.brand === activeBrand;
+      label.classList.toggle("is-active", isMatch);
+      label.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+  };
+
+  const clearActiveState = () => {
+    activeBrand = null;
+    applyActiveState();
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const activateItem = (target, event) => {
+    activeBrand = target.dataset.brand ?? null;
+    applyActiveState();
+    showGenderBreakdownTooltip(
+      tooltip,
+      createMarketScopeTooltipContent(target),
+      event?.clientX ?? target.getBoundingClientRect().right,
+      event?.clientY ?? target.getBoundingClientRect().top
+    );
+  };
+
+  const getInteractiveTarget = (startNode) => {
+    if (!(startNode instanceof Element)) {
+      return null;
+    }
+
+    return startNode.closest(
+      ".market-scope-row[data-brand], .bubble-point[data-brand], .bubble-point-group[data-brand]"
+    );
+  };
+
+  section.addEventListener("pointerover", (event) => {
+    const target = getInteractiveTarget(event.target);
+    if (!target) {
+      clearActiveState();
+      return;
+    }
+
+    if (activeBrand !== target.dataset.brand) {
+      activateItem(target, event);
+    }
+  });
+
+  section.addEventListener("pointermove", (event) => {
+    const target = getInteractiveTarget(event.target);
+    if (!target) {
+      clearActiveState();
+      return;
+    }
+
+    if (!activeBrand || activeBrand !== target.dataset.brand) {
+      activateItem(target, event);
+      return;
+    }
+
+    if (!activeBrand) {
+      return;
+    }
+
+    placeTooltip(tooltip, event.clientX, event.clientY);
+  });
+
+  section.addEventListener("pointerout", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget instanceof Element && getInteractiveTarget(nextTarget)) {
+      return;
+    }
+
+    clearActiveState();
+  });
+
+  section.addEventListener("pointerleave", clearActiveState);
+
+  applyActiveState();
+}
+
 function setupGenderBreakdownInteractions() {
   const section = document.querySelector(GENDER_BREAKDOWN_SELECTOR);
   if (!section) {
@@ -3072,6 +3512,7 @@ function setupGenderBreakdownInteractions() {
 
   const getSegments = () => Array.from(section.querySelectorAll(".gender-segment[data-brand][data-gender]"));
   const getNodes = () => Array.from(section.querySelectorAll(".gender-price-node[data-brand][data-gender]"));
+  const getLabelOverlays = () => Array.from(section.querySelectorAll(".gender-price-label-overlay[data-brand][data-gender]"));
   const getLegendButtons = () => Array.from(section.querySelectorAll(".gender-legend-toggle[data-gender]"));
 
   const applyGenderVisibility = () => {
@@ -3088,11 +3529,16 @@ function setupGenderBreakdownInteractions() {
     getNodes().forEach((node) => {
       node.classList.toggle("is-hidden", !visibleGenders.has(node.dataset.gender));
     });
+
+    getLabelOverlays().forEach((label) => {
+      label.classList.toggle("is-hidden", !visibleGenders.has(label.dataset.gender));
+    });
   };
 
   const applyActiveState = () => {
     const segments = getSegments();
     const nodes = getNodes();
+    const labels = getLabelOverlays();
     const hasActive = Boolean(activeKey);
 
     segments.forEach((segment) => {
@@ -3107,6 +3553,13 @@ function setupGenderBreakdownInteractions() {
       const isMatch = activeKey === key;
       node.classList.toggle("is-active", isMatch);
       node.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    labels.forEach((label) => {
+      const key = `${label.dataset.brand}__${label.dataset.gender}`;
+      const isMatch = activeKey === key;
+      label.classList.toggle("is-active", isMatch);
+      label.classList.toggle("is-dimmed", hasActive && !isMatch);
     });
   };
 
@@ -3181,15 +3634,15 @@ function setupGenderBreakdownInteractions() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  if (window.location.hash) {
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
   setupNavigation();
   setupRevealEffects();
   bootstrapMarketScopePage();
   bootstrapFemaleOpportunityPage();
   setupScrollState();
-
-  if (window.location.hash && document.querySelector(window.location.hash)) {
-    window.requestAnimationFrame(() => scrollToSection(window.location.hash));
-  }
 });
 
 </script>

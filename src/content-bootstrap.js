@@ -91,7 +91,6 @@ function setupNavigation() {
       }
 
       event.preventDefault();
-      history.replaceState(null, "", href);
       scrollToSection(href);
     });
   });
@@ -103,7 +102,6 @@ function setupNavigation() {
         return;
       }
 
-      history.replaceState(null, "", target);
       scrollToSection(target);
     });
   });
@@ -160,6 +158,7 @@ function bootstrapMarketScopePage() {
 
   renderBrandCompareTable(tableContainer, MARKET_SCOPE_BRAND_COMPARE);
   renderMarketScopeBubbleChart(bubbleContainer, MARKET_SCOPE_BRAND_COMPARE);
+  setupMarketScopeInteractions();
 }
 
 function bootstrapFemaleOpportunityPage() {
@@ -209,10 +208,12 @@ function createBubbleTooltipContent(target) {
   const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
   const yoy = target.dataset.yoy ?? "n/a";
   const price = formatPriceLabel(target.dataset.price);
+  const yoyClass =
+    yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
 
   return `
     <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
-    <div class="gender-breakdown-tooltip-line">YOY% <strong>${yoy}</strong></div>
+    <div class="gender-breakdown-tooltip-line">YOY% <strong class="${yoyClass}">${yoy}</strong></div>
     <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
   `;
 }
@@ -249,6 +250,132 @@ function hideGenderBreakdownTooltip(tooltip) {
   tooltip.classList.remove("is-visible");
 }
 
+function createMarketScopeTooltipContent(target) {
+  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const share = target.dataset.share ?? "n/a";
+  const yoy = target.dataset.yoy ?? "n/a";
+  const yoyClass =
+    yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${brand}</div>
+    <div class="gender-breakdown-tooltip-line">% in inner TTL <strong>${share}</strong></div>
+    <div class="gender-breakdown-tooltip-line">Half-zip YoY <strong class="${yoyClass}">${yoy}</strong></div>
+  `;
+}
+
+function setupMarketScopeInteractions() {
+  const section = document.querySelector("#competitor-scope");
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  let activeBrand = null;
+
+  const getRows = () => Array.from(section.querySelectorAll(".market-scope-row[data-brand]"));
+  const getBubbles = () =>
+    Array.from(section.querySelectorAll(".bubble-point-group[data-brand], .bubble-point[data-brand]"));
+  const getLabels = () =>
+    Array.from(section.querySelectorAll(".market-scope-brand-label[data-brand], .market-scope-annotation[data-brand]"));
+
+  const applyActiveState = () => {
+    const rows = getRows();
+    const bubbles = getBubbles();
+    const labels = getLabels();
+    const hasActive = Boolean(activeBrand);
+
+    rows.forEach((row) => {
+      const isMatch = row.dataset.brand === activeBrand;
+      row.classList.toggle("is-active", isMatch);
+      row.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    bubbles.forEach((bubble) => {
+      const isMatch = bubble.dataset.brand === activeBrand;
+      bubble.classList.toggle("is-active", isMatch);
+      bubble.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    labels.forEach((label) => {
+      const isMatch = label.dataset.brand === activeBrand;
+      label.classList.toggle("is-active", isMatch);
+      label.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+  };
+
+  const clearActiveState = () => {
+    activeBrand = null;
+    applyActiveState();
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const activateItem = (target, event) => {
+    activeBrand = target.dataset.brand ?? null;
+    applyActiveState();
+    showGenderBreakdownTooltip(
+      tooltip,
+      createMarketScopeTooltipContent(target),
+      event?.clientX ?? target.getBoundingClientRect().right,
+      event?.clientY ?? target.getBoundingClientRect().top
+    );
+  };
+
+  const getInteractiveTarget = (startNode) => {
+    if (!(startNode instanceof Element)) {
+      return null;
+    }
+
+    return startNode.closest(
+      ".market-scope-row[data-brand], .bubble-point[data-brand], .bubble-point-group[data-brand]"
+    );
+  };
+
+  section.addEventListener("pointerover", (event) => {
+    const target = getInteractiveTarget(event.target);
+    if (!target) {
+      clearActiveState();
+      return;
+    }
+
+    if (activeBrand !== target.dataset.brand) {
+      activateItem(target, event);
+    }
+  });
+
+  section.addEventListener("pointermove", (event) => {
+    const target = getInteractiveTarget(event.target);
+    if (!target) {
+      clearActiveState();
+      return;
+    }
+
+    if (!activeBrand || activeBrand !== target.dataset.brand) {
+      activateItem(target, event);
+      return;
+    }
+
+    if (!activeBrand) {
+      return;
+    }
+
+    placeTooltip(tooltip, event.clientX, event.clientY);
+  });
+
+  section.addEventListener("pointerout", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget instanceof Element && getInteractiveTarget(nextTarget)) {
+      return;
+    }
+
+    clearActiveState();
+  });
+
+  section.addEventListener("pointerleave", clearActiveState);
+
+  applyActiveState();
+}
+
 function setupGenderBreakdownInteractions() {
   const section = document.querySelector(GENDER_BREAKDOWN_SELECTOR);
   if (!section) {
@@ -261,6 +388,7 @@ function setupGenderBreakdownInteractions() {
 
   const getSegments = () => Array.from(section.querySelectorAll(".gender-segment[data-brand][data-gender]"));
   const getNodes = () => Array.from(section.querySelectorAll(".gender-price-node[data-brand][data-gender]"));
+  const getLabelOverlays = () => Array.from(section.querySelectorAll(".gender-price-label-overlay[data-brand][data-gender]"));
   const getLegendButtons = () => Array.from(section.querySelectorAll(".gender-legend-toggle[data-gender]"));
 
   const applyGenderVisibility = () => {
@@ -277,11 +405,16 @@ function setupGenderBreakdownInteractions() {
     getNodes().forEach((node) => {
       node.classList.toggle("is-hidden", !visibleGenders.has(node.dataset.gender));
     });
+
+    getLabelOverlays().forEach((label) => {
+      label.classList.toggle("is-hidden", !visibleGenders.has(label.dataset.gender));
+    });
   };
 
   const applyActiveState = () => {
     const segments = getSegments();
     const nodes = getNodes();
+    const labels = getLabelOverlays();
     const hasActive = Boolean(activeKey);
 
     segments.forEach((segment) => {
@@ -296,6 +429,13 @@ function setupGenderBreakdownInteractions() {
       const isMatch = activeKey === key;
       node.classList.toggle("is-active", isMatch);
       node.classList.toggle("is-dimmed", hasActive && !isMatch);
+    });
+
+    labels.forEach((label) => {
+      const key = `${label.dataset.brand}__${label.dataset.gender}`;
+      const isMatch = activeKey === key;
+      label.classList.toggle("is-active", isMatch);
+      label.classList.toggle("is-dimmed", hasActive && !isMatch);
     });
   };
 
@@ -370,13 +510,13 @@ function setupGenderBreakdownInteractions() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  if (window.location.hash) {
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
   setupNavigation();
   setupRevealEffects();
   bootstrapMarketScopePage();
   bootstrapFemaleOpportunityPage();
   setupScrollState();
-
-  if (window.location.hash && document.querySelector(window.location.hash)) {
-    window.requestAnimationFrame(() => scrollToSection(window.location.hash));
-  }
 });

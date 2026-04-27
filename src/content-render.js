@@ -46,7 +46,13 @@ export function renderBrandCompareTable(container, rows) {
   const body = rows
     .map(
       (row) => `
-        <tr>
+        <tr
+          class="market-scope-row"
+          data-brand="${row.brand}"
+          data-share="${row.halfZipShareLabel}"
+          data-yoy="${row.halfZipYoyLabel}"
+          tabindex="0"
+        >
           <td><div class="brand-name">${row.brand}</div></td>
           <td class="${getMetricClass(row.innerYoy)}">${row.innerYoyLabel}</td>
           <td class="metric-cell share-cell">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner)}</td>
