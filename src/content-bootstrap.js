@@ -246,7 +246,7 @@ function createSegmentTooltipContent(target) {
 function createSilhouetteTooltipContent(target) {
   const fit = target.dataset.fitLabel ?? "";
   const length = target.dataset.lengthLabel ?? "";
-  const title = `${length} X ${fit}`;
+  const title = `${fit} X ${length}`;
   const lines = [];
   const buildLine = (label, share, yoy) => {
     const yoyClass =
@@ -305,16 +305,21 @@ function hideGenderBreakdownTooltip(tooltip) {
 }
 
 function createMarketScopeTooltipContent(target) {
-  const brand = (target.dataset.brand ?? "").split("/")[0];
+  const rawBrand = target.dataset.brand ?? "";
+  const brand = rawBrand.includes("SALOMON") ? "SALOMON*" : rawBrand.split("/")[0];
   const share = target.dataset.share ?? "n/a";
   const yoy = target.dataset.yoy ?? "n/a";
   const yoyClass =
     yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
+  const note = rawBrand.includes("SALOMON")
+    ? `<div class="gender-breakdown-tooltip-line">SALOMON 为低基数高增长的离群点</div>`
+    : "";
 
   return `
     <div class="gender-breakdown-tooltip-title">${brand}</div>
     <div class="gender-breakdown-tooltip-line">% in inner TTL <strong>${share}</strong></div>
-    <div class="gender-breakdown-tooltip-line">Half-zip YoY <strong class="${yoyClass}">${yoy}</strong></div>
+    <div class="gender-breakdown-tooltip-line">Half-zip YOY <strong class="${yoyClass}">${yoy}</strong></div>
+    ${note}
   `;
 }
 

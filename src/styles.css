@@ -981,6 +981,16 @@ a {
   opacity: 0.32;
 }
 
+.gender-breakdown-legend-item[aria-pressed="false"] {
+  opacity: 0.34;
+  color: #9aa3b2;
+}
+
+.gender-breakdown-legend-item[aria-pressed="false"] .gender-breakdown-swatch {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
 .gender-breakdown-legend-item.is-static {
   cursor: default;
 }
@@ -1036,6 +1046,20 @@ a {
 }
 
 .gender-breakdown-brand-sub {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9aa0aa;
+  white-space: nowrap;
+}
+
+.market-scope-brand-main {
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.market-scope-brand-sub {
   margin-top: 3px;
   font-size: 12px;
   font-weight: 600;
@@ -1322,7 +1346,7 @@ a {
 
 .silhouette-matrix-grid {
   display: grid;
-  grid-template-columns: 72px repeat(3, minmax(0, 1fr));
+  grid-template-columns: 72px repeat(2, minmax(0, 1fr));
   align-items: center;
   row-gap: 0;
   column-gap: 0;
@@ -1522,12 +1546,39 @@ a {
   max-width: 760px;
   margin: 0 auto;
   position: relative;
+  padding-top: 30px;
 }
 
-.silhouette-growth-svg {
+.silhouette-growth-stage {
+  position: relative;
   width: 100%;
-  height: auto;
+  height: 398px;
+  margin-top: 10px;
+}
+
+.silhouette-growth-canvas {
+  width: 100%;
+  height: 100%;
   display: block;
+  cursor: grab;
+}
+
+.silhouette-growth-canvas.is-dragging {
+  cursor: grabbing;
+}
+
+.silhouette-growth-legend {
+  position: absolute;
+  top: 8px;
+  right: 0;
+}
+
+.silhouette-growth-note {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  margin-top: 0;
+  font-size: 13px;
 }
 
 .silhouette-growth-grid-line,

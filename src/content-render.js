@@ -27,6 +27,17 @@ function renderShareCell(label, value) {
   `;
 }
 
+function renderMarketScopeBrandCell(brand) {
+  if (brand.includes("SALOMON")) {
+    return `
+      <div class="brand-name market-scope-brand-main">SALOMON/萨洛蒙*</div>
+      <div class="market-scope-brand-sub">(仅 2 SKU)</div>
+    `;
+  }
+
+  return `<div class="brand-name">${brand}</div>`;
+}
+
 export function renderBrandCompareTable(container, rows) {
   if (!container) {
     return;
@@ -53,7 +64,7 @@ export function renderBrandCompareTable(container, rows) {
           data-yoy="${row.halfZipYoyLabel}"
           tabindex="0"
         >
-          <td><div class="brand-name">${row.brand}</div></td>
+          <td>${renderMarketScopeBrandCell(row.brand)}</td>
           <td class="${getMetricClass(row.innerYoy)}">${row.innerYoyLabel}</td>
           <td class="metric-cell share-cell">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner)}</td>
           <td class="${getMetricClass(row.halfZipYoy)}">${row.halfZipYoyLabel}</td>

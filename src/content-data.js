@@ -503,11 +503,30 @@ export const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
   })
 );
 
-export const SILHOUETTE_GROWTH_DATA = SILHOUETTE_MATRIX_DATA
-  .filter((item) => item.count > 0)
-  .sort((a, b) => b.count - a.count)
-  .slice(0, 6)
-  .map((item) => {
+const SILHOUETTE_GROWTH_REQUIRED_KEYS = new Set([
+  "regular合体__semi-crop短款",
+  "slim修身__semi-crop短款"
+]);
+
+const SILHOUETTE_GROWTH_SOURCE = (() => {
+  const ranked = SILHOUETTE_MATRIX_DATA.filter((item) => item.count > 0).sort((a, b) => b.count - a.count);
+  const selected = ranked.slice(0, 6);
+  const selectedKeys = new Set(selected.map((item) => `${item.fit}__${item.length}`));
+
+  ranked.forEach((item) => {
+    const key = `${item.fit}__${item.length}`;
+    if (!SILHOUETTE_GROWTH_REQUIRED_KEYS.has(key) || selectedKeys.has(key)) {
+      return;
+    }
+
+    selected.push(item);
+    selectedKeys.add(key);
+  });
+
+  return selected;
+})();
+
+export const SILHOUETTE_GROWTH_DATA = SILHOUETTE_GROWTH_SOURCE.map((item) => {
     const comboLabel = `${formatSilhouetteFitShort(item.fit)} × ${formatSilhouetteLengthShort(item.length)}`;
 
     return {

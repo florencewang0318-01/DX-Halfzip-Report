@@ -320,6 +320,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
   overlay.appendChild(legend);
 
   rows.forEach((row, index) => {
+    const brandLabel = row.brand.includes("SALOMON") ? "SALOMON*" : row.brand.split("/")[0];
     const cx = scaleValue(
       row.halfZipShareOfInner,
       xMin,
@@ -371,7 +372,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
     overlay.appendChild(
       createChartOverlayText({
         className: "chart-overlay-label is-brand market-scope-brand-label",
-        text: row.brand.split("/")[0],
+        text: brandLabel,
         x: cx,
         y: stretchedCy - r - 6,
         width,
@@ -384,23 +385,6 @@ export function renderMarketScopeBubbleChart(container, rows) {
       })
     );
 
-    if (row.brand.includes("SALOMON")) {
-      overlay.appendChild(
-        createChartOverlayText({
-          className: "chart-overlay-annotation bubble-annotation market-scope-annotation",
-          text: "SALOMON 为低基数高增长的离群点",
-          x: cx + r + 12,
-          y: stretchedCy - r + 14,
-          width,
-          height,
-          anchor: "start",
-          valign: "middle",
-          dataset: {
-            brand: row.brand
-          }
-        })
-      );
-    }
   });
 
   container.innerHTML = "";
@@ -482,7 +466,7 @@ export function renderSilhouetteStructureChart(container, rows, meta = {}) {
   }
 
   const fitOrder = ["regular合体", "Active运动版型", "slim修身", "loose宽松"];
-  const lengthOrder = ["regular常规", "semi-crop短款", "crop短款"];
+  const lengthOrder = ["regular常规", "semi-crop短款"];
   const maxShare = Math.max(...rows.map((row) => row.gmvShare), 0);
   const getYoyClass = (label) => {
     if (!label || label === "n/a") {
@@ -620,225 +604,119 @@ export function renderSilhouetteGrowthChart(container, rows) {
     return;
   }
 
-  const validRows = rows.filter((row) => row.genders.some((gender) => gender.count25 > 0));
+  const validRows = rows.filter(
+    (row) => row.length !== "crop短款" && row.genders.some((gender) => gender.count25 > 0)
+  );
   if (!validRows.length) {
     container.innerHTML = "";
     return;
   }
 
-  const width = 760;
-  const height = 426;
-  const margin = { top: 58, right: 88, bottom: 54, left: 138 };
-  const plotWidth = width - margin.left - margin.right;
-  const rowGap = 52;
-  const plotHeight = rowGap * (validRows.length - 1);
-  const axisBottom = margin.top + plotHeight;
-  const xMin = -50;
-  const xMax = 110;
-  const ticks = [-50, 0, 50, 100];
+  if (container.__silhouetteGrowthCleanup) {
+    container.__silhouetteGrowthCleanup();
+    container.__silhouetteGrowthCleanup = null;
+  }
 
-  const svg = createSvgElement("svg", {
-    class: "silhouette-growth-svg",
-    viewBox: `0 0 ${width} ${height}`,
-    role: "img",
-    "aria-label": "核心轮廓的性别增长机会图"
-  });
+  const fitPositions = {
+    regular合体: -0.52,
+    Active运动版型: 0.06,
+    slim修身: 0.72,
+    loose宽松: 1.3
+  };
+  const lengthPositions = {
+    regular常规: -0.78,
+    "semi-crop短款": 0.5
+  };
+  const genderOffsets = {
+    女: { x: -0.08, z: -0.08 },
+    男: { x: 0.06, z: 0.03 },
+    男女: { x: 0.12, z: 0.1 }
+  };
+  const axisBaseY = -0.62;
+  const points = validRows.flatMap((row) =>
+    row.genders
+      .filter((genderItem) => {
+        if (genderItem.count25 <= 0) {
+          return false;
+        }
 
-  const overlay = createChartOverlay();
-  const defs = createSvgElement("defs");
-  const shadowFilter = createSvgElement("filter", {
-    id: "silhouette-growth-shadow",
-    x: "-35%",
-    y: "-35%",
-    width: "170%",
-    height: "170%"
-  });
-  shadowFilter.appendChild(
-    createSvgElement("feDropShadow", {
-      dx: "0",
-      dy: "4",
-      stdDeviation: "5",
-      "flood-color": "#94a3b8",
-      "flood-opacity": "0.16"
-    })
-  );
-  defs.appendChild(shadowFilter);
+        if (genderItem.yoyLabel === "new") {
+          return false;
+        }
 
-  validRows.forEach((row, rowIndex) => {
-    row.genders.forEach((genderItem, genderIndex) => {
-      const palette = getGenderBubblePalette(genderItem.gender);
-      const gradient = createSvgElement("radialGradient", {
-        id: `silhouette-growth-gradient-${rowIndex}-${genderIndex}`,
-        cx: "36%",
-        cy: "30%",
-        r: "76%"
-      });
-      gradient.appendChild(createStop("0%", palette.highlight, 0.96));
-      gradient.appendChild(createStop("42%", palette.base, 0.90));
-      gradient.appendChild(createStop("100%", palette.edge, 0.98));
-      defs.appendChild(gradient);
-    });
-  });
-  svg.appendChild(defs);
+        if (row.fit === "slim修身" && row.length === "regular常规" && genderItem.gender === "男") {
+          return false;
+        }
 
-  const xZero = scaleValue(0, xMin, xMax, margin.left, margin.left + plotWidth);
-  ticks.forEach((tickValue) => {
-    const x = scaleValue(tickValue, xMin, xMax, margin.left, margin.left + plotWidth);
-    svg.appendChild(
-      createSvgElement("line", {
-        x1: x,
-        y1: margin.top - 10,
-        x2: x,
-        y2: axisBottom + 10,
-        class: `silhouette-growth-grid-line${tickValue === 0 ? " is-zero" : ""}`
+        return true;
       })
-    );
+      .map((genderItem) => {
+        const numericYoy =
+          genderItem.yoyLabel === "new" ? null : Number(String(genderItem.yoyLabel).replace(/[^\d.-]/g, ""));
+        const isFemaleSemiCropRegular =
+          genderItem.gender === "女" && row.length === "semi-crop短款" && row.fit === "regular合体";
+        const isFemaleSemiCropLoose =
+          genderItem.gender === "女" && row.length === "semi-crop短款" && row.fit === "loose宽松";
 
-    overlay.appendChild(
-      createChartOverlayText({
-        className: "chart-overlay-tick is-x silhouette-growth-tick",
-        text: formatPercentTick(tickValue),
-        x,
-        y: axisBottom + 18,
-        width,
-        height,
-        anchor: "middle",
-        valign: "top"
+        let displayX = (lengthPositions[row.length] ?? 0) + (genderOffsets[genderItem.gender]?.x ?? 0);
+        let displayZ = (fitPositions[row.fit] ?? 0) + (genderOffsets[genderItem.gender]?.z ?? 0);
+
+        if (isFemaleSemiCropRegular) {
+          displayX = 0.9;
+          displayZ = -0.18;
+        } else if (isFemaleSemiCropLoose) {
+          displayX = 0.74;
+          displayZ = -0.42;
+        }
+
+        return {
+          fit: row.fit,
+          fitLabel: formatSilhouetteFitLabel(row.fit),
+          length: row.length,
+          lengthLabel: formatSilhouetteLengthLabel(row.length),
+          gender: genderItem.gender,
+          genderLabel: getGenderLabel(genderItem.gender),
+          yoyLabel: genderItem.yoyLabel,
+          yoyValue: numericYoy,
+          gmv25: genderItem.gmv25,
+          x: displayX,
+          z: displayZ,
+          outlierBand: isFemaleSemiCropRegular ? "upper-right" : isFemaleSemiCropLoose ? "upper-mid" : null
+        };
       })
-    );
-  });
-
-  validRows.forEach((row, index) => {
-    const y = margin.top + index * rowGap;
-    svg.appendChild(
-      createSvgElement("line", {
-        x1: margin.left,
-        y1: y,
-        x2: margin.left + plotWidth,
-        y2: y,
-        class: "silhouette-growth-row-line"
-      })
-    );
-
-    overlay.appendChild(
-      createChartOverlayText({
-        className: "chart-overlay-tick is-y silhouette-growth-combo-label",
-        text: row.comboLabel,
-        x: margin.left - 18,
-        y,
-        width,
-        height,
-        anchor: "end",
-        valign: "middle"
-      })
-    );
-  });
-
-  svg.appendChild(
-    createSvgElement("line", {
-      x1: margin.left,
-      y1: axisBottom,
-      x2: margin.left + plotWidth,
-      y2: axisBottom,
-      class: "gender-price-axis-line"
-    })
-  );
-  svg.appendChild(
-    createSvgElement("line", {
-      x1: xZero,
-      y1: margin.top - 12,
-      x2: xZero,
-      y2: axisBottom + 8,
-      class: "gender-price-axis-line silhouette-growth-zero-line"
-    })
   );
 
-  overlay.appendChild(
-    createChartOverlayText({
-      className: "chart-overlay-axis-title is-x",
-      text: "YOY%",
-      x: margin.left + plotWidth / 2,
-      y: height - 10,
-      width,
-      height,
-      anchor: "middle",
-      valign: "top"
-    })
-  );
+  const maxGmv = Math.max(...points.map((point) => point.gmv25));
+  const minGmv = Math.min(...points.map((point) => point.gmv25));
+  const axisYCap = 100;
+  const axisSpan = 1.64;
 
-  validRows.forEach((row, rowIndex) => {
-    const y = margin.top + rowIndex * rowGap;
+  const mapY = (point) => {
+    if (!Number.isFinite(point.yoyValue)) {
+      return null;
+    }
 
-    row.genders.forEach((genderItem, genderIndex) => {
-      if (genderItem.count25 <= 0) {
-        return;
-      }
+    if (point.gender === "女" && point.length === "semi-crop短款" && point.fit === "regular合体") {
+      return axisSpan + 0.24;
+    }
 
-      const token = getSilhouetteGenderToken(genderItem.gender);
-      const palette = getGenderBubblePalette(genderItem.gender);
-      const shareRadius = 9 + (Math.max(0, genderItem.shareInCombo) / 100) * 11;
+    if (point.gender === "女" && point.length === "semi-crop短款" && point.fit === "loose宽松") {
+      return axisSpan + 0.12;
+    }
 
-      if (genderItem.yoyLabel === "new") {
-        overlay.appendChild(
-          createChartOverlayText({
-            className: `chart-overlay-label silhouette-growth-new ${token.className}`,
-            text: `${token.short} new`,
-            x: margin.left + plotWidth + 26,
-            y,
-            width,
-            height,
-            anchor: "start",
-            valign: "middle"
-          })
-        );
-        return;
-      }
+    if (point.yoyValue > axisYCap) {
+      return axisSpan + 0.12;
+    }
 
-      const x = scaleValue(
-        Number(String(genderItem.yoyLabel).replace(/[^\d.-]/g, "")),
-        xMin,
-        xMax,
-        margin.left,
-        margin.left + plotWidth
-      );
+    if (point.yoyValue < 0) {
+      return Math.max(-0.24, (point.yoyValue / axisYCap) * 0.24);
+    }
 
-      const group = createSvgElement("g", {
-        class: "silhouette-growth-node"
-      });
-      group.appendChild(
-        createSvgElement("circle", {
-          cx: x,
-          cy: y,
-          r: shareRadius,
-          fill: `url(#silhouette-growth-gradient-${rowIndex}-${genderIndex})`,
-          stroke: palette.edge,
-          "stroke-width": 1.2,
-          filter: "url(#silhouette-growth-shadow)"
-        })
-      );
-      group.appendChild(
-        createSvgElement("circle", {
-          cx: x - shareRadius * 0.26,
-          cy: y - shareRadius * 0.30,
-          r: Math.max(3, shareRadius * 0.28),
-          fill: "rgba(255,255,255,0.34)"
-        })
-      );
-      svg.appendChild(group);
+    return (point.yoyValue / axisYCap) * axisSpan;
+  };
 
-      overlay.appendChild(
-        createChartOverlayText({
-          className: `chart-overlay-label silhouette-growth-yoy ${token.className}`,
-          text: `${token.short} ${genderItem.yoyLabel}`,
-          x,
-          y: y - shareRadius - 12,
-          width,
-          height,
-          anchor: "middle",
-          valign: "bottom"
-        })
-      );
-    });
+  points.forEach((point) => {
+    point.y = axisBaseY + mapY(point);
   });
 
   container.innerHTML = "";
@@ -846,15 +724,453 @@ export function renderSilhouetteGrowthChart(container, rows) {
   wrap.className = "silhouette-growth-wrap";
   wrap.innerHTML = `
     <div class="gender-breakdown-legend silhouette-growth-legend">
-      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female</span></span>
-      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male</span></span>
-      <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-unisex"></span><span>Unisex</span></span>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="女" aria-pressed="true">
+        <span class="gender-breakdown-swatch is-female"></span><span>Female</span>
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
+        <span class="gender-breakdown-swatch is-male"></span><span>Male</span>
+      </button>
+      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
+        <span class="gender-breakdown-swatch is-unisex"></span><span>Unisex</span>
+      </button>
     </div>
-    <div class="silhouette-growth-note">Dot size = share within silhouette combo</div>
+    <div class="silhouette-growth-note">Bubble size = GMV</div>
+    <div class="silhouette-growth-stage">
+      <canvas class="silhouette-growth-canvas" aria-label="可拖动旋转的轮廓增长三维气泡图"></canvas>
+    </div>
   `;
-  wrap.appendChild(svg);
-  wrap.appendChild(overlay);
   container.appendChild(wrap);
+
+  const stage = wrap.querySelector(".silhouette-growth-stage");
+  const canvas = wrap.querySelector(".silhouette-growth-canvas");
+  const ctx = canvas.getContext("2d");
+  const legendButtons = Array.from(wrap.querySelectorAll(".gender-legend-toggle"));
+
+  const ensureTooltip = () => {
+    let tooltip = document.querySelector("#silhouetteGrowthTooltip");
+    if (tooltip) {
+      return tooltip;
+    }
+
+    tooltip = document.createElement("div");
+    tooltip.id = "silhouetteGrowthTooltip";
+    tooltip.className = "gender-breakdown-tooltip";
+    document.body.appendChild(tooltip);
+    return tooltip;
+  };
+
+  const tooltip = ensureTooltip();
+  let width = 0;
+  let height = 0;
+  let dpr = window.devicePixelRatio || 1;
+  let currentYaw = -0.88;
+  let hoverPoint = null;
+  let isDragging = false;
+  let dragPointerId = null;
+  let lastPointerX = 0;
+  let lastPointerY = 0;
+  let projectedPoints = [];
+  const hiddenGenders = new Set();
+
+  const yoyTicks = [0, 50, 100];
+  const fitOrder = ["regular合体", "Active运动版型", "slim修身", "loose宽松"];
+  const lengthOrder = ["regular常规", "semi-crop短款"];
+
+  const rotateHorizontal = (point, yaw) => {
+    const cosYaw = Math.cos(yaw);
+    const sinYaw = Math.sin(yaw);
+    const x1 = point.x * cosYaw + point.z * sinYaw;
+    const z1 = -point.x * sinYaw + point.z * cosYaw;
+
+    return { x: x1, y: point.y, z: z1 };
+  };
+
+  const projectPoint = (point) => {
+    const rotated = rotateHorizontal(point, currentYaw);
+    const spreadX = width * 0.19;
+    const spreadY = height * 0.245;
+    const depthSkewX = width * 0.09;
+    const depthSkewY = height * 0.07;
+    const centerX = width * 0.545;
+    const centerY = height * 0.585;
+
+    return {
+      x: centerX + rotated.x * spreadX + rotated.z * depthSkewX,
+      y: centerY - rotated.y * spreadY + rotated.z * depthSkewY,
+      scale: 1 - rotated.z * 0.045,
+      depth: rotated.z
+    };
+  };
+
+  const projectOutlierPoint = (point) => {
+    const rotated = rotateHorizontal(point, currentYaw);
+    const spreadX = width * 0.19;
+    const depthSkewX = width * 0.09;
+    const centerX = width * 0.545;
+    const anchorY = point.outlierBand === "upper-right" ? height * 0.25 : height * 0.17;
+    const anchorXOffset = point.outlierBand === "upper-right" ? width * 0.19 : width * 0.13;
+
+    return {
+      x: centerX + rotated.x * spreadX + rotated.z * depthSkewX + anchorXOffset,
+      y: anchorY + rotated.z * 6,
+      scale: 0.94 - rotated.z * 0.02,
+      depth: rotated.z + 2
+    };
+  };
+
+  const drawArrow = (from, to) => {
+    const headLength = 12;
+    const angle = Math.atan2(to.y - from.y, to.x - from.x);
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(to.x, to.y);
+    ctx.lineTo(to.x - headLength * Math.cos(angle - Math.PI / 6), to.y - headLength * Math.sin(angle - Math.PI / 6));
+    ctx.moveTo(to.x, to.y);
+    ctx.lineTo(to.x - headLength * Math.cos(angle + Math.PI / 6), to.y - headLength * Math.sin(angle + Math.PI / 6));
+    ctx.stroke();
+  };
+
+  const getBubbleRadius3d = (value) => {
+    if (maxGmv === minGmv) {
+      return 20;
+    }
+
+    const normalized = Math.sqrt((value - minGmv) / (maxGmv - minGmv));
+    return 12 + normalized * 17;
+  };
+
+  const drawBubble = (point, projected) => {
+    const palette = getGenderBubblePalette(point.gender);
+    const radius = getBubbleRadius3d(point.gmv25) * projected.scale;
+    const gradient = ctx.createRadialGradient(
+      projected.x - radius * 0.32,
+      projected.y - radius * 0.34,
+      radius * 0.18,
+      projected.x,
+      projected.y,
+      radius
+    );
+    gradient.addColorStop(0, "rgba(255,255,255,0.78)");
+    gradient.addColorStop(0.24, palette.highlight);
+    gradient.addColorStop(0.56, palette.base);
+    gradient.addColorStop(1, palette.edge);
+
+    ctx.save();
+    if (hoverPoint === point) {
+      ctx.shadowColor = palette.shadow;
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 8;
+    } else {
+      ctx.shadowColor = palette.shadow;
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetY = 6;
+    }
+
+    ctx.beginPath();
+    ctx.arc(projected.x, projected.y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    ctx.lineWidth = hoverPoint === point ? 2.2 : 1.2;
+    ctx.strokeStyle = palette.edge;
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(projected.x - radius * 0.24, projected.y - radius * 0.28, Math.max(3, radius * 0.22), 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.34)";
+    ctx.fill();
+    ctx.restore();
+
+    projected.radius = radius;
+  };
+
+  const drawLabel = (text, x, y, options = {}) => {
+    const { align = "center", baseline = "middle", color = "#111827", size = 12, weight = 700 } = options;
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.font = `${weight} ${size}px Inter, system-ui, sans-serif`;
+    ctx.textAlign = align;
+    ctx.textBaseline = baseline;
+    ctx.fillText(text, x, y);
+    ctx.restore();
+  };
+
+  const drawScene = () => {
+    ctx.clearRect(0, 0, width, height);
+    ctx.save();
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, width, height);
+
+    const origin = projectPoint({ x: -1.44, y: axisBaseY, z: -1.28 });
+    const xAxisEnd = projectPoint({ x: 1.02, y: axisBaseY, z: -1.28 });
+    const zAxisEnd = projectPoint({ x: -1.44, y: axisBaseY, z: 1.38 });
+    const yAxisEnd = projectPoint({ x: -1.44, y: axisBaseY + axisSpan + 0.34, z: -1.28 });
+
+    ctx.strokeStyle = "rgba(213, 223, 236, 0.92)";
+    ctx.lineWidth = 1;
+
+    lengthOrder.forEach((lengthKey) => {
+      const xVal = lengthPositions[lengthKey];
+      const front = projectPoint({ x: xVal, y: axisBaseY, z: -1.28 });
+      const back = projectPoint({ x: xVal, y: axisBaseY, z: 1.38 });
+      ctx.beginPath();
+      ctx.moveTo(front.x, front.y);
+      ctx.lineTo(back.x, back.y);
+      ctx.stroke();
+    });
+
+    fitOrder.forEach((fitKey) => {
+      const zVal = fitPositions[fitKey];
+      const left = projectPoint({ x: -1.44, y: axisBaseY, z: zVal });
+      const right = projectPoint({ x: 1.02, y: axisBaseY, z: zVal });
+      ctx.beginPath();
+      ctx.moveTo(left.x, left.y);
+      ctx.lineTo(right.x, right.y);
+      ctx.stroke();
+    });
+
+    ctx.strokeStyle = "rgba(79, 85, 101, 0.88)";
+    ctx.lineWidth = 1.8;
+    drawArrow(origin, xAxisEnd);
+    drawArrow(origin, zAxisEnd);
+    drawArrow(origin, yAxisEnd);
+
+    lengthOrder.forEach((lengthKey) => {
+      const xVal = lengthPositions[lengthKey];
+      const tick = projectPoint({ x: xVal, y: axisBaseY, z: -1.28 });
+      const tickTop = projectPoint({ x: xVal, y: axisBaseY + 0.07, z: -1.28 });
+      ctx.beginPath();
+      ctx.moveTo(tick.x, tick.y);
+      ctx.lineTo(tickTop.x, tickTop.y);
+      ctx.stroke();
+      drawLabel(formatSilhouetteLengthLabel(lengthKey), tick.x + 12, tick.y - 6, {
+        align: "left",
+        size: 11,
+        color: "#111827",
+        weight: 600
+      });
+    });
+
+    fitOrder.forEach((fitKey) => {
+      const zVal = fitPositions[fitKey];
+      const tick = projectPoint({ x: -1.44, y: axisBaseY, z: zVal });
+      drawLabel(formatSilhouetteFitLabel(fitKey), tick.x - 14, tick.y + 1, {
+        align: "right",
+        size: 11,
+        color: "#111827",
+        weight: 600
+      });
+    });
+
+    yoyTicks.forEach((tickValue) => {
+      const tickPoint = projectPoint({
+        x: -1.44,
+        y: axisBaseY + (tickValue / axisYCap) * axisSpan,
+        z: -1.28
+      });
+      drawLabel(formatPercentTick(tickValue), tickPoint.x + 10, tickPoint.y, {
+        align: "left",
+        size: 11,
+        color: "#111827",
+        weight: 600
+      });
+    });
+
+    drawLabel("Length", xAxisEnd.x + 26, xAxisEnd.y - 2, {
+      align: "left",
+      size: 12,
+      color: "#334155",
+      weight: 700
+    });
+    drawLabel("Fit", zAxisEnd.x - 28, zAxisEnd.y + 14, {
+      align: "right",
+      size: 12,
+      color: "#334155",
+      weight: 700
+    });
+
+    drawLabel("YOY%", yAxisEnd.x + 10, yAxisEnd.y - 28, {
+      size: 12,
+      color: "#334155",
+      weight: 700
+    });
+
+    const visiblePoints = points.filter((point) => !hiddenGenders.has(point.gender));
+
+    const renderedPoints = visiblePoints
+      .map((point) => {
+        const projected = point.outlierBand ? projectOutlierPoint(point) : projectPoint(point);
+        return { point, projected };
+      })
+      .sort((a, b) => a.projected.depth - b.projected.depth);
+
+    renderedPoints.forEach(({ point, projected }) => drawBubble(point, projected));
+
+    projectedPoints = renderedPoints.map(({ point, projected }) => ({
+      point,
+      x: projected.x,
+      y: projected.y,
+      r: projected.radius ?? 12
+    }));
+
+    ctx.restore();
+  };
+
+  const resizeCanvas = () => {
+    const rect = stage.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    drawScene();
+  };
+
+  const hideTooltip = () => {
+    tooltip.classList.remove("is-visible");
+  };
+
+  const showTooltip = (point, clientX, clientY) => {
+    const yoyClass =
+      point.yoyLabel === "new"
+        ? "is-positive"
+        : point.yoyLabel.startsWith("+")
+          ? "is-positive"
+          : point.yoyLabel.startsWith("-")
+            ? "is-negative"
+            : "is-neutral";
+
+    tooltip.innerHTML = `
+      <div class="gender-breakdown-tooltip-title">${point.fitLabel} X ${point.lengthLabel}</div>
+      <div class="gender-breakdown-tooltip-line">Gender <strong>${point.genderLabel}</strong></div>
+      <div class="gender-breakdown-tooltip-line">YOY% <strong class="${yoyClass}">${point.yoyLabel}</strong></div>
+    `;
+    tooltip.classList.add("is-visible");
+    const rect = tooltip.getBoundingClientRect();
+    const nextX = Math.min(clientX + 16, window.innerWidth - rect.width - 16);
+    const nextY = Math.min(clientY + 16, window.innerHeight - rect.height - 16);
+    tooltip.style.left = `${Math.max(12, nextX)}px`;
+    tooltip.style.top = `${Math.max(12, nextY)}px`;
+  };
+
+  const pickPoint = (clientX, clientY) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const hit = [...projectedPoints]
+      .sort((a, b) => b.r - a.r)
+      .find((item) => Math.hypot(item.x - x, item.y - y) <= item.r + 6);
+
+    return hit?.point ?? null;
+  };
+
+  const handlePointerDown = (event) => {
+    isDragging = true;
+    dragPointerId = event.pointerId;
+    lastPointerX = event.clientX;
+    lastPointerY = event.clientY;
+    canvas.classList.add("is-dragging");
+    canvas.setPointerCapture?.(event.pointerId);
+    hideTooltip();
+  };
+
+  const handlePointerMove = (event) => {
+    if (isDragging && dragPointerId === event.pointerId) {
+      const deltaX = event.clientX - lastPointerX;
+      lastPointerX = event.clientX;
+      currentYaw += deltaX * 0.008;
+      hoverPoint = null;
+      drawScene();
+      return;
+    }
+
+    const picked = pickPoint(event.clientX, event.clientY);
+    if (picked !== hoverPoint) {
+      hoverPoint = picked;
+      drawScene();
+    }
+
+    if (picked) {
+      showTooltip(picked, event.clientX, event.clientY);
+    } else {
+      hideTooltip();
+    }
+  };
+
+  const endDrag = () => {
+    isDragging = false;
+    dragPointerId = null;
+    canvas.classList.remove("is-dragging");
+  };
+
+  const handlePointerUp = () => {
+    endDrag();
+  };
+
+  const handlePointerLeave = () => {
+    endDrag();
+    hoverPoint = null;
+    drawScene();
+    hideTooltip();
+  };
+
+  const syncLegendState = () => {
+    legendButtons.forEach((button) => {
+      const gender = button.dataset.gender;
+      const isVisible = !hiddenGenders.has(gender);
+      button.setAttribute("aria-pressed", isVisible ? "true" : "false");
+    });
+  };
+
+  const handleLegendToggle = (event) => {
+    const button = event.currentTarget;
+    const gender = button.dataset.gender;
+    if (!gender) {
+      return;
+    }
+
+    if (hiddenGenders.has(gender)) {
+      hiddenGenders.delete(gender);
+    } else {
+      hiddenGenders.add(gender);
+    }
+
+    hoverPoint = hoverPoint && hiddenGenders.has(hoverPoint.gender) ? null : hoverPoint;
+    hideTooltip();
+    syncLegendState();
+    drawScene();
+  };
+
+  const resizeObserver = new ResizeObserver(resizeCanvas);
+  resizeObserver.observe(stage);
+
+  legendButtons.forEach((button) => button.addEventListener("click", handleLegendToggle));
+  canvas.addEventListener("pointerdown", handlePointerDown);
+  canvas.addEventListener("pointermove", handlePointerMove);
+  canvas.addEventListener("pointerup", handlePointerUp);
+  canvas.addEventListener("pointercancel", handlePointerUp);
+  canvas.addEventListener("pointerleave", handlePointerLeave);
+
+  syncLegendState();
+  resizeCanvas();
+
+  container.__silhouetteGrowthCleanup = () => {
+    resizeObserver.disconnect();
+    legendButtons.forEach((button) => button.removeEventListener("click", handleLegendToggle));
+    canvas.removeEventListener("pointerdown", handlePointerDown);
+    canvas.removeEventListener("pointermove", handlePointerMove);
+    canvas.removeEventListener("pointerup", handlePointerUp);
+    canvas.removeEventListener("pointercancel", handlePointerUp);
+    canvas.removeEventListener("pointerleave", handlePointerLeave);
+    hideTooltip();
+  };
 }
 
 function formatPriceTick(value) {
@@ -879,7 +1195,12 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   }
 
   const validRows = rows.filter(
-    (row) => row.avgDealPrice > 0 && row.gmv > 0 && row.yoyMetric !== null && Number.isFinite(row.yoyMetric)
+    (row) =>
+      row.avgDealPrice > 0 &&
+      row.gmv > 0 &&
+      row.yoyMetric !== null &&
+      Number.isFinite(row.yoyMetric) &&
+      !(row.brand === "KOLON SPORT/可隆" && row.gender === "男女")
   );
   if (!validRows.length) {
     container.innerHTML = "";
