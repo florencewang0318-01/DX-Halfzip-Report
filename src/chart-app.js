@@ -1870,19 +1870,16 @@ export function renderFunctionGenderSplit(container, groups) {
       (group) => `
         <article class="function-gender-card ${group.className}">
           <div class="function-gender-card-head">
-            <div>
-              <div class="function-gender-title">${group.label}</div>
-              <div class="function-gender-subtitle">25AW gender overview</div>
-            </div>
+            <div class="function-gender-title">${group.label}</div>
             <div class="function-gender-head-label">Share / YOY</div>
           </div>
           <div class="function-gender-metrics">
             <div class="function-gender-metric">
-              <span>Sales Share</span>
+              <span>TTL Function%</span>
               <strong>${group.salesShareLabel}</strong>
             </div>
             <div class="function-gender-metric">
-              <span>GMV YOY</span>
+              <span>TTL YOY%</span>
               <strong class="${getYoyTone(group.yoyLabel)}">${group.yoyLabel}</strong>
             </div>
           </div>

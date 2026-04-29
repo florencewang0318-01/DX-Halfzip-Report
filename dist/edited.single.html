@@ -1430,8 +1430,8 @@ a {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.74);
+  padding-bottom: 2px;
+  border-bottom: none;
 }
 
 .function-gender-title {
@@ -1461,7 +1461,7 @@ a {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  margin: 12px 0;
+  margin: 8px 0 12px;
 }
 
 .function-gender-metric {
@@ -2853,6 +2853,8 @@ function summarizeFunctionCoverage(rows, gender) {
   });
   const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
   const totalCount = filteredRows.length;
+  let functionGmv = 0;
+  let functionCount = 0;
   const bucketMap = new Map(
     FUNCTION_BUCKETS.map((bucket) => [
       bucket.key,
@@ -2866,7 +2868,13 @@ function summarizeFunctionCoverage(rows, gender) {
 
   filteredRows.forEach((row) => {
     const gmv = toNumber(row["销售额"]);
-    getFunctionBucketKeys(row).forEach((key) => {
+    const bucketKeys = getFunctionBucketKeys(row);
+    if (bucketKeys.length) {
+      functionGmv += gmv;
+      functionCount += 1;
+    }
+
+    bucketKeys.forEach((key) => {
       const current = bucketMap.get(key);
       if (!current) {
         return;
@@ -2880,6 +2888,8 @@ function summarizeFunctionCoverage(rows, gender) {
   return {
     totalGmv,
     totalCount,
+    functionGmv,
+    functionCount,
     buckets: Array.from(bucketMap.values())
   };
 }
@@ -3090,12 +3100,11 @@ const FUNCTION_GENDER_COVERAGE_Y25 = FUNCTION_GENDER_KEYS.map((item) => ({
   summary: summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25, item.gender),
   previousSummary: summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24, item.gender)
 }));
-const FUNCTION_GENDER_TOTAL_Y25 = FUNCTION_GENDER_COVERAGE_Y25.reduce((sum, item) => sum + item.summary.totalGmv, 0);
 
 const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => {
   const rows = buildFunctionRows(item.summary, item.previousSummary, item.summary.totalGmv).slice(0, 7);
   const yoy = computeYoy(item.summary.totalGmv, item.previousSummary.totalGmv);
-  const share = FUNCTION_GENDER_TOTAL_Y25 ? (item.summary.totalGmv / FUNCTION_GENDER_TOTAL_Y25) * 100 : 0;
+  const share = item.summary.totalGmv ? (item.summary.functionGmv / item.summary.totalGmv) * 100 : 0;
 
   return {
     gender: item.gender,
@@ -3104,6 +3113,9 @@ const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => {
     totalGmv25: item.summary.totalGmv,
     totalGmv24: item.previousSummary.totalGmv,
     totalCount25: item.summary.totalCount,
+    functionGmv25: item.summary.functionGmv,
+    functionGmv24: item.previousSummary.functionGmv,
+    functionCount25: item.summary.functionCount,
     salesShare: share,
     salesShareLabel: `${Math.round(share)}%`,
     yoy,
@@ -5364,19 +5376,16 @@ function renderFunctionGenderSplit(container, groups) {
       (group) => `
         <article class="function-gender-card ${group.className}">
           <div class="function-gender-card-head">
-            <div>
-              <div class="function-gender-title">${group.label}</div>
-              <div class="function-gender-subtitle">25AW gender overview</div>
-            </div>
+            <div class="function-gender-title">${group.label}</div>
             <div class="function-gender-head-label">Share / YOY</div>
           </div>
           <div class="function-gender-metrics">
             <div class="function-gender-metric">
-              <span>Sales Share</span>
+              <span>TTL Function%</span>
               <strong>${group.salesShareLabel}</strong>
             </div>
             <div class="function-gender-metric">
-              <span>GMV YOY</span>
+              <span>TTL YOY%</span>
               <strong class="${getYoyTone(group.yoyLabel)}">${group.yoyLabel}</strong>
             </div>
           </div>

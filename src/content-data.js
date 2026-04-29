@@ -426,6 +426,8 @@ function summarizeFunctionCoverage(rows, gender) {
   });
   const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
   const totalCount = filteredRows.length;
+  let functionGmv = 0;
+  let functionCount = 0;
   const bucketMap = new Map(
     FUNCTION_BUCKETS.map((bucket) => [
       bucket.key,
@@ -439,7 +441,13 @@ function summarizeFunctionCoverage(rows, gender) {
 
   filteredRows.forEach((row) => {
     const gmv = toNumber(row["销售额"]);
-    getFunctionBucketKeys(row).forEach((key) => {
+    const bucketKeys = getFunctionBucketKeys(row);
+    if (bucketKeys.length) {
+      functionGmv += gmv;
+      functionCount += 1;
+    }
+
+    bucketKeys.forEach((key) => {
       const current = bucketMap.get(key);
       if (!current) {
         return;
@@ -453,6 +461,8 @@ function summarizeFunctionCoverage(rows, gender) {
   return {
     totalGmv,
     totalCount,
+    functionGmv,
+    functionCount,
     buckets: Array.from(bucketMap.values())
   };
 }
@@ -663,12 +673,11 @@ const FUNCTION_GENDER_COVERAGE_Y25 = FUNCTION_GENDER_KEYS.map((item) => ({
   summary: summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25, item.gender),
   previousSummary: summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24, item.gender)
 }));
-const FUNCTION_GENDER_TOTAL_Y25 = FUNCTION_GENDER_COVERAGE_Y25.reduce((sum, item) => sum + item.summary.totalGmv, 0);
 
 export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => {
   const rows = buildFunctionRows(item.summary, item.previousSummary, item.summary.totalGmv).slice(0, 7);
   const yoy = computeYoy(item.summary.totalGmv, item.previousSummary.totalGmv);
-  const share = FUNCTION_GENDER_TOTAL_Y25 ? (item.summary.totalGmv / FUNCTION_GENDER_TOTAL_Y25) * 100 : 0;
+  const share = item.summary.totalGmv ? (item.summary.functionGmv / item.summary.totalGmv) * 100 : 0;
 
   return {
     gender: item.gender,
@@ -677,6 +686,9 @@ export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => 
     totalGmv25: item.summary.totalGmv,
     totalGmv24: item.previousSummary.totalGmv,
     totalCount25: item.summary.totalCount,
+    functionGmv25: item.summary.functionGmv,
+    functionGmv24: item.previousSummary.functionGmv,
+    functionCount25: item.summary.functionCount,
     salesShare: share,
     salesShareLabel: `${Math.round(share)}%`,
     yoy,
