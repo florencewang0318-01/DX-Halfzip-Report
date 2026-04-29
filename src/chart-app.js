@@ -1511,348 +1511,498 @@ function getYoyTone(label) {
   return "is-neutral";
 }
 
-export function renderFunctionOpportunityMap(container, rows, meta = {}) {
+export function renderFunctionOpportunityMap(container, rowsByView, metaByView = {}) {
   if (!container) {
     return;
   }
 
-  const validRows = rows.filter((row) => row.gmv25 > 0 && row.key !== "windproof");
-  if (!validRows.length) {
-    container.innerHTML = "";
-    return;
-  }
+  const viewConfigs = {
+    all: { key: "all", label: "ALL", titleLabel: "ALL", tone: "all" },
+    male: { key: "male", label: "MALE", titleLabel: "MALE", tone: "male" },
+    female: { key: "female", label: "FEMALE", titleLabel: "FEMALE", tone: "female" }
+  };
+  let activeView = "all";
 
-  const width = 600;
-  const height = 380;
-  const margin = { top: 34, right: 34, bottom: 58, left: 54 };
-  const plotWidth = width - margin.left - margin.right;
-  const plotHeight = height - margin.top - margin.bottom;
-  const xMax = Math.max(70, Math.ceil(Math.max(...validRows.map((row) => row.share)) / 10) * 10);
-  const yMin = -50;
-  const yMax = 200;
-  const xAxisY = scaleValue(0, yMin, yMax, margin.top + plotHeight, margin.top);
-  const averageShareValue = Number.isFinite(meta.averageFunctionShare) ? meta.averageFunctionShare : 0;
-  const averageShareLabel = meta.averageFunctionShareLabel ?? `${Math.round(averageShareValue)}%`;
-  const ttlHalfZipYoyValue = Number.isFinite(meta.ttlHalfZipYoy) ? meta.ttlHalfZipYoy : 0;
-  const ttlHalfZipYoyLabel = meta.ttlHalfZipYoyLabel ?? formatYoyLabel(ttlHalfZipYoyValue);
-  const gmvValues = validRows.map((row) => row.gmv25);
-  const gmvMin = Math.min(...gmvValues);
-  const gmvMax = Math.max(...gmvValues);
-  const yTicks = [-50, 0, 50, 100, 150, 200];
-  const xTicks = [0, 20, 40, 60].filter((tick) => tick <= xMax);
-  if (!xTicks.includes(xMax)) {
-    xTicks.push(xMax);
-  }
+  const getFunctionViewIconMarkup = (viewKey) => {
+    if (viewKey === "male") {
+      return `
+        <svg viewBox="0 0 24 24" class="function-map-view-icon" aria-hidden="true">
+          <circle cx="12" cy="5.5" r="3.1" fill="currentColor"/>
+          <path d="M7.2 10.2H16.8L12 21Z" fill="currentColor"/>
+        </svg>
+      `;
+    }
 
-  const svg = createSvgElement("svg", {
-    class: "function-map-svg",
-    viewBox: `0 0 ${width} ${height}`,
-    role: "img",
-    "aria-label": "Function opportunity map"
-  });
-  const overlay = createChartOverlay();
-  const defs = createSvgElement("defs");
-  const shadowFilter = createSvgElement("filter", {
-    id: "function-map-shadow",
-    x: "-35%",
-    y: "-35%",
-    width: "170%",
-    height: "170%"
-  });
-  shadowFilter.appendChild(
-    createSvgElement("feDropShadow", {
-      dx: "0",
-      dy: "5",
-      stdDeviation: "6",
-      "flood-color": "#64748b",
-      "flood-opacity": "0.17"
-    })
-  );
-  defs.appendChild(shadowFilter);
-  const axisMarker = createSvgElement("marker", {
-    id: "function-map-axis-arrow",
-    viewBox: "0 0 10 10",
-    refX: "8.2",
-    refY: "5",
-    markerWidth: "6",
-    markerHeight: "6",
-    orient: "auto-start-reverse"
-  });
-  axisMarker.appendChild(
-    createSvgElement("path", {
-      d: "M 0 0 L 10 5 L 0 10 z",
-      fill: "#4b5563"
-    })
-  );
-  defs.appendChild(axisMarker);
-  svg.appendChild(defs);
+    if (viewKey === "female") {
+      return `
+        <svg viewBox="0 0 24 24" class="function-map-view-icon" aria-hidden="true">
+          <circle cx="12" cy="5.5" r="3.1" fill="currentColor"/>
+          <path d="M12 9.1 7.4 17.2H10.2V21H13.8V17.2H16.6Z" fill="currentColor"/>
+        </svg>
+      `;
+    }
 
-  yTicks.forEach((tick) => {
-    const y = scaleValue(tick, yMin, yMax, margin.top + plotHeight, margin.top);
+    return `<span class="function-map-view-all-text">ALL</span>`;
+  };
+
+  const createFunctionViewButtonMarkup = (view, isActive) => `
+    <button
+      type="button"
+      class="function-map-view-btn is-${view.tone}${isActive ? " is-active" : ""}"
+      data-view="${view.key}"
+      aria-pressed="${isActive ? "true" : "false"}"
+      aria-label="${view.label}"
+      title="${view.label}"
+    >${getFunctionViewIconMarkup(view.key)}</button>
+  `;
+
+  const root = document.createElement("div");
+  root.className = "function-map-root";
+
+  const controls = document.createElement("div");
+  controls.className = "function-map-view-switch";
+  controls.innerHTML = Object.values(viewConfigs)
+    .map((view) => createFunctionViewButtonMarkup(view, view.key === activeView))
+    .join("");
+
+  const wrap = document.createElement("div");
+  wrap.className = "function-map-wrap";
+  root.appendChild(controls);
+  root.appendChild(wrap);
+  container.innerHTML = "";
+  container.appendChild(root);
+
+  const syncViewButtons = () => {
+    controls.querySelectorAll(".function-map-view-btn[data-view]").forEach((node) => {
+      const isActive = node.dataset.view === activeView;
+      node.classList.toggle("is-active", isActive);
+      node.setAttribute("aria-pressed", String(isActive));
+    });
+  };
+
+  const renderView = (viewKey) => {
+    const rows = rowsByView?.[viewKey] ?? rowsByView?.all ?? [];
+    const meta = metaByView?.[viewKey] ?? metaByView?.all ?? {};
+    const hiddenKeys = viewKey === "male" ? new Set(["cool-touch", "durable"]) : new Set();
+    const bubbleScale = viewKey === "all" ? 1 : 0.88;
+    const validRows = rows.filter(
+      (row) => row.gmv25 > 0 && row.key !== "windproof" && !hiddenKeys.has(row.key)
+    );
+
+    if (!validRows.length) {
+      wrap.innerHTML = "";
+      return;
+    }
+
+    const panelTitle = container.closest(".function-opportunity-panel")?.querySelector(".panel-title");
+    if (panelTitle) {
+      panelTitle.textContent = `Function Opportunity Map | ${viewConfigs[viewKey]?.titleLabel ?? "ALL"}`;
+    }
+
+    const width = 600;
+    const height = 380;
+    const margin = { top: 34, right: 34, bottom: 58, left: 54 };
+    const plotWidth = width - margin.left - margin.right;
+    const plotHeight = height - margin.top - margin.bottom;
+    const xMax = Math.max(70, Math.ceil(Math.max(...validRows.map((row) => row.share)) / 10) * 10);
+    const yMin = viewKey === "female" ? -10 : -50;
+    const yMax = 200;
+    const plotTop = margin.top;
+    const plotBottom = margin.top + plotHeight;
+    const baseZeroY = scaleValue(0, -50, yMax, plotBottom, plotTop);
+    const scaleFunctionY = (value) => {
+      if (viewKey !== "female") {
+        return scaleValue(value, yMin, yMax, plotBottom, plotTop);
+      }
+
+      if (value <= 0) {
+        return scaleValue(value, yMin, 0, plotBottom, baseZeroY);
+      }
+
+      return scaleValue(value, 0, yMax, baseZeroY, plotTop);
+    };
+    const xAxisY = viewKey === "female" ? baseZeroY : scaleValue(0, yMin, yMax, plotBottom, plotTop);
+    const averageShareValue = Number.isFinite(meta.averageFunctionShare) ? meta.averageFunctionShare : 0;
+    const averageShareLabel = meta.averageFunctionShareLabel ?? `${Math.round(averageShareValue)}%`;
+    const ttlHalfZipYoyValue = Number.isFinite(meta.ttlHalfZipYoy) ? meta.ttlHalfZipYoy : 0;
+    const ttlHalfZipYoyLabel = meta.ttlHalfZipYoyLabel ?? formatYoyLabel(ttlHalfZipYoyValue);
+    const gmvValues = validRows.map((row) => row.gmv25);
+    const gmvMin = Math.min(...gmvValues);
+    const gmvMax = Math.max(...gmvValues);
+    const yTicks = viewKey === "female" ? [-10, 0, 50, 100, 150, 200] : [-50, 0, 50, 100, 150, 200];
+    const xTicks = [0, 20, 40, 60].filter((tick) => tick <= xMax);
+    if (!xTicks.includes(xMax)) {
+      xTicks.push(xMax);
+    }
+
+    const svg = createSvgElement("svg", {
+      class: "function-map-svg",
+      viewBox: `0 0 ${width} ${height}`,
+      role: "img",
+      "aria-label": `Function opportunity map ${viewConfigs[viewKey]?.label ?? "ALL"}`
+    });
+    const overlay = createChartOverlay();
+    const defs = createSvgElement("defs");
+    const shadowFilter = createSvgElement("filter", {
+      id: `function-map-shadow-${viewKey}`,
+      x: "-35%",
+      y: "-35%",
+      width: "170%",
+      height: "170%"
+    });
+    shadowFilter.appendChild(
+      createSvgElement("feDropShadow", {
+        dx: "0",
+        dy: "5",
+        stdDeviation: "6",
+        "flood-color": "#64748b",
+        "flood-opacity": "0.17"
+      })
+    );
+    defs.appendChild(shadowFilter);
+    const axisMarker = createSvgElement("marker", {
+      id: `function-map-axis-arrow-${viewKey}`,
+      viewBox: "0 0 10 10",
+      refX: "8.2",
+      refY: "5",
+      markerWidth: "6",
+      markerHeight: "6",
+      orient: "auto-start-reverse"
+    });
+    axisMarker.appendChild(
+      createSvgElement("path", {
+        d: "M 0 0 L 10 5 L 0 10 z",
+        fill: "#4b5563"
+      })
+    );
+    defs.appendChild(axisMarker);
+    svg.appendChild(defs);
+
+    yTicks.forEach((tick) => {
+      const y = scaleFunctionY(tick);
+      svg.appendChild(
+        createSvgElement("line", {
+          x1: margin.left,
+          y1: y,
+          x2: margin.left + plotWidth,
+          y2: y,
+          class: tick === 0 ? "function-map-zero-line" : "gender-price-grid-line"
+        })
+      );
+      svg.appendChild(
+        createSvgElement("text", {
+          x: margin.left - 12,
+          y,
+          class: "function-map-svg-tick function-map-svg-tick-y",
+          "text-anchor": "end",
+          "dominant-baseline": "middle"
+        })
+      );
+      svg.lastChild.textContent = formatFunctionMapTick(tick);
+    });
+
+    const quadrantX = scaleValue(Math.max(0, Math.min(xMax, averageShareValue)), 0, xMax, margin.left, margin.left + plotWidth);
+    const quadrantY = scaleFunctionY(Math.max(yMin, Math.min(yMax, ttlHalfZipYoyValue)));
+
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: quadrantX,
+        y1: margin.top,
+        x2: quadrantX,
+        y2: margin.top + plotHeight,
+        class: "function-map-quadrant-line"
+      })
+    );
     svg.appendChild(
       createSvgElement("line", {
         x1: margin.left,
-        y1: y,
+        y1: quadrantY,
         x2: margin.left + plotWidth,
-        y2: y,
-        class: tick === 0 ? "function-map-zero-line" : "gender-price-grid-line"
+        y2: quadrantY,
+        class: "function-map-quadrant-line"
       })
     );
     svg.appendChild(
       createSvgElement("text", {
-        x: margin.left - 12,
-        y,
-        class: "function-map-svg-tick function-map-svg-tick-y",
+        x: margin.left + plotWidth - 4,
+        y: quadrantY - 6,
+        class: "function-map-quadrant-note",
         "text-anchor": "end",
-        "dominant-baseline": "middle"
+        "dominant-baseline": "auto"
       })
     );
-    svg.lastChild.textContent = formatFunctionMapTick(tick);
-  });
-
-  const quadrantX = scaleValue(Math.max(0, Math.min(xMax, averageShareValue)), 0, xMax, margin.left, margin.left + plotWidth);
-  const quadrantY = scaleValue(Math.max(yMin, Math.min(yMax, ttlHalfZipYoyValue)), yMin, yMax, margin.top + plotHeight, margin.top);
-
-  svg.appendChild(
-    createSvgElement("line", {
-      x1: quadrantX,
-      y1: margin.top,
-      x2: quadrantX,
-      y2: margin.top + plotHeight,
-      class: "function-map-quadrant-line"
-    })
-  );
-  svg.appendChild(
-    createSvgElement("line", {
-      x1: margin.left,
-      y1: quadrantY,
-      x2: margin.left + plotWidth,
-      y2: quadrantY,
-      class: "function-map-quadrant-line"
-    })
-  );
-  svg.appendChild(
-    createSvgElement("text", {
-      x: margin.left + plotWidth - 4,
-      y: quadrantY - 6,
-      class: "function-map-quadrant-note",
-      "text-anchor": "end",
-      "dominant-baseline": "auto"
-    })
-  );
-  svg.lastChild.textContent = `TTL Half-Zip ${ttlHalfZipYoyLabel}`;
-  svg.appendChild(
-    createSvgElement("text", {
-      x: quadrantX + 6,
-      y: margin.top + plotHeight - 8,
-      class: "function-map-quadrant-note",
-      "text-anchor": "start",
-      "dominant-baseline": "auto"
-    })
-  );
-  svg.lastChild.textContent = `Average = ${averageShareLabel}`;
-  const quadrantLabels = [
-    {
-      text: "Potential Functions",
-      x: margin.left + 12,
-      y: margin.top + 10,
-      anchor: "start"
-    },
-    {
-      text: "Core Functions",
-      x: margin.left + plotWidth - 12,
-      y: margin.top + 10,
-      anchor: "end"
-    },
-    {
-      text: "Weak Functions",
-      x: margin.left + 12,
-      y: margin.top + plotHeight - 12,
-      anchor: "start"
-    },
-    {
-      text: "Mature Functions",
-      x: margin.left + plotWidth - 12,
-      y: margin.top + plotHeight - 12,
-      anchor: "end"
-    }
-  ];
-  quadrantLabels.forEach((label) => {
+    svg.lastChild.textContent = `TTL Half-Zip ${ttlHalfZipYoyLabel}`;
     svg.appendChild(
       createSvgElement("text", {
-        x: label.x,
-        y: label.y,
-        class: "function-map-quadrant-label",
-        "text-anchor": label.anchor,
-        "dominant-baseline": label.y < margin.top + plotHeight / 2 ? "hanging" : "auto"
+        x: quadrantX + 6,
+        y: margin.top + plotHeight - 8,
+        class: "function-map-quadrant-note",
+        "text-anchor": "start",
+        "dominant-baseline": "auto"
       })
     );
-    svg.lastChild.textContent = label.text;
-  });
+    svg.lastChild.textContent = `Average = ${averageShareLabel}`;
+    const quadrantLabels = [
+      {
+        text: "Potential Functions",
+        x: margin.left + 12,
+        y: margin.top + 10,
+        anchor: "start"
+      },
+      {
+        text: "Core Functions",
+        x: margin.left + plotWidth - 12,
+        y: margin.top + 10,
+        anchor: "end"
+      },
+      {
+        text: "Weak Functions",
+        x: margin.left + 12,
+        y: margin.top + plotHeight - 12,
+        anchor: "start"
+      },
+      {
+        text: "Mature Functions",
+        x: margin.left + plotWidth - 12,
+        y: margin.top + plotHeight - 12,
+        anchor: "end"
+      }
+    ];
+    quadrantLabels.forEach((label) => {
+      svg.appendChild(
+        createSvgElement("text", {
+          x: label.x,
+          y: label.y,
+          class: "function-map-quadrant-label",
+          "text-anchor": label.anchor,
+          "dominant-baseline": label.y < margin.top + plotHeight / 2 ? "hanging" : "auto"
+        })
+      );
+      svg.lastChild.textContent = label.text;
+    });
 
-  xTicks.forEach((tick) => {
-    const x = scaleValue(tick, 0, xMax, margin.left, margin.left + plotWidth);
+    xTicks.forEach((tick) => {
+      const x = scaleValue(tick, 0, xMax, margin.left, margin.left + plotWidth);
+      svg.appendChild(
+        createSvgElement("line", {
+          x1: x,
+          y1: margin.top,
+          x2: x,
+          y2: margin.top + plotHeight,
+          class: "gender-price-grid-line"
+        })
+      );
+      svg.appendChild(
+        createSvgElement("text", {
+          x,
+          y: margin.top + plotHeight + 9,
+          class: "function-map-svg-tick function-map-svg-tick-x",
+          "text-anchor": "middle",
+          "dominant-baseline": "hanging"
+        })
+      );
+      svg.lastChild.textContent = formatFunctionMapTick(tick);
+    });
+
     svg.appendChild(
       createSvgElement("line", {
-        x1: x,
-        y1: margin.top,
-        x2: x,
-        y2: margin.top + plotHeight,
-        class: "gender-price-grid-line"
+        x1: margin.left,
+        y1: margin.top + plotHeight,
+        x2: margin.left,
+        y2: margin.top,
+        class: "gender-price-axis-line",
+        "marker-end": `url(#function-map-axis-arrow-${viewKey})`
       })
     );
     svg.appendChild(
+      createSvgElement("line", {
+        x1: margin.left,
+        y1: xAxisY,
+        x2: margin.left + plotWidth,
+        y2: xAxisY,
+        class: "gender-price-axis-line",
+        "marker-end": `url(#function-map-axis-arrow-${viewKey})`
+      })
+    );
+
+    svg.appendChild(
       createSvgElement("text", {
-        x,
-        y: margin.top + plotHeight + 9,
-        class: "function-map-svg-tick function-map-svg-tick-x",
+        x: margin.left + plotWidth / 2,
+        y: height - 29,
+        class: "function-map-svg-axis-title function-map-svg-axis-title-x",
         "text-anchor": "middle",
         "dominant-baseline": "hanging"
       })
     );
-    svg.lastChild.textContent = formatFunctionMapTick(tick);
-  });
-
-  svg.appendChild(
-    createSvgElement("line", {
-      x1: margin.left,
-      y1: margin.top + plotHeight,
-      x2: margin.left,
-      y2: margin.top,
-      class: "gender-price-axis-line",
-      "marker-end": "url(#function-map-axis-arrow)"
-    })
-  );
-  svg.appendChild(
-    createSvgElement("line", {
-      x1: margin.left,
-      y1: xAxisY,
-      x2: margin.left + plotWidth,
-      y2: xAxisY,
-      class: "gender-price-axis-line",
-      "marker-end": "url(#function-map-axis-arrow)"
-    })
-  );
-
-  svg.appendChild(
-    createSvgElement("text", {
-      x: margin.left + plotWidth / 2,
-      y: height - 29,
-      class: "function-map-svg-axis-title function-map-svg-axis-title-x",
-      "text-anchor": "middle",
-      "dominant-baseline": "hanging"
-    })
-  );
-  svg.lastChild.textContent = "25AW sales share";
-  svg.appendChild(
-    createSvgElement("text", {
-      x: 15,
-      y: margin.top + plotHeight / 2,
-      class: "function-map-svg-axis-title function-map-svg-axis-title-y",
-      "text-anchor": "middle",
-      "dominant-baseline": "middle",
-      transform: `rotate(-90 15 ${margin.top + plotHeight / 2})`
-    })
-  );
-  svg.lastChild.textContent = "YOY%";
-
-  validRows.forEach((row, index) => {
-    const isOutlier = Number.isFinite(row.yoy) && row.yoy > yMax;
-    const cx = scaleValue(row.share, 0, xMax, margin.left, margin.left + plotWidth);
-    const cy = scaleValue(
-      Number.isFinite(row.yoy) ? Math.max(yMin, Math.min(yMax, row.yoy)) : 0,
-      yMin,
-      yMax,
-      margin.top + plotHeight,
-      margin.top
+    svg.lastChild.textContent = "25AW sales share";
+    svg.appendChild(
+      createSvgElement("text", {
+        x: 15,
+        y: margin.top + plotHeight / 2,
+        class: "function-map-svg-axis-title function-map-svg-axis-title-y",
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+        transform: `rotate(-90 15 ${margin.top + plotHeight / 2})`
+      })
     );
-    const r = getCompactBubbleRadius(row.gmv25, gmvMin, gmvMax);
-    const gradient = createSvgElement("radialGradient", {
-      id: `function-map-gradient-${index}`,
-      cx: "35%",
-      cy: "30%",
-      r: "78%"
-    });
-    gradient.appendChild(createStop("0%", "#ffffff", 0.78));
-    gradient.appendChild(createStop("46%", row.color, 0.82));
-    gradient.appendChild(createStop("100%", row.color, 0.98));
-    defs.appendChild(gradient);
+    svg.lastChild.textContent = "YOY%";
 
-    const group = createSvgElement("g", {
-      class: `function-map-node${isOutlier ? " is-outlier" : ""}`,
-      "data-function": row.label,
-      "data-function-en": row.labelEn,
-      "data-share": row.shareLabel,
-      "data-yoy": row.yoyLabel,
-      tabindex: "0"
-    });
-    group.appendChild(
-      createSvgElement("circle", {
-        cx,
-        cy,
-        r,
-        fill: `url(#function-map-gradient-${index})`,
-        stroke: row.color,
-        "stroke-width": 1.25,
-        filter: "url(#function-map-shadow)",
-        class: "function-map-bubble",
+    validRows.forEach((row, index) => {
+      const cx = scaleValue(row.share, 0, xMax, margin.left, margin.left + plotWidth);
+      const cy = scaleValue(
+        Number.isFinite(row.yoy) ? Math.max(yMin, Math.min(yMax, row.yoy)) : 0,
+        yMin,
+        yMax,
+        plotBottom,
+        plotTop
+      );
+      const plottedCy = scaleFunctionY(
+        Number.isFinite(row.yoy) ? Math.max(yMin, Math.min(yMax, row.yoy)) : 0
+      );
+      const r = getCompactBubbleRadius(row.gmv25, gmvMin, gmvMax) * bubbleScale;
+      const gradient = createSvgElement("radialGradient", {
+        id: `function-map-gradient-${viewKey}-${index}`,
+        cx: "35%",
+        cy: "30%",
+        r: "78%"
+      });
+      gradient.appendChild(createStop("0%", "#ffffff", 0.78));
+      gradient.appendChild(createStop("46%", row.color, 0.82));
+      gradient.appendChild(createStop("100%", row.color, 0.98));
+      defs.appendChild(gradient);
+
+      const group = createSvgElement("g", {
+        class: "function-map-node",
         "data-function": row.label,
         "data-function-en": row.labelEn,
         "data-share": row.shareLabel,
         "data-yoy": row.yoyLabel,
         tabindex: "0"
-      })
-    );
-    svg.appendChild(group);
+      });
+      group.appendChild(
+        createSvgElement("circle", {
+          cx,
+          cy: plottedCy,
+          r,
+          fill: `url(#function-map-gradient-${viewKey}-${index})`,
+          stroke: row.color,
+          "stroke-width": 1.25,
+          filter: `url(#function-map-shadow-${viewKey})`,
+          class: "function-map-bubble",
+          "data-function": row.label,
+          "data-function-en": row.labelEn,
+          "data-share": row.shareLabel,
+          "data-yoy": row.yoyLabel,
+          tabindex: "0"
+        })
+      );
+      svg.appendChild(group);
 
-    const bilingualLabels = new Set(["吸湿速干", "弹力", "保暖", "抑菌防臭", "轻量"]);
-    const labelOffsetMap = {
-      "防晒": { dx: 0, dy: r - 10, anchor: "middle", valign: "top" },
-      "凉感": { dx: 0, dy: r - 10, anchor: "middle", valign: "top" },
-      "防静电": { dx: r + 6, dy: -14, anchor: "start" },
-      "透气": { dx: r + 6, dy: -5, anchor: "start" },
-      "轻量": { dx: r + 6, dy: -5, anchor: "start" },
-      "吸湿速干": { dx: r + 6, dy: -5, anchor: "start" },
-      "弹力": { dx: r + 6, dy: 4, anchor: "start" },
-      "抑菌防臭": { dx: r + 6, dy: -5, anchor: "start" },
-      "保暖": { dx: r + 6, dy: -5, anchor: "start" }
-    };
-    const defaultAnchor = "start";
-    const offset = labelOffsetMap[row.label] ?? {
-      dx: r + 6,
-      dy: -5,
-      anchor: defaultAnchor
-    };
-    const labelNode = createChartOverlayText({
-      className: `chart-overlay-label is-brand function-map-label${bilingualLabels.has(row.label) ? " is-bilingual" : ""}`,
-      text: row.label,
-      x: cx + offset.dx,
-      y: cy + offset.dy,
-      width,
-      height,
-      anchor: offset.anchor,
-      valign: offset.valign ?? "bottom"
+      const bilingualLabels = new Set(["吸湿速干", "弹力", "保暖", "抑菌防臭", "轻量"]);
+      const activeBilingualLabels =
+        viewKey === "female"
+          ? new Set(["吸湿速干", "弹力", "保暖", "抑菌防臭"])
+          : bilingualLabels;
+      const labelOffsetMap = {
+        "防晒": { dx: 0, dy: r - 10, anchor: "middle", valign: "top" },
+        "凉感": { dx: 0, dy: r - 10, anchor: "middle", valign: "top" },
+        "防静电": { dx: r + 6, dy: -14, anchor: "start" },
+        "透气": { dx: r + 6, dy: -16, anchor: "start" },
+        "轻量": { dx: r + 6, dy: -5, anchor: "start" },
+        "吸湿速干": { dx: r + 6, dy: -5, anchor: "start" },
+        "弹力": { dx: r + 6, dy: 4, anchor: "start" },
+        "抑菌防臭": { dx: r + 6, dy: -5, anchor: "start" },
+        "保暖": { dx: r + 6, dy: -5, anchor: "start" }
+      };
+      const viewSpecificLabelOffsets = {
+        male: {
+          "吸湿速干": { dx: -(r + 6), dy: 10, anchor: "end" },
+          "弹力": { dx: r + 6, dy: 18, anchor: "start" }
+        },
+        female: {
+          "弹力": { dx: -(r + 6), dy: 18, anchor: "end" },
+          "吸湿速干": { dx: -(r + 6), dy: 10, anchor: "end" },
+          "抑菌防臭": { dx: -(r + 6), dy: -5, anchor: "end" },
+          "防静电": { dx: -(r + 6), dy: -14, anchor: "end" },
+          "凉感": { dx: -(r + 6), dy: -12, anchor: "end" },
+          "轻量": { dx: 0, dy: r - 6, anchor: "middle", valign: "top" },
+          "防晒": { dx: r + 6, dy: -4, anchor: "start" }
+        }
+      };
+      const offset = labelOffsetMap[row.label] ?? {
+        dx: r + 6,
+        dy: -5,
+        anchor: "start"
+      };
+      const finalOffset = viewSpecificLabelOffsets[viewKey]?.[row.label] ?? offset;
+      const labelNode = createChartOverlayText({
+        className: `chart-overlay-label is-brand function-map-label${activeBilingualLabels.has(row.label) ? " is-bilingual" : ""}`,
+        text: row.label,
+        x: cx + finalOffset.dx,
+        y: plottedCy + finalOffset.dy,
+        width,
+        height,
+        anchor: finalOffset.anchor,
+        valign: finalOffset.valign ?? "bottom"
+      });
+      if (viewKey === "female" && row.label === "轻量") {
+        labelNode.classList.add("is-compact");
+      }
+      if (activeBilingualLabels.has(row.label)) {
+        labelNode.innerHTML = `<span>${row.label}</span><small>${row.labelEn}</small>`;
+      }
+      overlay.appendChild(labelNode);
     });
-    if (bilingualLabels.has(row.label)) {
-      labelNode.innerHTML = `<span>${row.label}</span><small>${row.labelEn}</small>`;
-    }
-    overlay.appendChild(labelNode);
+
+    wrap.innerHTML = "";
+    wrap.appendChild(svg);
+    wrap.appendChild(overlay);
+    const note = document.createElement("div");
+    note.className = "function-map-note";
+    note.innerHTML = `
+      <p>Bubble Size = GMV</p>
+      <p class="function-map-note-spacer" aria-hidden="true"></p>
+      <p>6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON</p>
+    `;
+    wrap.appendChild(note);
+  };
+
+  controls.querySelectorAll(".function-map-view-btn[data-view]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextView = button.dataset.view;
+      if (!nextView || nextView === activeView) {
+        return;
+      }
+
+      activeView = nextView;
+      syncViewButtons();
+      renderView(activeView);
+      container.dispatchEvent(
+        new CustomEvent("functionviewchange", {
+          detail: { viewKey: activeView }
+        })
+      );
+    });
   });
 
-  container.innerHTML = "";
-  const wrap = document.createElement("div");
-  wrap.className = "function-map-wrap";
-  wrap.appendChild(svg);
-  wrap.appendChild(overlay);
-  const note = document.createElement("div");
-  note.className = "function-map-note";
-  note.innerHTML = `
-    <p>Bubble Size = GMV</p>
-    <p class="function-map-note-spacer" aria-hidden="true"></p>
-    <p>6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON</p>
-  `;
-  wrap.appendChild(note);
-  container.appendChild(wrap);
+  container.__setFunctionOpportunityView = (nextView) => {
+    if (!viewConfigs[nextView] || nextView === activeView) {
+      return;
+    }
+
+    activeView = nextView;
+    syncViewButtons();
+    renderView(activeView);
+    container.dispatchEvent(
+      new CustomEvent("functionviewchange", {
+        detail: { viewKey: activeView }
+      })
+    );
+  };
+  container.__getFunctionOpportunityView = () => activeView;
+
+  renderView(activeView);
+  syncViewButtons();
 }
 
 export function renderFunctionGenderSplit(container, groups) {
@@ -1868,7 +2018,7 @@ export function renderFunctionGenderSplit(container, groups) {
   container.innerHTML = groups
     .map(
       (group) => `
-        <article class="function-gender-card ${group.className}">
+        <article class="function-gender-card ${group.className}" data-view="${group.gender === "男" ? "male" : "female"}" tabindex="0">
           <div class="function-gender-card-head">
             <div class="function-gender-title">${group.label}</div>
             <div class="function-gender-head-label">Share / YOY</div>

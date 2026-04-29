@@ -1,7 +1,7 @@
 import {
   FEMALE_OPPORTUNITY_BRAND_GENDER,
   FUNCTION_GENDER_SPLIT,
-  FUNCTION_OPPORTUNITY_MAP,
+  FUNCTION_OPPORTUNITY_MAPS,
   FUNCTION_OPPORTUNITY_META,
   GENDER_BREAKDOWN_PRICE_BUBBLES,
   MARKET_SCOPE_BRAND_COMPARE,
@@ -192,7 +192,7 @@ function bootstrapFunctionPage() {
   const opportunityContainer = document.querySelector("#function-opportunity-map");
   const genderContainer = document.querySelector("#function-gender-split");
 
-  renderFunctionOpportunityMap(opportunityContainer, FUNCTION_OPPORTUNITY_MAP, FUNCTION_OPPORTUNITY_META);
+  renderFunctionOpportunityMap(opportunityContainer, FUNCTION_OPPORTUNITY_MAPS, FUNCTION_OPPORTUNITY_META);
   renderFunctionGenderSplit(genderContainer, FUNCTION_GENDER_SPLIT);
   setupFunctionInteractions();
 }
@@ -360,7 +360,21 @@ function setupFunctionInteractions() {
   }
 
   const tooltip = ensureGenderBreakdownTooltip();
+  const opportunityContainer = section.querySelector("#function-opportunity-map");
+  const genderContainer = section.querySelector("#function-gender-split");
   let activeNode = null;
+
+  const getGenderCards = () => Array.from(section.querySelectorAll(".function-gender-card[data-view]"));
+  const applyFunctionGenderHighlight = (viewKey) => {
+    const cards = getGenderCards();
+    const hasFocusedView = viewKey === "male" || viewKey === "female";
+
+    cards.forEach((card) => {
+      const isActive = hasFocusedView && card.dataset.view === viewKey;
+      card.classList.toggle("is-linked-active", isActive);
+      card.classList.remove("is-linked-dimmed");
+    });
+  };
 
   const clearActiveNode = () => {
     if (activeNode) {
@@ -421,6 +435,31 @@ function setupFunctionInteractions() {
   });
 
   section.addEventListener("pointerleave", clearActiveNode);
+
+  opportunityContainer?.addEventListener("functionviewchange", (event) => {
+    applyFunctionGenderHighlight(event.detail?.viewKey ?? "all");
+  });
+
+  getGenderCards().forEach((card) => {
+    const activateLinkedView = () => {
+      const viewKey = card.dataset.view;
+      if (!viewKey) {
+        return;
+      }
+      opportunityContainer?.__setFunctionOpportunityView?.(viewKey);
+      applyFunctionGenderHighlight(viewKey);
+    };
+
+    card.addEventListener("click", activateLinkedView);
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        activateLinkedView();
+      }
+    });
+  });
+
+  applyFunctionGenderHighlight(opportunityContainer?.__getFunctionOpportunityView?.() ?? "all");
 }
 
 function setupMarketScopeInteractions() {

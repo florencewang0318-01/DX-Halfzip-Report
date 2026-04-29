@@ -493,10 +493,14 @@ function buildFunctionRows(current, previous, denominator = current.totalGmv) {
     .sort((a, b) => b.share - a.share);
 }
 
-function summarizeHalfZipTotals(rows) {
+function summarizeHalfZipTotals(rows, gender) {
   return rows.reduce(
     (summary, row) => {
       if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+        return summary;
+      }
+
+      if (gender && row.gender !== gender) {
         return summary;
       }
 
@@ -646,23 +650,47 @@ export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.fl
 
 const FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25);
 const FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24);
-const HALF_ZIP_TOTALS_Y25 = summarizeHalfZipTotals(LS_HZ_INNER_DATASET.raw.y25);
-const HALF_ZIP_TOTALS_Y24 = summarizeHalfZipTotals(LS_HZ_INNER_DATASET.raw.y24);
+const FUNCTION_OPPORTUNITY_VIEWS = [
+  { key: "all", label: "ALL", gender: null },
+  { key: "male", label: "MALE", gender: "男" },
+  { key: "female", label: "FEMALE", gender: "女" }
+];
 
-export const FUNCTION_OPPORTUNITY_MAP = buildFunctionRows(FUNCTION_COVERAGE_Y25, FUNCTION_COVERAGE_Y24).slice(0, 10);
-export const FUNCTION_OPPORTUNITY_META = (() => {
-  const displayRows = FUNCTION_OPPORTUNITY_MAP.filter((row) => row.gmv25 > 0 && row.key !== "windproof");
+function buildFunctionOpportunityMeta(rows, totals25, totals24) {
+  const displayRows = rows.filter((row) => row.gmv25 > 0 && row.key !== "windproof");
   const averageShare = displayRows.length
     ? displayRows.reduce((sum, row) => sum + row.share, 0) / displayRows.length
     : 0;
+  const ttlHalfZipYoy = computeYoy(totals25.gmv, totals24.gmv);
 
   return {
-    ttlHalfZipYoy: computeYoy(HALF_ZIP_TOTALS_Y25.gmv, HALF_ZIP_TOTALS_Y24.gmv),
-    ttlHalfZipYoyLabel: formatYoyLabel(computeYoy(HALF_ZIP_TOTALS_Y25.gmv, HALF_ZIP_TOTALS_Y24.gmv)),
+    ttlHalfZipYoy,
+    ttlHalfZipYoyLabel: formatYoyLabel(ttlHalfZipYoy),
     averageFunctionShare: averageShare,
     averageFunctionShareLabel: `${Math.round(averageShare)}%`
   };
-})();
+}
+
+export const FUNCTION_OPPORTUNITY_MAPS = FUNCTION_OPPORTUNITY_VIEWS.reduce((result, view) => {
+  const current = view.gender
+    ? summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25, view.gender)
+    : FUNCTION_COVERAGE_Y25;
+  const previous = view.gender
+    ? summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24, view.gender)
+    : FUNCTION_COVERAGE_Y24;
+
+  result[view.key] = buildFunctionRows(current, previous).slice(0, 10);
+  return result;
+}, {});
+
+export const FUNCTION_OPPORTUNITY_MAP = FUNCTION_OPPORTUNITY_MAPS.all;
+
+export const FUNCTION_OPPORTUNITY_META = FUNCTION_OPPORTUNITY_VIEWS.reduce((result, view) => {
+  const totals25 = summarizeHalfZipTotals(LS_HZ_INNER_DATASET.raw.y25, view.gender);
+  const totals24 = summarizeHalfZipTotals(LS_HZ_INNER_DATASET.raw.y24, view.gender);
+  result[view.key] = buildFunctionOpportunityMeta(FUNCTION_OPPORTUNITY_MAPS[view.key], totals25, totals24);
+  return result;
+}, {});
 
 const FUNCTION_GENDER_KEYS = [
   { gender: "男", label: "Male", className: "is-male" },

@@ -1279,6 +1279,94 @@ a {
   margin-bottom: 8px;
 }
 
+.function-map-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.function-map-view-switch {
+  position: absolute;
+  top: -48px;
+  right: 2px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(203, 213, 225, 0.88);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.function-map-view-btn {
+  appearance: none;
+  min-width: 38px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 160ms ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.function-map-view-btn:hover {
+  color: #334155;
+  background: rgba(241, 245, 249, 0.9);
+}
+
+.function-map-view-btn.is-all {
+  min-width: 42px;
+}
+
+.function-map-view-btn.is-male {
+  color: #7e9bcf;
+  background: #ffffff;
+}
+
+.function-map-view-btn.is-female {
+  color: #dca5c7;
+  background: #ffffff;
+}
+
+.function-map-view-btn.is-active {
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+}
+
+.function-map-view-btn.is-all.is-active {
+  background: #111827;
+}
+
+.function-map-view-btn.is-male.is-active {
+  background: #7e9bcf;
+}
+
+.function-map-view-btn.is-female.is-active {
+  background: #dca5c7;
+}
+
+.function-map-view-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.function-map-view-all-text {
+  display: block;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
 .function-map-wrap {
   position: relative;
   width: 100%;
@@ -1343,6 +1431,10 @@ a {
   font-weight: 800;
   line-height: 1;
   color: var(--accent);
+}
+
+.function-map-label.is-compact {
+  font-size: 11px;
 }
 
 .function-map-label.is-bilingual {
@@ -1411,11 +1503,30 @@ a {
   border-radius: 16px;
   background: linear-gradient(180deg, rgba(248, 251, 255, 0.94), rgba(255, 255, 255, 0.98));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, opacity 180ms ease;
+  cursor: pointer;
 }
 
 .function-gender-card.is-female {
   border-color: rgba(229, 188, 214, 0.78);
   background: linear-gradient(180deg, rgba(255, 246, 251, 0.94), rgba(255, 255, 255, 0.98));
+}
+
+.function-gender-card.is-linked-active {
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.function-gender-card.is-male.is-linked-active {
+  border-color: rgba(126, 155, 207, 0.92);
+}
+
+.function-gender-card.is-female.is-linked-active {
+  border-color: rgba(220, 165, 199, 0.92);
+}
+
+.function-gender-card.is-linked-dimmed {
+  opacity: 0.48;
 }
 
 .function-gender-card-head {
