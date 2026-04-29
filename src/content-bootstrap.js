@@ -1,5 +1,7 @@
 import {
   FEMALE_OPPORTUNITY_BRAND_GENDER,
+  FUNCTION_GENDER_SPLIT,
+  FUNCTION_OPPORTUNITY_MAP,
   GENDER_BREAKDOWN_PRICE_BUBBLES,
   MARKET_SCOPE_BRAND_COMPARE,
   SILHOUETTE_GROWTH_DATA,
@@ -12,6 +14,8 @@ import {
 } from "./content-render.js";
 import {
   renderGenderBreakdownPriceBubbleChart,
+  renderFunctionGenderSplit,
+  renderFunctionOpportunityMap,
   renderMarketScopeBubbleChart,
   renderSilhouetteGrowthChart,
   renderSilhouetteStructureChart
@@ -183,6 +187,15 @@ function bootstrapSilhouettePage() {
   setupSilhouetteInteractions();
 }
 
+function bootstrapFunctionPage() {
+  const opportunityContainer = document.querySelector("#function-opportunity-map");
+  const genderContainer = document.querySelector("#function-gender-split");
+
+  renderFunctionOpportunityMap(opportunityContainer, FUNCTION_OPPORTUNITY_MAP);
+  renderFunctionGenderSplit(genderContainer, FUNCTION_GENDER_SPLIT);
+  setupFunctionInteractions();
+}
+
 function ensureGenderBreakdownTooltip() {
   let tooltip = document.querySelector("#genderBreakdownTooltip");
   if (tooltip) {
@@ -321,6 +334,92 @@ function createMarketScopeTooltipContent(target) {
     <div class="gender-breakdown-tooltip-line">Half-zip YOY <strong class="${yoyClass}">${yoy}</strong></div>
     ${note}
   `;
+}
+
+function createFunctionTooltipContent(target) {
+  const functionName = target.dataset.function ?? "";
+  const functionNameEn = target.dataset.functionEn ?? "";
+  const share = target.dataset.share ?? "n/a";
+  const yoy = target.dataset.yoy ?? "n/a";
+  const yoyClass =
+    yoy === "n/a" ? "is-neutral" : yoy === "new" || yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
+  const title = functionNameEn ? `${functionName} / ${functionNameEn}` : functionName;
+
+  return `
+    <div class="gender-breakdown-tooltip-title">${title}</div>
+    <div class="gender-breakdown-tooltip-line">Sales Share <strong>${share}</strong></div>
+    <div class="gender-breakdown-tooltip-line">YOY% <strong class="${yoyClass}">${yoy}</strong></div>
+  `;
+}
+
+function setupFunctionInteractions() {
+  const section = document.querySelector("#function-scene");
+  if (!section) {
+    return;
+  }
+
+  const tooltip = ensureGenderBreakdownTooltip();
+  let activeNode = null;
+
+  const clearActiveNode = () => {
+    if (activeNode) {
+      activeNode.classList.remove("is-active");
+      activeNode = null;
+    }
+    hideGenderBreakdownTooltip(tooltip);
+  };
+
+  const getFunctionTarget = (startNode) => {
+    if (!(startNode instanceof Element)) {
+      return null;
+    }
+
+    return startNode.closest(".function-map-node[data-function], .function-map-bubble[data-function]");
+  };
+
+  const activateNode = (target, event) => {
+    const node = target.closest(".function-map-node[data-function]") ?? target;
+    if (activeNode && activeNode !== node) {
+      activeNode.classList.remove("is-active");
+    }
+    activeNode = node;
+    activeNode.classList.add("is-active");
+    showGenderBreakdownTooltip(tooltip, createFunctionTooltipContent(target), event.clientX, event.clientY);
+  };
+
+  section.addEventListener("pointerover", (event) => {
+    const target = getFunctionTarget(event.target);
+    if (!target) {
+      clearActiveNode();
+      return;
+    }
+    activateNode(target, event);
+  });
+
+  section.addEventListener("pointermove", (event) => {
+    const target = getFunctionTarget(event.target);
+    if (!target) {
+      clearActiveNode();
+      return;
+    }
+
+    if (!activeNode) {
+      activateNode(target, event);
+      return;
+    }
+
+    placeTooltip(tooltip, event.clientX, event.clientY);
+  });
+
+  section.addEventListener("pointerout", (event) => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget instanceof Element && getFunctionTarget(nextTarget)) {
+      return;
+    }
+    clearActiveNode();
+  });
+
+  section.addEventListener("pointerleave", clearActiveNode);
 }
 
 function setupMarketScopeInteractions() {
@@ -664,5 +763,6 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapMarketScopePage();
   bootstrapFemaleOpportunityPage();
   bootstrapSilhouettePage();
+  bootstrapFunctionPage();
   setupScrollState();
 });

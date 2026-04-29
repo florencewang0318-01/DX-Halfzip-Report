@@ -303,6 +303,186 @@ function createSilhouetteSummary(rows) {
   };
 }
 
+const FUNCTION_BUCKETS = [
+  {
+    key: "warmth",
+    label: "保暖",
+    labelEn: "Warmth",
+    color: "#e6adc8",
+    tokens: ["保暖", "锁温保暖", "远红外保暖", "保暖蓄热", "吸光发热保暖"]
+  },
+  {
+    key: "quick-dry",
+    label: "吸湿速干",
+    labelEn: "Quick Dry",
+    color: "#70a6c8",
+    tokens: ["吸湿速干", "吸湿排汗", "排汗", "芯吸", "速干", "透气排汗", "出汗不粘"]
+  },
+  {
+    key: "stretch",
+    label: "弹力",
+    labelEn: "Stretchable",
+    color: "#86a5da",
+    tokens: ["弹力", "四面弹力", "高弹力", "微弹"]
+  },
+  {
+    key: "breathable",
+    label: "透气",
+    labelEn: "Breathable",
+    color: "#7e9aaa",
+    tokens: ["透气", "透气排汗"]
+  },
+  {
+    key: "moisture-vapor",
+    label: "透湿",
+    labelEn: "Moisture Vapor",
+    color: "#80bfa8",
+    tokens: ["透湿", "透汽"]
+  },
+  {
+    key: "antibacterial",
+    label: "抑菌防臭",
+    labelEn: "Antibacterial",
+    color: "#77b98c",
+    tokens: ["抗菌", "抑菌", "抗菌防臭", "抑菌防臭", "防臭抑菌", "抑菌除臭"]
+  },
+  {
+    key: "lightweight",
+    label: "轻量",
+    labelEn: "Lightweight",
+    color: "#c5a7dc",
+    tokens: ["轻量", "轻薄", "轻盈", "轻盈柔软"]
+  },
+  {
+    key: "sun-protect",
+    label: "防晒",
+    labelEn: "Suncreen",
+    color: "#e4c96d",
+    tokens: ["防晒", "UPF50+防晒", "UPF100+防晒", "UPF50防紫外线防晒", "防晒抗UV"]
+  },
+  {
+    key: "cool-touch",
+    label: "凉感",
+    labelEn: "Cooling",
+    color: "#8fcbd1",
+    tokens: ["凉感", "接触凉感"]
+  },
+  {
+    key: "windproof",
+    label: "防风",
+    labelEn: "Windproof",
+    color: "#50627a",
+    tokens: ["防风"]
+  },
+  {
+    key: "durable",
+    label: "耐磨耐用",
+    labelEn: "Durable",
+    color: "#b88d78",
+    tokens: ["耐磨", "耐用"]
+  },
+  {
+    key: "anti-static",
+    label: "防静电",
+    labelEn: "Anti-static",
+    color: "#f08a6a",
+    tokens: ["防静电"]
+  }
+];
+
+const FUNCTION_TOKEN_TO_BUCKET = FUNCTION_BUCKETS.reduce((map, bucket) => {
+  bucket.tokens.forEach((token) => {
+    map.set(token.toLowerCase(), bucket.key);
+  });
+  return map;
+}, new Map());
+
+function getFunctionBucketKeys(row) {
+  const keys = new Set();
+
+  String(row.function ?? "")
+    .split("/")
+    .map((token) => token.trim())
+    .filter(Boolean)
+    .forEach((token) => {
+      const directKey = FUNCTION_TOKEN_TO_BUCKET.get(token.toLowerCase());
+      if (directKey) keys.add(directKey);
+
+      // 防晒 / 凉感经常以复合功能词出现，按包含关系兜底避免漏算。
+      if (token.includes("防晒")) keys.add("sun-protect");
+      if (token.includes("凉感")) keys.add("cool-touch");
+    });
+
+  return Array.from(keys);
+}
+
+function summarizeFunctionCoverage(rows, gender) {
+  const filteredRows = rows.filter((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return false;
+    }
+
+    return !gender || row.gender === gender;
+  });
+  const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
+  const totalCount = filteredRows.length;
+  const bucketMap = new Map(
+    FUNCTION_BUCKETS.map((bucket) => [
+      bucket.key,
+      {
+        ...bucket,
+        gmv: 0,
+        count: 0
+      }
+    ])
+  );
+
+  filteredRows.forEach((row) => {
+    const gmv = toNumber(row["销售额"]);
+    getFunctionBucketKeys(row).forEach((key) => {
+      const current = bucketMap.get(key);
+      if (!current) {
+        return;
+      }
+
+      current.gmv += gmv;
+      current.count += 1;
+    });
+  });
+
+  return {
+    totalGmv,
+    totalCount,
+    buckets: Array.from(bucketMap.values())
+  };
+}
+
+function buildFunctionRows(current, previous, denominator = current.totalGmv) {
+  return current.buckets
+    .map((bucket) => {
+      const previousBucket = previous.buckets.find((item) => item.key === bucket.key) ?? { gmv: 0, count: 0 };
+      const share = denominator ? (bucket.gmv / denominator) * 100 : 0;
+      const yoy = computeYoy(bucket.gmv, previousBucket.gmv);
+
+      return {
+        key: bucket.key,
+        label: bucket.label,
+        labelEn: bucket.labelEn,
+        color: bucket.color,
+        gmv25: bucket.gmv,
+        gmv24: previousBucket.gmv,
+        count25: bucket.count,
+        count24: previousBucket.count,
+        share,
+        shareLabel: `${Math.round(share)}%`,
+        yoy,
+        yoyLabel: previousBucket.gmv > 0 ? formatYoyLabel(yoy) : bucket.gmv > 0 ? "new" : "n/a"
+      };
+    })
+    .filter((row) => row.gmv25 > 0)
+    .sort((a, b) => b.share - a.share);
+}
+
 export const LS_HZ_INNER_DATASET = {
   workbook: LS_HZ_INNER_WORKBOOK,
   raw: {
@@ -438,6 +618,42 @@ export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.fl
       skuCount: cell.count25
     }))
 );
+
+const FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25);
+const FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24);
+
+export const FUNCTION_OPPORTUNITY_MAP = buildFunctionRows(FUNCTION_COVERAGE_Y25, FUNCTION_COVERAGE_Y24).slice(0, 10);
+
+const FUNCTION_GENDER_KEYS = [
+  { gender: "男", label: "Male", className: "is-male" },
+  { gender: "女", label: "Female", className: "is-female" }
+];
+const FUNCTION_GENDER_COVERAGE_Y25 = FUNCTION_GENDER_KEYS.map((item) => ({
+  ...item,
+  summary: summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25, item.gender),
+  previousSummary: summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24, item.gender)
+}));
+const FUNCTION_GENDER_TOTAL_Y25 = FUNCTION_GENDER_COVERAGE_Y25.reduce((sum, item) => sum + item.summary.totalGmv, 0);
+
+export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => {
+  const rows = buildFunctionRows(item.summary, item.previousSummary, item.summary.totalGmv).slice(0, 7);
+  const yoy = computeYoy(item.summary.totalGmv, item.previousSummary.totalGmv);
+  const share = FUNCTION_GENDER_TOTAL_Y25 ? (item.summary.totalGmv / FUNCTION_GENDER_TOTAL_Y25) * 100 : 0;
+
+  return {
+    gender: item.gender,
+    label: item.label,
+    className: item.className,
+    totalGmv25: item.summary.totalGmv,
+    totalGmv24: item.previousSummary.totalGmv,
+    totalCount25: item.summary.totalCount,
+    salesShare: share,
+    salesShareLabel: `${Math.round(share)}%`,
+    yoy,
+    yoyLabel: formatYoyLabel(yoy),
+    rows
+  };
+});
 
 const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
 const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);

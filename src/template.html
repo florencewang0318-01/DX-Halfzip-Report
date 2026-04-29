@@ -26,7 +26,7 @@
           <button class="nav-group-toggle" type="button" data-target="#silhouette" aria-label="Jump to product sections">Product</button>
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#silhouette">Silhouette</a>
-            <a class="nav-dropdown-item" href="#function-scene">Function & Scene</a>
+            <a class="nav-dropdown-item" href="#function-scene">Function</a>
             <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
             <a class="nav-dropdown-item" href="#design-cues">Design Cues</a>
           </div>
@@ -169,42 +169,36 @@
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="function-scene" data-page-label="Function & Scene">
+    <section class="sheet report-section paired-chart-page" id="function-scene" data-page-label="Function">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">04</span><span>Function & Scene</span></div>
-              <h2 class="section-title">功能卖点正在从单一保暖转向“保暖 + 弹力 + 透气/速干”的复合组合，但最终仍由场景决定话术重心</h2>
+              <div class="section-kicker"><span class="section-badge">04</span><span>Function</span></div>
+              <h2 class="section-title">半拉链内搭的功能竞争已从单一保暖，转向保暖、弹力、吸湿速干与透气的复合价值组合</h2>
               <ul class="section-bullets">
-                <li>高频功能词已经显现出主排序：弹力、保暖、吸湿速干、透气、四面弹力。</li>
-                <li>功能表达不应只停留在词汇堆砌，需要区分滑雪、徒步、训练、通勤四种使用语言。</li>
-                <li>本页适合作为“从数据到开发话术”的过渡页，为后面的设计方向做承接。</li>
+                <li>Function 字段按同义词归并为标准功能桶，其中透气独立计算，透湿与透汽合并为透湿。</li>
+                <li>左图用 sales share × YOY% 判断整体功能机会，气泡大小代表 25AW 功能覆盖 GMV。</li>
+                <li>右图拆分男性与女性功能排序，帮助判断女性导向开发中哪些功能需要被优先强化。</li>
               </ul>
             </div>
           </div>
 
-          <div class="chart-grid evidence-grid two-up reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Evidence Block A</div>
-              <h3 class="panel-title">功能词频结构</h3>
-              <div class="placeholder">
-                <p>建议图表：功能词 Top10 条形图</p>
-                <p>建议统一口径：排汗 / 吸湿排汗 / 芯吸 / 速干 等同义词归并。</p>
-              </div>
+          <div class="chart-grid evidence-grid function-grid reveal">
+            <article class="chart-panel panel function-opportunity-panel">
+              <div class="chart-kicker">Function Opportunity</div>
+              <h3 class="panel-title">Function Opportunity Map | ALL</h3>
+              <div id="function-opportunity-map" class="function-opportunity-card"></div>
             </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Evidence Block B</div>
-              <h3 class="panel-title">场景语言映射</h3>
-              <div class="placeholder">
-                <p>建议图表：场景 x 功能气泡图</p>
-                <p>建议内容：滑雪偏保暖层搭，徒步偏透气弹力，都市通勤偏轻保暖和外观利落。</p>
-              </div>
+            <article class="chart-panel panel function-gender-panel">
+              <div class="chart-kicker">Gender Split</div>
+              <h3 class="panel-title">Function Ranking by Gender</h3>
+              <div id="function-gender-split" class="function-gender-split"></div>
             </article>
           </div>
 
           <div class="page-foot">
-            <span>Pending chart build</span>
+            <span>Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
             <span>Page 04</span>
           </div>
         </div>
