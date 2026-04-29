@@ -483,6 +483,21 @@ function buildFunctionRows(current, previous, denominator = current.totalGmv) {
     .sort((a, b) => b.share - a.share);
 }
 
+function summarizeHalfZipTotals(rows) {
+  return rows.reduce(
+    (summary, row) => {
+      if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+        return summary;
+      }
+
+      summary.gmv += toNumber(row["销售额"]);
+      summary.count += 1;
+      return summary;
+    },
+    { gmv: 0, count: 0 }
+  );
+}
+
 export const LS_HZ_INNER_DATASET = {
   workbook: LS_HZ_INNER_WORKBOOK,
   raw: {
@@ -621,8 +636,23 @@ export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.fl
 
 const FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25);
 const FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24);
+const HALF_ZIP_TOTALS_Y25 = summarizeHalfZipTotals(LS_HZ_INNER_DATASET.raw.y25);
+const HALF_ZIP_TOTALS_Y24 = summarizeHalfZipTotals(LS_HZ_INNER_DATASET.raw.y24);
 
 export const FUNCTION_OPPORTUNITY_MAP = buildFunctionRows(FUNCTION_COVERAGE_Y25, FUNCTION_COVERAGE_Y24).slice(0, 10);
+export const FUNCTION_OPPORTUNITY_META = (() => {
+  const displayRows = FUNCTION_OPPORTUNITY_MAP.filter((row) => row.gmv25 > 0 && row.key !== "windproof");
+  const averageShare = displayRows.length
+    ? displayRows.reduce((sum, row) => sum + row.share, 0) / displayRows.length
+    : 0;
+
+  return {
+    ttlHalfZipYoy: computeYoy(HALF_ZIP_TOTALS_Y25.gmv, HALF_ZIP_TOTALS_Y24.gmv),
+    ttlHalfZipYoyLabel: formatYoyLabel(computeYoy(HALF_ZIP_TOTALS_Y25.gmv, HALF_ZIP_TOTALS_Y24.gmv)),
+    averageFunctionShare: averageShare,
+    averageFunctionShareLabel: `${Math.round(averageShare)}%`
+  };
+})();
 
 const FUNCTION_GENDER_KEYS = [
   { gender: "男", label: "Male", className: "is-male" },

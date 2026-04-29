@@ -1511,7 +1511,7 @@ function getYoyTone(label) {
   return "is-neutral";
 }
 
-export function renderFunctionOpportunityMap(container, rows) {
+export function renderFunctionOpportunityMap(container, rows, meta = {}) {
   if (!container) {
     return;
   }
@@ -1524,13 +1524,17 @@ export function renderFunctionOpportunityMap(container, rows) {
 
   const width = 600;
   const height = 380;
-  const margin = { top: 40, right: 34, bottom: 58, left: 54 };
+  const margin = { top: 34, right: 34, bottom: 58, left: 54 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
   const xMax = Math.max(70, Math.ceil(Math.max(...validRows.map((row) => row.share)) / 10) * 10);
   const yMin = -50;
   const yMax = 200;
   const xAxisY = scaleValue(0, yMin, yMax, margin.top + plotHeight, margin.top);
+  const averageShareValue = Number.isFinite(meta.averageFunctionShare) ? meta.averageFunctionShare : 0;
+  const averageShareLabel = meta.averageFunctionShareLabel ?? `${Math.round(averageShareValue)}%`;
+  const ttlHalfZipYoyValue = Number.isFinite(meta.ttlHalfZipYoy) ? meta.ttlHalfZipYoy : 0;
+  const ttlHalfZipYoyLabel = meta.ttlHalfZipYoyLabel ?? formatYoyLabel(ttlHalfZipYoyValue);
   const gmvValues = validRows.map((row) => row.gmv25);
   const gmvMin = Math.min(...gmvValues);
   const gmvMax = Math.max(...gmvValues);
@@ -1604,6 +1608,86 @@ export function renderFunctionOpportunityMap(container, rows) {
       })
     );
     svg.lastChild.textContent = formatFunctionMapTick(tick);
+  });
+
+  const quadrantX = scaleValue(Math.max(0, Math.min(xMax, averageShareValue)), 0, xMax, margin.left, margin.left + plotWidth);
+  const quadrantY = scaleValue(Math.max(yMin, Math.min(yMax, ttlHalfZipYoyValue)), yMin, yMax, margin.top + plotHeight, margin.top);
+
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: quadrantX,
+      y1: margin.top,
+      x2: quadrantX,
+      y2: margin.top + plotHeight,
+      class: "function-map-quadrant-line"
+    })
+  );
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: margin.left,
+      y1: quadrantY,
+      x2: margin.left + plotWidth,
+      y2: quadrantY,
+      class: "function-map-quadrant-line"
+    })
+  );
+  svg.appendChild(
+    createSvgElement("text", {
+      x: margin.left + plotWidth - 4,
+      y: quadrantY - 6,
+      class: "function-map-quadrant-note",
+      "text-anchor": "end",
+      "dominant-baseline": "auto"
+    })
+  );
+  svg.lastChild.textContent = `TTL Half-Zip ${ttlHalfZipYoyLabel}`;
+  svg.appendChild(
+    createSvgElement("text", {
+      x: quadrantX + 6,
+      y: margin.top + plotHeight - 8,
+      class: "function-map-quadrant-note",
+      "text-anchor": "start",
+      "dominant-baseline": "auto"
+    })
+  );
+  svg.lastChild.textContent = `Average = ${averageShareLabel}`;
+  const quadrantLabels = [
+    {
+      text: "Potential Functions",
+      x: margin.left + 12,
+      y: margin.top + 10,
+      anchor: "start"
+    },
+    {
+      text: "Core Functions",
+      x: margin.left + plotWidth - 12,
+      y: margin.top + 10,
+      anchor: "end"
+    },
+    {
+      text: "Weak Functions",
+      x: margin.left + 12,
+      y: margin.top + plotHeight - 12,
+      anchor: "start"
+    },
+    {
+      text: "Mature Functions",
+      x: margin.left + plotWidth - 12,
+      y: margin.top + plotHeight - 12,
+      anchor: "end"
+    }
+  ];
+  quadrantLabels.forEach((label) => {
+    svg.appendChild(
+      createSvgElement("text", {
+        x: label.x,
+        y: label.y,
+        class: "function-map-quadrant-label",
+        "text-anchor": label.anchor,
+        "dominant-baseline": label.y < margin.top + plotHeight / 2 ? "hanging" : "auto"
+      })
+    );
+    svg.lastChild.textContent = label.text;
   });
 
   xTicks.forEach((tick) => {
@@ -1729,7 +1813,7 @@ export function renderFunctionOpportunityMap(container, rows) {
       "透气": { dx: r + 6, dy: -5, anchor: "start" },
       "轻量": { dx: r + 6, dy: -5, anchor: "start" },
       "吸湿速干": { dx: r + 6, dy: -5, anchor: "start" },
-      "弹力": { dx: r + 6, dy: -5, anchor: "start" },
+      "弹力": { dx: r + 6, dy: 4, anchor: "start" },
       "抑菌防臭": { dx: r + 6, dy: -5, anchor: "start" },
       "保暖": { dx: r + 6, dy: -5, anchor: "start" }
     };
@@ -1760,6 +1844,14 @@ export function renderFunctionOpportunityMap(container, rows) {
   wrap.className = "function-map-wrap";
   wrap.appendChild(svg);
   wrap.appendChild(overlay);
+  const note = document.createElement("div");
+  note.className = "function-map-note";
+  note.innerHTML = `
+    <p>Bubble Size = GMV</p>
+    <p class="function-map-note-spacer" aria-hidden="true"></p>
+    <p>6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON</p>
+  `;
+  wrap.appendChild(note);
   container.appendChild(wrap);
 }
 

@@ -2,6 +2,7 @@ import {
   FEMALE_OPPORTUNITY_BRAND_GENDER,
   FUNCTION_GENDER_SPLIT,
   FUNCTION_OPPORTUNITY_MAP,
+  FUNCTION_OPPORTUNITY_META,
   GENDER_BREAKDOWN_PRICE_BUBBLES,
   MARKET_SCOPE_BRAND_COMPARE,
   SILHOUETTE_GROWTH_DATA,
@@ -191,7 +192,7 @@ function bootstrapFunctionPage() {
   const opportunityContainer = document.querySelector("#function-opportunity-map");
   const genderContainer = document.querySelector("#function-gender-split");
 
-  renderFunctionOpportunityMap(opportunityContainer, FUNCTION_OPPORTUNITY_MAP);
+  renderFunctionOpportunityMap(opportunityContainer, FUNCTION_OPPORTUNITY_MAP, FUNCTION_OPPORTUNITY_META);
   renderFunctionGenderSplit(genderContainer, FUNCTION_GENDER_SPLIT);
   setupFunctionInteractions();
 }
