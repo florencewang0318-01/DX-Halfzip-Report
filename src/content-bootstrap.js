@@ -207,19 +207,63 @@ function bootstrapFabricOverviewPage() {
   renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
 
   if (definitionContainer) {
-    definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map(
-      (item) => `
-        <article class="fabric-definition-card">
-          <div class="fabric-definition-card-head">
-            <span class="fabric-definition-dot" style="background:${item.color};"></span>
-            <strong>${item.label}</strong>
+    definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map((item, index) => {
+      const sampleCount = item.sampleCount ?? 4;
+      const sampleClass = sampleCount >= 5 ? "is-five" : "is-four";
+      const sampleCards = Array.from(
+        { length: sampleCount },
+        () => `<div class="fabric-sample-placeholder">图片占位<br>4:3比例</div>`
+      ).join("");
+
+      return `
+        <article class="fabric-accordion-card${index === 0 ? " is-open" : ""}" data-fabric-key="${item.key}" style="--fabric-open-tint:${item.color}22; --fabric-open-border:${item.color}66;">
+          <button class="fabric-accordion-trigger" type="button" aria-expanded="${index === 0 ? "true" : "false"}">
+            <div class="fabric-accordion-title">
+              <span class="fabric-definition-dot" style="background:${item.color};"></span>
+              <strong>
+                <span class="fabric-accordion-title-cn">${item.label}</span>
+                <span class="fabric-accordion-title-en">${item.labelEn ?? ""}</span>
+              </strong>
+            </div>
+            <span class="fabric-accordion-icon" aria-hidden="true"></span>
+          </button>
+          <div class="fabric-accordion-panel">
+            <div class="fabric-accordion-panel-inner">
+              <div class="fabric-accordion-copy">
+                <div class="fabric-accordion-copy-block">
+                  <p><em>Textile:</em><span>${item.textile}</span></p>
+                </div>
+                <div class="fabric-accordion-copy-block">
+                  <p><em>Positioning:</em><span>${item.positioning}</span></p>
+                </div>
+              </div>
+              <div class="fabric-accordion-samples ${sampleClass}">
+                ${sampleCards}
+              </div>
+            </div>
           </div>
-          <p>${item.definition}</p>
-          <p><span>包含口径</span>${item.include}</p>
-          <p><span>典型感受</span>${item.feel}</p>
         </article>
-      `
-    ).join("");
+      `;
+    }).join("");
+
+    const cards = Array.from(definitionContainer.querySelectorAll(".fabric-accordion-card"));
+    cards.forEach((card) => {
+      const trigger = card.querySelector(".fabric-accordion-trigger");
+      if (!trigger) {
+        return;
+      }
+
+      trigger.addEventListener("click", () => {
+        cards.forEach((otherCard) => {
+          const otherTrigger = otherCard.querySelector(".fabric-accordion-trigger");
+          const shouldOpen = otherCard === card;
+          otherCard.classList.toggle("is-open", shouldOpen);
+          if (otherTrigger) {
+            otherTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+          }
+        });
+      });
+    });
   }
 }
 

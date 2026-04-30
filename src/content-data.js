@@ -307,34 +307,38 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
   {
     key: "smooth",
     label: "光滑/平整面料",
+    labelEn: "Smooth Fabric",
     color: "#b0c3f0",
-    definition: "表面无明显肌理或毛感，整体视觉平整。",
-    include: "光滑、平滑、顺滑、棉感、针织、弹力棉感、棉混纺、平整针织",
-    feel: "运动功能层、日常舒适层、基础半拉链"
+    textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
+    positioning: "运动功能层、日常舒适层、基础半拉链",
+    sampleCount: 5
   },
   {
     key: "brushed",
     label: "拉绒/磨毛面料",
+    labelEn: "Brushed Fabric",
     color: "#ebc58c",
-    definition: "有绒感、毛感、磨毛感或仿羊毛触感，但并非真羊毛。",
-    include: "拉绒、磨毛、抓绒、微抓绒、刷毛、仿羊毛、仿羊羔绒",
-    feel: "轻保暖、亲肤、秋冬保暖层"
-  },
-  {
-    key: "wool",
-    label: "羊毛面料",
-    color: "#99cce8",
-    definition: "明确含羊毛或美利奴羊毛等天然羊毛成分。",
-    include: "羊毛、美利奴羊毛、Merino wool、羊毛混纺",
-    feel: "高端保暖、专业户外、贴身功能层"
+    textile: "有绒感/毛感、表面磨毛感或仿羊毛",
+    positioning: "秋冬保暖层、轻保暖、亲肤感",
+    sampleCount: 5
   },
   {
     key: "textured",
     label: "肌理面料",
+    labelEn: "Textured Fabric",
     color: "#e4a7b5",
-    definition: "表面有明确视觉纹理或结构感。",
-    include: "罗纹、华夫格、网眼、格纹、坑条、蜂窝、杂色纹理、波浪纹理、提花",
-    feel: "外穿感、设计感、透气结构、风格化面料"
+    textile: "表面有明确视觉纹理或结构感",
+    positioning: "具有透气结构、设计感、风格化面料",
+    sampleCount: 5
+  },
+  {
+    key: "wool",
+    label: "羊毛面料",
+    labelEn: "Wool",
+    color: "#99cce8",
+    textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
+    positioning: "贴身功能层、高端保暖、专业户外",
+    sampleCount: 5
   }
 ];
 

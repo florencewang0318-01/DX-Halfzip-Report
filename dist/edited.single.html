@@ -1744,6 +1744,7 @@ a {
   grid-template-columns: 180px minmax(0, 1fr);
   align-items: center;
   column-gap: 10px;
+  margin-left: -10px;
 }
 
 .fabric-overview-pie-block {
@@ -1793,14 +1794,14 @@ a {
 
 .fabric-overview-legend-item strong {
   color: var(--accent);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   line-height: 1.15;
 }
 
 .fabric-overview-legend-copy small {
   color: #94a3b8;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.15;
 }
@@ -1866,7 +1867,7 @@ a {
 }
 
 .fabric-price-card-label {
-  color: #6b7280;
+  color: #111827;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.2;
@@ -1881,7 +1882,7 @@ a {
 
 .fabric-price-card-english {
   color: #94a3b8;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.1;
 }
@@ -1950,24 +1951,57 @@ a {
   flex-direction: column;
 }
 
-.fabric-definition-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+.fabric-definition-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 14px;
+  box-sizing: border-box;
 }
 
-.fabric-definition-card {
-  padding: 14px 14px 13px;
-  border-radius: 15px;
-  border: 1px solid rgba(226, 232, 240, 0.82);
-  background: linear-gradient(180deg, rgba(249, 251, 254, 0.94), rgba(255, 255, 255, 0.98));
+.fabric-accordion-card {
+  position: relative;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  border: 1px solid rgba(203, 213, 225, 0.78);
+  background: linear-gradient(180deg, rgba(252, 253, 255, 0.98), rgba(255, 255, 255, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  overflow: hidden;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.fabric-definition-card-head {
+.fabric-accordion-card.is-open {
+  border-color: var(--fabric-open-border, rgba(173, 184, 204, 0.92));
+  background: var(--fabric-open-tint, rgba(176, 195, 240, 0.12));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.fabric-accordion-trigger {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 16px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fabric-accordion-trigger:focus-visible {
+  outline: 2px solid rgba(98, 136, 204, 0.42);
+  outline-offset: -2px;
+}
+
+.fabric-accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
 }
 
 .fabric-definition-dot {
@@ -1977,53 +2011,126 @@ a {
   flex-shrink: 0;
 }
 
-.fabric-definition-card-head strong {
+.fabric-accordion-title strong {
   color: var(--accent);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
   line-height: 1.35;
 }
 
-.fabric-definition-card p {
-  color: #64748b;
-  font-size: 11px;
-  line-height: 1.55;
+.fabric-accordion-title-cn {
+  color: var(--accent);
 }
 
-.fabric-definition-card p + p {
-  margin-top: 6px;
+.fabric-accordion-title-en {
+  color: #949dab;
+  font-weight: 600;
 }
 
-.fabric-definition-card p span {
-  display: inline-block;
-  margin-right: 6px;
-  color: #94a3b8;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.fabric-accordion-icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
-.fabric-image-reserve-block {
+.fabric-accordion-icon::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #6d8ecf;
+  border-bottom: 2px solid #6d8ecf;
+  transform: rotate(45deg);
+  transition: transform 180ms ease, top 180ms ease;
+}
+
+.fabric-accordion-card.is-open .fabric-accordion-icon::before {
+  top: 8px;
+  transform: rotate(-135deg);
+}
+
+.fabric-accordion-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 220ms ease;
+}
+
+.fabric-accordion-card.is-open .fabric-accordion-panel {
+  max-height: 280px;
+}
+
+.fabric-accordion-panel-inner {
+  padding: 0 14px 24px;
+}
+
+.fabric-accordion-copy {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.fabric-accordion-copy-block {
+  min-width: 0;
+}
+
+.fabric-accordion-copy-block p {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.fabric-accordion-copy-block em {
+  display: inline;
+  color: #111827;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.fabric-accordion-copy-block span {
+  display: inline;
+  min-width: 0;
+}
+
+.fabric-accordion-samples {
+  display: grid;
+  gap: 6px;
+  justify-content: space-between;
   margin-top: 14px;
-  flex: 1;
-  min-height: 0;
 }
 
-.fabric-image-reserve-block .chart-kicker {
-  margin-top: 2px;
+.fabric-accordion-samples.is-five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.fabric-image-reserve {
-  flex: 1;
-  min-height: 170px;
+.fabric-accordion-samples.is-four {
+  grid-template-columns: repeat(4, minmax(78px, 1fr));
+}
+
+.fabric-sample-placeholder {
+  aspect-ratio: 3 / 4;
+  max-height: 135px;
   border-radius: 16px;
-  border: 1px dashed rgba(203, 213, 225, 0.92);
-  background:
-    linear-gradient(180deg, rgba(248, 250, 253, 0.9), rgba(255, 255, 255, 0.96));
+  border: 1px solid rgba(186, 195, 209, 0.9);
+  background: linear-gradient(180deg, rgba(248, 250, 253, 0.96), rgba(255, 255, 255, 0.98));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #334155;
+  font-size: 10px;
+  line-height: 1.25;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
 
 .silhouette-structure-panel .panel-title,
@@ -2705,11 +2812,7 @@ a {
             <article class="chart-panel panel fabric-overview-right-panel">
               <div class="chart-kicker">Fabric Feature</div>
               <h3 class="panel-title">面料大类定义与典型商品感受</h3>
-              <div id="fabric-overview-definitions" class="fabric-definition-grid"></div>
-              <div class="fabric-image-reserve-block">
-                <div class="chart-kicker">Material Samples</div>
-                <div class="fabric-image-reserve"></div>
-              </div>
+              <div id="fabric-overview-definitions" class="fabric-definition-accordion"></div>
             </article>
           </div>
 
@@ -3157,34 +3260,38 @@ const FABRIC_CATEGORY_DEFINITIONS = [
   {
     key: "smooth",
     label: "光滑/平整面料",
+    labelEn: "Smooth Fabric",
     color: "#b0c3f0",
-    definition: "表面无明显肌理或毛感，整体视觉平整。",
-    include: "光滑、平滑、顺滑、棉感、针织、弹力棉感、棉混纺、平整针织",
-    feel: "运动功能层、日常舒适层、基础半拉链"
+    textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
+    positioning: "运动功能层、日常舒适层、基础半拉链",
+    sampleCount: 5
   },
   {
     key: "brushed",
     label: "拉绒/磨毛面料",
+    labelEn: "Brushed Fabric",
     color: "#ebc58c",
-    definition: "有绒感、毛感、磨毛感或仿羊毛触感，但并非真羊毛。",
-    include: "拉绒、磨毛、抓绒、微抓绒、刷毛、仿羊毛、仿羊羔绒",
-    feel: "轻保暖、亲肤、秋冬保暖层"
-  },
-  {
-    key: "wool",
-    label: "羊毛面料",
-    color: "#99cce8",
-    definition: "明确含羊毛或美利奴羊毛等天然羊毛成分。",
-    include: "羊毛、美利奴羊毛、Merino wool、羊毛混纺",
-    feel: "高端保暖、专业户外、贴身功能层"
+    textile: "有绒感/毛感、表面磨毛感或仿羊毛",
+    positioning: "秋冬保暖层、轻保暖、亲肤感",
+    sampleCount: 5
   },
   {
     key: "textured",
     label: "肌理面料",
+    labelEn: "Textured Fabric",
     color: "#e4a7b5",
-    definition: "表面有明确视觉纹理或结构感。",
-    include: "罗纹、华夫格、网眼、格纹、坑条、蜂窝、杂色纹理、波浪纹理、提花",
-    feel: "外穿感、设计感、透气结构、风格化面料"
+    textile: "表面有明确视觉纹理或结构感",
+    positioning: "具有透气结构、设计感、风格化面料",
+    sampleCount: 5
+  },
+  {
+    key: "wool",
+    label: "羊毛面料",
+    labelEn: "Wool",
+    color: "#99cce8",
+    textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
+    positioning: "贴身功能层、高端保暖、专业户外",
+    sampleCount: 5
   }
 ];
 
@@ -6618,19 +6725,63 @@ function bootstrapFabricOverviewPage() {
   renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
 
   if (definitionContainer) {
-    definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map(
-      (item) => `
-        <article class="fabric-definition-card">
-          <div class="fabric-definition-card-head">
-            <span class="fabric-definition-dot" style="background:${item.color};"></span>
-            <strong>${item.label}</strong>
+    definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map((item, index) => {
+      const sampleCount = item.sampleCount ?? 4;
+      const sampleClass = sampleCount >= 5 ? "is-five" : "is-four";
+      const sampleCards = Array.from(
+        { length: sampleCount },
+        () => `<div class="fabric-sample-placeholder">图片占位<br>4:3比例</div>`
+      ).join("");
+
+      return `
+        <article class="fabric-accordion-card${index === 0 ? " is-open" : ""}" data-fabric-key="${item.key}" style="--fabric-open-tint:${item.color}22; --fabric-open-border:${item.color}66;">
+          <button class="fabric-accordion-trigger" type="button" aria-expanded="${index === 0 ? "true" : "false"}">
+            <div class="fabric-accordion-title">
+              <span class="fabric-definition-dot" style="background:${item.color};"></span>
+              <strong>
+                <span class="fabric-accordion-title-cn">${item.label}</span>
+                <span class="fabric-accordion-title-en">${item.labelEn ?? ""}</span>
+              </strong>
+            </div>
+            <span class="fabric-accordion-icon" aria-hidden="true"></span>
+          </button>
+          <div class="fabric-accordion-panel">
+            <div class="fabric-accordion-panel-inner">
+              <div class="fabric-accordion-copy">
+                <div class="fabric-accordion-copy-block">
+                  <p><em>Textile:</em><span>${item.textile}</span></p>
+                </div>
+                <div class="fabric-accordion-copy-block">
+                  <p><em>Positioning:</em><span>${item.positioning}</span></p>
+                </div>
+              </div>
+              <div class="fabric-accordion-samples ${sampleClass}">
+                ${sampleCards}
+              </div>
+            </div>
           </div>
-          <p>${item.definition}</p>
-          <p><span>包含口径</span>${item.include}</p>
-          <p><span>典型感受</span>${item.feel}</p>
         </article>
-      `
-    ).join("");
+      `;
+    }).join("");
+
+    const cards = Array.from(definitionContainer.querySelectorAll(".fabric-accordion-card"));
+    cards.forEach((card) => {
+      const trigger = card.querySelector(".fabric-accordion-trigger");
+      if (!trigger) {
+        return;
+      }
+
+      trigger.addEventListener("click", () => {
+        cards.forEach((otherCard) => {
+          const otherTrigger = otherCard.querySelector(".fabric-accordion-trigger");
+          const shouldOpen = otherCard === card;
+          otherCard.classList.toggle("is-open", shouldOpen);
+          if (otherTrigger) {
+            otherTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+          }
+        });
+      });
+    });
   }
 }
 
