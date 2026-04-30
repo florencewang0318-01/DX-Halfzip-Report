@@ -1711,6 +1711,321 @@ a {
   color: var(--muted);
 }
 
+.page-fabric-overview .chart-grid {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 5fr);
+}
+
+.fabric-overview-left-panel,
+.fabric-overview-right-panel {
+  min-height: 0;
+}
+
+.fabric-overview-left-panel .panel-title,
+.fabric-overview-right-panel .panel-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.fabric-overview-chart-card {
+  flex: 1;
+  min-height: 0;
+  padding-top: 6px;
+}
+
+.fabric-overview-root {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+}
+
+.fabric-overview-top {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+}
+
+.fabric-overview-pie-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fabric-overview-ring-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fabric-overview-ring-svg {
+  width: 100%;
+  max-width: 372px;
+  height: auto;
+  overflow: visible;
+}
+
+.fabric-overview-legend {
+  display: grid;
+  gap: 14px;
+  align-content: center;
+  justify-items: start;
+  justify-self: end;
+  padding-left: 0;
+  margin-right: 10px;
+}
+
+.fabric-overview-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.fabric-overview-legend-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fabric-overview-legend-item strong {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.fabric-overview-legend-copy small {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.fabric-overview-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fabric-overview-pie-slice,
+.fabric-overview-pie-share-label {
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.fabric-overview-pie-share-label {
+  fill: #111827;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.fabric-overview-pie-yoy-label {
+  fill: var(--green);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 900;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.fabric-price-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: -16px;
+}
+
+.fabric-price-card {
+  position: relative;
+  padding: 10px 14px 11px 16px;
+  border-radius: 15px;
+  border: 1px solid rgba(188, 199, 220, 0.78);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 254, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  overflow: hidden;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease, box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.fabric-price-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--fabric-card-accent, #94a3b8);
+}
+
+.fabric-price-card-label {
+  display: block;
+}
+
+.fabric-price-card-label {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.fabric-price-card-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.fabric-price-card-english {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.fabric-price-card-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 7px;
+}
+
+.fabric-price-card strong {
+  display: block;
+  color: #111827;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.fabric-price-card small {
+  display: block;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fabric-overview-note {
+  margin: -2px 2px 0;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+}
+
+.fabric-overview-root.has-active-fabric [data-fabric-key] {
+  opacity: 0.28;
+  filter: grayscale(0.42);
+}
+
+.fabric-overview-root.has-active-fabric [data-fabric-key].is-active {
+  opacity: 1;
+  filter: none;
+}
+
+.fabric-overview-root.has-active-fabric .fabric-overview-pie-slice.is-active {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(1.03);
+}
+
+.fabric-overview-root.has-active-fabric .fabric-overview-legend-item.is-active {
+  transform: translateX(2px);
+}
+
+.fabric-overview-root.has-active-fabric .fabric-price-card.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(121, 145, 187, 0.5);
+  box-shadow: 0 10px 18px rgba(148, 163, 184, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.fabric-overview-right-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.fabric-definition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fabric-definition-card {
+  padding: 14px 14px 13px;
+  border-radius: 15px;
+  border: 1px solid rgba(226, 232, 240, 0.82);
+  background: linear-gradient(180deg, rgba(249, 251, 254, 0.94), rgba(255, 255, 255, 0.98));
+}
+
+.fabric-definition-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fabric-definition-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fabric-definition-card-head strong {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.fabric-definition-card p {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.fabric-definition-card p + p {
+  margin-top: 6px;
+}
+
+.fabric-definition-card p span {
+  display: inline-block;
+  margin-right: 6px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fabric-image-reserve-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.fabric-image-reserve-block .chart-kicker {
+  margin-top: 2px;
+}
+
+.fabric-image-reserve {
+  flex: 1;
+  min-height: 170px;
+  border-radius: 16px;
+  border: 1px dashed rgba(203, 213, 225, 0.92);
+  background:
+    linear-gradient(180deg, rgba(248, 250, 253, 0.9), rgba(255, 255, 255, 0.96));
+}
+
 .silhouette-structure-panel .panel-title,
 .silhouette-growth-panel .panel-title {
   margin-top: 0;
@@ -2188,7 +2503,7 @@ a {
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#silhouette">Silhouette</a>
             <a class="nav-dropdown-item" href="#function-scene">Function</a>
-            <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
+            <a class="nav-dropdown-item" href="#fabric-overview">Fabric Overview</a>
             <a class="nav-dropdown-item" href="#design-cues">Design Cues</a>
           </div>
         </div>
@@ -2366,43 +2681,40 @@ a {
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="fabric-warmth" data-page-label="Fabric & Warmth">
+    <section class="sheet report-section paired-chart-page page-fabric-overview" id="fabric-overview" data-page-label="Fabric Overview">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">05</span><span>Fabric & Warmth</span></div>
-              <h2 class="section-title">面料与加绒不是二选一，而是决定半拉链内搭“贴身层”还是“可外穿层”的根本分野</h2>
+              <div class="section-kicker"><span class="section-badge">05</span><span>Fabric Overview</span></div>
+              <h2 class="section-title">光滑/平整是规模底盘，羊毛与纹理是增长型方向</h2>
               <ul class="section-bullets">
-                <li>当前样本中未加绒 85 款、加绒 66 款，说明轻保暖与抓绒保暖双结构并存。</li>
-                <li>面料表达已经从单一聚酯弹力扩展到抓绒、羊毛混纺、功能针织等多个路径。</li>
-                <li>本页要回答的是：27FW 应如何分层配置轻量保暖、核心保暖和形象面料。</li>
+                <li>先把半拉链内搭的面料表面质地标准化归并为 4 个大类，再看它们各自的规模、增长与价格差异。</li>
+                <li>左图用双层环形图表达 Y25 与 Y24 的结构占比变化，帮助判断面料底盘与增长方向是否已发生迁移。</li>
+                <li>右侧先定义四类面料的口径与典型商品感受，图片区本版暂留结构位置，为后续商品案例补充做准备。</li>
               </ul>
             </div>
           </div>
 
-          <div class="chart-grid evidence-grid emphasis-right reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Fabric Read</div>
-              <h3 class="panel-title">面料类型与加绒结构</h3>
-              <div class="placeholder">
-                <p>建议图表：面料家族 x 是否加绒 矩阵图</p>
-                <p>建议看点：聚酯弹力、抓绒、Polartec、羊毛混纺、网面结构等面料的分层逻辑。</p>
-              </div>
+          <div class="chart-grid evidence-grid two-up reveal">
+            <article class="chart-panel panel fabric-overview-left-panel">
+              <div class="chart-kicker">Fabric Classification</div>
+              <h3 class="panel-title">4 大面料大类总览</h3>
+              <div id="fabric-overview-chart" class="fabric-overview-chart-card"></div>
             </article>
-            <article class="chart-panel panel panel-large">
-              <div class="chart-kicker">Development Translation</div>
-              <h3 class="panel-title">27FW 面料开发分层</h3>
-              <div class="note-stack">
-                <p>轻量基础层：强调弹力、透气、亲肤、可长时间穿着。</p>
-                <p>核心保暖层：强调微抓绒、双面磨毛、层搭滑雪 / 徒步场景。</p>
-                <p>形象差异层：强调羊毛混纺、肌理表面、外穿感与高级手感。</p>
+            <article class="chart-panel panel fabric-overview-right-panel">
+              <div class="chart-kicker">Fabric Feature</div>
+              <h3 class="panel-title">面料大类定义与典型商品感受</h3>
+              <div id="fabric-overview-definitions" class="fabric-definition-grid"></div>
+              <div class="fabric-image-reserve-block">
+                <div class="chart-kicker">Material Samples</div>
+                <div class="fabric-image-reserve"></div>
               </div>
             </article>
           </div>
 
           <div class="page-foot">
-            <span>Pending chart build</span>
+            <span>Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
             <span>Page 05</span>
           </div>
         </div>
@@ -2841,6 +3153,142 @@ function createSilhouetteSummary(rows) {
   };
 }
 
+const FABRIC_CATEGORY_DEFINITIONS = [
+  {
+    key: "smooth",
+    label: "光滑/平整面料",
+    color: "#b0c3f0",
+    definition: "表面无明显肌理或毛感，整体视觉平整。",
+    include: "光滑、平滑、顺滑、棉感、针织、弹力棉感、棉混纺、平整针织",
+    feel: "运动功能层、日常舒适层、基础半拉链"
+  },
+  {
+    key: "brushed",
+    label: "拉绒/磨毛面料",
+    color: "#ebc58c",
+    definition: "有绒感、毛感、磨毛感或仿羊毛触感，但并非真羊毛。",
+    include: "拉绒、磨毛、抓绒、微抓绒、刷毛、仿羊毛、仿羊羔绒",
+    feel: "轻保暖、亲肤、秋冬保暖层"
+  },
+  {
+    key: "wool",
+    label: "羊毛面料",
+    color: "#99cce8",
+    definition: "明确含羊毛或美利奴羊毛等天然羊毛成分。",
+    include: "羊毛、美利奴羊毛、Merino wool、羊毛混纺",
+    feel: "高端保暖、专业户外、贴身功能层"
+  },
+  {
+    key: "textured",
+    label: "肌理面料",
+    color: "#e4a7b5",
+    definition: "表面有明确视觉纹理或结构感。",
+    include: "罗纹、华夫格、网眼、格纹、坑条、蜂窝、杂色纹理、波浪纹理、提花",
+    feel: "外穿感、设计感、透气结构、风格化面料"
+  }
+];
+
+function normalizeFabricCategory(rawFabricTexture) {
+  const value = String(rawFabricTexture ?? "").trim();
+  if (!value) {
+    return null;
+  }
+
+  if (value.includes("羊毛")) {
+    return "wool";
+  }
+
+  if (
+    value.includes("拉绒") ||
+    value.includes("磨毛") ||
+    value.includes("抓绒") ||
+    value.includes("仿羊毛") ||
+    value.includes("丝绒")
+  ) {
+    return "brushed";
+  }
+
+  if (
+    value.includes("纹理") ||
+    value.includes("肌理") ||
+    value.includes("网面") ||
+    value.includes("网状") ||
+    value.includes("华夫格") ||
+    value.includes("罗纹") ||
+    value.includes("针织") ||
+    value.includes("格子") ||
+    value.includes("波浪")
+  ) {
+    return value.startsWith("光滑") ? "smooth" : "textured";
+  }
+
+  if (value.includes("光滑") || value.includes("平整") || value.includes("平滑") || value.includes("顺滑")) {
+    return "smooth";
+  }
+
+  return "smooth";
+}
+
+function summarizeFabricOverview(rows) {
+  const summary = new Map();
+  let totalGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const categoryKey = normalizeFabricCategory(row["面料质地"]);
+    if (!categoryKey) {
+      return;
+    }
+
+    const current = summary.get(categoryKey) ?? {
+      key: categoryKey,
+      gmv: 0,
+      count: 0,
+      weightedDealPriceTotal: 0,
+      weightedDealPriceUnits: 0,
+      fallbackDealPriceTotal: 0,
+      fallbackDealPriceCount: 0,
+      avgDealPrice: 0
+    };
+
+    const sales = toNumber(row["销售额"]);
+    const units = toNumber(row["销量"]);
+    const dealPrice = toNumber(row["成交均价"] ?? row["成交价格"]);
+
+    current.gmv += sales;
+    current.count += 1;
+
+    if (dealPrice > 0 && units > 0) {
+      current.weightedDealPriceTotal += dealPrice * units;
+      current.weightedDealPriceUnits += units;
+    } else if (dealPrice > 0) {
+      current.fallbackDealPriceTotal += dealPrice;
+      current.fallbackDealPriceCount += 1;
+    }
+
+    totalGmv += sales;
+    summary.set(categoryKey, current);
+  });
+
+  summary.forEach((item) => {
+    if (item.weightedDealPriceUnits > 0) {
+      item.avgDealPrice = item.weightedDealPriceTotal / item.weightedDealPriceUnits;
+    } else if (item.fallbackDealPriceCount > 0) {
+      item.avgDealPrice = item.fallbackDealPriceTotal / item.fallbackDealPriceCount;
+    }
+
+    item.share = totalGmv ? (item.gmv / totalGmv) * 100 : 0;
+  });
+
+  return {
+    totalGmv,
+    items: summary
+  };
+}
+
 const FUNCTION_BUCKETS = [
   {
     key: "warmth",
@@ -3265,6 +3713,8 @@ const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => {
 
 const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
 const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);
+const FABRIC_OVERVIEW_Y25 = summarizeFabricOverview(LS_HZ_INNER_DATASET.raw.y25);
+const FABRIC_OVERVIEW_Y24 = summarizeFabricOverview(LS_HZ_INNER_DATASET.raw.y24);
 
 const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
   SILHOUETTE_LENGTH_ORDER.map((length) => {
@@ -3390,6 +3840,38 @@ const SILHOUETTE_PAGE_DRAFT = {
   trackedSampleCount: SILHOUETTE_Y25.trackedCount,
   untrackedSampleCount: SILHOUETTE_Y25.untrackedCount
 };
+
+const FABRIC_OVERVIEW_DATA = FABRIC_CATEGORY_DEFINITIONS.map((definition) => {
+  const current = FABRIC_OVERVIEW_Y25.items.get(definition.key) ?? {
+    gmv: 0,
+    share: 0,
+    avgDealPrice: 0,
+    count: 0
+  };
+  const previous = FABRIC_OVERVIEW_Y24.items.get(definition.key) ?? {
+    gmv: 0,
+    share: 0,
+    avgDealPrice: 0,
+    count: 0
+  };
+  const yoy = computeYoy(current.gmv, previous.gmv);
+
+  return {
+    ...definition,
+    gmv25: current.gmv,
+    gmv24: previous.gmv,
+    share25: current.share,
+    share24: previous.share,
+    share25Label: `${Math.round(current.share)}%`,
+    share24Label: `${Math.round(previous.share)}%`,
+    avgDealPrice25: current.avgDealPrice,
+    avgDealPrice25Label: `¥${Math.round(current.avgDealPrice || 0).toLocaleString("en-US")}`,
+    yoy,
+    yoyLabel: formatYoyLabel(yoy),
+    count25: current.count,
+    count24: previous.count
+  };
+}).sort((a, b) => b.gmv25 - a.gmv25);
 
 const MARKET_SCOPE_PAGE_DRAFT = {
   chapter: "01 Competitor Scope",
@@ -3670,6 +4152,54 @@ function scaleSqrtValue(value, min, max, start, end) {
 
   const normalized = (value - min) / (max - min);
   return start + Math.sqrt(Math.max(0, normalized)) * (end - start);
+}
+
+function polarToCartesian(centerX, centerY, radius, angleDegrees) {
+  const angleRadians = ((angleDegrees - 90) * Math.PI) / 180;
+  return {
+    x: centerX + radius * Math.cos(angleRadians),
+    y: centerY + radius * Math.sin(angleRadians)
+  };
+}
+
+function adjustHexColor(hex, percent) {
+  const raw = hex.replace("#", "");
+  const normalized =
+    raw.length === 3
+      ? raw
+          .split("")
+          .map((char) => `${char}${char}`)
+          .join("")
+      : raw;
+
+  const readChannel = (offset) => parseInt(normalized.slice(offset, offset + 2), 16);
+  const shiftChannel = (value) => {
+    const delta = percent < 0 ? value * (percent / 100) : (255 - value) * (percent / 100);
+    return Math.round(Math.max(0, Math.min(255, value + delta)));
+  };
+
+  return `rgb(${shiftChannel(readChannel(0))}, ${shiftChannel(readChannel(2))}, ${shiftChannel(readChannel(4))})`;
+}
+
+function describeArcPath(centerX, centerY, radius, startAngle, endAngle) {
+  const start = polarToCartesian(centerX, centerY, radius, endAngle);
+  const end = polarToCartesian(centerX, centerY, radius, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
+}
+
+function describePieSlicePath(centerX, centerY, radius, startAngle, endAngle) {
+  const start = polarToCartesian(centerX, centerY, radius, startAngle);
+  const end = polarToCartesian(centerX, centerY, radius, endAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  return [
+    `M ${centerX} ${centerY}`,
+    `L ${start.x} ${start.y}`,
+    `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+    "Z"
+  ].join(" ");
 }
 
 function getBubbleRadius(value, min, max) {
@@ -4039,6 +4569,207 @@ function renderMarketScopeBubbleChart(container, rows) {
   wrap.appendChild(overlay);
 
   container.appendChild(wrap);
+}
+
+function renderFabricOverviewChart(container, rows) {
+  if (!container) {
+    return;
+  }
+
+  const fabricEnglishLabelMap = {
+    smooth: "Smooth Fabric",
+    brushed: "Brushed Fabric",
+    textured: "Textured Fabric",
+    wool: "Wool"
+  };
+
+  const width = 372;
+  const height = 300;
+  const centerX = 186;
+  const centerY = 138;
+  const radius = 118;
+
+  const root = document.createElement("div");
+  root.className = "fabric-overview-root";
+
+  const setActiveFabricKey = (key) => {
+    root.classList.add("has-active-fabric");
+    root.querySelectorAll("[data-fabric-key]").forEach((element) => {
+      element.classList.toggle("is-active", element.dataset.fabricKey === key);
+    });
+  };
+
+  const clearActiveFabricKey = () => {
+    root.classList.remove("has-active-fabric");
+    root.querySelectorAll("[data-fabric-key]").forEach((element) => {
+      element.classList.remove("is-active");
+    });
+  };
+
+  const top = document.createElement("div");
+  top.className = "fabric-overview-top";
+
+  const legend = document.createElement("div");
+  legend.className = "fabric-overview-legend";
+  rows.forEach((row) => {
+    const item = document.createElement("div");
+    item.className = "fabric-overview-legend-item";
+    item.dataset.fabricKey = row.key;
+    item.innerHTML = `
+      <span class="fabric-overview-dot" style="background:${row.color};"></span>
+      <div class="fabric-overview-legend-copy">
+        <strong>${row.label}</strong>
+        <small>${fabricEnglishLabelMap[row.key] ?? ""}</small>
+      </div>
+    `;
+    item.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    item.addEventListener("mouseleave", clearActiveFabricKey);
+    legend.appendChild(item);
+  });
+  top.appendChild(legend);
+
+  const pieBlock = document.createElement("div");
+  pieBlock.className = "fabric-overview-pie-block";
+
+  const ringWrap = document.createElement("div");
+  ringWrap.className = "fabric-overview-ring-wrap";
+
+  const svg = createSvgElement("svg", {
+    class: "fabric-overview-ring-svg",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": "Y25 面料大类占比饼图"
+  });
+
+  const defs = createSvgElement("defs");
+  const pieShadow = createSvgElement("filter", {
+    id: "fabricPieShadow",
+    x: "-20%",
+    y: "-20%",
+    width: "140%",
+    height: "140%"
+  });
+  pieShadow.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: 0,
+      dy: 4,
+      stdDeviation: 4,
+      "flood-color": "#40547a",
+      "flood-opacity": 0.18
+    })
+  );
+  defs.appendChild(pieShadow);
+
+  rows.forEach((row, index) => {
+    const gradient = createSvgElement("radialGradient", {
+      id: `fabricPieGradient${index}`,
+      cx: "34%",
+      cy: "30%",
+      r: "76%"
+    });
+    gradient.appendChild(createSvgElement("stop", { offset: "0%", "stop-color": adjustHexColor(row.color, 36) }));
+    gradient.appendChild(createSvgElement("stop", { offset: "26%", "stop-color": adjustHexColor(row.color, 18) }));
+    gradient.appendChild(createSvgElement("stop", { offset: "72%", "stop-color": row.color }));
+    gradient.appendChild(createSvgElement("stop", { offset: "100%", "stop-color": adjustHexColor(row.color, -10) }));
+    defs.appendChild(gradient);
+  });
+  svg.appendChild(defs);
+
+  let labelAngle = -190;
+  rows.forEach((row, index) => {
+    const span = (row.share25 / 100) * 360;
+    const startAngle = labelAngle;
+    const endAngle = labelAngle + span;
+    const midAngle = labelAngle + span / 2;
+    const shareRadius = row.share25 <= 11 ? radius * 0.68 : radius * 0.55;
+    const innerPoint = polarToCartesian(centerX, centerY, shareRadius, midAngle);
+    const outerRadius = row.key === "smooth" ? radius + 28 : radius + 16;
+    const outerPoint = polarToCartesian(centerX, centerY, outerRadius, midAngle);
+    const outerAnchor =
+      row.key === "smooth"
+        ? "end"
+        : midAngle > 18 && midAngle < 162
+          ? "start"
+          : midAngle > 198 && midAngle < 342
+            ? "end"
+            : "middle";
+
+    const slicePath = createSvgElement("path", {
+      d: describePieSlicePath(centerX, centerY, radius, startAngle, endAngle),
+      fill: `url(#fabricPieGradient${index})`,
+      stroke: "rgba(255,255,255,0.92)",
+      "stroke-width": 2,
+      filter: "url(#fabricPieShadow)",
+      class: "fabric-overview-pie-slice",
+      "data-fabric-key": row.key
+    });
+    slicePath.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    slicePath.addEventListener("mouseleave", clearActiveFabricKey);
+    svg.appendChild(slicePath);
+
+    const shareLabel = createSvgElement("text", {
+      x: innerPoint.x,
+      y: innerPoint.y + 5,
+      class: "fabric-overview-pie-share-label",
+      "text-anchor": "middle",
+      "data-fabric-key": row.key
+    });
+    shareLabel.textContent = row.share25Label;
+    shareLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    shareLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    svg.appendChild(shareLabel);
+
+    const yoyLabel = createSvgElement("text", {
+      x: outerPoint.x,
+      y: outerPoint.y + 4,
+      class: "fabric-overview-pie-yoy-label",
+      "text-anchor": outerAnchor,
+      "data-fabric-key": row.key
+    });
+    yoyLabel.textContent = row.yoyLabel;
+    yoyLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    yoyLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    svg.appendChild(yoyLabel);
+
+    labelAngle += span;
+  });
+
+  ringWrap.appendChild(svg);
+  pieBlock.appendChild(ringWrap);
+  top.appendChild(pieBlock);
+
+  const priceStrip = document.createElement("div");
+  priceStrip.className = "fabric-price-strip";
+  rows.forEach((row) => {
+    const card = document.createElement("div");
+    card.className = "fabric-price-card";
+    card.dataset.fabricKey = row.key;
+    card.style.setProperty("--fabric-card-accent", row.color);
+    card.innerHTML = `
+      <div class="fabric-price-card-title">
+        <span class="fabric-price-card-label">${row.label}</span>
+        <small class="fabric-price-card-english">${fabricEnglishLabelMap[row.key] ?? ""}</small>
+      </div>
+      <div class="fabric-price-card-metric">
+        <strong>${row.avgDealPrice25 > 0 ? row.avgDealPrice25Label : "n/a"}</strong>
+        <small>成交均价</small>
+      </div>
+    `;
+    card.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    card.addEventListener("mouseleave", clearActiveFabricKey);
+    priceStrip.appendChild(card);
+  });
+
+  const note = document.createElement("p");
+  note.className = "fabric-overview-note";
+  note.textContent = "6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON";
+
+  root.appendChild(top);
+  root.appendChild(priceStrip);
+  root.appendChild(note);
+
+  container.innerHTML = "";
+  container.appendChild(root);
 }
 
 function getSilhouetteGenderToken(gender) {
@@ -5880,6 +6611,29 @@ function bootstrapFunctionPage() {
   setupFunctionInteractions();
 }
 
+function bootstrapFabricOverviewPage() {
+  const chartContainer = document.querySelector("#fabric-overview-chart");
+  const definitionContainer = document.querySelector("#fabric-overview-definitions");
+
+  renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
+
+  if (definitionContainer) {
+    definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map(
+      (item) => `
+        <article class="fabric-definition-card">
+          <div class="fabric-definition-card-head">
+            <span class="fabric-definition-dot" style="background:${item.color};"></span>
+            <strong>${item.label}</strong>
+          </div>
+          <p>${item.definition}</p>
+          <p><span>包含口径</span>${item.include}</p>
+          <p><span>典型感受</span>${item.feel}</p>
+        </article>
+      `
+    ).join("");
+  }
+}
+
 function ensureGenderBreakdownTooltip() {
   let tooltip = document.querySelector("#genderBreakdownTooltip");
   if (tooltip) {
@@ -6487,6 +7241,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapFemaleOpportunityPage();
   bootstrapSilhouettePage();
   bootstrapFunctionPage();
+  bootstrapFabricOverviewPage();
   setupScrollState();
 });
 

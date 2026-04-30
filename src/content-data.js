@@ -303,6 +303,142 @@ function createSilhouetteSummary(rows) {
   };
 }
 
+export const FABRIC_CATEGORY_DEFINITIONS = [
+  {
+    key: "smooth",
+    label: "光滑/平整面料",
+    color: "#b0c3f0",
+    definition: "表面无明显肌理或毛感，整体视觉平整。",
+    include: "光滑、平滑、顺滑、棉感、针织、弹力棉感、棉混纺、平整针织",
+    feel: "运动功能层、日常舒适层、基础半拉链"
+  },
+  {
+    key: "brushed",
+    label: "拉绒/磨毛面料",
+    color: "#ebc58c",
+    definition: "有绒感、毛感、磨毛感或仿羊毛触感，但并非真羊毛。",
+    include: "拉绒、磨毛、抓绒、微抓绒、刷毛、仿羊毛、仿羊羔绒",
+    feel: "轻保暖、亲肤、秋冬保暖层"
+  },
+  {
+    key: "wool",
+    label: "羊毛面料",
+    color: "#99cce8",
+    definition: "明确含羊毛或美利奴羊毛等天然羊毛成分。",
+    include: "羊毛、美利奴羊毛、Merino wool、羊毛混纺",
+    feel: "高端保暖、专业户外、贴身功能层"
+  },
+  {
+    key: "textured",
+    label: "肌理面料",
+    color: "#e4a7b5",
+    definition: "表面有明确视觉纹理或结构感。",
+    include: "罗纹、华夫格、网眼、格纹、坑条、蜂窝、杂色纹理、波浪纹理、提花",
+    feel: "外穿感、设计感、透气结构、风格化面料"
+  }
+];
+
+function normalizeFabricCategory(rawFabricTexture) {
+  const value = String(rawFabricTexture ?? "").trim();
+  if (!value) {
+    return null;
+  }
+
+  if (value.includes("羊毛")) {
+    return "wool";
+  }
+
+  if (
+    value.includes("拉绒") ||
+    value.includes("磨毛") ||
+    value.includes("抓绒") ||
+    value.includes("仿羊毛") ||
+    value.includes("丝绒")
+  ) {
+    return "brushed";
+  }
+
+  if (
+    value.includes("纹理") ||
+    value.includes("肌理") ||
+    value.includes("网面") ||
+    value.includes("网状") ||
+    value.includes("华夫格") ||
+    value.includes("罗纹") ||
+    value.includes("针织") ||
+    value.includes("格子") ||
+    value.includes("波浪")
+  ) {
+    return value.startsWith("光滑") ? "smooth" : "textured";
+  }
+
+  if (value.includes("光滑") || value.includes("平整") || value.includes("平滑") || value.includes("顺滑")) {
+    return "smooth";
+  }
+
+  return "smooth";
+}
+
+function summarizeFabricOverview(rows) {
+  const summary = new Map();
+  let totalGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const categoryKey = normalizeFabricCategory(row["面料质地"]);
+    if (!categoryKey) {
+      return;
+    }
+
+    const current = summary.get(categoryKey) ?? {
+      key: categoryKey,
+      gmv: 0,
+      count: 0,
+      weightedDealPriceTotal: 0,
+      weightedDealPriceUnits: 0,
+      fallbackDealPriceTotal: 0,
+      fallbackDealPriceCount: 0,
+      avgDealPrice: 0
+    };
+
+    const sales = toNumber(row["销售额"]);
+    const units = toNumber(row["销量"]);
+    const dealPrice = toNumber(row["成交均价"] ?? row["成交价格"]);
+
+    current.gmv += sales;
+    current.count += 1;
+
+    if (dealPrice > 0 && units > 0) {
+      current.weightedDealPriceTotal += dealPrice * units;
+      current.weightedDealPriceUnits += units;
+    } else if (dealPrice > 0) {
+      current.fallbackDealPriceTotal += dealPrice;
+      current.fallbackDealPriceCount += 1;
+    }
+
+    totalGmv += sales;
+    summary.set(categoryKey, current);
+  });
+
+  summary.forEach((item) => {
+    if (item.weightedDealPriceUnits > 0) {
+      item.avgDealPrice = item.weightedDealPriceTotal / item.weightedDealPriceUnits;
+    } else if (item.fallbackDealPriceCount > 0) {
+      item.avgDealPrice = item.fallbackDealPriceTotal / item.fallbackDealPriceCount;
+    }
+
+    item.share = totalGmv ? (item.gmv / totalGmv) * 100 : 0;
+  });
+
+  return {
+    totalGmv,
+    items: summary
+  };
+}
+
 const FUNCTION_BUCKETS = [
   {
     key: "warmth",
@@ -727,6 +863,8 @@ export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => 
 
 const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
 const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);
+const FABRIC_OVERVIEW_Y25 = summarizeFabricOverview(LS_HZ_INNER_DATASET.raw.y25);
+const FABRIC_OVERVIEW_Y24 = summarizeFabricOverview(LS_HZ_INNER_DATASET.raw.y24);
 
 export const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
   SILHOUETTE_LENGTH_ORDER.map((length) => {
@@ -852,6 +990,38 @@ export const SILHOUETTE_PAGE_DRAFT = {
   trackedSampleCount: SILHOUETTE_Y25.trackedCount,
   untrackedSampleCount: SILHOUETTE_Y25.untrackedCount
 };
+
+export const FABRIC_OVERVIEW_DATA = FABRIC_CATEGORY_DEFINITIONS.map((definition) => {
+  const current = FABRIC_OVERVIEW_Y25.items.get(definition.key) ?? {
+    gmv: 0,
+    share: 0,
+    avgDealPrice: 0,
+    count: 0
+  };
+  const previous = FABRIC_OVERVIEW_Y24.items.get(definition.key) ?? {
+    gmv: 0,
+    share: 0,
+    avgDealPrice: 0,
+    count: 0
+  };
+  const yoy = computeYoy(current.gmv, previous.gmv);
+
+  return {
+    ...definition,
+    gmv25: current.gmv,
+    gmv24: previous.gmv,
+    share25: current.share,
+    share24: previous.share,
+    share25Label: `${Math.round(current.share)}%`,
+    share24Label: `${Math.round(previous.share)}%`,
+    avgDealPrice25: current.avgDealPrice,
+    avgDealPrice25Label: `¥${Math.round(current.avgDealPrice || 0).toLocaleString("en-US")}`,
+    yoy,
+    yoyLabel: formatYoyLabel(yoy),
+    count25: current.count,
+    count24: previous.count
+  };
+}).sort((a, b) => b.gmv25 - a.gmv25);
 
 export const MARKET_SCOPE_PAGE_DRAFT = {
   chapter: "01 Competitor Scope",

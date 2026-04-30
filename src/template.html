@@ -27,7 +27,7 @@
           <div class="nav-dropdown">
             <a class="nav-dropdown-item" href="#silhouette">Silhouette</a>
             <a class="nav-dropdown-item" href="#function-scene">Function</a>
-            <a class="nav-dropdown-item" href="#fabric-warmth">Fabric & Warmth</a>
+            <a class="nav-dropdown-item" href="#fabric-overview">Fabric Overview</a>
             <a class="nav-dropdown-item" href="#design-cues">Design Cues</a>
           </div>
         </div>
@@ -205,43 +205,40 @@
       </div>
     </section>
 
-    <section class="sheet report-section paired-chart-page" id="fabric-warmth" data-page-label="Fabric & Warmth">
+    <section class="sheet report-section paired-chart-page page-fabric-overview" id="fabric-overview" data-page-label="Fabric Overview">
       <div class="page">
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">05</span><span>Fabric & Warmth</span></div>
-              <h2 class="section-title">面料与加绒不是二选一，而是决定半拉链内搭“贴身层”还是“可外穿层”的根本分野</h2>
+              <div class="section-kicker"><span class="section-badge">05</span><span>Fabric Overview</span></div>
+              <h2 class="section-title">光滑/平整是规模底盘，羊毛与纹理是增长型方向</h2>
               <ul class="section-bullets">
-                <li>当前样本中未加绒 85 款、加绒 66 款，说明轻保暖与抓绒保暖双结构并存。</li>
-                <li>面料表达已经从单一聚酯弹力扩展到抓绒、羊毛混纺、功能针织等多个路径。</li>
-                <li>本页要回答的是：27FW 应如何分层配置轻量保暖、核心保暖和形象面料。</li>
+                <li>先把半拉链内搭的面料表面质地标准化归并为 4 个大类，再看它们各自的规模、增长与价格差异。</li>
+                <li>左图用双层环形图表达 Y25 与 Y24 的结构占比变化，帮助判断面料底盘与增长方向是否已发生迁移。</li>
+                <li>右侧先定义四类面料的口径与典型商品感受，图片区本版暂留结构位置，为后续商品案例补充做准备。</li>
               </ul>
             </div>
           </div>
 
-          <div class="chart-grid evidence-grid emphasis-right reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Fabric Read</div>
-              <h3 class="panel-title">面料类型与加绒结构</h3>
-              <div class="placeholder">
-                <p>建议图表：面料家族 x 是否加绒 矩阵图</p>
-                <p>建议看点：聚酯弹力、抓绒、Polartec、羊毛混纺、网面结构等面料的分层逻辑。</p>
-              </div>
+          <div class="chart-grid evidence-grid two-up reveal">
+            <article class="chart-panel panel fabric-overview-left-panel">
+              <div class="chart-kicker">Fabric Classification</div>
+              <h3 class="panel-title">4 大面料大类总览</h3>
+              <div id="fabric-overview-chart" class="fabric-overview-chart-card"></div>
             </article>
-            <article class="chart-panel panel panel-large">
-              <div class="chart-kicker">Development Translation</div>
-              <h3 class="panel-title">27FW 面料开发分层</h3>
-              <div class="note-stack">
-                <p>轻量基础层：强调弹力、透气、亲肤、可长时间穿着。</p>
-                <p>核心保暖层：强调微抓绒、双面磨毛、层搭滑雪 / 徒步场景。</p>
-                <p>形象差异层：强调羊毛混纺、肌理表面、外穿感与高级手感。</p>
+            <article class="chart-panel panel fabric-overview-right-panel">
+              <div class="chart-kicker">Fabric Feature</div>
+              <h3 class="panel-title">面料大类定义与典型商品感受</h3>
+              <div id="fabric-overview-definitions" class="fabric-definition-grid"></div>
+              <div class="fabric-image-reserve-block">
+                <div class="chart-kicker">Material Samples</div>
+                <div class="fabric-image-reserve"></div>
               </div>
             </article>
           </div>
 
           <div class="page-foot">
-            <span>Pending chart build</span>
+            <span>Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
             <span>Page 05</span>
           </div>
         </div>

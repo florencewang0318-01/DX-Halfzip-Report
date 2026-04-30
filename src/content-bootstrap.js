@@ -1,4 +1,6 @@
 import {
+  FABRIC_CATEGORY_DEFINITIONS,
+  FABRIC_OVERVIEW_DATA,
   FEMALE_OPPORTUNITY_BRAND_GENDER,
   FUNCTION_GENDER_SPLIT,
   FUNCTION_OPPORTUNITY_MAPS,
@@ -14,6 +16,7 @@ import {
   renderFemaleOpportunityGenderMatrix
 } from "./content-render.js";
 import {
+  renderFabricOverviewChart,
   renderGenderBreakdownPriceBubbleChart,
   renderFunctionGenderSplit,
   renderFunctionOpportunityMap,
@@ -195,6 +198,29 @@ function bootstrapFunctionPage() {
   renderFunctionOpportunityMap(opportunityContainer, FUNCTION_OPPORTUNITY_MAPS, FUNCTION_OPPORTUNITY_META);
   renderFunctionGenderSplit(genderContainer, FUNCTION_GENDER_SPLIT);
   setupFunctionInteractions();
+}
+
+function bootstrapFabricOverviewPage() {
+  const chartContainer = document.querySelector("#fabric-overview-chart");
+  const definitionContainer = document.querySelector("#fabric-overview-definitions");
+
+  renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
+
+  if (definitionContainer) {
+    definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map(
+      (item) => `
+        <article class="fabric-definition-card">
+          <div class="fabric-definition-card-head">
+            <span class="fabric-definition-dot" style="background:${item.color};"></span>
+            <strong>${item.label}</strong>
+          </div>
+          <p>${item.definition}</p>
+          <p><span>包含口径</span>${item.include}</p>
+          <p><span>典型感受</span>${item.feel}</p>
+        </article>
+      `
+    ).join("");
+  }
 }
 
 function ensureGenderBreakdownTooltip() {
@@ -804,5 +830,6 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapFemaleOpportunityPage();
   bootstrapSilhouettePage();
   bootstrapFunctionPage();
+  bootstrapFabricOverviewPage();
   setupScrollState();
 });

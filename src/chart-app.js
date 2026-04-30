@@ -27,6 +27,54 @@ function scaleSqrtValue(value, min, max, start, end) {
   return start + Math.sqrt(Math.max(0, normalized)) * (end - start);
 }
 
+function polarToCartesian(centerX, centerY, radius, angleDegrees) {
+  const angleRadians = ((angleDegrees - 90) * Math.PI) / 180;
+  return {
+    x: centerX + radius * Math.cos(angleRadians),
+    y: centerY + radius * Math.sin(angleRadians)
+  };
+}
+
+function adjustHexColor(hex, percent) {
+  const raw = hex.replace("#", "");
+  const normalized =
+    raw.length === 3
+      ? raw
+          .split("")
+          .map((char) => `${char}${char}`)
+          .join("")
+      : raw;
+
+  const readChannel = (offset) => parseInt(normalized.slice(offset, offset + 2), 16);
+  const shiftChannel = (value) => {
+    const delta = percent < 0 ? value * (percent / 100) : (255 - value) * (percent / 100);
+    return Math.round(Math.max(0, Math.min(255, value + delta)));
+  };
+
+  return `rgb(${shiftChannel(readChannel(0))}, ${shiftChannel(readChannel(2))}, ${shiftChannel(readChannel(4))})`;
+}
+
+function describeArcPath(centerX, centerY, radius, startAngle, endAngle) {
+  const start = polarToCartesian(centerX, centerY, radius, endAngle);
+  const end = polarToCartesian(centerX, centerY, radius, startAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  return `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
+}
+
+function describePieSlicePath(centerX, centerY, radius, startAngle, endAngle) {
+  const start = polarToCartesian(centerX, centerY, radius, startAngle);
+  const end = polarToCartesian(centerX, centerY, radius, endAngle);
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  return [
+    `M ${centerX} ${centerY}`,
+    `L ${start.x} ${start.y}`,
+    `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
+    "Z"
+  ].join(" ");
+}
+
 function getBubbleRadius(value, min, max) {
   if (max === min) {
     return 20;
@@ -394,6 +442,207 @@ export function renderMarketScopeBubbleChart(container, rows) {
   wrap.appendChild(overlay);
 
   container.appendChild(wrap);
+}
+
+export function renderFabricOverviewChart(container, rows) {
+  if (!container) {
+    return;
+  }
+
+  const fabricEnglishLabelMap = {
+    smooth: "Smooth Fabric",
+    brushed: "Brushed Fabric",
+    textured: "Textured Fabric",
+    wool: "Wool"
+  };
+
+  const width = 372;
+  const height = 300;
+  const centerX = 186;
+  const centerY = 138;
+  const radius = 118;
+
+  const root = document.createElement("div");
+  root.className = "fabric-overview-root";
+
+  const setActiveFabricKey = (key) => {
+    root.classList.add("has-active-fabric");
+    root.querySelectorAll("[data-fabric-key]").forEach((element) => {
+      element.classList.toggle("is-active", element.dataset.fabricKey === key);
+    });
+  };
+
+  const clearActiveFabricKey = () => {
+    root.classList.remove("has-active-fabric");
+    root.querySelectorAll("[data-fabric-key]").forEach((element) => {
+      element.classList.remove("is-active");
+    });
+  };
+
+  const top = document.createElement("div");
+  top.className = "fabric-overview-top";
+
+  const legend = document.createElement("div");
+  legend.className = "fabric-overview-legend";
+  rows.forEach((row) => {
+    const item = document.createElement("div");
+    item.className = "fabric-overview-legend-item";
+    item.dataset.fabricKey = row.key;
+    item.innerHTML = `
+      <span class="fabric-overview-dot" style="background:${row.color};"></span>
+      <div class="fabric-overview-legend-copy">
+        <strong>${row.label}</strong>
+        <small>${fabricEnglishLabelMap[row.key] ?? ""}</small>
+      </div>
+    `;
+    item.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    item.addEventListener("mouseleave", clearActiveFabricKey);
+    legend.appendChild(item);
+  });
+  top.appendChild(legend);
+
+  const pieBlock = document.createElement("div");
+  pieBlock.className = "fabric-overview-pie-block";
+
+  const ringWrap = document.createElement("div");
+  ringWrap.className = "fabric-overview-ring-wrap";
+
+  const svg = createSvgElement("svg", {
+    class: "fabric-overview-ring-svg",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": "Y25 面料大类占比饼图"
+  });
+
+  const defs = createSvgElement("defs");
+  const pieShadow = createSvgElement("filter", {
+    id: "fabricPieShadow",
+    x: "-20%",
+    y: "-20%",
+    width: "140%",
+    height: "140%"
+  });
+  pieShadow.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: 0,
+      dy: 4,
+      stdDeviation: 4,
+      "flood-color": "#40547a",
+      "flood-opacity": 0.18
+    })
+  );
+  defs.appendChild(pieShadow);
+
+  rows.forEach((row, index) => {
+    const gradient = createSvgElement("radialGradient", {
+      id: `fabricPieGradient${index}`,
+      cx: "34%",
+      cy: "30%",
+      r: "76%"
+    });
+    gradient.appendChild(createSvgElement("stop", { offset: "0%", "stop-color": adjustHexColor(row.color, 36) }));
+    gradient.appendChild(createSvgElement("stop", { offset: "26%", "stop-color": adjustHexColor(row.color, 18) }));
+    gradient.appendChild(createSvgElement("stop", { offset: "72%", "stop-color": row.color }));
+    gradient.appendChild(createSvgElement("stop", { offset: "100%", "stop-color": adjustHexColor(row.color, -10) }));
+    defs.appendChild(gradient);
+  });
+  svg.appendChild(defs);
+
+  let labelAngle = -190;
+  rows.forEach((row, index) => {
+    const span = (row.share25 / 100) * 360;
+    const startAngle = labelAngle;
+    const endAngle = labelAngle + span;
+    const midAngle = labelAngle + span / 2;
+    const shareRadius = row.share25 <= 11 ? radius * 0.68 : radius * 0.55;
+    const innerPoint = polarToCartesian(centerX, centerY, shareRadius, midAngle);
+    const outerRadius = row.key === "smooth" ? radius + 28 : radius + 16;
+    const outerPoint = polarToCartesian(centerX, centerY, outerRadius, midAngle);
+    const outerAnchor =
+      row.key === "smooth"
+        ? "end"
+        : midAngle > 18 && midAngle < 162
+          ? "start"
+          : midAngle > 198 && midAngle < 342
+            ? "end"
+            : "middle";
+
+    const slicePath = createSvgElement("path", {
+      d: describePieSlicePath(centerX, centerY, radius, startAngle, endAngle),
+      fill: `url(#fabricPieGradient${index})`,
+      stroke: "rgba(255,255,255,0.92)",
+      "stroke-width": 2,
+      filter: "url(#fabricPieShadow)",
+      class: "fabric-overview-pie-slice",
+      "data-fabric-key": row.key
+    });
+    slicePath.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    slicePath.addEventListener("mouseleave", clearActiveFabricKey);
+    svg.appendChild(slicePath);
+
+    const shareLabel = createSvgElement("text", {
+      x: innerPoint.x,
+      y: innerPoint.y + 5,
+      class: "fabric-overview-pie-share-label",
+      "text-anchor": "middle",
+      "data-fabric-key": row.key
+    });
+    shareLabel.textContent = row.share25Label;
+    shareLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    shareLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    svg.appendChild(shareLabel);
+
+    const yoyLabel = createSvgElement("text", {
+      x: outerPoint.x,
+      y: outerPoint.y + 4,
+      class: "fabric-overview-pie-yoy-label",
+      "text-anchor": outerAnchor,
+      "data-fabric-key": row.key
+    });
+    yoyLabel.textContent = row.yoyLabel;
+    yoyLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    yoyLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    svg.appendChild(yoyLabel);
+
+    labelAngle += span;
+  });
+
+  ringWrap.appendChild(svg);
+  pieBlock.appendChild(ringWrap);
+  top.appendChild(pieBlock);
+
+  const priceStrip = document.createElement("div");
+  priceStrip.className = "fabric-price-strip";
+  rows.forEach((row) => {
+    const card = document.createElement("div");
+    card.className = "fabric-price-card";
+    card.dataset.fabricKey = row.key;
+    card.style.setProperty("--fabric-card-accent", row.color);
+    card.innerHTML = `
+      <div class="fabric-price-card-title">
+        <span class="fabric-price-card-label">${row.label}</span>
+        <small class="fabric-price-card-english">${fabricEnglishLabelMap[row.key] ?? ""}</small>
+      </div>
+      <div class="fabric-price-card-metric">
+        <strong>${row.avgDealPrice25 > 0 ? row.avgDealPrice25Label : "n/a"}</strong>
+        <small>成交均价</small>
+      </div>
+    `;
+    card.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
+    card.addEventListener("mouseleave", clearActiveFabricKey);
+    priceStrip.appendChild(card);
+  });
+
+  const note = document.createElement("p");
+  note.className = "fabric-overview-note";
+  note.textContent = "6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON";
+
+  root.appendChild(top);
+  root.appendChild(priceStrip);
+  root.appendChild(note);
+
+  container.innerHTML = "";
+  container.appendChild(root);
 }
 
 function getSilhouetteGenderToken(gender) {

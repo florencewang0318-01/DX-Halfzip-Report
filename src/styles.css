@@ -1704,6 +1704,321 @@ a {
   color: var(--muted);
 }
 
+.page-fabric-overview .chart-grid {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 5fr);
+}
+
+.fabric-overview-left-panel,
+.fabric-overview-right-panel {
+  min-height: 0;
+}
+
+.fabric-overview-left-panel .panel-title,
+.fabric-overview-right-panel .panel-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.fabric-overview-chart-card {
+  flex: 1;
+  min-height: 0;
+  padding-top: 6px;
+}
+
+.fabric-overview-root {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+}
+
+.fabric-overview-top {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+}
+
+.fabric-overview-pie-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fabric-overview-ring-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fabric-overview-ring-svg {
+  width: 100%;
+  max-width: 372px;
+  height: auto;
+  overflow: visible;
+}
+
+.fabric-overview-legend {
+  display: grid;
+  gap: 14px;
+  align-content: center;
+  justify-items: start;
+  justify-self: end;
+  padding-left: 0;
+  margin-right: 10px;
+}
+
+.fabric-overview-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.fabric-overview-legend-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fabric-overview-legend-item strong {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.fabric-overview-legend-copy small {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.fabric-overview-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fabric-overview-pie-slice,
+.fabric-overview-pie-share-label {
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.fabric-overview-pie-share-label {
+  fill: #111827;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.fabric-overview-pie-yoy-label {
+  fill: var(--green);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 900;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+}
+
+.fabric-price-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: -16px;
+}
+
+.fabric-price-card {
+  position: relative;
+  padding: 10px 14px 11px 16px;
+  border-radius: 15px;
+  border: 1px solid rgba(188, 199, 220, 0.78);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 254, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  overflow: hidden;
+  transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease, box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.fabric-price-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: var(--fabric-card-accent, #94a3b8);
+}
+
+.fabric-price-card-label {
+  display: block;
+}
+
+.fabric-price-card-label {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.fabric-price-card-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.fabric-price-card-english {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.fabric-price-card-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 7px;
+}
+
+.fabric-price-card strong {
+  display: block;
+  color: #111827;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.fabric-price-card small {
+  display: block;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fabric-overview-note {
+  margin: -2px 2px 0;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+}
+
+.fabric-overview-root.has-active-fabric [data-fabric-key] {
+  opacity: 0.28;
+  filter: grayscale(0.42);
+}
+
+.fabric-overview-root.has-active-fabric [data-fabric-key].is-active {
+  opacity: 1;
+  filter: none;
+}
+
+.fabric-overview-root.has-active-fabric .fabric-overview-pie-slice.is-active {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(1.03);
+}
+
+.fabric-overview-root.has-active-fabric .fabric-overview-legend-item.is-active {
+  transform: translateX(2px);
+}
+
+.fabric-overview-root.has-active-fabric .fabric-price-card.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(121, 145, 187, 0.5);
+  box-shadow: 0 10px 18px rgba(148, 163, 184, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.fabric-overview-right-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.fabric-definition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fabric-definition-card {
+  padding: 14px 14px 13px;
+  border-radius: 15px;
+  border: 1px solid rgba(226, 232, 240, 0.82);
+  background: linear-gradient(180deg, rgba(249, 251, 254, 0.94), rgba(255, 255, 255, 0.98));
+}
+
+.fabric-definition-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fabric-definition-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fabric-definition-card-head strong {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.fabric-definition-card p {
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.fabric-definition-card p + p {
+  margin-top: 6px;
+}
+
+.fabric-definition-card p span {
+  display: inline-block;
+  margin-right: 6px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fabric-image-reserve-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.fabric-image-reserve-block .chart-kicker {
+  margin-top: 2px;
+}
+
+.fabric-image-reserve {
+  flex: 1;
+  min-height: 170px;
+  border-radius: 16px;
+  border: 1px dashed rgba(203, 213, 225, 0.92);
+  background:
+    linear-gradient(180deg, rgba(248, 250, 253, 0.9), rgba(255, 255, 255, 0.96));
+}
+
 .silhouette-structure-panel .panel-title,
 .silhouette-growth-panel .panel-title {
   margin-top: 0;
