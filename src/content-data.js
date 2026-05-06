@@ -311,7 +311,21 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#b0c3f0",
     textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
     positioning: "运动功能层、日常舒适层、基础半拉链",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/smooth01.jpg",
+      "../pic/smooth02.jpg",
+      "../pic/smooth03.jpg",
+      "../pic/smooth04.jpg",
+      "../pic/smooth05.jpg"
+    ],
+    sampleBrands: [
+      "LULULEMON",
+      "KAILAS",
+      "KAILAS",
+      "KOLON",
+      "DESCENTE"
+    ]
   },
   {
     key: "brushed",
@@ -320,16 +334,44 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#ebc58c",
     textile: "有绒感/毛感、表面磨毛感或仿羊毛",
     positioning: "秋冬保暖层、轻保暖、亲肤感",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/brushed01.jpg",
+      "../pic/brushed02.jpg",
+      "../pic/brushed03.jpg",
+      "../pic/brushed04.jpg",
+      "../pic/brushed05.jpg"
+    ],
+    sampleBrands: [
+      "ARC‘TERYX",
+      "KAILAS",
+      "DESCENTE",
+      "LULULEMON",
+      "KOLON"
+    ]
   },
   {
     key: "textured",
     label: "肌理面料",
     labelEn: "Textured Fabric",
     color: "#e4a7b5",
-    textile: "表面有明确视觉纹理或结构感",
+    textile: "表面有明确视觉纹理或结构感，如罗纹、华夫格等",
     positioning: "具有透气结构、设计感、风格化面料",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/textured01.jpg",
+      "../pic/textured02.jpg",
+      "../pic/textured03.jpg",
+      "../pic/textured04.jpg",
+      "../pic/textured05.jpg"
+    ],
+    sampleBrands: [
+      "ARC‘TERYX",
+      "DESCENTE",
+      "LULULEMON",
+      "LULULEMON",
+      "LULULEMON"
+    ]
   },
   {
     key: "wool",
@@ -338,7 +380,21 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#99cce8",
     textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
     positioning: "贴身功能层、高端保暖、专业户外",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/wool01.jpg",
+      "../pic/wool02.jpg",
+      "../pic/wool03.jpg",
+      "../pic/wool04.jpg",
+      "../pic/wool05.jpg"
+    ],
+    sampleBrands: [
+      "ARC‘TERYX",
+      "DESCENTE",
+      "KOLON",
+      "KAILAS",
+      "LULULEMON"
+    ]
   }
 ];
 

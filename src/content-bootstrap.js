@@ -203,17 +203,46 @@ function bootstrapFunctionPage() {
 function bootstrapFabricOverviewPage() {
   const chartContainer = document.querySelector("#fabric-overview-chart");
   const definitionContainer = document.querySelector("#fabric-overview-definitions");
+  const fabricImageLightbox = ensureFabricImageLightbox();
 
   renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
 
   if (definitionContainer) {
+    const openFabricAccordionCard = (cards, targetCard) => {
+      cards.forEach((otherCard) => {
+        const otherTrigger = otherCard.querySelector(".fabric-accordion-trigger");
+        const shouldOpen = otherCard === targetCard;
+        otherCard.classList.toggle("is-open", shouldOpen);
+        if (otherTrigger) {
+          otherTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+        }
+      });
+    };
+
     definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map((item, index) => {
       const sampleCount = item.sampleCount ?? 4;
       const sampleClass = sampleCount >= 5 ? "is-five" : "is-four";
-      const sampleCards = Array.from(
-        { length: sampleCount },
-        () => `<div class="fabric-sample-placeholder">图片占位<br>4:3比例</div>`
-      ).join("");
+      const sampleCards = Array.from({ length: sampleCount }, (_, sampleIndex) => {
+        const imageSrc = item.sampleImages?.[sampleIndex];
+        const brandLabel = item.sampleBrands?.[sampleIndex];
+        if (imageSrc) {
+          return `
+            <button
+              class="fabric-sample-photo-frame"
+              type="button"
+              data-fabric-image-trigger="true"
+              data-image-src="${imageSrc}"
+              data-image-alt="${item.label} 示例图 ${sampleIndex + 1}"
+              data-image-brand="${brandLabel ?? ""}"
+            >
+              <img class="fabric-sample-photo" src="${imageSrc}" alt="${item.label} 示例图 ${sampleIndex + 1}">
+              ${brandLabel ? `<div class="fabric-sample-brand">${brandLabel}</div>` : ""}
+            </button>
+          `;
+        }
+
+        return `<div class="fabric-sample-placeholder">图片占位<br>4:3比例</div>`;
+      }).join("");
 
       return `
         <article class="fabric-accordion-card${index === 0 ? " is-open" : ""}" data-fabric-key="${item.key}" style="--fabric-open-tint:${item.color}22; --fabric-open-border:${item.color}66;">
@@ -254,17 +283,109 @@ function bootstrapFabricOverviewPage() {
       }
 
       trigger.addEventListener("click", () => {
-        cards.forEach((otherCard) => {
-          const otherTrigger = otherCard.querySelector(".fabric-accordion-trigger");
-          const shouldOpen = otherCard === card;
-          otherCard.classList.toggle("is-open", shouldOpen);
-          if (otherTrigger) {
-            otherTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
-          }
-        });
+        openFabricAccordionCard(cards, card);
+      });
+    });
+
+    chartContainer?.addEventListener("fabricoverviewselect", (event) => {
+      const fabricKey = event.detail?.key;
+      if (!fabricKey) {
+        return;
+      }
+
+      const targetCard = cards.find((card) => card.dataset.fabricKey === fabricKey);
+      if (!targetCard) {
+        return;
+      }
+
+      openFabricAccordionCard(cards, targetCard);
+    });
+
+    definitionContainer.addEventListener("click", (event) => {
+      const imageTrigger = event.target instanceof Element
+        ? event.target.closest("[data-fabric-image-trigger='true']")
+        : null;
+      if (!(imageTrigger instanceof HTMLElement)) {
+        return;
+      }
+
+      fabricImageLightbox.open({
+        src: imageTrigger.dataset.imageSrc ?? "",
+        alt: imageTrigger.dataset.imageAlt ?? "",
+        brand: imageTrigger.dataset.imageBrand ?? ""
       });
     });
   }
+}
+
+function ensureFabricImageLightbox() {
+  let lightbox = document.querySelector("#fabricImageLightbox");
+  if (lightbox) {
+    return lightbox.__fabricImageLightboxApi;
+  }
+
+  lightbox = document.createElement("div");
+  lightbox.id = "fabricImageLightbox";
+  lightbox.className = "fabric-image-lightbox";
+  lightbox.innerHTML = `
+    <div class="fabric-image-lightbox-backdrop" data-fabric-lightbox-close="true"></div>
+    <div class="fabric-image-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Fabric image preview">
+      <button class="fabric-image-lightbox-close" type="button" aria-label="Close image preview" data-fabric-lightbox-close="true">×</button>
+      <div class="fabric-image-lightbox-media-wrap">
+        <img class="fabric-image-lightbox-media" alt="">
+      </div>
+      <div class="fabric-image-lightbox-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(lightbox);
+
+  const media = lightbox.querySelector(".fabric-image-lightbox-media");
+  const caption = lightbox.querySelector(".fabric-image-lightbox-caption");
+
+  const close = () => {
+    lightbox.classList.remove("is-open");
+    document.body.classList.remove("has-fabric-lightbox-open");
+    if (media instanceof HTMLImageElement) {
+      media.removeAttribute("src");
+      media.alt = "";
+    }
+    if (caption) {
+      caption.textContent = "";
+    }
+  };
+
+  const open = ({ src, alt, brand }) => {
+    if (!(media instanceof HTMLImageElement) || !src) {
+      return;
+    }
+
+    media.src = src;
+    media.alt = alt;
+    if (caption) {
+      caption.textContent = brand || alt || "";
+    }
+    lightbox.classList.add("is-open");
+    document.body.classList.add("has-fabric-lightbox-open");
+  };
+
+  lightbox.addEventListener("click", (event) => {
+    const closeTrigger = event.target instanceof Element
+      ? event.target.closest("[data-fabric-lightbox-close='true']")
+      : null;
+    if (closeTrigger) {
+      close();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+      close();
+    }
+  });
+
+  const api = { open, close };
+  lightbox.__fabricImageLightboxApi = api;
+  return api;
 }
 
 function ensureGenderBreakdownTooltip() {

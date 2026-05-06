@@ -1784,6 +1784,7 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
   transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
 }
 
@@ -1822,6 +1823,7 @@ a {
 
 .fabric-overview-pie-slice,
 .fabric-overview-pie-share-label {
+  cursor: pointer;
   transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
 }
 
@@ -1855,6 +1857,7 @@ a {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 254, 0.94));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
   overflow: hidden;
+  cursor: pointer;
   transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease, box-shadow 180ms ease,
     border-color 180ms ease;
 }
@@ -2133,7 +2136,7 @@ a {
   aspect-ratio: 3 / 4;
   max-height: 135px;
   border-radius: 16px;
-  border: 1px solid rgba(186, 195, 209, 0.9);
+  border: none;
   background: linear-gradient(180deg, rgba(248, 250, 253, 0.96), rgba(255, 255, 255, 0.98));
   display: flex;
   align-items: center;
@@ -2143,6 +2146,121 @@ a {
   font-size: 10px;
   line-height: 1.25;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.fabric-sample-photo-frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-height: 135px;
+  border-radius: 16px;
+  border: none;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  padding: 0;
+  cursor: zoom-in;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.fabric-sample-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.fabric-sample-brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 7px 4px 8px;
+  background: rgba(107, 114, 128, 0.64);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.fabric-image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: none;
+}
+
+.fabric-image-lightbox.is-open {
+  display: block;
+}
+
+.fabric-image-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(6px);
+}
+
+.fabric-image-lightbox-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 860px);
+  margin: 4vh auto;
+  padding: 18px 18px 16px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+}
+
+.fabric-image-lightbox-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(226, 232, 240, 0.92);
+  color: #0f172a;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fabric-image-lightbox-media-wrap {
+  width: 100%;
+  max-height: 82vh;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.fabric-image-lightbox-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 82vh;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.fabric-image-lightbox-caption {
+  margin-top: 10px;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+body.has-fabric-lightbox-open {
+  overflow: hidden;
 }
 
 .silhouette-structure-panel .panel-title,
@@ -3276,7 +3394,21 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#b0c3f0",
     textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
     positioning: "运动功能层、日常舒适层、基础半拉链",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/smooth01.jpg",
+      "../pic/smooth02.jpg",
+      "../pic/smooth03.jpg",
+      "../pic/smooth04.jpg",
+      "../pic/smooth05.jpg"
+    ],
+    sampleBrands: [
+      "LULULEMON",
+      "KAILAS",
+      "KAILAS",
+      "KOLON",
+      "DESCENTE"
+    ]
   },
   {
     key: "brushed",
@@ -3285,16 +3417,44 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#ebc58c",
     textile: "有绒感/毛感、表面磨毛感或仿羊毛",
     positioning: "秋冬保暖层、轻保暖、亲肤感",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/brushed01.jpg",
+      "../pic/brushed02.jpg",
+      "../pic/brushed03.jpg",
+      "../pic/brushed04.jpg",
+      "../pic/brushed05.jpg"
+    ],
+    sampleBrands: [
+      "ARC‘TERYX",
+      "KAILAS",
+      "DESCENTE",
+      "LULULEMON",
+      "KOLON"
+    ]
   },
   {
     key: "textured",
     label: "肌理面料",
     labelEn: "Textured Fabric",
     color: "#e4a7b5",
-    textile: "表面有明确视觉纹理或结构感",
+    textile: "表面有明确视觉纹理或结构感，如罗纹、华夫格等",
     positioning: "具有透气结构、设计感、风格化面料",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/textured01.jpg",
+      "../pic/textured02.jpg",
+      "../pic/textured03.jpg",
+      "../pic/textured04.jpg",
+      "../pic/textured05.jpg"
+    ],
+    sampleBrands: [
+      "ARC‘TERYX",
+      "DESCENTE",
+      "LULULEMON",
+      "LULULEMON",
+      "LULULEMON"
+    ]
   },
   {
     key: "wool",
@@ -3303,7 +3463,21 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#99cce8",
     textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
     positioning: "贴身功能层、高端保暖、专业户外",
-    sampleCount: 5
+    sampleCount: 5,
+    sampleImages: [
+      "../pic/wool01.jpg",
+      "../pic/wool02.jpg",
+      "../pic/wool03.jpg",
+      "../pic/wool04.jpg",
+      "../pic/wool05.jpg"
+    ],
+    sampleBrands: [
+      "ARC‘TERYX",
+      "DESCENTE",
+      "KOLON",
+      "KAILAS",
+      "LULULEMON"
+    ]
   }
 ];
 
@@ -4711,6 +4885,15 @@ function renderFabricOverviewChart(container, rows) {
   const root = document.createElement("div");
   root.className = "fabric-overview-root";
 
+  const emitFabricSelection = (key) => {
+    root.dispatchEvent(
+      new CustomEvent("fabricoverviewselect", {
+        bubbles: true,
+        detail: { key }
+      })
+    );
+  };
+
   const setActiveFabricKey = (key) => {
     root.classList.add("has-active-fabric");
     root.querySelectorAll("[data-fabric-key]").forEach((element) => {
@@ -4734,6 +4917,7 @@ function renderFabricOverviewChart(container, rows) {
     const item = document.createElement("div");
     item.className = "fabric-overview-legend-item";
     item.dataset.fabricKey = row.key;
+    item.tabIndex = 0;
     item.innerHTML = `
       <span class="fabric-overview-dot" style="background:${row.color};"></span>
       <div class="fabric-overview-legend-copy">
@@ -4743,6 +4927,13 @@ function renderFabricOverviewChart(container, rows) {
     `;
     item.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     item.addEventListener("mouseleave", clearActiveFabricKey);
+    item.addEventListener("click", () => emitFabricSelection(row.key));
+    item.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        emitFabricSelection(row.key);
+      }
+    });
     legend.appendChild(item);
   });
   top.appendChild(legend);
@@ -4824,6 +5015,7 @@ function renderFabricOverviewChart(container, rows) {
     });
     slicePath.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     slicePath.addEventListener("mouseleave", clearActiveFabricKey);
+    slicePath.addEventListener("click", () => emitFabricSelection(row.key));
     svg.appendChild(slicePath);
 
     const shareLabel = createSvgElement("text", {
@@ -4836,6 +5028,7 @@ function renderFabricOverviewChart(container, rows) {
     shareLabel.textContent = row.share25Label;
     shareLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     shareLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    shareLabel.addEventListener("click", () => emitFabricSelection(row.key));
     svg.appendChild(shareLabel);
 
     const yoyLabel = createSvgElement("text", {
@@ -4848,6 +5041,7 @@ function renderFabricOverviewChart(container, rows) {
     yoyLabel.textContent = row.yoyLabel;
     yoyLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     yoyLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    yoyLabel.addEventListener("click", () => emitFabricSelection(row.key));
     svg.appendChild(yoyLabel);
 
     labelAngle += span;
@@ -4863,6 +5057,7 @@ function renderFabricOverviewChart(container, rows) {
     const card = document.createElement("div");
     card.className = "fabric-price-card";
     card.dataset.fabricKey = row.key;
+    card.tabIndex = 0;
     card.style.setProperty("--fabric-card-accent", row.color);
     card.innerHTML = `
       <div class="fabric-price-card-title">
@@ -4876,6 +5071,13 @@ function renderFabricOverviewChart(container, rows) {
     `;
     card.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     card.addEventListener("mouseleave", clearActiveFabricKey);
+    card.addEventListener("click", () => emitFabricSelection(row.key));
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        emitFabricSelection(row.key);
+      }
+    });
     priceStrip.appendChild(card);
   });
 
@@ -6733,17 +6935,46 @@ function bootstrapFunctionPage() {
 function bootstrapFabricOverviewPage() {
   const chartContainer = document.querySelector("#fabric-overview-chart");
   const definitionContainer = document.querySelector("#fabric-overview-definitions");
+  const fabricImageLightbox = ensureFabricImageLightbox();
 
   renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
 
   if (definitionContainer) {
+    const openFabricAccordionCard = (cards, targetCard) => {
+      cards.forEach((otherCard) => {
+        const otherTrigger = otherCard.querySelector(".fabric-accordion-trigger");
+        const shouldOpen = otherCard === targetCard;
+        otherCard.classList.toggle("is-open", shouldOpen);
+        if (otherTrigger) {
+          otherTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+        }
+      });
+    };
+
     definitionContainer.innerHTML = FABRIC_CATEGORY_DEFINITIONS.map((item, index) => {
       const sampleCount = item.sampleCount ?? 4;
       const sampleClass = sampleCount >= 5 ? "is-five" : "is-four";
-      const sampleCards = Array.from(
-        { length: sampleCount },
-        () => `<div class="fabric-sample-placeholder">图片占位<br>4:3比例</div>`
-      ).join("");
+      const sampleCards = Array.from({ length: sampleCount }, (_, sampleIndex) => {
+        const imageSrc = item.sampleImages?.[sampleIndex];
+        const brandLabel = item.sampleBrands?.[sampleIndex];
+        if (imageSrc) {
+          return `
+            <button
+              class="fabric-sample-photo-frame"
+              type="button"
+              data-fabric-image-trigger="true"
+              data-image-src="${imageSrc}"
+              data-image-alt="${item.label} 示例图 ${sampleIndex + 1}"
+              data-image-brand="${brandLabel ?? ""}"
+            >
+              <img class="fabric-sample-photo" src="${imageSrc}" alt="${item.label} 示例图 ${sampleIndex + 1}">
+              ${brandLabel ? `<div class="fabric-sample-brand">${brandLabel}</div>` : ""}
+            </button>
+          `;
+        }
+
+        return `<div class="fabric-sample-placeholder">图片占位<br>4:3比例</div>`;
+      }).join("");
 
       return `
         <article class="fabric-accordion-card${index === 0 ? " is-open" : ""}" data-fabric-key="${item.key}" style="--fabric-open-tint:${item.color}22; --fabric-open-border:${item.color}66;">
@@ -6784,17 +7015,109 @@ function bootstrapFabricOverviewPage() {
       }
 
       trigger.addEventListener("click", () => {
-        cards.forEach((otherCard) => {
-          const otherTrigger = otherCard.querySelector(".fabric-accordion-trigger");
-          const shouldOpen = otherCard === card;
-          otherCard.classList.toggle("is-open", shouldOpen);
-          if (otherTrigger) {
-            otherTrigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
-          }
-        });
+        openFabricAccordionCard(cards, card);
+      });
+    });
+
+    chartContainer?.addEventListener("fabricoverviewselect", (event) => {
+      const fabricKey = event.detail?.key;
+      if (!fabricKey) {
+        return;
+      }
+
+      const targetCard = cards.find((card) => card.dataset.fabricKey === fabricKey);
+      if (!targetCard) {
+        return;
+      }
+
+      openFabricAccordionCard(cards, targetCard);
+    });
+
+    definitionContainer.addEventListener("click", (event) => {
+      const imageTrigger = event.target instanceof Element
+        ? event.target.closest("[data-fabric-image-trigger='true']")
+        : null;
+      if (!(imageTrigger instanceof HTMLElement)) {
+        return;
+      }
+
+      fabricImageLightbox.open({
+        src: imageTrigger.dataset.imageSrc ?? "",
+        alt: imageTrigger.dataset.imageAlt ?? "",
+        brand: imageTrigger.dataset.imageBrand ?? ""
       });
     });
   }
+}
+
+function ensureFabricImageLightbox() {
+  let lightbox = document.querySelector("#fabricImageLightbox");
+  if (lightbox) {
+    return lightbox.__fabricImageLightboxApi;
+  }
+
+  lightbox = document.createElement("div");
+  lightbox.id = "fabricImageLightbox";
+  lightbox.className = "fabric-image-lightbox";
+  lightbox.innerHTML = `
+    <div class="fabric-image-lightbox-backdrop" data-fabric-lightbox-close="true"></div>
+    <div class="fabric-image-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Fabric image preview">
+      <button class="fabric-image-lightbox-close" type="button" aria-label="Close image preview" data-fabric-lightbox-close="true">×</button>
+      <div class="fabric-image-lightbox-media-wrap">
+        <img class="fabric-image-lightbox-media" alt="">
+      </div>
+      <div class="fabric-image-lightbox-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(lightbox);
+
+  const media = lightbox.querySelector(".fabric-image-lightbox-media");
+  const caption = lightbox.querySelector(".fabric-image-lightbox-caption");
+
+  const close = () => {
+    lightbox.classList.remove("is-open");
+    document.body.classList.remove("has-fabric-lightbox-open");
+    if (media instanceof HTMLImageElement) {
+      media.removeAttribute("src");
+      media.alt = "";
+    }
+    if (caption) {
+      caption.textContent = "";
+    }
+  };
+
+  const open = ({ src, alt, brand }) => {
+    if (!(media instanceof HTMLImageElement) || !src) {
+      return;
+    }
+
+    media.src = src;
+    media.alt = alt;
+    if (caption) {
+      caption.textContent = brand || alt || "";
+    }
+    lightbox.classList.add("is-open");
+    document.body.classList.add("has-fabric-lightbox-open");
+  };
+
+  lightbox.addEventListener("click", (event) => {
+    const closeTrigger = event.target instanceof Element
+      ? event.target.closest("[data-fabric-lightbox-close='true']")
+      : null;
+    if (closeTrigger) {
+      close();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+      close();
+    }
+  });
+
+  const api = { open, close };
+  lightbox.__fabricImageLightboxApi = api;
+  return api;
 }
 
 function ensureGenderBreakdownTooltip() {

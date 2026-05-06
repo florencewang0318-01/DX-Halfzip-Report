@@ -465,6 +465,15 @@ export function renderFabricOverviewChart(container, rows) {
   const root = document.createElement("div");
   root.className = "fabric-overview-root";
 
+  const emitFabricSelection = (key) => {
+    root.dispatchEvent(
+      new CustomEvent("fabricoverviewselect", {
+        bubbles: true,
+        detail: { key }
+      })
+    );
+  };
+
   const setActiveFabricKey = (key) => {
     root.classList.add("has-active-fabric");
     root.querySelectorAll("[data-fabric-key]").forEach((element) => {
@@ -488,6 +497,7 @@ export function renderFabricOverviewChart(container, rows) {
     const item = document.createElement("div");
     item.className = "fabric-overview-legend-item";
     item.dataset.fabricKey = row.key;
+    item.tabIndex = 0;
     item.innerHTML = `
       <span class="fabric-overview-dot" style="background:${row.color};"></span>
       <div class="fabric-overview-legend-copy">
@@ -497,6 +507,13 @@ export function renderFabricOverviewChart(container, rows) {
     `;
     item.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     item.addEventListener("mouseleave", clearActiveFabricKey);
+    item.addEventListener("click", () => emitFabricSelection(row.key));
+    item.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        emitFabricSelection(row.key);
+      }
+    });
     legend.appendChild(item);
   });
   top.appendChild(legend);
@@ -578,6 +595,7 @@ export function renderFabricOverviewChart(container, rows) {
     });
     slicePath.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     slicePath.addEventListener("mouseleave", clearActiveFabricKey);
+    slicePath.addEventListener("click", () => emitFabricSelection(row.key));
     svg.appendChild(slicePath);
 
     const shareLabel = createSvgElement("text", {
@@ -590,6 +608,7 @@ export function renderFabricOverviewChart(container, rows) {
     shareLabel.textContent = row.share25Label;
     shareLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     shareLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    shareLabel.addEventListener("click", () => emitFabricSelection(row.key));
     svg.appendChild(shareLabel);
 
     const yoyLabel = createSvgElement("text", {
@@ -602,6 +621,7 @@ export function renderFabricOverviewChart(container, rows) {
     yoyLabel.textContent = row.yoyLabel;
     yoyLabel.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     yoyLabel.addEventListener("mouseleave", clearActiveFabricKey);
+    yoyLabel.addEventListener("click", () => emitFabricSelection(row.key));
     svg.appendChild(yoyLabel);
 
     labelAngle += span;
@@ -617,6 +637,7 @@ export function renderFabricOverviewChart(container, rows) {
     const card = document.createElement("div");
     card.className = "fabric-price-card";
     card.dataset.fabricKey = row.key;
+    card.tabIndex = 0;
     card.style.setProperty("--fabric-card-accent", row.color);
     card.innerHTML = `
       <div class="fabric-price-card-title">
@@ -630,6 +651,13 @@ export function renderFabricOverviewChart(container, rows) {
     `;
     card.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
     card.addEventListener("mouseleave", clearActiveFabricKey);
+    card.addEventListener("click", () => emitFabricSelection(row.key));
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        emitFabricSelection(row.key);
+      }
+    });
     priceStrip.appendChild(card);
   });
 
