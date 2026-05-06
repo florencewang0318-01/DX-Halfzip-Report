@@ -54,6 +54,20 @@ function adjustHexColor(hex, percent) {
   return `rgb(${shiftChannel(readChannel(0))}, ${shiftChannel(readChannel(2))}, ${shiftChannel(readChannel(4))})`;
 }
 
+function hexToRgba(hex, alpha = 1) {
+  const raw = hex.replace("#", "");
+  const normalized =
+    raw.length === 3
+      ? raw
+          .split("")
+          .map((char) => `${char}${char}`)
+          .join("")
+      : raw;
+
+  const readChannel = (offset) => parseInt(normalized.slice(offset, offset + 2), 16);
+  return `rgba(${readChannel(0)}, ${readChannel(2)}, ${readChannel(4)}, ${alpha})`;
+}
+
 function describeArcPath(centerX, centerY, radius, startAngle, endAngle) {
   const start = polarToCartesian(centerX, centerY, radius, endAngle);
   const end = polarToCartesian(centerX, centerY, radius, startAngle);
@@ -669,6 +683,510 @@ export function renderFabricOverviewChart(container, rows) {
   root.appendChild(priceStrip);
   root.appendChild(note);
 
+  container.innerHTML = "";
+  container.appendChild(root);
+}
+
+export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
+  if (!container) {
+    return;
+  }
+
+  const warmthCardToneMap = {
+    "non-fleece": {
+      border: "rgba(148, 163, 184, 0.42)",
+      background: "linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 0.96))",
+      accent: "#94a3b8"
+    },
+    fleece: {
+      border: "rgba(234, 179, 8, 0.28)",
+      background: "linear-gradient(180deg, rgba(255, 251, 235, 0.96), rgba(255, 255, 255, 0.96))",
+      accent: "#d4a943"
+    }
+  };
+  const shortFabricLabelMap = {
+    smooth: "光滑/平整",
+    brushed: "拉绒/磨毛",
+    textured: "肌理",
+    wool: "羊毛"
+  };
+  const warmthLabelMap = {
+    "non-fleece": "不加绒",
+    fleece: "加绒"
+  };
+  const width = 560;
+  const height = 286;
+  const margin = {
+    top: 12,
+    right: 32,
+    bottom: 24,
+    left: 60
+  };
+  const xValues = bubbleRows.map((row) => row.avgDealPrice25);
+  const yValues = bubbleRows.map((row) => (Number.isFinite(row.yoy) ? row.yoy : 0));
+  const xMin = Math.floor((Math.min(...xValues) - 40) / 100) * 100;
+  const xMax = Math.ceil((Math.max(...xValues) + 40) / 100) * 100;
+  const yMin = Math.min(-100, Math.floor((Math.min(...yValues) - 25) / 100) * 100);
+  const yMax = 500;
+  const bubbleMax = Math.max(...bubbleRows.map((row) => row.gmv25), 0);
+  const plotTop = margin.top;
+  const plotBottom = height - margin.bottom;
+  const warmthZeroY = plotBottom - 26;
+  const warmthPositiveStep = (warmthZeroY - plotTop) / 3;
+  const xTicks = [];
+  for (let tick = xMin; tick <= xMax; tick += 200) {
+    xTicks.push(tick);
+  }
+  const yTicks = [-50, 0, 100, 200, 500].filter((tick) => tick >= yMin && tick <= yMax);
+
+  const scaleWarmthY = (value) => {
+    const boundedValue = Number.isFinite(value) ? value : 0;
+    if (boundedValue <= -50) {
+      return plotBottom;
+    }
+    if (boundedValue <= 0) {
+      return scaleValue(boundedValue, -50, 0, plotBottom, warmthZeroY);
+    }
+    if (boundedValue <= 100) {
+      return scaleValue(boundedValue, 0, 100, warmthZeroY, warmthZeroY - warmthPositiveStep);
+    }
+    if (boundedValue <= 200) {
+      return scaleValue(
+        boundedValue,
+        100,
+        200,
+        warmthZeroY - warmthPositiveStep,
+        warmthZeroY - warmthPositiveStep * 2
+      );
+    }
+    return scaleValue(
+      Math.min(boundedValue, 500),
+      200,
+      500,
+      warmthZeroY - warmthPositiveStep * 2,
+      warmthZeroY - warmthPositiveStep * 3
+    );
+  };
+
+  const root = document.createElement("div");
+  root.className = "fabric-warmth-bubble-root";
+  const activeWarmthKeys = new Set(["non-fleece", "fleece"]);
+
+  const overview = document.createElement("div");
+  overview.className = "fabric-warmth-overview";
+  overviewRows.forEach((row) => {
+    const tone = warmthCardToneMap[row.key] ?? warmthCardToneMap["non-fleece"];
+    const item = document.createElement("article");
+    item.className = "fabric-warmth-kpi-card";
+    item.style.borderColor = tone.border;
+    item.style.background = tone.background;
+    item.style.setProperty("--fabric-warmth-card-accent", tone.accent);
+    item.innerHTML = `
+      <div class="fabric-warmth-kpi-head">
+        <strong>${row.label}</strong>
+        <small>${row.labelEn}</small>
+      </div>
+      <button
+        type="button"
+        class="fabric-warmth-visibility-toggle"
+        data-warmth-key="${row.key}"
+        aria-pressed="false"
+      >
+        <span class="fabric-warmth-visibility-button-text">展开气泡</span>
+      </button>
+      <div class="fabric-warmth-kpi-metrics">
+        <div class="fabric-warmth-kpi-metric">
+          <span>占比</span>
+          <strong>${row.share25Label}</strong>
+        </div>
+        <div class="fabric-warmth-kpi-metric">
+          <span>YOY</span>
+          <strong class="${row.yoyLabel.startsWith("-") ? "is-negative" : row.yoyLabel === "n/a" ? "is-neutral" : "is-positive"}">${row.yoyLabel}</strong>
+        </div>
+        <div class="fabric-warmth-kpi-metric">
+          <span>成交均价</span>
+          <strong>${row.avgDealPrice25Label}</strong>
+        </div>
+      </div>
+    `;
+    item.querySelector(".fabric-warmth-visibility-toggle")?.addEventListener("click", () => {
+      if (activeWarmthKeys.has(row.key)) {
+        activeWarmthKeys.delete(row.key);
+      } else {
+        activeWarmthKeys.add(row.key);
+      }
+      applyWarmthVisibility();
+    });
+    overview.appendChild(item);
+  });
+
+  const svg = createSvgElement("svg", {
+    class: "fabric-warmth-bubble-svg",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": "面料与是否加绒组合的价格、规模和同比气泡图"
+  });
+
+  const defs = createSvgElement("defs");
+  const shadowFilter = createSvgElement("filter", {
+    id: "fabric-warmth-bubble-shadow",
+    x: "-35%",
+    y: "-35%",
+    width: "170%",
+    height: "170%"
+  });
+  shadowFilter.appendChild(
+    createSvgElement("feDropShadow", {
+      dx: "0",
+      dy: "5",
+      stdDeviation: "6",
+      "flood-color": "#64748b",
+      "flood-opacity": "0.17"
+    })
+  );
+  defs.appendChild(shadowFilter);
+
+  const axisMarker = createSvgElement("marker", {
+    id: "fabric-warmth-axis-arrow",
+    viewBox: "0 0 10 10",
+    refX: "8.2",
+    refY: "5",
+    markerWidth: "6",
+    markerHeight: "6",
+    orient: "auto-start-reverse"
+  });
+  axisMarker.appendChild(
+    createSvgElement("path", {
+      d: "M 0 0 L 10 5 L 0 10 z",
+      fill: "#4b5563"
+    })
+  );
+  defs.appendChild(axisMarker);
+  svg.appendChild(defs);
+
+  yTicks.forEach((tick) => {
+    const y = scaleWarmthY(tick);
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: margin.left,
+        x2: width - margin.right,
+        y1: y,
+        y2: y,
+        class: "gender-price-grid-line"
+      })
+    );
+
+    const tickLabel = createSvgElement("text", {
+      x: margin.left - 10,
+      y,
+      class: "function-map-svg-tick fabric-warmth-bubble-tick",
+      "text-anchor": "end",
+      "dominant-baseline": "middle"
+    });
+    tickLabel.textContent = `${tick}%`;
+    svg.appendChild(tickLabel);
+  });
+
+  xTicks.forEach((tick) => {
+    const x = scaleValue(tick, xMin, xMax, margin.left, width - margin.right);
+    svg.appendChild(
+      createSvgElement("line", {
+        x1: x,
+        x2: x,
+        y1: margin.top,
+        y2: height - margin.bottom,
+        class: "gender-price-grid-line"
+      })
+    );
+
+    const xLabel = createSvgElement("text", {
+      x,
+      y: height - 18,
+      class: "function-map-svg-tick fabric-warmth-bubble-tick",
+      "text-anchor": "middle",
+      "dominant-baseline": "hanging"
+    });
+    xLabel.textContent = `¥${tick}`;
+    svg.appendChild(xLabel);
+  });
+
+  const zeroAxisY = scaleWarmthY(0);
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: margin.left,
+      y1: height - margin.bottom,
+      x2: margin.left,
+      y2: margin.top,
+      class: "gender-price-axis-line",
+      "marker-end": "url(#fabric-warmth-axis-arrow)"
+    })
+  );
+  svg.appendChild(
+    createSvgElement("line", {
+      x1: margin.left,
+      y1: zeroAxisY,
+      x2: width - margin.right,
+      y2: zeroAxisY,
+      class: "gender-price-axis-line",
+      "marker-end": "url(#fabric-warmth-axis-arrow)"
+    })
+  );
+
+  const xAxisTitle = createSvgElement("text", {
+    x: margin.left + (width - margin.left - margin.right) / 2,
+    y: height - 4,
+    class: "function-map-svg-axis-title fabric-warmth-bubble-axis-title",
+    "text-anchor": "middle",
+    "dominant-baseline": "hanging"
+  });
+  xAxisTitle.textContent = "Price";
+  svg.appendChild(xAxisTitle);
+
+  const yAxisTitle = createSvgElement("text", {
+    x: 15,
+    y: margin.top + (height - margin.top - margin.bottom) / 2,
+    class: "function-map-svg-axis-title fabric-warmth-bubble-axis-title",
+    "text-anchor": "middle",
+    "dominant-baseline": "middle",
+    transform: `rotate(-90 15 ${margin.top + (height - margin.top - margin.bottom) / 2})`
+  });
+  yAxisTitle.textContent = "YOY%";
+  svg.appendChild(yAxisTitle);
+
+  const sortedBubbles = [...bubbleRows].sort((a, b) => b.gmv25 - a.gmv25);
+  sortedBubbles.forEach((row, index) => {
+    const cx = scaleValue(row.avgDealPrice25, xMin, xMax, margin.left, width - margin.right);
+    const radius = scaleSqrtValue(row.gmv25, 0, bubbleMax, 10, 22);
+    const rawYoy = Number.isFinite(row.yoy) ? row.yoy : 0;
+    const cappedYoy = Math.max(-50, Math.min(500, rawYoy));
+    const rawCy = scaleWarmthY(cappedYoy);
+    const pointOffsetYMap = {
+      "textured__fleece": -14,
+      "wool__fleece": -20
+    };
+    const pointOffsetY = pointOffsetYMap[row.key] ?? 0;
+    const topOverflowAllowanceMap = {
+      "textured__fleece": 10,
+      "wool__fleece": 18
+    };
+    const minCy = margin.top + radius - (topOverflowAllowanceMap[row.key] ?? -4);
+    const cy = Math.max(
+      minCy,
+      Math.min(height - margin.bottom - radius - 4, rawCy + pointOffsetY)
+    );
+    const yoyClass =
+      row.yoyLabel === "n/a" ? "is-neutral" : row.yoyLabel.startsWith("-") ? "is-negative" : "is-positive";
+    const labelPlacementMap = {
+      "textured__non-fleece": { anchor: "middle", x: cx, labelY: cy - radius - 16, yoyOffset: 13 },
+      "smooth__fleece": { anchor: "middle", x: cx, labelY: cy - radius - 16, yoyOffset: 13 },
+      "smooth__non-fleece": {
+        anchor: "end",
+        x: cx - radius - 10,
+        labelY: cy - 1,
+        yoyOffset: 13
+      },
+      "textured__fleece": { anchor: "middle", x: cx, labelY: cy + radius + 12, yoyOffset: 13 },
+      "brushed__fleece": { anchor: "start", x: cx + radius + 6, labelY: cy - radius - 12, yoyOffset: 13 },
+      "wool__fleece": { anchor: "end", x: cx - radius - 14, labelY: cy - 2, yoyOffset: 13 }
+    };
+    const defaultLabelToRight = cx < width * 0.58;
+    const defaultLabelOffset = radius + 30;
+    const defaultRawLabelX = defaultLabelToRight ? cx + defaultLabelOffset : cx - defaultLabelOffset;
+    const defaultLabelX = Math.max(margin.left + 32, Math.min(width - margin.right + 20, defaultRawLabelX));
+    const placement = labelPlacementMap[row.key] ?? {
+      anchor: "middle",
+      x: defaultLabelX,
+      labelY: cy - 1,
+      yoyOffset: 13
+    };
+
+    const gradient = createSvgElement("radialGradient", {
+      id: `fabric-warmth-bubble-gradient-${index}`,
+      cx: "35%",
+      cy: "30%",
+      r: "78%"
+    });
+    gradient.appendChild(createStop("0%", "#ffffff", 0.78));
+    gradient.appendChild(createStop("46%", row.color, 0.82));
+    gradient.appendChild(createStop("100%", row.color, 0.98));
+    defs.appendChild(gradient);
+
+    const bubbleGroup = createSvgElement("g", {
+      class: "fabric-warmth-bubble-node",
+      "data-warmth-key": row.warmthKey
+    });
+
+    const bubble = createSvgElement("circle", {
+      cx,
+      cy,
+      r: radius,
+      fill: `url(#fabric-warmth-bubble-gradient-${index})`,
+      stroke: row.color,
+      "stroke-width": 1.25,
+      filter: "url(#fabric-warmth-bubble-shadow)",
+      class: "fabric-warmth-bubble-core"
+    });
+    bubbleGroup.appendChild(bubble);
+
+    const bubbleLabel = createSvgElement("text", {
+      x: placement.x,
+      y: placement.labelY,
+      class: "fabric-warmth-bubble-label",
+      "text-anchor": placement.anchor
+    });
+    bubbleLabel.textContent = `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
+    bubbleGroup.appendChild(bubbleLabel);
+
+    bubbleGroup.addEventListener("mouseenter", (event) => {
+      showTooltip(event, row, yoyClass);
+    });
+    bubbleGroup.addEventListener("mousemove", (event) => {
+      updateTooltipPosition(event);
+    });
+    bubbleGroup.addEventListener("mouseleave", () => {
+      hideTooltip();
+    });
+    svg.appendChild(bubbleGroup);
+  });
+
+  const chartStage = document.createElement("div");
+  chartStage.className = "fabric-warmth-bubble-stage";
+  const tooltip = document.createElement("div");
+  tooltip.className = "fabric-warmth-bubble-tooltip";
+  tooltip.setAttribute("aria-hidden", "true");
+  chartStage.appendChild(svg);
+  const note = document.createElement("p");
+  note.className = "fabric-warmth-bubble-note";
+  note.textContent = "Bubble Size = GMV";
+  chartStage.appendChild(note);
+  chartStage.appendChild(tooltip);
+
+  const hideTooltip = () => {
+    tooltip.classList.remove("is-visible");
+    tooltip.setAttribute("aria-hidden", "true");
+  };
+
+  const updateTooltipPosition = (event) => {
+    const stageRect = chartStage.getBoundingClientRect();
+    const tooltipWidth = tooltip.offsetWidth || 160;
+    const tooltipHeight = tooltip.offsetHeight || 84;
+    const desiredLeft = event.clientX - stageRect.left + 14;
+    const desiredTop = event.clientY - stageRect.top - tooltipHeight - 12;
+    const boundedLeft = Math.max(8, Math.min(stageRect.width - tooltipWidth - 8, desiredLeft));
+    const fallbackTop = event.clientY - stageRect.top + 16;
+    const boundedTop = desiredTop < 8 ? fallbackTop : desiredTop;
+    tooltip.style.left = `${boundedLeft}px`;
+    tooltip.style.top = `${Math.max(8, Math.min(stageRect.height - tooltipHeight - 8, boundedTop))}px`;
+  };
+
+  const showTooltip = (event, row, yoyClass) => {
+    tooltip.innerHTML = `
+      <div class="fabric-warmth-bubble-tooltip-row">
+        <span>GMV占比</span>
+        <strong>${row.share25Label}</strong>
+      </div>
+      <div class="fabric-warmth-bubble-tooltip-row">
+        <span>YOY%</span>
+        <strong class="${yoyClass}">${row.yoyLabel}</strong>
+      </div>
+      <div class="fabric-warmth-bubble-tooltip-row">
+        <span>成交均价</span>
+        <strong>${row.avgDealPrice25Label}</strong>
+      </div>
+    `;
+    tooltip.classList.add("is-visible");
+    tooltip.setAttribute("aria-hidden", "false");
+    updateTooltipPosition(event);
+  };
+
+  const applyWarmthVisibility = () => {
+    svg.querySelectorAll(".fabric-warmth-bubble-node[data-warmth-key]").forEach((node) => {
+      const isVisible = activeWarmthKeys.has(node.dataset.warmthKey ?? "");
+      node.classList.toggle("is-hidden", !isVisible);
+    });
+    root.querySelectorAll(".fabric-warmth-visibility-toggle[data-warmth-key]").forEach((button) => {
+      const isVisible = activeWarmthKeys.has(button.dataset.warmthKey ?? "");
+      button.classList.toggle("is-active", !isVisible);
+      button.setAttribute("aria-pressed", String(!isVisible));
+      const label = button.querySelector(".fabric-warmth-visibility-button-text");
+      if (label) {
+        label.textContent = isVisible ? "展开气泡" : "隐藏气泡";
+      }
+    });
+  };
+  applyWarmthVisibility();
+
+  root.appendChild(overview);
+  root.appendChild(chartStage);
+
+  container.innerHTML = "";
+  container.appendChild(root);
+}
+
+export function renderFabricFunctionMatrix(container, rows, columns) {
+  if (!container) {
+    return;
+  }
+
+  const root = document.createElement("div");
+  root.className = "fabric-function-matrix-root";
+
+  const note = document.createElement("p");
+  note.className = "fabric-function-matrix-note";
+  note.textContent = "单元格数值 = 该类面料中带该功能表达的 GMV 占比";
+  root.appendChild(note);
+
+  const grid = document.createElement("div");
+  grid.className = "fabric-function-matrix-grid";
+  grid.style.gridTemplateColumns = `150px repeat(${columns.length}, minmax(0, 1fr))`;
+
+  const corner = document.createElement("div");
+  corner.className = "fabric-function-matrix-corner";
+  corner.innerHTML = `<span>Fabric</span><span>Function</span>`;
+  grid.appendChild(corner);
+
+  columns.forEach((column) => {
+    const header = document.createElement("div");
+    header.className = "fabric-function-matrix-column";
+    header.innerHTML = `
+      <strong>${column.label}</strong>
+      <small>${column.labelEn}</small>
+    `;
+    grid.appendChild(header);
+  });
+
+  rows.forEach((row) => {
+    const rowHeader = document.createElement("div");
+    rowHeader.className = "fabric-function-matrix-row-header";
+    rowHeader.innerHTML = `
+      <div class="fabric-function-matrix-row-head">
+        <span class="fabric-function-matrix-row-dot" style="background:${row.color};"></span>
+        <strong>${row.label}</strong>
+      </div>
+      <div class="fabric-function-matrix-row-meta">
+        <span>${row.labelEn}</span>
+        <span>功能表达 ${row.functionCoverageLabel}</span>
+      </div>
+    `;
+    grid.appendChild(rowHeader);
+
+    row.cells.forEach((cell) => {
+      const intensity = Math.max(0.08, Math.min(0.42, cell.share / 100 * 0.44));
+      const cellNode = document.createElement("div");
+      const levelClass =
+        cell.share >= 50 ? "is-strong" : cell.share >= 25 ? "is-medium" : cell.share > 0 ? "is-light" : "is-zero";
+      cellNode.className = `fabric-function-matrix-cell ${levelClass}`;
+      cellNode.style.background = hexToRgba(row.color, intensity);
+      cellNode.style.borderColor = hexToRgba(row.color, Math.min(0.52, intensity + 0.16));
+      cellNode.innerHTML = `
+        <strong>${cell.shareLabel}</strong>
+        <small>${cell.share >= 50 ? "强表达" : cell.share >= 25 ? "可感知" : cell.share > 0 ? "弱表达" : "-"}</small>
+      `;
+      grid.appendChild(cellNode);
+    });
+  });
+
+  root.appendChild(grid);
   container.innerHTML = "";
   container.appendChild(root);
 }

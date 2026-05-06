@@ -404,10 +404,6 @@ function normalizeFabricCategory(rawFabricTexture) {
     return null;
   }
 
-  if (value.includes("羊毛")) {
-    return "wool";
-  }
-
   if (
     value.includes("拉绒") ||
     value.includes("磨毛") ||
@@ -416,6 +412,10 @@ function normalizeFabricCategory(rawFabricTexture) {
     value.includes("丝绒")
   ) {
     return "brushed";
+  }
+
+  if (value.includes("羊毛")) {
+    return "wool";
   }
 
   if (
@@ -1051,6 +1051,220 @@ export const SILHOUETTE_PAGE_DRAFT = {
   untrackedSampleCount: SILHOUETTE_Y25.untrackedCount
 };
 
+const FABRIC_CATEGORY_LOOKUP = new Map(
+  FABRIC_CATEGORY_DEFINITIONS.map((definition) => [definition.key, definition])
+);
+
+const FABRIC_WARMTH_BUCKETS = [
+  {
+    key: "non-fleece",
+    label: "不加绒",
+    labelEn: "Non-fleece",
+    axisOrder: 0
+  },
+  {
+    key: "fleece",
+    label: "加绒",
+    labelEn: "Fleece",
+    axisOrder: 1
+  }
+];
+
+const FABRIC_FUNCTION_MATRIX_BUCKET_KEYS = [
+  "warmth",
+  "quick-dry",
+  "stretch",
+  "breathable",
+  "antibacterial",
+  "lightweight"
+];
+
+function normalizeWarmthBucket(rawWarmth) {
+  return String(rawWarmth ?? "").trim() === "是" ? "fleece" : "non-fleece";
+}
+
+function summarizeFabricWarmth(rows) {
+  const summary = new Map();
+  let totalGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const fabricKey = normalizeFabricCategory(row["面料质地"]);
+    if (!fabricKey) {
+      return;
+    }
+
+    const warmthKey = normalizeWarmthBucket(row["内里是否加绒"]);
+    const summaryKey = `${fabricKey}__${warmthKey}`;
+    const current = summary.get(summaryKey) ?? {
+      key: summaryKey,
+      fabricKey,
+      warmthKey,
+      gmv: 0,
+      count: 0,
+      weightedDealPriceTotal: 0,
+      weightedDealPriceUnits: 0,
+      fallbackDealPriceTotal: 0,
+      fallbackDealPriceCount: 0,
+      avgDealPrice: 0
+    };
+
+    const sales = toNumber(row["销售额"]);
+    const units = toNumber(row["销量"]);
+    const dealPrice = toNumber(row["成交均价"] ?? row["成交价格"]);
+
+    current.gmv += sales;
+    current.count += 1;
+
+    if (dealPrice > 0 && units > 0) {
+      current.weightedDealPriceTotal += dealPrice * units;
+      current.weightedDealPriceUnits += units;
+    } else if (dealPrice > 0) {
+      current.fallbackDealPriceTotal += dealPrice;
+      current.fallbackDealPriceCount += 1;
+    }
+
+    totalGmv += sales;
+    summary.set(summaryKey, current);
+  });
+
+  summary.forEach((item) => {
+    if (item.weightedDealPriceUnits > 0) {
+      item.avgDealPrice = item.weightedDealPriceTotal / item.weightedDealPriceUnits;
+    } else if (item.fallbackDealPriceCount > 0) {
+      item.avgDealPrice = item.fallbackDealPriceTotal / item.fallbackDealPriceCount;
+    }
+
+    item.share = totalGmv ? (item.gmv / totalGmv) * 100 : 0;
+  });
+
+  return {
+    totalGmv,
+    items: summary
+  };
+}
+
+function summarizeWarmthOverview(rows) {
+  const summary = new Map();
+  let totalGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const warmthKey = normalizeWarmthBucket(row["内里是否加绒"]);
+    const current = summary.get(warmthKey) ?? {
+      warmthKey,
+      gmv: 0,
+      count: 0,
+      weightedDealPriceTotal: 0,
+      weightedDealPriceUnits: 0,
+      fallbackDealPriceTotal: 0,
+      fallbackDealPriceCount: 0,
+      avgDealPrice: 0
+    };
+
+    const sales = toNumber(row["销售额"]);
+    const units = toNumber(row["销量"]);
+    const dealPrice = toNumber(row["成交均价"] ?? row["成交价格"]);
+
+    current.gmv += sales;
+    current.count += 1;
+
+    if (dealPrice > 0 && units > 0) {
+      current.weightedDealPriceTotal += dealPrice * units;
+      current.weightedDealPriceUnits += units;
+    } else if (dealPrice > 0) {
+      current.fallbackDealPriceTotal += dealPrice;
+      current.fallbackDealPriceCount += 1;
+    }
+
+    totalGmv += sales;
+    summary.set(warmthKey, current);
+  });
+
+  summary.forEach((item) => {
+    if (item.weightedDealPriceUnits > 0) {
+      item.avgDealPrice = item.weightedDealPriceTotal / item.weightedDealPriceUnits;
+    } else if (item.fallbackDealPriceCount > 0) {
+      item.avgDealPrice = item.fallbackDealPriceTotal / item.fallbackDealPriceCount;
+    }
+
+    item.share = totalGmv ? (item.gmv / totalGmv) * 100 : 0;
+  });
+
+  return {
+    totalGmv,
+    items: summary
+  };
+}
+
+function summarizeFabricFunctionMatrix(rows) {
+  const summary = new Map(
+    FABRIC_CATEGORY_DEFINITIONS.map((definition) => [
+      definition.key,
+      {
+        key: definition.key,
+        gmv: 0,
+        count: 0,
+        functionGmv: 0,
+        buckets: new Map(FABRIC_FUNCTION_MATRIX_BUCKET_KEYS.map((bucketKey) => [bucketKey, 0]))
+      }
+    ])
+  );
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const fabricKey = normalizeFabricCategory(row["面料质地"]);
+    const current = summary.get(fabricKey);
+    if (!current) {
+      return;
+    }
+
+    const sales = toNumber(row["销售额"]);
+    const bucketKeys = getFunctionBucketKeys(row);
+
+    current.gmv += sales;
+    current.count += 1;
+
+    if (bucketKeys.length > 0) {
+      current.functionGmv += sales;
+    }
+
+    bucketKeys.forEach((bucketKey) => {
+      if (!current.buckets.has(bucketKey)) {
+        return;
+      }
+
+      current.buckets.set(bucketKey, (current.buckets.get(bucketKey) ?? 0) + sales);
+    });
+  });
+
+  return Array.from(summary.values()).map((item) => ({
+    ...item,
+    functionCoverageShare: item.gmv ? (item.functionGmv / item.gmv) * 100 : 0,
+    functionCoverageLabel: `${Math.round(item.gmv ? (item.functionGmv / item.gmv) * 100 : 0)}%`,
+    cells: FABRIC_FUNCTION_MATRIX_BUCKET_KEYS.map((bucketKey) => {
+      const bucketGmv = item.buckets.get(bucketKey) ?? 0;
+      const share = item.gmv ? (bucketGmv / item.gmv) * 100 : 0;
+
+      return {
+        key: bucketKey,
+        gmv: bucketGmv,
+        share,
+        shareLabel: `${Math.round(share)}%`
+      };
+    })
+  }));
+}
+
 export const FABRIC_OVERVIEW_DATA = FABRIC_CATEGORY_DEFINITIONS.map((definition) => {
   const current = FABRIC_OVERVIEW_Y25.items.get(definition.key) ?? {
     gmv: 0,
@@ -1082,6 +1296,129 @@ export const FABRIC_OVERVIEW_DATA = FABRIC_CATEGORY_DEFINITIONS.map((definition)
     count24: previous.count
   };
 }).sort((a, b) => b.gmv25 - a.gmv25);
+
+const FABRIC_WARMTH_Y25 = summarizeFabricWarmth(LS_HZ_INNER_DATASET.raw.y25);
+const FABRIC_WARMTH_Y24 = summarizeFabricWarmth(LS_HZ_INNER_DATASET.raw.y24);
+const WARMTH_OVERVIEW_Y25 = summarizeWarmthOverview(LS_HZ_INNER_DATASET.raw.y25);
+const WARMTH_OVERVIEW_Y24 = summarizeWarmthOverview(LS_HZ_INNER_DATASET.raw.y24);
+const FABRIC_FUNCTION_MATRIX_Y25 = summarizeFabricFunctionMatrix(LS_HZ_INNER_DATASET.raw.y25);
+
+export const FABRIC_WARMTH_OVERVIEW_DATA = FABRIC_WARMTH_BUCKETS.map((warmthBucket) => {
+  const current = WARMTH_OVERVIEW_Y25.items.get(warmthBucket.key) ?? {
+    gmv: 0,
+    share: 0,
+    avgDealPrice: 0,
+    count: 0
+  };
+  const previous = WARMTH_OVERVIEW_Y24.items.get(warmthBucket.key) ?? {
+    gmv: 0,
+    share: 0,
+    avgDealPrice: 0,
+    count: 0
+  };
+  const yoy = computeYoy(current.gmv, previous.gmv);
+
+  return {
+    key: warmthBucket.key,
+    label: warmthBucket.label,
+    labelEn: warmthBucket.labelEn,
+    gmv25: current.gmv,
+    share25: current.share,
+    share25Label: `${Math.round(current.share)}%`,
+    avgDealPrice25: current.avgDealPrice,
+    avgDealPrice25Label: `¥${Math.round(current.avgDealPrice || 0).toLocaleString("en-US")}`,
+    yoy,
+    yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.gmv > 0 ? "new" : "n/a",
+    count25: current.count
+  };
+});
+
+export const FABRIC_WARMTH_BUBBLE_DATA = FABRIC_CATEGORY_DEFINITIONS.flatMap((definition) =>
+  FABRIC_WARMTH_BUCKETS.map((warmthBucket) => {
+    const current = FABRIC_WARMTH_Y25.items.get(`${definition.key}__${warmthBucket.key}`) ?? {
+      gmv: 0,
+      share: 0,
+      avgDealPrice: 0,
+      count: 0
+    };
+    const previous = FABRIC_WARMTH_Y24.items.get(`${definition.key}__${warmthBucket.key}`) ?? {
+      gmv: 0,
+      share: 0,
+      avgDealPrice: 0,
+      count: 0
+    };
+    const yoy = computeYoy(current.gmv, previous.gmv);
+
+    return {
+      key: `${definition.key}__${warmthBucket.key}`,
+      fabricKey: definition.key,
+      fabricLabel: definition.label,
+      fabricLabelEn: definition.labelEn,
+      warmthKey: warmthBucket.key,
+      warmthLabel: warmthBucket.label,
+      warmthLabelEn: warmthBucket.labelEn,
+      warmthAxisOrder: warmthBucket.axisOrder,
+      color: definition.color,
+      gmv25: current.gmv,
+      gmv24: previous.gmv,
+      share25: current.share,
+      share25Label: `${Math.round(current.share)}%`,
+      avgDealPrice25: current.avgDealPrice,
+      avgDealPrice25Label: `¥${Math.round(current.avgDealPrice || 0).toLocaleString("en-US")}`,
+      yoy,
+      yoyLabel:
+        previous.gmv > 0 ? formatYoyLabel(yoy) : current.gmv > 0 ? "new" : "n/a",
+      count25: current.count
+    };
+  }).filter((item) => item.gmv25 > 0)
+);
+
+export const FABRIC_FUNCTION_MATRIX_COLUMNS = FABRIC_FUNCTION_MATRIX_BUCKET_KEYS.map((bucketKey) => {
+  const bucket = FUNCTION_BUCKETS.find((item) => item.key === bucketKey);
+  return {
+    key: bucketKey,
+    label: bucket?.label ?? bucketKey,
+    labelEn: bucket?.labelEn ?? bucketKey,
+    color: bucket?.color ?? "#cbd5e1"
+  };
+});
+
+export const FABRIC_FUNCTION_MATRIX_DATA = FABRIC_OVERVIEW_DATA.map((definition) => {
+  const matrixRow = FABRIC_FUNCTION_MATRIX_Y25.find((item) => item.key === definition.key) ?? {
+    gmv: 0,
+    count: 0,
+    functionCoverageShare: 0,
+    functionCoverageLabel: "0%",
+    cells: []
+  };
+
+  return {
+    key: definition.key,
+    label: definition.label,
+    labelEn: definition.labelEn,
+    color: definition.color,
+    gmv25: definition.gmv25,
+    gmv25Label: `¥${Math.round(definition.gmv25 / 10000)}w`,
+    count25: matrixRow.count,
+    functionCoverageShare: matrixRow.functionCoverageShare,
+    functionCoverageLabel: matrixRow.functionCoverageLabel,
+    cells: FABRIC_FUNCTION_MATRIX_COLUMNS.map((column) => {
+      const cell = matrixRow.cells.find((item) => item.key === column.key) ?? {
+        key: column.key,
+        gmv: 0,
+        share: 0,
+        shareLabel: "0%"
+      };
+
+      return {
+        ...cell,
+        label: column.label,
+        labelEn: column.labelEn,
+        color: column.color
+      };
+    })
+  };
+});
 
 export const MARKET_SCOPE_PAGE_DRAFT = {
   chapter: "01 Competitor Scope",

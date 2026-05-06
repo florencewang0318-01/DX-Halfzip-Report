@@ -1,6 +1,10 @@
 import {
   FABRIC_CATEGORY_DEFINITIONS,
+  FABRIC_FUNCTION_MATRIX_COLUMNS,
+  FABRIC_FUNCTION_MATRIX_DATA,
+  FABRIC_WARMTH_OVERVIEW_DATA,
   FABRIC_OVERVIEW_DATA,
+  FABRIC_WARMTH_BUBBLE_DATA,
   FEMALE_OPPORTUNITY_BRAND_GENDER,
   FUNCTION_GENDER_SPLIT,
   FUNCTION_OPPORTUNITY_MAPS,
@@ -16,7 +20,9 @@ import {
   renderFemaleOpportunityGenderMatrix
 } from "./content-render.js";
 import {
+  renderFabricFunctionMatrix,
   renderFabricOverviewChart,
+  renderFabricWarmthBubbleChart,
   renderGenderBreakdownPriceBubbleChart,
   renderFunctionGenderSplit,
   renderFunctionOpportunityMap,
@@ -316,6 +322,14 @@ function bootstrapFabricOverviewPage() {
       });
     });
   }
+}
+
+function bootstrapFabricWarmthFunctionPage() {
+  const warmthContainer = document.querySelector("#fabric-warmth-bubble-chart");
+  const functionContainer = document.querySelector("#fabric-function-matrix");
+
+  renderFabricWarmthBubbleChart(warmthContainer, FABRIC_WARMTH_OVERVIEW_DATA, FABRIC_WARMTH_BUBBLE_DATA);
+  renderFabricFunctionMatrix(functionContainer, FABRIC_FUNCTION_MATRIX_DATA, FABRIC_FUNCTION_MATRIX_COLUMNS);
 }
 
 function ensureFabricImageLightbox() {
@@ -996,5 +1010,6 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapSilhouettePage();
   bootstrapFunctionPage();
   bootstrapFabricOverviewPage();
+  bootstrapFabricWarmthFunctionPage();
   setupScrollState();
 });
