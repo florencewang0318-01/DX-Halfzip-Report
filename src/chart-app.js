@@ -694,14 +694,14 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
 
   const warmthCardToneMap = {
     "non-fleece": {
-      border: "rgba(148, 163, 184, 0.42)",
-      background: "linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 0.96))",
-      accent: "#94a3b8"
+      border: "rgba(147, 197, 253, 0.58)",
+      background: "linear-gradient(180deg, rgba(239, 246, 255, 0.98), rgba(255, 255, 255, 0.96))",
+      accent: "#60a5fa"
     },
     fleece: {
-      border: "rgba(234, 179, 8, 0.28)",
-      background: "linear-gradient(180deg, rgba(255, 251, 235, 0.96), rgba(255, 255, 255, 0.96))",
-      accent: "#d4a943"
+      border: "rgba(244, 114, 182, 0.34)",
+      background: "linear-gradient(180deg, rgba(253, 242, 248, 0.96), rgba(255, 255, 255, 0.96))",
+      accent: "#ec4899"
     }
   };
   const shortFabricLabelMap = {
@@ -771,6 +771,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
   const root = document.createElement("div");
   root.className = "fabric-warmth-bubble-root";
   const activeWarmthKeys = new Set(["non-fleece", "fleece"]);
+  let hoveredWarmthKey = "";
 
   const overview = document.createElement("div");
   overview.className = "fabric-warmth-overview";
@@ -778,13 +779,30 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
     const tone = warmthCardToneMap[row.key] ?? warmthCardToneMap["non-fleece"];
     const item = document.createElement("article");
     item.className = "fabric-warmth-kpi-card";
+    item.dataset.warmthKey = row.key;
     item.style.borderColor = tone.border;
     item.style.background = tone.background;
     item.style.setProperty("--fabric-warmth-card-accent", tone.accent);
     item.innerHTML = `
-      <div class="fabric-warmth-kpi-head">
-        <strong>${row.label}</strong>
-        <small>${row.labelEn}</small>
+      <div class="fabric-warmth-kpi-content">
+        <div class="fabric-warmth-kpi-head">
+          <strong>${row.label}</strong>
+          <small>${row.labelEn}</small>
+        </div>
+        <div class="fabric-warmth-kpi-metrics">
+          <div class="fabric-warmth-kpi-metric">
+            <span>占比</span>
+            <strong>${row.share25Label}</strong>
+          </div>
+          <div class="fabric-warmth-kpi-metric">
+            <span>YOY</span>
+            <strong class="${row.yoyLabel.startsWith("-") ? "is-negative" : row.yoyLabel === "n/a" ? "is-neutral" : "is-positive"}">${row.yoyLabel}</strong>
+          </div>
+          <div class="fabric-warmth-kpi-metric">
+            <span>成交均价</span>
+            <strong>${row.avgDealPrice25Label}</strong>
+          </div>
+        </div>
       </div>
       <button
         type="button"
@@ -794,20 +812,6 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
       >
         <span class="fabric-warmth-visibility-button-text">展开气泡</span>
       </button>
-      <div class="fabric-warmth-kpi-metrics">
-        <div class="fabric-warmth-kpi-metric">
-          <span>占比</span>
-          <strong>${row.share25Label}</strong>
-        </div>
-        <div class="fabric-warmth-kpi-metric">
-          <span>YOY</span>
-          <strong class="${row.yoyLabel.startsWith("-") ? "is-negative" : row.yoyLabel === "n/a" ? "is-neutral" : "is-positive"}">${row.yoyLabel}</strong>
-        </div>
-        <div class="fabric-warmth-kpi-metric">
-          <span>成交均价</span>
-          <strong>${row.avgDealPrice25Label}</strong>
-        </div>
-      </div>
     `;
     item.querySelector(".fabric-warmth-visibility-toggle")?.addEventListener("click", () => {
       if (activeWarmthKeys.has(row.key)) {
@@ -816,6 +820,14 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
         activeWarmthKeys.add(row.key);
       }
       applyWarmthVisibility();
+    });
+    item.addEventListener("mouseenter", () => {
+      hoveredWarmthKey = row.key;
+      applyWarmthEmphasis();
+    });
+    item.addEventListener("mouseleave", () => {
+      hoveredWarmthKey = "";
+      applyWarmthEmphasis();
     });
     overview.appendChild(item);
   });
@@ -1080,7 +1092,9 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
   };
 
   const showTooltip = (event, row, yoyClass) => {
+    const comboLabel = `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
     tooltip.innerHTML = `
+      <div class="fabric-warmth-bubble-tooltip-title">${comboLabel}</div>
       <div class="fabric-warmth-bubble-tooltip-row">
         <span>GMV占比</span>
         <strong>${row.share25Label}</strong>
@@ -1112,6 +1126,23 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
       if (label) {
         label.textContent = isVisible ? "展开气泡" : "隐藏气泡";
       }
+    });
+    applyWarmthEmphasis();
+  };
+
+  const applyWarmthEmphasis = () => {
+    const hasHover = Boolean(hoveredWarmthKey);
+    svg.querySelectorAll(".fabric-warmth-bubble-node[data-warmth-key]").forEach((node) => {
+      const nodeWarmthKey = node.dataset.warmthKey ?? "";
+      const isVisible = activeWarmthKeys.has(nodeWarmthKey);
+      const isTarget = hasHover && nodeWarmthKey === hoveredWarmthKey;
+      node.classList.toggle("is-emphasized", isVisible && isTarget);
+      node.classList.toggle("is-dimmed", isVisible && hasHover && !isTarget);
+    });
+    overview.querySelectorAll(".fabric-warmth-kpi-card[data-warmth-key]").forEach((card) => {
+      const cardWarmthKey = card.dataset.warmthKey ?? "";
+      card.classList.toggle("is-hover-linked", hasHover && cardWarmthKey === hoveredWarmthKey);
+      card.classList.toggle("is-dimmed", hasHover && cardWarmthKey !== hoveredWarmthKey);
     });
   };
   applyWarmthVisibility();
