@@ -1161,11 +1161,13 @@ export function renderFabricFunctionMatrix(container, rows, columns) {
 
   const root = document.createElement("div");
   root.className = "fabric-function-matrix-root";
+  const tooltip = document.createElement("div");
+  tooltip.className = "fabric-function-matrix-tooltip";
+  tooltip.setAttribute("aria-hidden", "true");
 
   const note = document.createElement("p");
   note.className = "fabric-function-matrix-note";
-  note.textContent = "单元格数值 = 该类面料中带该功能表达的 GMV 占比";
-  root.appendChild(note);
+  note.textContent = "Cell Value = GMV share with function claim";
 
   const grid = document.createElement("div");
   grid.className = "fabric-function-matrix-grid";
@@ -1173,7 +1175,11 @@ export function renderFabricFunctionMatrix(container, rows, columns) {
 
   const corner = document.createElement("div");
   corner.className = "fabric-function-matrix-corner";
-  corner.innerHTML = `<span>Fabric</span><span>Function</span>`;
+  corner.innerHTML = `
+    <span>Fabric</span>
+    <em>/</em>
+    <span>Function</span>
+  `;
   grid.appendChild(corner);
 
   columns.forEach((column) => {
@@ -1196,28 +1202,87 @@ export function renderFabricFunctionMatrix(container, rows, columns) {
       </div>
       <div class="fabric-function-matrix-row-meta">
         <span>${row.labelEn}</span>
-        <span>功能表达 ${row.functionCoverageLabel}</span>
+        <span>${row.functionConclusion}</span>
       </div>
     `;
     grid.appendChild(rowHeader);
 
     row.cells.forEach((cell) => {
-      const intensity = Math.max(0.08, Math.min(0.42, cell.share / 100 * 0.44));
       const cellNode = document.createElement("div");
       const levelClass =
         cell.share >= 50 ? "is-strong" : cell.share >= 25 ? "is-medium" : cell.share > 0 ? "is-light" : "is-zero";
-      cellNode.className = `fabric-function-matrix-cell ${levelClass}`;
+      const isElevatedMedium = levelClass === "is-medium" && cell.share > 30;
+      const intensity =
+        levelClass === "is-strong"
+          ? Math.max(0.38, Math.min(0.76, 0.28 + cell.share / 100 * 0.58))
+          : levelClass === "is-medium"
+            ? Math.max(0.24, Math.min(0.58, 0.16 + cell.share / 100 * 0.52 + (cell.share > 30 ? 0.035 : 0)))
+            : levelClass === "is-light"
+              ? Math.max(0.08, Math.min(0.22, 0.04 + cell.share / 100 * 0.34))
+              : 0.04;
+      const borderAlpha =
+        levelClass === "is-strong"
+          ? Math.min(0.78, intensity + 0.2)
+          : levelClass === "is-medium"
+            ? Math.min(0.62, intensity + 0.18)
+            : levelClass === "is-light"
+              ? Math.min(0.42, intensity + 0.14)
+              : 0.16;
+      cellNode.className = `fabric-function-matrix-cell ${levelClass}${isElevatedMedium ? " is-medium-elevated" : ""}`;
       cellNode.style.background = hexToRgba(row.color, intensity);
-      cellNode.style.borderColor = hexToRgba(row.color, Math.min(0.52, intensity + 0.16));
+      cellNode.style.borderColor = hexToRgba(row.color, borderAlpha);
       cellNode.innerHTML = `
         <strong>${cell.shareLabel}</strong>
         <small>${cell.share >= 50 ? "强表达" : cell.share >= 25 ? "可感知" : cell.share > 0 ? "弱表达" : "-"}</small>
       `;
+      if (cell.share > 0) {
+        cellNode.addEventListener("mouseenter", (event) => {
+          showTooltip(event, cell);
+        });
+        cellNode.addEventListener("mousemove", (event) => {
+          updateTooltipPosition(event);
+        });
+        cellNode.addEventListener("mouseleave", () => {
+          hideTooltip();
+        });
+      }
       grid.appendChild(cellNode);
     });
   });
 
+  const hideTooltip = () => {
+    tooltip.classList.remove("is-visible");
+    tooltip.setAttribute("aria-hidden", "true");
+  };
+
+  const updateTooltipPosition = (event) => {
+    const rootRect = root.getBoundingClientRect();
+    const tooltipWidth = tooltip.offsetWidth || 132;
+    const tooltipHeight = tooltip.offsetHeight || 52;
+    const desiredLeft = event.clientX - rootRect.left + 14;
+    const desiredTop = event.clientY - rootRect.top - tooltipHeight - 12;
+    const boundedLeft = Math.max(8, Math.min(rootRect.width - tooltipWidth - 8, desiredLeft));
+    const fallbackTop = event.clientY - rootRect.top + 16;
+    const boundedTop = desiredTop < 8 ? fallbackTop : desiredTop;
+    tooltip.style.left = `${boundedLeft}px`;
+    tooltip.style.top = `${Math.max(8, Math.min(rootRect.height - tooltipHeight - 8, boundedTop))}px`;
+  };
+
+  const showTooltip = (event, cell) => {
+    tooltip.innerHTML = `
+      <div class="fabric-function-matrix-tooltip-row">
+        <span>YOY%</span>
+        <strong class="${getYoyClass(cell.yoyLabel)}">${cell.yoyLabel}</strong>
+      </div>
+    `;
+    tooltip.classList.add("is-visible");
+    tooltip.setAttribute("aria-hidden", "false");
+    updateTooltipPosition(event);
+  };
+
   root.appendChild(grid);
+  root.appendChild(note);
+  root.appendChild(tooltip);
   container.innerHTML = "";
   container.appendChild(root);
 }

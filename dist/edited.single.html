@@ -2678,19 +2678,21 @@ body.has-fabric-lightbox-open {
 }
 
 .fabric-function-matrix-root {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   height: 100%;
 }
 
 .fabric-function-matrix-note {
   margin: 0;
   color: #94a3b8;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.04em;
+  line-height: 1.3;
+  letter-spacing: 0.03em;
+  margin-top: 6px;
 }
 
 .fabric-function-matrix-grid {
@@ -2711,9 +2713,9 @@ body.has-fabric-lightbox-open {
 
 .fabric-function-matrix-corner {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
   padding: 12px 14px;
   color: #64748b;
   font-size: 10px;
@@ -2723,28 +2725,40 @@ body.has-fabric-lightbox-open {
   text-transform: uppercase;
 }
 
+.fabric-function-matrix-corner em {
+  color: #94a3b8;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .fabric-function-matrix-column {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  min-height: 64px;
-  padding: 10px 8px;
+  gap: 5px;
+  min-height: 68px;
+  padding: 8px 6px 9px;
   text-align: center;
 }
 
 .fabric-function-matrix-column strong {
   color: #111827;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.15;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
 }
 
 .fabric-function-matrix-column small {
-  color: #94a3b8;
-  font-size: 10px;
+  color: #8b99b2;
+  font-size: 9px;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
 }
 
 .fabric-function-matrix-row-header {
@@ -2784,9 +2798,11 @@ body.has-fabric-lightbox-open {
 
 .fabric-function-matrix-row-meta span:first-child {
   color: #94a3b8;
-  font-size: 11px;
+  display: block;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.15;
+  transform: translateY(-2px);
 }
 
 .fabric-function-matrix-row-meta span:last-child {
@@ -2804,6 +2820,33 @@ body.has-fabric-lightbox-open {
   min-height: 74px;
   padding: 8px 6px;
   text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.fabric-function-matrix-cell.is-light {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+.fabric-function-matrix-cell.is-medium {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 4px 10px rgba(148, 163, 184, 0.08);
+}
+
+.fabric-function-matrix-cell.is-medium-elevated {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 5px 12px rgba(100, 116, 139, 0.1);
+}
+
+.fabric-function-matrix-cell.is-strong {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    0 6px 14px rgba(100, 116, 139, 0.12);
 }
 
 .fabric-function-matrix-cell strong {
@@ -2824,6 +2867,70 @@ body.has-fabric-lightbox-open {
 .fabric-function-matrix-cell.is-zero strong,
 .fabric-function-matrix-cell.is-zero small {
   color: #94a3b8;
+}
+
+.fabric-function-matrix-cell.is-zero {
+  cursor: default;
+}
+
+.fabric-function-matrix-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-width: 120px;
+  padding: 10px 12px;
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  z-index: 3;
+}
+
+.fabric-function-matrix-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fabric-function-matrix-tooltip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fabric-function-matrix-tooltip-row span {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.fabric-function-matrix-tooltip-row strong {
+  color: #111827;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.fabric-function-matrix-tooltip-row strong.is-positive {
+  color: var(--green);
+}
+
+.fabric-function-matrix-tooltip-row strong.is-negative {
+  color: var(--red);
+}
+
+.fabric-function-matrix-tooltip-row strong.is-neutral {
+  color: #64748b;
 }
 
 .silhouette-structure-panel .panel-title,
@@ -3992,6 +4099,7 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     label: "光滑/平整面料",
     labelEn: "Smooth Fabric",
     color: "#b0c3f0",
+    functionConclusion: "基础功能承接最稳",
     textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
     positioning: "运动功能层、日常舒适层、基础半拉链",
     sampleCount: 5,
@@ -4015,6 +4123,7 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     label: "拉绒/磨毛面料",
     labelEn: "Brushed Fabric",
     color: "#ebc58c",
+    functionConclusion: "保暖+弹性舒适导向",
     textile: "有绒感/毛感、表面磨毛感或仿羊毛",
     positioning: "秋冬保暖层、轻保暖、亲肤感",
     sampleCount: 5,
@@ -4038,6 +4147,7 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     label: "肌理面料",
     labelEn: "Textured Fabric",
     color: "#e4a7b5",
+    functionConclusion: "速干+弹力强表达",
     textile: "表面有明确视觉纹理或结构感，如罗纹、华夫格等",
     positioning: "具有透气结构、设计感、风格化面料",
     sampleCount: 5,
@@ -4061,6 +4171,7 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     label: "羊毛面料",
     labelEn: "Wool",
     color: "#99cce8",
+    functionConclusion: "功能复合度最高",
     textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
     positioning: "贴身功能层、高端保暖、专业户外",
     sampleCount: 5,
@@ -4985,6 +5096,7 @@ const FABRIC_WARMTH_Y24 = summarizeFabricWarmth(LS_HZ_INNER_DATASET.raw.y24);
 const WARMTH_OVERVIEW_Y25 = summarizeWarmthOverview(LS_HZ_INNER_DATASET.raw.y25);
 const WARMTH_OVERVIEW_Y24 = summarizeWarmthOverview(LS_HZ_INNER_DATASET.raw.y24);
 const FABRIC_FUNCTION_MATRIX_Y25 = summarizeFabricFunctionMatrix(LS_HZ_INNER_DATASET.raw.y25);
+const FABRIC_FUNCTION_MATRIX_Y24 = summarizeFabricFunctionMatrix(LS_HZ_INNER_DATASET.raw.y24);
 
 const FABRIC_WARMTH_OVERVIEW_DATA = FABRIC_WARMTH_BUCKETS.map((warmthBucket) => {
   const current = WARMTH_OVERVIEW_Y25.items.get(warmthBucket.key) ?? {
@@ -5074,12 +5186,20 @@ const FABRIC_FUNCTION_MATRIX_DATA = FABRIC_OVERVIEW_DATA.map((definition) => {
     functionCoverageLabel: "0%",
     cells: []
   };
+  const previousMatrixRow = FABRIC_FUNCTION_MATRIX_Y24.find((item) => item.key === definition.key) ?? {
+    gmv: 0,
+    count: 0,
+    functionCoverageShare: 0,
+    functionCoverageLabel: "0%",
+    cells: []
+  };
 
   return {
     key: definition.key,
     label: definition.label,
     labelEn: definition.labelEn,
     color: definition.color,
+    functionConclusion: definition.functionConclusion ?? `功能表达 ${matrixRow.functionCoverageLabel}`,
     gmv25: definition.gmv25,
     gmv25Label: `¥${Math.round(definition.gmv25 / 10000)}w`,
     count25: matrixRow.count,
@@ -5092,12 +5212,21 @@ const FABRIC_FUNCTION_MATRIX_DATA = FABRIC_OVERVIEW_DATA.map((definition) => {
         share: 0,
         shareLabel: "0%"
       };
+      const previousCell = previousMatrixRow.cells.find((item) => item.key === column.key) ?? {
+        key: column.key,
+        gmv: 0,
+        share: 0,
+        shareLabel: "0%"
+      };
+      const yoy = computeYoy(cell.gmv, previousCell.gmv);
 
       return {
         ...cell,
         label: column.label,
         labelEn: column.labelEn,
-        color: column.color
+        color: column.color,
+        yoy,
+        yoyLabel: previousCell.gmv > 0 ? formatYoyLabel(yoy) : cell.gmv > 0 ? "new" : "n/a"
       };
     })
   };
@@ -6518,11 +6647,13 @@ function renderFabricFunctionMatrix(container, rows, columns) {
 
   const root = document.createElement("div");
   root.className = "fabric-function-matrix-root";
+  const tooltip = document.createElement("div");
+  tooltip.className = "fabric-function-matrix-tooltip";
+  tooltip.setAttribute("aria-hidden", "true");
 
   const note = document.createElement("p");
   note.className = "fabric-function-matrix-note";
-  note.textContent = "单元格数值 = 该类面料中带该功能表达的 GMV 占比";
-  root.appendChild(note);
+  note.textContent = "Cell Value = GMV share with function claim";
 
   const grid = document.createElement("div");
   grid.className = "fabric-function-matrix-grid";
@@ -6530,7 +6661,11 @@ function renderFabricFunctionMatrix(container, rows, columns) {
 
   const corner = document.createElement("div");
   corner.className = "fabric-function-matrix-corner";
-  corner.innerHTML = `<span>Fabric</span><span>Function</span>`;
+  corner.innerHTML = `
+    <span>Fabric</span>
+    <em>/</em>
+    <span>Function</span>
+  `;
   grid.appendChild(corner);
 
   columns.forEach((column) => {
@@ -6553,28 +6688,87 @@ function renderFabricFunctionMatrix(container, rows, columns) {
       </div>
       <div class="fabric-function-matrix-row-meta">
         <span>${row.labelEn}</span>
-        <span>功能表达 ${row.functionCoverageLabel}</span>
+        <span>${row.functionConclusion}</span>
       </div>
     `;
     grid.appendChild(rowHeader);
 
     row.cells.forEach((cell) => {
-      const intensity = Math.max(0.08, Math.min(0.42, cell.share / 100 * 0.44));
       const cellNode = document.createElement("div");
       const levelClass =
         cell.share >= 50 ? "is-strong" : cell.share >= 25 ? "is-medium" : cell.share > 0 ? "is-light" : "is-zero";
-      cellNode.className = `fabric-function-matrix-cell ${levelClass}`;
+      const isElevatedMedium = levelClass === "is-medium" && cell.share > 30;
+      const intensity =
+        levelClass === "is-strong"
+          ? Math.max(0.38, Math.min(0.76, 0.28 + cell.share / 100 * 0.58))
+          : levelClass === "is-medium"
+            ? Math.max(0.24, Math.min(0.58, 0.16 + cell.share / 100 * 0.52 + (cell.share > 30 ? 0.035 : 0)))
+            : levelClass === "is-light"
+              ? Math.max(0.08, Math.min(0.22, 0.04 + cell.share / 100 * 0.34))
+              : 0.04;
+      const borderAlpha =
+        levelClass === "is-strong"
+          ? Math.min(0.78, intensity + 0.2)
+          : levelClass === "is-medium"
+            ? Math.min(0.62, intensity + 0.18)
+            : levelClass === "is-light"
+              ? Math.min(0.42, intensity + 0.14)
+              : 0.16;
+      cellNode.className = `fabric-function-matrix-cell ${levelClass}${isElevatedMedium ? " is-medium-elevated" : ""}`;
       cellNode.style.background = hexToRgba(row.color, intensity);
-      cellNode.style.borderColor = hexToRgba(row.color, Math.min(0.52, intensity + 0.16));
+      cellNode.style.borderColor = hexToRgba(row.color, borderAlpha);
       cellNode.innerHTML = `
         <strong>${cell.shareLabel}</strong>
         <small>${cell.share >= 50 ? "强表达" : cell.share >= 25 ? "可感知" : cell.share > 0 ? "弱表达" : "-"}</small>
       `;
+      if (cell.share > 0) {
+        cellNode.addEventListener("mouseenter", (event) => {
+          showTooltip(event, cell);
+        });
+        cellNode.addEventListener("mousemove", (event) => {
+          updateTooltipPosition(event);
+        });
+        cellNode.addEventListener("mouseleave", () => {
+          hideTooltip();
+        });
+      }
       grid.appendChild(cellNode);
     });
   });
 
+  const hideTooltip = () => {
+    tooltip.classList.remove("is-visible");
+    tooltip.setAttribute("aria-hidden", "true");
+  };
+
+  const updateTooltipPosition = (event) => {
+    const rootRect = root.getBoundingClientRect();
+    const tooltipWidth = tooltip.offsetWidth || 132;
+    const tooltipHeight = tooltip.offsetHeight || 52;
+    const desiredLeft = event.clientX - rootRect.left + 14;
+    const desiredTop = event.clientY - rootRect.top - tooltipHeight - 12;
+    const boundedLeft = Math.max(8, Math.min(rootRect.width - tooltipWidth - 8, desiredLeft));
+    const fallbackTop = event.clientY - rootRect.top + 16;
+    const boundedTop = desiredTop < 8 ? fallbackTop : desiredTop;
+    tooltip.style.left = `${boundedLeft}px`;
+    tooltip.style.top = `${Math.max(8, Math.min(rootRect.height - tooltipHeight - 8, boundedTop))}px`;
+  };
+
+  const showTooltip = (event, cell) => {
+    tooltip.innerHTML = `
+      <div class="fabric-function-matrix-tooltip-row">
+        <span>YOY%</span>
+        <strong class="${getYoyClass(cell.yoyLabel)}">${cell.yoyLabel}</strong>
+      </div>
+    `;
+    tooltip.classList.add("is-visible");
+    tooltip.setAttribute("aria-hidden", "false");
+    updateTooltipPosition(event);
+  };
+
   root.appendChild(grid);
+  root.appendChild(note);
+  root.appendChild(tooltip);
   container.innerHTML = "";
   container.appendChild(root);
 }

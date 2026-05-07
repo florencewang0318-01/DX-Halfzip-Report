@@ -309,6 +309,7 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     label: "光滑/平整面料",
     labelEn: "Smooth Fabric",
     color: "#b0c3f0",
+    functionConclusion: "基础功能承接最稳",
     textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
     positioning: "运动功能层、日常舒适层、基础半拉链",
     sampleCount: 5,
@@ -332,6 +333,7 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     label: "拉绒/磨毛面料",
     labelEn: "Brushed Fabric",
     color: "#ebc58c",
+    functionConclusion: "保暖+弹性舒适导向",
     textile: "有绒感/毛感、表面磨毛感或仿羊毛",
     positioning: "秋冬保暖层、轻保暖、亲肤感",
     sampleCount: 5,
@@ -355,6 +357,7 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     label: "肌理面料",
     labelEn: "Textured Fabric",
     color: "#e4a7b5",
+    functionConclusion: "速干+弹力强表达",
     textile: "表面有明确视觉纹理或结构感，如罗纹、华夫格等",
     positioning: "具有透气结构、设计感、风格化面料",
     sampleCount: 5,
@@ -378,6 +381,7 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     label: "羊毛面料",
     labelEn: "Wool",
     color: "#99cce8",
+    functionConclusion: "功能复合度最高",
     textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
     positioning: "贴身功能层、高端保暖、专业户外",
     sampleCount: 5,
@@ -1302,6 +1306,7 @@ const FABRIC_WARMTH_Y24 = summarizeFabricWarmth(LS_HZ_INNER_DATASET.raw.y24);
 const WARMTH_OVERVIEW_Y25 = summarizeWarmthOverview(LS_HZ_INNER_DATASET.raw.y25);
 const WARMTH_OVERVIEW_Y24 = summarizeWarmthOverview(LS_HZ_INNER_DATASET.raw.y24);
 const FABRIC_FUNCTION_MATRIX_Y25 = summarizeFabricFunctionMatrix(LS_HZ_INNER_DATASET.raw.y25);
+const FABRIC_FUNCTION_MATRIX_Y24 = summarizeFabricFunctionMatrix(LS_HZ_INNER_DATASET.raw.y24);
 
 export const FABRIC_WARMTH_OVERVIEW_DATA = FABRIC_WARMTH_BUCKETS.map((warmthBucket) => {
   const current = WARMTH_OVERVIEW_Y25.items.get(warmthBucket.key) ?? {
@@ -1391,12 +1396,20 @@ export const FABRIC_FUNCTION_MATRIX_DATA = FABRIC_OVERVIEW_DATA.map((definition)
     functionCoverageLabel: "0%",
     cells: []
   };
+  const previousMatrixRow = FABRIC_FUNCTION_MATRIX_Y24.find((item) => item.key === definition.key) ?? {
+    gmv: 0,
+    count: 0,
+    functionCoverageShare: 0,
+    functionCoverageLabel: "0%",
+    cells: []
+  };
 
   return {
     key: definition.key,
     label: definition.label,
     labelEn: definition.labelEn,
     color: definition.color,
+    functionConclusion: definition.functionConclusion ?? `功能表达 ${matrixRow.functionCoverageLabel}`,
     gmv25: definition.gmv25,
     gmv25Label: `¥${Math.round(definition.gmv25 / 10000)}w`,
     count25: matrixRow.count,
@@ -1409,12 +1422,21 @@ export const FABRIC_FUNCTION_MATRIX_DATA = FABRIC_OVERVIEW_DATA.map((definition)
         share: 0,
         shareLabel: "0%"
       };
+      const previousCell = previousMatrixRow.cells.find((item) => item.key === column.key) ?? {
+        key: column.key,
+        gmv: 0,
+        share: 0,
+        shareLabel: "0%"
+      };
+      const yoy = computeYoy(cell.gmv, previousCell.gmv);
 
       return {
         ...cell,
         label: column.label,
         labelEn: column.labelEn,
-        color: column.color
+        color: column.color,
+        yoy,
+        yoyLabel: previousCell.gmv > 0 ? formatYoyLabel(yoy) : cell.gmv > 0 ? "new" : "n/a"
       };
     })
   };

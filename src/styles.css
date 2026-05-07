@@ -2671,19 +2671,21 @@ body.has-fabric-lightbox-open {
 }
 
 .fabric-function-matrix-root {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   height: 100%;
 }
 
 .fabric-function-matrix-note {
   margin: 0;
   color: #94a3b8;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.04em;
+  line-height: 1.3;
+  letter-spacing: 0.03em;
+  margin-top: 6px;
 }
 
 .fabric-function-matrix-grid {
@@ -2704,9 +2706,9 @@ body.has-fabric-lightbox-open {
 
 .fabric-function-matrix-corner {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
   padding: 12px 14px;
   color: #64748b;
   font-size: 10px;
@@ -2716,28 +2718,40 @@ body.has-fabric-lightbox-open {
   text-transform: uppercase;
 }
 
+.fabric-function-matrix-corner em {
+  color: #94a3b8;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .fabric-function-matrix-column {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
-  min-height: 64px;
-  padding: 10px 8px;
+  gap: 5px;
+  min-height: 68px;
+  padding: 8px 6px 9px;
   text-align: center;
 }
 
 .fabric-function-matrix-column strong {
   color: #111827;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.15;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
 }
 
 .fabric-function-matrix-column small {
-  color: #94a3b8;
-  font-size: 10px;
+  color: #8b99b2;
+  font-size: 9px;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
 }
 
 .fabric-function-matrix-row-header {
@@ -2777,9 +2791,11 @@ body.has-fabric-lightbox-open {
 
 .fabric-function-matrix-row-meta span:first-child {
   color: #94a3b8;
-  font-size: 11px;
+  display: block;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.15;
+  transform: translateY(-2px);
 }
 
 .fabric-function-matrix-row-meta span:last-child {
@@ -2797,6 +2813,33 @@ body.has-fabric-lightbox-open {
   min-height: 74px;
   padding: 8px 6px;
   text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.fabric-function-matrix-cell.is-light {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+.fabric-function-matrix-cell.is-medium {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 4px 10px rgba(148, 163, 184, 0.08);
+}
+
+.fabric-function-matrix-cell.is-medium-elevated {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 5px 12px rgba(100, 116, 139, 0.1);
+}
+
+.fabric-function-matrix-cell.is-strong {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.74),
+    0 6px 14px rgba(100, 116, 139, 0.12);
 }
 
 .fabric-function-matrix-cell strong {
@@ -2817,6 +2860,70 @@ body.has-fabric-lightbox-open {
 .fabric-function-matrix-cell.is-zero strong,
 .fabric-function-matrix-cell.is-zero small {
   color: #94a3b8;
+}
+
+.fabric-function-matrix-cell.is-zero {
+  cursor: default;
+}
+
+.fabric-function-matrix-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-width: 120px;
+  padding: 10px 12px;
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  z-index: 3;
+}
+
+.fabric-function-matrix-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fabric-function-matrix-tooltip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fabric-function-matrix-tooltip-row span {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.fabric-function-matrix-tooltip-row strong {
+  color: #111827;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.fabric-function-matrix-tooltip-row strong.is-positive {
+  color: var(--green);
+}
+
+.fabric-function-matrix-tooltip-row strong.is-negative {
+  color: var(--red);
+}
+
+.fabric-function-matrix-tooltip-row strong.is-neutral {
+  color: #64748b;
 }
 
 .silhouette-structure-panel .panel-title,
