@@ -175,6 +175,63 @@ function summarizeHalfZipByBrandGender(rows) {
   return summary;
 }
 
+function summarizeHalfZipByBrand(rows) {
+  const summary = new Map();
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    const brand = getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"]));
+    const current = summary.get(brand) ?? {
+      brand,
+      gmv: 0,
+      count: 0,
+      units: 0,
+      weightedDealPriceTotal: 0,
+      weightedDealPriceUnits: 0,
+      fallbackDealPriceTotal: 0,
+      fallbackDealPriceCount: 0,
+      avgDealPrice: 0
+    };
+
+    const sales = toNumber(row["销售额"]);
+    const units = toNumber(row["销量"]);
+    const dealPrice = toNumber(row["成交均价"] ?? row["成交价格"]);
+
+    current.gmv += sales;
+    current.count += 1;
+
+    if (units > 0) {
+      current.units += units;
+    }
+
+    if (dealPrice > 0 && units > 0) {
+      current.weightedDealPriceTotal += dealPrice * units;
+      current.weightedDealPriceUnits += units;
+    } else if (dealPrice > 0) {
+      current.fallbackDealPriceTotal += dealPrice;
+      current.fallbackDealPriceCount += 1;
+    }
+
+    summary.set(brand, current);
+  });
+
+  summary.forEach((item) => {
+    if (item.weightedDealPriceUnits > 0) {
+      item.avgDealPrice = item.weightedDealPriceTotal / item.weightedDealPriceUnits;
+      return;
+    }
+
+    if (item.fallbackDealPriceCount > 0) {
+      item.avgDealPrice = item.fallbackDealPriceTotal / item.fallbackDealPriceCount;
+    }
+  });
+
+  return summary;
+}
+
 const SILHOUETTE_FIT_ORDER = ["tight紧身", "slim修身", "regular合体", "Active运动版型", "loose宽松"];
 const SILHOUETTE_LENGTH_ORDER = ["crop短款", "semi-crop短款", "regular常规"];
 const SILHOUETTE_GENDERS = ["女", "男", "男女"];
@@ -667,6 +724,58 @@ function summarizeFunctionCoverage(rows, gender) {
   };
 }
 
+function summarizeFunctionCoverageByBrand(rows, brandName) {
+  const filteredRows = rows.filter((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return false;
+    }
+
+    return getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"])) === brandName;
+  });
+
+  const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
+  const totalCount = filteredRows.length;
+  let functionGmv = 0;
+  let functionCount = 0;
+  const bucketMap = new Map(
+    FUNCTION_BUCKETS.map((bucket) => [
+      bucket.key,
+      {
+        ...bucket,
+        gmv: 0,
+        count: 0
+      }
+    ])
+  );
+
+  filteredRows.forEach((row) => {
+    const gmv = toNumber(row["销售额"]);
+    const bucketKeys = getFunctionBucketKeys(row);
+    if (bucketKeys.length) {
+      functionGmv += gmv;
+      functionCount += 1;
+    }
+
+    bucketKeys.forEach((key) => {
+      const current = bucketMap.get(key);
+      if (!current) {
+        return;
+      }
+
+      current.gmv += gmv;
+      current.count += 1;
+    });
+  });
+
+  return {
+    totalGmv,
+    totalCount,
+    functionGmv,
+    functionCount,
+    buckets: Array.from(bucketMap.values())
+  };
+}
+
 function buildFunctionRows(current, previous, denominator = current.totalGmv) {
   return current.buckets
     .map((bucket) => {
@@ -741,6 +850,7 @@ export const REPORT_DATA_SOURCE = {
 
 const BRAND_PERFORMANCE_Y25 = summarizeBrandPerformance(LS_HZ_INNER_DATASET.raw.y25);
 const BRAND_PERFORMANCE_Y24 = summarizeBrandPerformance(LS_HZ_INNER_DATASET.raw.y24);
+const HALFZIP_BRAND_SUMMARY_Y25 = summarizeHalfZipByBrand(LS_HZ_INNER_DATASET.raw.y25);
 
 export const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.values())
   .map((item) => {
@@ -768,6 +878,24 @@ export const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.value
     };
   })
   .sort((a, b) => b.innerGmv25 - a.innerGmv25);
+
+export const COMPETITOR_BRAND_SNAPSHOT = MARKET_SCOPE_BRAND_COMPARE.map((item) => {
+  const brandSummary = HALFZIP_BRAND_SUMMARY_Y25.get(item.brand) ?? {
+    avgDealPrice: 0
+  };
+
+  return {
+    brand: item.brand,
+    innerShare: item.halfZipShareOfInner,
+    innerShareLabel: item.halfZipShareLabel,
+    halfZipYoy: item.halfZipYoy,
+    halfZipYoyLabel: item.halfZipYoyLabel,
+    avgDealPrice25: brandSummary.avgDealPrice,
+    avgDealPrice25Label: brandSummary.avgDealPrice
+      ? `¥${Math.round(brandSummary.avgDealPrice).toLocaleString("en-US")}`
+      : "n/a"
+  };
+});
 
 const FEMALE_OPPORTUNITY_GENDERS = ["女", "男", "男女"];
 const FEMALE_OPPORTUNITY_Y25 = summarizeHalfZipByBrandGender(LS_HZ_INNER_DATASET.raw.y25);
@@ -924,6 +1052,28 @@ export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => 
     rows
   };
 });
+
+const ARCTERYX_FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverageByBrand(
+  LS_HZ_INNER_DATASET.raw.y25,
+  "ARC'TERYX/始祖鸟"
+);
+const ARCTERYX_FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverageByBrand(
+  LS_HZ_INNER_DATASET.raw.y24,
+  "ARC'TERYX/始祖鸟"
+);
+const ARCTERYX_FUNCTION_RADAR_KEYS = ["warmth", "stretch", "quick-dry", "breathable", "durable", "lightweight"];
+
+export const ARCTERYX_BRAND_FUNCTION_RADAR = {
+  brand: "ARC'TERYX/始祖鸟",
+  conclusion:
+    "以保暖为绝对核心，并叠加弹力、速干、透气形成复合功能层。",
+  reserveTitle: "Strong Function Combo",
+  rows: buildFunctionRows(
+    ARCTERYX_FUNCTION_COVERAGE_Y25,
+    ARCTERYX_FUNCTION_COVERAGE_Y24,
+    ARCTERYX_FUNCTION_COVERAGE_Y25.totalGmv
+  ).filter((row) => ARCTERYX_FUNCTION_RADAR_KEYS.includes(row.key))
+};
 
 const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
 const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);
