@@ -1098,7 +1098,7 @@ const COMPETITOR_FUNCTION_RADAR_CONFIG = [
   },
   {
     brand: "LULULEMON/露露乐蒙",
-    conclusion: "以弹力为核心叠加保暖、速干与抑菌，整体偏运动休闲舒适功能层。",
+    conclusion: "以弹力为核心叠加速干、保暖与抑菌，整体偏运动休闲舒适功能。",
     radarKeys: ["stretch", "quick-dry", "warmth", "antibacterial", "lightweight"],
     strongCombos: [
       {
@@ -1131,6 +1131,251 @@ export const COMPETITOR_BRAND_FUNCTION_RADARS = Object.fromEntries(
         rows: buildFunctionRows(currentSummary, previousSummary, currentSummary.totalGmv).filter((row) =>
           (item.radarKeys ?? []).includes(row.key)
         )
+      }
+    ];
+  })
+);
+
+function summarizeFabricWarmthByBrand(rows, brandName) {
+  const filteredRows = rows.filter((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return false;
+    }
+
+    return getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"])) === brandName;
+  });
+
+  return summarizeFabricWarmth(filteredRows);
+}
+
+const COMPETITOR_BRAND_FABRIC_RADAR_CONFIG = [
+  {
+    brand: "ARC'TERYX/始祖鸟",
+    conclusion: "光滑/平整面料仍是主盘，但结构正从加绒保暖层转向轻量贴身的非加绒层；拉绒/磨毛加绒面料增长迅速，承接保暖层需求。",
+    combos: [
+      {
+        key: "smooth__fleece",
+        shortLabel: "光滑 X 加绒",
+        label: "光滑/平整面料 × 加绒"
+        ,
+        labelEn: "Smooth X Fleece"
+      },
+      {
+        key: "smooth__non-fleece",
+        shortLabel: "光滑 X 不加绒",
+        label: "光滑/平整面料 × 不加绒"
+        ,
+        labelEn: "Smooth X Non-fleece"
+      },
+      {
+        key: "wool__non-fleece",
+        shortLabel: "羊毛 X 不加绒",
+        label: "羊毛面料 × 不加绒"
+        ,
+        labelEn: "Wool X Non-fleece"
+      },
+      {
+        key: "textured__fleece",
+        shortLabel: "肌理 X 加绒",
+        label: "肌理面料 × 加绒"
+        ,
+        labelEn: "Textured X Fleece"
+      },
+      {
+        key: "brushed__fleece",
+        shortLabel: "拉绒/磨毛 X 加绒",
+        label: "拉绒/磨毛面料 × 加绒"
+        ,
+        labelEn: "Brushed X Fleece"
+      }
+    ]
+  },
+  {
+    brand: "KAILAS/凯乐石",
+    conclusion: "光滑/平整 X 加绒为稳定主盘，羊毛面料为主要增量，整体结构以保暖为导向。",
+    combos: [
+      {
+        key: "smooth__fleece",
+        shortLabel: "光滑 X 加绒",
+        label: "光滑/平整面料 × 加绒",
+        labelEn: "Smooth X Fleece"
+      },
+      {
+        key: "wool__fleece",
+        shortLabel: "羊毛 X 加绒",
+        label: "羊毛面料 × 加绒",
+        labelEn: "Wool X Fleece"
+      },
+      {
+        key: "wool__non-fleece",
+        shortLabel: "羊毛 X 不加绒",
+        label: "羊毛面料 × 不加绒",
+        labelEn: "Wool X Non-fleece"
+      },
+      {
+        key: "smooth__non-fleece",
+        shortLabel: "光滑 X 不加绒",
+        label: "光滑/平整面料 × 不加绒",
+        labelEn: "Smooth X Non-fleece"
+      },
+      {
+        key: "textured__fleece",
+        shortLabel: "肌理 X 加绒",
+        label: "肌理面料 × 加绒",
+        labelEn: "Textured X Fleece"
+      }
+    ]
+  },
+  {
+    brand: "KOLON SPORT/可隆",
+    conclusion: "重心向“表面光滑内里加绒”与“表面拉绒内里不加绒”双向迁移，面料结构明显重组。",
+    combos: [
+      {
+        key: "smooth__fleece",
+        shortLabel: "光滑 X 加绒",
+        label: "光滑/平整面料 × 加绒",
+        labelEn: "Smooth X Fleece"
+      },
+      {
+        key: "brushed__non-fleece",
+        shortLabel: "拉绒/磨毛 X 不加绒",
+        label: "拉绒/磨毛面料 × 不加绒",
+        labelEn: "Brushed X Non-fleece"
+      },
+      {
+        key: "smooth__non-fleece",
+        shortLabel: "光滑 X 不加绒",
+        label: "光滑/平整面料 × 不加绒",
+        labelEn: "Smooth X Non-fleece"
+      },
+      {
+        key: "brushed__fleece",
+        shortLabel: "拉绒/磨毛 X 加绒",
+        label: "拉绒/磨毛面料 × 加绒",
+        labelEn: "Brushed X Fleece"
+      },
+      {
+        key: "wool__non-fleece",
+        shortLabel: "羊毛 X 不加绒",
+        label: "羊毛面料 × 不加绒",
+        labelEn: "Wool X Non-fleece"
+      }
+    ]
+  },
+  {
+    brand: "DESCENTE/迪桑特",
+    conclusion: "整体偏轻量训练层而非保暖层，非加绒结构为主盘，其中核心是光滑面料，拉绒和肌理面料快速扩张。",
+    combos: [
+      {
+        key: "smooth__non-fleece",
+        shortLabel: "光滑 X 不加绒",
+        label: "光滑/平整面料 × 不加绒",
+        labelEn: "Smooth X Non-fleece"
+      },
+      {
+        key: "brushed__non-fleece",
+        shortLabel: "拉绒/磨毛 X 不加绒",
+        label: "拉绒/磨毛面料 × 不加绒",
+        labelEn: "Brushed X Non-fleece"
+      },
+      {
+        key: "brushed__fleece",
+        shortLabel: "拉绒/磨毛 X 加绒",
+        label: "拉绒/磨毛面料 × 加绒",
+        labelEn: "Brushed X Fleece"
+      },
+      {
+        key: "textured__non-fleece",
+        shortLabel: "肌理 X 不加绒",
+        label: "肌理面料 × 不加绒",
+        labelEn: "Textured X Non-fleece"
+      },
+      {
+        key: "smooth__fleece",
+        shortLabel: "光滑 X 加绒",
+        label: "光滑/平整面料 × 加绒",
+        labelEn: "Smooth X Fleece"
+      }
+    ]
+  },
+  {
+    brand: "LULULEMON/露露乐蒙",
+    conclusion: "面料结构较分散，肌理面料、光滑/平整面料承接非加绒贴身层，拉绒/磨毛面料承接加绒保暖层。",
+    combos: [
+      {
+        key: "textured__non-fleece",
+        shortLabel: "肌理 X 不加绒",
+        label: "肌理面料 × 不加绒",
+        labelEn: "Textured X Non-fleece"
+      },
+      {
+        key: "smooth__non-fleece",
+        shortLabel: "光滑 X 不加绒",
+        label: "光滑/平整面料 × 不加绒",
+        labelEn: "Smooth X Non-fleece"
+      },
+      {
+        key: "brushed__fleece",
+        shortLabel: "拉绒/磨毛 X 加绒",
+        label: "拉绒/磨毛面料 × 加绒",
+        labelEn: "Brushed X Fleece"
+      },
+      {
+        key: "brushed__non-fleece",
+        shortLabel: "拉绒/磨毛 X 不加绒",
+        label: "拉绒/磨毛面料 × 不加绒",
+        labelEn: "Brushed X Non-fleece"
+      },
+      {
+        key: "wool__fleece",
+        shortLabel: "羊毛 X 加绒",
+        label: "羊毛面料 × 加绒",
+        labelEn: "Wool X Fleece"
+      }
+    ]
+  }
+];
+
+export const COMPETITOR_BRAND_FABRIC_RADARS = Object.fromEntries(
+  COMPETITOR_BRAND_FABRIC_RADAR_CONFIG.map((item) => {
+    const currentSummary = summarizeFabricWarmthByBrand(LS_HZ_INNER_DATASET.raw.y25, item.brand);
+    const previousSummary = summarizeFabricWarmthByBrand(LS_HZ_INNER_DATASET.raw.y24, item.brand);
+
+    return [
+      item.brand,
+      {
+        brand: item.brand,
+        conclusion: item.conclusion ?? "",
+        rows: item.combos
+          .map((combo) => {
+            const current = currentSummary.items.get(combo.key) ?? {
+              gmv: 0,
+              share: 0,
+              avgDealPrice: 0,
+              count: 0
+            };
+            const previous = previousSummary.items.get(combo.key) ?? {
+              gmv: 0,
+              share: 0,
+              avgDealPrice: 0,
+              count: 0
+            };
+            const yoy = computeYoy(current.gmv, previous.gmv);
+
+            return {
+              key: combo.key,
+              label: combo.shortLabel,
+              fullLabel: combo.label,
+              fullLabelEn: combo.labelEn,
+              share: current.share,
+              shareLabel: `${Math.round(current.share)}%`,
+              yoy,
+              yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.gmv > 0 ? "new" : "n/a",
+              asp: current.avgDealPrice,
+              aspLabel: `¥${Math.round(current.avgDealPrice || 0).toLocaleString("en-US")}`
+            };
+          })
+          .filter((row) => row.share > 0)
       }
     ];
   })

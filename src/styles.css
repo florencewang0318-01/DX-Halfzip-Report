@@ -3481,7 +3481,8 @@ body.has-fabric-lightbox-open {
   text-transform: uppercase;
 }
 
-.competitor-function-radar-card {
+.competitor-function-radar-card,
+.competitor-fabric-radar-card {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -3489,7 +3490,18 @@ body.has-fabric-lightbox-open {
   padding: 38px 16px 16px;
 }
 
-.competitor-function-radar-conclusion {
+article[data-brand="KAILAS/凯乐石"] .competitor-function-radar-card {
+  flex: 1.05;
+  padding-bottom: 10px;
+}
+
+article[data-brand="KAILAS/凯乐石"] .competitor-fabric-radar-card {
+  flex: 0.95;
+  margin-top: -4px;
+}
+
+.competitor-function-radar-conclusion,
+.competitor-fabric-radar-conclusion {
   color: #667085;
   font-size: 12px;
   line-height: 1.45;
@@ -3499,13 +3511,18 @@ body.has-fabric-lightbox-open {
   margin-top: -2px;
 }
 
-.competitor-function-radar-plot {
+.competitor-function-radar-plot,
+.competitor-fabric-radar-plot {
   flex: 1 1 auto;
   min-height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: -15px;
+}
+
+.competitor-fabric-radar-plot {
+  margin-top: 20px;
 }
 
 .competitor-function-radar-combos {
@@ -3519,6 +3536,32 @@ body.has-fabric-lightbox-open {
   font-size: 12px;
   line-height: 1.45;
   text-align: left;
+}
+
+article[data-brand="KAILAS/凯乐石"] .competitor-function-radar-card.has-combos .competitor-function-radar-combos {
+  margin-top: -8px;
+}
+
+article[data-brand="KOLON SPORT/可隆"] .competitor-function-radar-card .competitor-function-radar-plot {
+  margin-top: 4px;
+}
+
+article[data-brand="KOLON SPORT/可隆"] .competitor-function-radar-card.has-combos .competitor-function-radar-combos {
+  margin-top: 10px;
+}
+
+article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card .competitor-function-radar-conclusion {
+  white-space: nowrap;
+  max-width: calc(100% + 28px);
+  margin-right: -28px;
+}
+
+article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card .competitor-function-radar-plot {
+  margin-top: 2px;
+}
+
+article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has-combos .competitor-function-radar-combos {
+  margin-top: 14px;
 }
 
 .competitor-function-radar-combos strong {
