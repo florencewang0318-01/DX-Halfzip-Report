@@ -1,5 +1,5 @@
 import {
-  ARCTERYX_BRAND_FUNCTION_RADAR,
+  COMPETITOR_BRAND_FUNCTION_RADARS,
   COMPETITOR_BRAND_SNAPSHOT,
   FABRIC_CATEGORY_DEFINITIONS,
   FABRIC_FUNCTION_MATRIX_COLUMNS,
@@ -385,30 +385,13 @@ function bootstrapCompetitorBrandSnapshotCards() {
   });
 }
 
-function bootstrapArcteryxFunctionRadarCard() {
-  const card = document.querySelector("#arcteryx-function-radar-card");
-  if (!card) {
+function bootstrapCompetitorFunctionRadarCards() {
+  const cards = Array.from(document.querySelectorAll(".competitor-function-radar-card[data-brand]"));
+  if (!cards.length) {
     return;
   }
 
-  const conclusion = card.querySelector(".competitor-function-radar-conclusion");
-  const plot = card.querySelector(".competitor-function-radar-plot");
-  const combos = card.querySelector(".competitor-function-radar-combos");
-  const rows = ARCTERYX_BRAND_FUNCTION_RADAR.rows ?? [];
   const tooltip = ensureGenderBreakdownTooltip();
-
-  if (conclusion) {
-    conclusion.textContent = ARCTERYX_BRAND_FUNCTION_RADAR.conclusion ?? "";
-  }
-
-  if (combos) {
-    combos.textContent = ARCTERYX_BRAND_FUNCTION_RADAR.reserveTitle ?? "Strong Function Combo";
-  }
-
-  if (!plot || !rows.length) {
-    return;
-  }
-
   const width = 248;
   const height = 170;
   const centerX = width / 2;
@@ -427,94 +410,169 @@ function bootstrapArcteryxFunctionRadarCard() {
 
   const pointsToString = (points) => points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
 
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("class", "competitor-function-radar-svg");
-  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-  svg.setAttribute("role", "img");
-  svg.setAttribute("aria-label", "ARC'TERYX function radar");
+  cards.forEach((card) => {
+    const brand = card.dataset.brand;
+    if (!brand) {
+      return;
+    }
 
-  const showRowTooltip = (row, event, fallbackTarget) => {
-    const yoyDisplay = row.yoyLabel === "new" ? "New" : row.yoyLabel;
-    const yoyClass =
-      row.yoy > 0 ? "is-positive" : row.yoy < 0 ? "is-negative" : "is-neutral";
-    const html = `
-      <div class="gender-breakdown-tooltip-title">${row.label}</div>
-      <div class="gender-breakdown-tooltip-line">GMV Share <strong>${row.shareLabel}</strong></div>
-      <div class="gender-breakdown-tooltip-line">YOY <strong class="${yoyClass}">${yoyDisplay}</strong></div>
-    `;
-    const rect = fallbackTarget.getBoundingClientRect();
-    showGenderBreakdownTooltip(
-      tooltip,
-      html,
-      event?.clientX ?? rect.left + rect.width / 2,
-      event?.clientY ?? rect.top
-    );
-  };
+    const radarData = COMPETITOR_BRAND_FUNCTION_RADARS[brand];
+    if (!radarData) {
+      return;
+    }
 
-  levels.forEach((level) => {
-    const ringPoints = rows.map((_, index) => polarPoint(level, (360 / rows.length) * index));
-    const ring = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    ring.setAttribute("class", "competitor-function-radar-grid");
-    ring.setAttribute("points", pointsToString(ringPoints));
-    svg.appendChild(ring);
-  });
+    const conclusion = card.querySelector(".competitor-function-radar-conclusion");
+    const plot = card.querySelector(".competitor-function-radar-plot");
+    const combos = card.querySelector(".competitor-function-radar-combos");
+    const rows = radarData.rows ?? [];
 
-  rows.forEach((_, index) => {
-    const axisPoint = polarPoint(1, (360 / rows.length) * index);
-    const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    axis.setAttribute("class", "competitor-function-radar-axis");
-    axis.setAttribute("x1", `${centerX}`);
-    axis.setAttribute("y1", `${centerY}`);
-    axis.setAttribute("x2", `${axisPoint.x}`);
-    axis.setAttribute("y2", `${axisPoint.y}`);
-    svg.appendChild(axis);
-  });
+    if (conclusion) {
+      conclusion.textContent = radarData.conclusion ?? "";
+    }
 
-  const valuePoints = rows.map((row, index) =>
-    polarPoint(Math.max(0, Math.min(1, row.share / maxValue)), (360 / rows.length) * index)
-  );
-  const area = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-  area.setAttribute("class", "competitor-function-radar-area");
-  area.setAttribute("points", pointsToString(valuePoints));
-  svg.appendChild(area);
+    if (combos) {
+      const strongCombos = radarData.strongCombos ?? [];
+      if (strongCombos.length) {
+        card.classList.add("has-combos");
+        combos.innerHTML = `
+          <strong>强功能组合：</strong>${strongCombos
+            .map(
+              (combo, index) => `
+                <button class="competitor-function-radar-combo" type="button" data-index="${index}">
+                  ${combo.label}
+                </button>
+              `
+            )
+            .join("<span class=\"competitor-function-radar-combo-separator\">, </span>")}
+        `;
 
-  rows.forEach((row, index) => {
-    const angle = (360 / rows.length) * index;
-    const nodePoint = valuePoints[index];
-    const labelPoint = polarPoint(1.2, angle);
-    const labelAnchor = labelPoint.x < centerX - 8 ? "end" : labelPoint.x > centerX + 8 ? "start" : "middle";
+        combos.querySelectorAll(".competitor-function-radar-combo").forEach((comboButton) => {
+          const combo = strongCombos[Number(comboButton.dataset.index)];
+          if (!combo) {
+            return;
+          }
 
-    const hit = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    hit.setAttribute("class", "competitor-function-radar-hit");
-    hit.setAttribute("cx", `${nodePoint.x}`);
-    hit.setAttribute("cy", `${nodePoint.y}`);
-    hit.setAttribute("r", "12");
-    svg.appendChild(hit);
+          const showComboTooltip = (event, fallbackTarget) => {
+            const yoyClass =
+              combo.yoy > 0 ? "is-positive" : combo.yoy < 0 ? "is-negative" : "is-neutral";
+            const html = `
+              <div class="gender-breakdown-tooltip-title">${combo.label}</div>
+              <div class="gender-breakdown-tooltip-line">GMV Share <strong>${combo.shareLabel}</strong></div>
+              <div class="gender-breakdown-tooltip-line">YOY <strong class="${yoyClass}">${combo.yoyLabel}</strong></div>
+            `;
+            const rect = fallbackTarget.getBoundingClientRect();
+            showGenderBreakdownTooltip(
+              tooltip,
+              html,
+              event?.clientX ?? rect.left + rect.width / 2,
+              event?.clientY ?? rect.top
+            );
+          };
 
-    const node = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    node.setAttribute("class", "competitor-function-radar-node");
-    node.setAttribute("cx", `${nodePoint.x}`);
-    node.setAttribute("cy", `${nodePoint.y}`);
-    node.setAttribute("r", "4");
-    svg.appendChild(node);
+          comboButton.addEventListener("mouseenter", (event) => showComboTooltip(event, comboButton));
+          comboButton.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
+          comboButton.addEventListener("mouseleave", () => hideGenderBreakdownTooltip(tooltip));
+        });
+      } else {
+        card.classList.remove("has-combos");
+        combos.textContent = "";
+      }
+    }
 
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("class", "competitor-function-radar-label");
-    label.setAttribute("x", `${labelPoint.x}`);
-    label.setAttribute("y", `${labelPoint.y}`);
-    label.setAttribute("text-anchor", labelAnchor);
-    label.textContent = row.label;
-    svg.appendChild(label);
+    if (!plot || !rows.length) {
+      return;
+    }
 
-    [hit, node, label].forEach((element) => {
-      element.addEventListener("mouseenter", (event) => showRowTooltip(row, event, element));
-      element.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
-      element.addEventListener("mouseleave", () => hideGenderBreakdownTooltip(tooltip));
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "competitor-function-radar-svg");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", `${brand} function radar`);
+
+    const showRowTooltip = (row, event, fallbackTarget) => {
+      const yoyDisplay = row.yoyLabel === "new" ? "New" : row.yoyLabel;
+      const yoyClass =
+        row.yoy > 0 ? "is-positive" : row.yoy < 0 ? "is-negative" : "is-neutral";
+      const title = row.labelEn ? `${row.label} ${row.labelEn}` : row.label;
+      const html = `
+        <div class="gender-breakdown-tooltip-title">${title}</div>
+        <div class="gender-breakdown-tooltip-line">GMV Share <strong>${row.shareLabel}</strong></div>
+        <div class="gender-breakdown-tooltip-line">YOY <strong class="${yoyClass}">${yoyDisplay}</strong></div>
+      `;
+      const rect = fallbackTarget.getBoundingClientRect();
+      showGenderBreakdownTooltip(
+        tooltip,
+        html,
+        event?.clientX ?? rect.left + rect.width / 2,
+        event?.clientY ?? rect.top
+      );
+    };
+
+    levels.forEach((level) => {
+      const ringPoints = rows.map((_, index) => polarPoint(level, (360 / rows.length) * index));
+      const ring = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      ring.setAttribute("class", "competitor-function-radar-grid");
+      ring.setAttribute("points", pointsToString(ringPoints));
+      svg.appendChild(ring);
     });
-  });
 
-  plot.innerHTML = "";
-  plot.appendChild(svg);
+    rows.forEach((_, index) => {
+      const axisPoint = polarPoint(1, (360 / rows.length) * index);
+      const axis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      axis.setAttribute("class", "competitor-function-radar-axis");
+      axis.setAttribute("x1", `${centerX}`);
+      axis.setAttribute("y1", `${centerY}`);
+      axis.setAttribute("x2", `${axisPoint.x}`);
+      axis.setAttribute("y2", `${axisPoint.y}`);
+      svg.appendChild(axis);
+    });
+
+    const valuePoints = rows.map((row, index) =>
+      polarPoint(Math.max(0, Math.min(1, row.share / maxValue)), (360 / rows.length) * index)
+    );
+    const area = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    area.setAttribute("class", "competitor-function-radar-area");
+    area.setAttribute("points", pointsToString(valuePoints));
+    svg.appendChild(area);
+
+    rows.forEach((row, index) => {
+      const angle = (360 / rows.length) * index;
+      const nodePoint = valuePoints[index];
+      const labelPoint = polarPoint(1.2, angle);
+      const labelAnchor = labelPoint.x < centerX - 8 ? "end" : labelPoint.x > centerX + 8 ? "start" : "middle";
+
+      const hit = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      hit.setAttribute("class", "competitor-function-radar-hit");
+      hit.setAttribute("cx", `${nodePoint.x}`);
+      hit.setAttribute("cy", `${nodePoint.y}`);
+      hit.setAttribute("r", "12");
+      svg.appendChild(hit);
+
+      const node = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      node.setAttribute("class", "competitor-function-radar-node");
+      node.setAttribute("cx", `${nodePoint.x}`);
+      node.setAttribute("cy", `${nodePoint.y}`);
+      node.setAttribute("r", "4");
+      svg.appendChild(node);
+
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("class", "competitor-function-radar-label");
+      label.setAttribute("x", `${labelPoint.x}`);
+      label.setAttribute("y", `${labelPoint.y}`);
+      label.setAttribute("text-anchor", labelAnchor);
+      label.textContent = row.label;
+      svg.appendChild(label);
+
+      [hit, node, label].forEach((element) => {
+        element.addEventListener("mouseenter", (event) => showRowTooltip(row, event, element));
+        element.addEventListener("mousemove", (event) => placeTooltip(tooltip, event.clientX, event.clientY));
+        element.addEventListener("mouseleave", () => hideGenderBreakdownTooltip(tooltip));
+      });
+    });
+
+    plot.innerHTML = "";
+    plot.appendChild(svg);
+  });
 }
 
 function ensureFabricImageLightbox() {
@@ -1197,6 +1255,6 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapFabricOverviewPage();
   bootstrapFabricWarmthFunctionPage();
   bootstrapCompetitorBrandSnapshotCards();
-  bootstrapArcteryxFunctionRadarCard();
+  bootstrapCompetitorFunctionRadarCards();
   setupScrollState();
 });

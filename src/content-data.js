@@ -1053,27 +1053,88 @@ export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => 
   };
 });
 
-const ARCTERYX_FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverageByBrand(
-  LS_HZ_INNER_DATASET.raw.y25,
-  "ARC'TERYX/始祖鸟"
-);
-const ARCTERYX_FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverageByBrand(
-  LS_HZ_INNER_DATASET.raw.y24,
-  "ARC'TERYX/始祖鸟"
-);
-const ARCTERYX_FUNCTION_RADAR_KEYS = ["warmth", "stretch", "quick-dry", "breathable", "durable", "lightweight"];
+const COMPETITOR_FUNCTION_RADAR_CONFIG = [
+  {
+    brand: "ARC'TERYX/始祖鸟",
+    conclusion: "功能非增长重心，主要以保暖为核心叠加弹力、速干、透气。",
+    radarKeys: ["warmth", "stretch", "quick-dry", "breathable", "durable", "lightweight"]
+  },
+  {
+    brand: "KAILAS/凯乐石",
+    conclusion: "以吸湿速干、抑菌、保暖、透气为多重核心形成强复合功能层。",
+    radarKeys: ["quick-dry", "antibacterial", "warmth", "breathable", "stretch", "lightweight"],
+    strongCombos: [
+      {
+        label: "吸湿速干+抑菌防臭",
+        shareLabel: "84%",
+        yoyLabel: "+237%",
+        yoy: 237
+      },
+      {
+        label: "保暖+吸湿速干+透气",
+        shareLabel: "63%",
+        yoyLabel: "+227%",
+        yoy: 227
+      }
+    ]
+  },
+  {
+    brand: "KOLON SPORT/可隆",
+    conclusion: "以弹力与速干为核心，偏通勤户外的舒适功能层。",
+    radarKeys: ["stretch", "quick-dry", "antibacterial", "warmth", "anti-static"],
+    strongCombos: [
+      {
+        label: "弹力+吸湿速干",
+        shareLabel: "39%",
+        yoyLabel: "+769%",
+        yoy: 769
+      }
+    ]
+  },
+  {
+    brand: "DESCENTE/迪桑特",
+    conclusion: "以弹力和吸湿速干为双核心，整体偏性能训练导向。",
+    radarKeys: ["stretch", "quick-dry", "warmth", "lightweight", "sun-protect"]
+  },
+  {
+    brand: "LULULEMON/露露乐蒙",
+    conclusion: "以弹力为核心叠加保暖、速干与抑菌，整体偏运动休闲舒适功能层。",
+    radarKeys: ["stretch", "quick-dry", "warmth", "antibacterial", "lightweight"],
+    strongCombos: [
+      {
+        label: "弹力+抑菌防臭",
+        shareLabel: "35%",
+        yoyLabel: "+290%",
+        yoy: 290
+      }
+    ]
+  }
+];
 
-export const ARCTERYX_BRAND_FUNCTION_RADAR = {
-  brand: "ARC'TERYX/始祖鸟",
-  conclusion:
-    "以保暖为绝对核心，并叠加弹力、速干、透气形成复合功能层。",
-  reserveTitle: "Strong Function Combo",
-  rows: buildFunctionRows(
-    ARCTERYX_FUNCTION_COVERAGE_Y25,
-    ARCTERYX_FUNCTION_COVERAGE_Y24,
-    ARCTERYX_FUNCTION_COVERAGE_Y25.totalGmv
-  ).filter((row) => ARCTERYX_FUNCTION_RADAR_KEYS.includes(row.key))
-};
+export const COMPETITOR_BRAND_FUNCTION_RADARS = Object.fromEntries(
+  COMPETITOR_FUNCTION_RADAR_CONFIG.map((item) => {
+    const currentSummary = summarizeFunctionCoverageByBrand(LS_HZ_INNER_DATASET.raw.y25, item.brand);
+    const previousSummary = summarizeFunctionCoverageByBrand(LS_HZ_INNER_DATASET.raw.y24, item.brand);
+
+    return [
+      item.brand,
+      {
+        brand: item.brand,
+        conclusion: item.conclusion,
+        strongCombos: item.strongCombos ?? [],
+        functionPenetrationShare: currentSummary.totalGmv
+          ? (currentSummary.functionGmv / currentSummary.totalGmv) * 100
+          : 0,
+        functionPenetrationLabel: `${Math.round(
+          currentSummary.totalGmv ? (currentSummary.functionGmv / currentSummary.totalGmv) * 100 : 0
+        )}%`,
+        rows: buildFunctionRows(currentSummary, previousSummary, currentSummary.totalGmv).filter((row) =>
+          (item.radarKeys ?? []).includes(row.key)
+        )
+      }
+    ];
+  })
+);
 
 const SILHOUETTE_Y25 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y25);
 const SILHOUETTE_Y24 = createSilhouetteSummary(LS_HZ_INNER_DATASET.raw.y24);

@@ -3512,6 +3512,40 @@ body.has-fabric-lightbox-open {
   display: none;
 }
 
+.competitor-function-radar-card.has-combos .competitor-function-radar-combos {
+  display: block;
+  margin-top: -2px;
+  color: #667085;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.competitor-function-radar-combos strong {
+  color: #344054;
+  font-weight: 800;
+}
+
+.competitor-function-radar-combo {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #425172;
+  font: inherit;
+  cursor: help;
+}
+
+.competitor-function-radar-combo:hover {
+  color: #30436e;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.competitor-function-radar-combo-separator {
+  color: #98a2b3;
+}
+
 .competitor-function-radar-svg {
   width: 100%;
   max-width: 248px;
