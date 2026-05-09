@@ -496,6 +496,7 @@ function bootstrapCompetitorSegmentTopFunctionCards() {
     list.classList.add("is-filled");
     list.innerHTML = `
       <div class="competitor-function-title">Top Function</div>
+      <div class="competitor-function-conclusion">${functionData.conclusion ?? ""}</div>
       ${rowsMarkup}
     `;
   });
@@ -555,6 +556,7 @@ function bootstrapCompetitorSegmentFitLengthCards() {
     card.classList.add("is-filled");
     card.innerHTML = `
       <div class="competitor-function-title">Fit &amp; Length</div>
+      <div class="competitor-function-conclusion">${fitLengthData.conclusion ?? ""}</div>
       ${rowsMarkup}
     `;
   });

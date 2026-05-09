@@ -1259,6 +1259,19 @@ const COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS = [
 
 const COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS = ["女", "男"];
 
+const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTION_CONCLUSIONS = {
+  "ARC'TERYX/始祖鸟__女": "保暖与弹力双核心，轻量和速干同步放大。",
+  "ARC'TERYX/始祖鸟__男": "保暖绝对主导，弹力、速干与透气形成第二梯队。",
+  "KAILAS/凯乐石__女": "速干、抑菌、保暖、透气构成高复合功能层。",
+  "KAILAS/凯乐石__男": "速干绝对主导，抑菌与保暖构成基础功能层。",
+  "KOLON SPORT/可隆__女": "以弹力为核心，叠加防晒、抑菌与凉感功能。",
+  "KOLON SPORT/可隆__男": "弹力主导，保暖、抑菌与速干并行渗透。",
+  "DESCENTE/迪桑特__女": "弹力与速干双核心，保暖作为辅助功能补充。",
+  "DESCENTE/迪桑特__男": "速干和弹力双核驱动，兼顾保暖与轻量需求。",
+  "LULULEMON/露露乐蒙__女": "弹力是绝对核心，速干、抑菌与保暖共同补强。",
+  "LULULEMON/露露乐蒙__男": "弹力主导，保暖、抑菌与速干形成复合功能层。"
+};
+
 export const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
   COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS.flatMap((brand) =>
     COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS.map((gender) => {
@@ -1270,12 +1283,26 @@ export const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
         {
           brand,
           gender,
+          conclusion: COMPETITOR_BRAND_SEGMENT_TOP_FUNCTION_CONCLUSIONS[`${brand}__${gender}`] ?? "",
           rows: buildFunctionRows(current, previous, current.totalGmv).slice(0, 5)
         }
       ];
     })
   )
 );
+
+const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONCLUSIONS = {
+  "ARC'TERYX/始祖鸟__女": "以 Slim × Regular 为主，少量宽松短款做补充。",
+  "ARC'TERYX/始祖鸟__男": "版型高度集中在 Slim × Regular。",
+  "KAILAS/凯乐石__女": "Active × Regular 主导，常规与修身常规做补充。",
+  "KAILAS/凯乐石__男": "几乎清一色集中在 Regular × Regular。",
+  "KOLON SPORT/可隆__女": "Slim × Regular 占绝对多数，常规与宽松常规补充。",
+  "KOLON SPORT/可隆__男": "版型几乎完全集中在 Regular × Regular。",
+  "DESCENTE/迪桑特__女": "以 Slim × Regular 和 Active × Regular 双版型为主。",
+  "DESCENTE/迪桑特__男": "Active × Regular 略占优，与 Regular × Regular 双主版。",
+  "LULULEMON/露露乐蒙__女": "短款修身最主流，常规修身与宽松短款并存。",
+  "LULULEMON/露露乐蒙__男": "以 Regular × Regular 为主，少量 Slim × Regular 补充。"
+};
 
 const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONFIG = {
   "ARC'TERYX/始祖鸟__女": 2,
@@ -1301,6 +1328,7 @@ export const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH = Object.fromEntries(
       {
         brand,
         gender,
+        conclusion: COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONCLUSIONS[`${brand}__${gender}`] ?? "",
         rows: Array.from(current.comboMap.values())
           .map((item) => {
             const previousItem = previous.comboMap.get(`${item.fit}__${item.length}`) ?? {

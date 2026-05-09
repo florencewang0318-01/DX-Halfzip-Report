@@ -3511,6 +3511,20 @@ article[data-brand="KAILAS/凯乐石"] .competitor-fabric-radar-card {
   margin-top: -2px;
 }
 
+.competitor-function-conclusion {
+  color: #667085;
+  display: block;
+  margin-top: -2px;
+  margin-left: -4px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .competitor-function-radar-plot,
 .competitor-fabric-radar-plot {
   flex: 1 1 auto;
@@ -3808,7 +3822,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
 }
 
 .competitor-function-list.is-filled {
-  min-height: 170px;
+  min-height: 202px;
   padding: 40px 18px 14px;
   display: grid;
   align-content: start;
@@ -3822,7 +3836,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
 }
 
 .competitor-fit-list.is-filled {
-  min-height: 92px;
+  min-height: 126px;
   padding: 40px 18px 14px;
   display: grid;
   align-content: start;
@@ -3831,10 +3845,10 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   gap: 11px;
 }
 
-.competitor-board.segment.male[data-brand="KAILAS/凯乐石"] .competitor-fit-list.is-filled,
-.competitor-board.segment.male[data-brand="KOLON SPORT/可隆"] .competitor-fit-list.is-filled,
-.competitor-board.segment.male[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
-  min-height: 116px;
+article[data-brand="KAILAS/凯乐石"] .competitor-fit-list.is-filled,
+article[data-brand="KOLON SPORT/可隆"] .competitor-fit-list.is-filled,
+article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
+  min-height: 150px;
 }
 
 .competitor-function-title {
