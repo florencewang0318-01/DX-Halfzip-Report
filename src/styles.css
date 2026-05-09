@@ -3680,9 +3680,13 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   display: block;
   margin-top: 8px;
   color: var(--segment-note);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.45;
+}
+
+.competitor-segment-meta[data-segment-takeaway]::after {
+  content: attr(data-segment-takeaway);
 }
 
 .competitor-segment-metrics {

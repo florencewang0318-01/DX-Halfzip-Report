@@ -1260,16 +1260,16 @@ const COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS = [
 const COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS = ["女", "男"];
 
 const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTION_CONCLUSIONS = {
-  "ARC'TERYX/始祖鸟__女": "保暖与弹力双核心，轻量和速干同步放大。",
-  "ARC'TERYX/始祖鸟__男": "保暖绝对主导，弹力、速干与透气形成第二梯队。",
-  "KAILAS/凯乐石__女": "速干、抑菌、保暖、透气构成高复合功能层。",
-  "KAILAS/凯乐石__男": "速干绝对主导，抑菌与保暖构成基础功能层。",
-  "KOLON SPORT/可隆__女": "以弹力为核心，叠加防晒、抑菌与凉感功能。",
-  "KOLON SPORT/可隆__男": "弹力主导，保暖、抑菌与速干并行渗透。",
-  "DESCENTE/迪桑特__女": "弹力与速干双核心，保暖作为辅助功能补充。",
+  "ARC'TERYX/始祖鸟__女": "保暖+弹力双核心，综合需求驱动功能全面强化。",
+  "ARC'TERYX/始祖鸟__男": "仅聚焦保暖核心，其他附加功能动力不足。",
+  "KAILAS/凯乐石__女": "速干、抑菌需求爆发，功能复合度高。",
+  "KAILAS/凯乐石__男": "吸湿速干全面渗透。",
+  "KOLON SPORT/可隆__女": "弹力为高增速核心升级点，防静电为新兴趋势。",
+  "KOLON SPORT/可隆__男": "弹力为高增速核心升级点，保暖、抑菌与速干并行渗透。",
+  "DESCENTE/迪桑特__女": "弹力与速干双核心爆发增长，保暖辅助补充。",
   "DESCENTE/迪桑特__男": "速干和弹力双核驱动，兼顾保暖与轻量需求。",
-  "LULULEMON/露露乐蒙__女": "弹力是绝对核心，速干、抑菌与保暖共同补强。",
-  "LULULEMON/露露乐蒙__男": "弹力主导，保暖、抑菌与速干形成复合功能层。"
+  "LULULEMON/露露乐蒙__女": "弹力为主要核心功能，速干、抑菌与保暖共同补强。",
+  "LULULEMON/露露乐蒙__男": "弹力功能高度渗透，保暖、抑菌、速干与轻量共同补充。"
 };
 
 export const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
@@ -1292,16 +1292,16 @@ export const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
 );
 
 const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONCLUSIONS = {
-  "ARC'TERYX/始祖鸟__女": "以 Slim × Regular 为主，少量宽松短款做补充。",
-  "ARC'TERYX/始祖鸟__男": "版型高度集中在 Slim × Regular。",
-  "KAILAS/凯乐石__女": "Active × Regular 主导，常规与修身常规做补充。",
-  "KAILAS/凯乐石__男": "几乎清一色集中在 Regular × Regular。",
-  "KOLON SPORT/可隆__女": "Slim × Regular 占绝对多数，常规与宽松常规补充。",
-  "KOLON SPORT/可隆__男": "版型几乎完全集中在 Regular × Regular。",
-  "DESCENTE/迪桑特__女": "以 Slim × Regular 和 Active × Regular 双版型为主。",
-  "DESCENTE/迪桑特__男": "Active × Regular 略占优，与 Regular × Regular 双主版。",
-  "LULULEMON/露露乐蒙__女": "短款修身最主流，常规修身与宽松短款并存。",
-  "LULULEMON/露露乐蒙__男": "以 Regular × Regular 为主，少量 Slim × Regular 补充。"
+  "ARC'TERYX/始祖鸟__女": "修身X常规长度为主，宽松短款成新兴趋势。",
+  "ARC'TERYX/始祖鸟__男": "高度集中修身X常规长度。",
+  "KAILAS/凯乐石__女": "“合身不紧绷、适配户外运动”版型为高增速主流。",
+  "KAILAS/凯乐石__男": "高度集中于合体常规版型。",
+  "KOLON SPORT/可隆__女": "主流修身版型下滑，向合体与宽松的高增速版型转变。",
+  "KOLON SPORT/可隆__男": "高度集中于合体常规版型，修身版型几乎淘汰。",
+  "DESCENTE/迪桑特__女": "偏好修身与运动合体的非常规廓形，修身款爆发增长。",
+  "DESCENTE/迪桑特__男": "运动合体版型为主流且增速快。",
+  "LULULEMON/露露乐蒙__女": "版型多样，修身短款最主流，修身的常规长度与宽松短款爆发。",
+  "LULULEMON/露露乐蒙__男": "常规版型高度集中且增速快，修身版型走弱。"
 };
 
 const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONFIG = {
