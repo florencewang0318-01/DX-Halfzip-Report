@@ -3821,6 +3821,22 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   content: none;
 }
 
+.competitor-fit-list.is-filled {
+  min-height: 92px;
+  padding: 40px 18px 14px;
+  display: grid;
+  align-content: start;
+  justify-content: stretch;
+  text-align: left;
+  gap: 11px;
+}
+
+.competitor-board.segment.male[data-brand="KAILAS/凯乐石"] .competitor-fit-list.is-filled,
+.competitor-board.segment.male[data-brand="KOLON SPORT/可隆"] .competitor-fit-list.is-filled,
+.competitor-board.segment.male[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
+  min-height: 116px;
+}
+
 .competitor-function-title {
   position: absolute;
   top: 14px;
@@ -3833,6 +3849,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   display: none;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row,
 .competitor-function-list.is-filled .competitor-function-row {
   display: grid;
   grid-template-columns: 138px minmax(0, 92px) 40px 54px;
@@ -3840,6 +3857,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   gap: 8px;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row label,
 .competitor-function-list.is-filled .competitor-function-row label {
   display: flex;
   align-items: baseline;
@@ -3858,6 +3876,11 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   flex: 0 0 auto;
 }
 
+.competitor-fit-list.is-filled .competitor-function-label-cn {
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+
 .competitor-function-label-en {
   color: #9aa3b4;
   font-size: 11px;
@@ -3869,6 +3892,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   text-overflow: ellipsis;
 }
 
+.competitor-fit-list.is-filled .competitor-function-track,
 .competitor-function-list.is-filled .competitor-function-track {
   display: block;
   position: relative;
@@ -3879,6 +3903,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   overflow: hidden;
 }
 
+.competitor-fit-list.is-filled .competitor-function-track span,
 .competitor-function-list.is-filled .competitor-function-track span {
   position: absolute;
   inset: 0 auto 0 0;
@@ -3886,10 +3911,13 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   background: linear-gradient(90deg, #95a3e5 0%, #7f90db 100%);
 }
 
+.competitor-board.segment.female .competitor-fit-list.is-filled .competitor-function-track span,
 .competitor-board.segment.female .competitor-function-list.is-filled .competitor-function-track span {
   background: linear-gradient(90deg, #d9a9c3 0%, #c98bb0 100%);
 }
 
+.competitor-fit-list.is-filled .competitor-function-row em,
+.competitor-fit-list.is-filled .competitor-function-row b,
 .competitor-function-list.is-filled .competitor-function-row em,
 .competitor-function-list.is-filled .competitor-function-row b {
   font-style: normal;
@@ -3899,22 +3927,27 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   white-space: nowrap;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row em,
 .competitor-function-list.is-filled .competitor-function-row em {
   color: #667085;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b,
 .competitor-function-list.is-filled .competitor-function-row b {
   color: #94a3b8;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b.positive,
 .competitor-function-list.is-filled .competitor-function-row b.positive {
   color: var(--green);
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b.negative,
 .competitor-function-list.is-filled .competitor-function-row b.negative {
   color: var(--red);
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b.neutral,
 .competitor-function-list.is-filled .competitor-function-row b.neutral {
   color: #94a3b8;
 }

@@ -1,5 +1,6 @@
 import {
   COMPETITOR_BRAND_SEGMENT_METRICS,
+  COMPETITOR_BRAND_SEGMENT_FIT_LENGTH,
   COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS,
   COMPETITOR_BRAND_FABRIC_RADARS,
   COMPETITOR_BRAND_FUNCTION_RADARS,
@@ -495,6 +496,65 @@ function bootstrapCompetitorSegmentTopFunctionCards() {
     list.classList.add("is-filled");
     list.innerHTML = `
       <div class="competitor-function-title">Top Function</div>
+      ${rowsMarkup}
+    `;
+  });
+}
+
+function bootstrapCompetitorSegmentFitLengthCards() {
+  const cards = Array.from(document.querySelectorAll(".competitor-fit-list[data-fit-length='true']"));
+  if (!cards.length) {
+    return;
+  }
+
+  cards.forEach((card) => {
+    const segmentCard = card.closest(".competitor-board.segment[data-brand][data-gender]");
+    if (!(segmentCard instanceof HTMLElement)) {
+      return;
+    }
+
+    const brand = segmentCard.dataset.brand;
+    const gender = segmentCard.dataset.gender;
+    if (!brand || !gender) {
+      return;
+    }
+
+    const fitLengthData = COMPETITOR_BRAND_SEGMENT_FIT_LENGTH[`${brand}__${gender}`];
+    if (!fitLengthData?.rows?.length) {
+      return;
+    }
+
+    const rowsMarkup = fitLengthData.rows
+      .map((row) => {
+        const yoyClass =
+          row.yoyLabel === "n/a"
+            ? "neutral"
+            : row.yoy === null || row.yoy === undefined || Number.isNaN(row.yoy)
+              ? "neutral"
+              : row.yoy > 0
+                ? "positive"
+                : row.yoy < 0
+                  ? "negative"
+                  : "neutral";
+
+        return `
+          <div class="competitor-function-row">
+            <label>
+              <span class="competitor-function-label-cn">${row.labelEn}</span>
+            </label>
+            <div class="competitor-function-track">
+              <span style="width:${Math.max(0, Math.min(100, row.share ?? 0))}%;"></span>
+            </div>
+            <em>${row.shareLabel}</em>
+            <b class="${yoyClass}">${row.yoyLabel}</b>
+          </div>
+        `;
+      })
+      .join("");
+
+    card.classList.add("is-filled");
+    card.innerHTML = `
+      <div class="competitor-function-title">Fit &amp; Length</div>
       ${rowsMarkup}
     `;
   });
@@ -1530,6 +1590,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapCompetitorBrandSnapshotCards();
   bootstrapCompetitorSegmentMetricCards();
   bootstrapCompetitorSegmentTopFunctionCards();
+  bootstrapCompetitorSegmentFitLengthCards();
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   setupScrollState();

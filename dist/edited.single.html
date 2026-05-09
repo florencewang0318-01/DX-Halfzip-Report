@@ -3828,6 +3828,22 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   content: none;
 }
 
+.competitor-fit-list.is-filled {
+  min-height: 92px;
+  padding: 40px 18px 14px;
+  display: grid;
+  align-content: start;
+  justify-content: stretch;
+  text-align: left;
+  gap: 11px;
+}
+
+.competitor-board.segment.male[data-brand="KAILAS/凯乐石"] .competitor-fit-list.is-filled,
+.competitor-board.segment.male[data-brand="KOLON SPORT/可隆"] .competitor-fit-list.is-filled,
+.competitor-board.segment.male[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
+  min-height: 116px;
+}
+
 .competitor-function-title {
   position: absolute;
   top: 14px;
@@ -3840,6 +3856,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   display: none;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row,
 .competitor-function-list.is-filled .competitor-function-row {
   display: grid;
   grid-template-columns: 138px minmax(0, 92px) 40px 54px;
@@ -3847,6 +3864,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   gap: 8px;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row label,
 .competitor-function-list.is-filled .competitor-function-row label {
   display: flex;
   align-items: baseline;
@@ -3865,6 +3883,11 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   flex: 0 0 auto;
 }
 
+.competitor-fit-list.is-filled .competitor-function-label-cn {
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+
 .competitor-function-label-en {
   color: #9aa3b4;
   font-size: 11px;
@@ -3876,6 +3899,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   text-overflow: ellipsis;
 }
 
+.competitor-fit-list.is-filled .competitor-function-track,
 .competitor-function-list.is-filled .competitor-function-track {
   display: block;
   position: relative;
@@ -3886,6 +3910,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   overflow: hidden;
 }
 
+.competitor-fit-list.is-filled .competitor-function-track span,
 .competitor-function-list.is-filled .competitor-function-track span {
   position: absolute;
   inset: 0 auto 0 0;
@@ -3893,10 +3918,13 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   background: linear-gradient(90deg, #95a3e5 0%, #7f90db 100%);
 }
 
+.competitor-board.segment.female .competitor-fit-list.is-filled .competitor-function-track span,
 .competitor-board.segment.female .competitor-function-list.is-filled .competitor-function-track span {
   background: linear-gradient(90deg, #d9a9c3 0%, #c98bb0 100%);
 }
 
+.competitor-fit-list.is-filled .competitor-function-row em,
+.competitor-fit-list.is-filled .competitor-function-row b,
 .competitor-function-list.is-filled .competitor-function-row em,
 .competitor-function-list.is-filled .competitor-function-row b {
   font-style: normal;
@@ -3906,22 +3934,27 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   white-space: nowrap;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row em,
 .competitor-function-list.is-filled .competitor-function-row em {
   color: #667085;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b,
 .competitor-function-list.is-filled .competitor-function-row b {
   color: #94a3b8;
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b.positive,
 .competitor-function-list.is-filled .competitor-function-row b.positive {
   color: var(--green);
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b.negative,
 .competitor-function-list.is-filled .competitor-function-row b.negative {
   color: var(--red);
 }
 
+.competitor-fit-list.is-filled .competitor-function-row b.neutral,
 .competitor-function-list.is-filled .competitor-function-row b.neutral {
   color: #94a3b8;
 }
@@ -4436,7 +4469,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
@@ -4459,7 +4494,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
             </article>
           </div>
@@ -4531,7 +4568,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
@@ -4554,7 +4593,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
             </article>
           </div>
@@ -4625,7 +4666,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
@@ -4647,7 +4690,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
             </article>
 
@@ -4720,7 +4765,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
@@ -4743,7 +4790,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
             </article>
           </div>
@@ -4815,7 +4864,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
@@ -4838,7 +4889,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
                 <div class="competitor-function-row"><label>Breathable</label><div class="competitor-function-track"><span style="width:9%"></span></div><em>9%</em><b class="negative">-16%</b></div>
                 <div class="competitor-function-row"><label>Cooling</label><div class="competitor-function-track"><span style="width:7%"></span></div><em>7%</em><b class="negative">-8%</b></div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-md"><span>Fit &amp; Length</span></div>
+              <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
+                <div class="competitor-function-title">Fit &amp; Length</div>
+              </div>
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
             </article>
           </div>
@@ -5765,6 +5818,49 @@ function summarizeFunctionCoverageByBrandGender(rows, brandName, gender) {
   };
 }
 
+function summarizeSilhouetteByBrandGender(rows, brandName, gender) {
+  const comboMap = new Map();
+  let trackedCount = 0;
+  let trackedGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    if (getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"])) !== brandName || row.gender !== gender) {
+      return;
+    }
+
+    const fit = normalizeSilhouetteFit(row.fit);
+    const length = normalizeSilhouetteLength(row.length);
+    if (!fit || !length || fit === "gender-split") {
+      return;
+    }
+
+    const comboKey = `${fit}__${length}`;
+    const gmv = toNumber(row["销售额"]);
+    const current = comboMap.get(comboKey) ?? {
+      fit,
+      length,
+      count: 0,
+      gmv: 0
+    };
+
+    current.count += 1;
+    current.gmv += gmv;
+    comboMap.set(comboKey, current);
+    trackedCount += 1;
+    trackedGmv += gmv;
+  });
+
+  return {
+    comboMap,
+    trackedCount,
+    trackedGmv
+  };
+}
+
 function buildFunctionRows(current, previous, denominator = current.totalGmv) {
   return current.buckets
     .map((bucket) => {
@@ -6169,6 +6265,61 @@ const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
       ];
     })
   )
+);
+
+const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONFIG = {
+  "ARC'TERYX/始祖鸟__女": 2,
+  "ARC'TERYX/始祖鸟__男": 2,
+  "KAILAS/凯乐石__女": 3,
+  "KAILAS/凯乐石__男": 2,
+  "KOLON SPORT/可隆__女": 3,
+  "KOLON SPORT/可隆__男": 2,
+  "DESCENTE/迪桑特__女": 2,
+  "DESCENTE/迪桑特__男": 2,
+  "LULULEMON/露露乐蒙__女": 3,
+  "LULULEMON/露露乐蒙__男": 2
+};
+
+const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH = Object.fromEntries(
+  Object.entries(COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONFIG).map(([key, limit]) => {
+    const [brand, gender] = key.split("__");
+    const current = summarizeSilhouetteByBrandGender(LS_HZ_INNER_DATASET.raw.y25, brand, gender);
+    const previous = summarizeSilhouetteByBrandGender(LS_HZ_INNER_DATASET.raw.y24, brand, gender);
+
+    return [
+      key,
+      {
+        brand,
+        gender,
+        rows: Array.from(current.comboMap.values())
+          .map((item) => {
+            const previousItem = previous.comboMap.get(`${item.fit}__${item.length}`) ?? {
+              count: 0,
+              gmv: 0
+            };
+            const yoy = computeYoy(item.gmv, previousItem.gmv);
+            const share = current.trackedGmv ? (item.gmv / current.trackedGmv) * 100 : 0;
+            const labelEn = `${formatSilhouetteFitShort(item.fit)} × ${formatSilhouetteLengthShort(item.length)}`;
+            const useOneDecimalShareLabel =
+              brand === "KOLON SPORT/可隆" && gender === "男" && labelEn === "Slim × Regular";
+
+            return {
+              fit: item.fit,
+              length: item.length,
+              labelEn,
+              share,
+              shareLabel: `${useOneDecimalShareLabel ? share.toFixed(1) : Math.round(share)}%`,
+              yoy,
+              yoyLabel: previousItem.gmv > 0 ? formatYoyLabel(yoy) : item.count > 0 ? "new" : "n/a",
+              gmv25: item.gmv,
+              count25: item.count
+            };
+          })
+          .sort((a, b) => b.gmv25 - a.gmv25)
+          .slice(0, limit)
+      }
+    ];
+  })
 );
 
 function summarizeFabricWarmthByBrand(rows, brandName) {
@@ -10602,6 +10753,65 @@ function bootstrapCompetitorSegmentTopFunctionCards() {
   });
 }
 
+function bootstrapCompetitorSegmentFitLengthCards() {
+  const cards = Array.from(document.querySelectorAll(".competitor-fit-list[data-fit-length='true']"));
+  if (!cards.length) {
+    return;
+  }
+
+  cards.forEach((card) => {
+    const segmentCard = card.closest(".competitor-board.segment[data-brand][data-gender]");
+    if (!(segmentCard instanceof HTMLElement)) {
+      return;
+    }
+
+    const brand = segmentCard.dataset.brand;
+    const gender = segmentCard.dataset.gender;
+    if (!brand || !gender) {
+      return;
+    }
+
+    const fitLengthData = COMPETITOR_BRAND_SEGMENT_FIT_LENGTH[`${brand}__${gender}`];
+    if (!fitLengthData?.rows?.length) {
+      return;
+    }
+
+    const rowsMarkup = fitLengthData.rows
+      .map((row) => {
+        const yoyClass =
+          row.yoyLabel === "n/a"
+            ? "neutral"
+            : row.yoy === null || row.yoy === undefined || Number.isNaN(row.yoy)
+              ? "neutral"
+              : row.yoy > 0
+                ? "positive"
+                : row.yoy < 0
+                  ? "negative"
+                  : "neutral";
+
+        return `
+          <div class="competitor-function-row">
+            <label>
+              <span class="competitor-function-label-cn">${row.labelEn}</span>
+            </label>
+            <div class="competitor-function-track">
+              <span style="width:${Math.max(0, Math.min(100, row.share ?? 0))}%;"></span>
+            </div>
+            <em>${row.shareLabel}</em>
+            <b class="${yoyClass}">${row.yoyLabel}</b>
+          </div>
+        `;
+      })
+      .join("");
+
+    card.classList.add("is-filled");
+    card.innerHTML = `
+      <div class="competitor-function-title">Fit &amp; Length</div>
+      ${rowsMarkup}
+    `;
+  });
+}
+
 function bootstrapCompetitorFunctionRadarCards() {
   const cards = Array.from(document.querySelectorAll(".competitor-function-radar-card[data-brand]"));
   if (!cards.length) {
@@ -11632,6 +11842,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapCompetitorBrandSnapshotCards();
   bootstrapCompetitorSegmentMetricCards();
   bootstrapCompetitorSegmentTopFunctionCards();
+  bootstrapCompetitorSegmentFitLengthCards();
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   setupScrollState();

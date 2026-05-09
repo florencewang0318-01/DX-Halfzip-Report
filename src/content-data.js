@@ -828,6 +828,49 @@ function summarizeFunctionCoverageByBrandGender(rows, brandName, gender) {
   };
 }
 
+function summarizeSilhouetteByBrandGender(rows, brandName, gender) {
+  const comboMap = new Map();
+  let trackedCount = 0;
+  let trackedGmv = 0;
+
+  rows.forEach((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return;
+    }
+
+    if (getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"])) !== brandName || row.gender !== gender) {
+      return;
+    }
+
+    const fit = normalizeSilhouetteFit(row.fit);
+    const length = normalizeSilhouetteLength(row.length);
+    if (!fit || !length || fit === "gender-split") {
+      return;
+    }
+
+    const comboKey = `${fit}__${length}`;
+    const gmv = toNumber(row["销售额"]);
+    const current = comboMap.get(comboKey) ?? {
+      fit,
+      length,
+      count: 0,
+      gmv: 0
+    };
+
+    current.count += 1;
+    current.gmv += gmv;
+    comboMap.set(comboKey, current);
+    trackedCount += 1;
+    trackedGmv += gmv;
+  });
+
+  return {
+    comboMap,
+    trackedCount,
+    trackedGmv
+  };
+}
+
 function buildFunctionRows(current, previous, denominator = current.totalGmv) {
   return current.buckets
     .map((bucket) => {
@@ -1232,6 +1275,61 @@ export const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
       ];
     })
   )
+);
+
+const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONFIG = {
+  "ARC'TERYX/始祖鸟__女": 2,
+  "ARC'TERYX/始祖鸟__男": 2,
+  "KAILAS/凯乐石__女": 3,
+  "KAILAS/凯乐石__男": 2,
+  "KOLON SPORT/可隆__女": 3,
+  "KOLON SPORT/可隆__男": 2,
+  "DESCENTE/迪桑特__女": 2,
+  "DESCENTE/迪桑特__男": 2,
+  "LULULEMON/露露乐蒙__女": 3,
+  "LULULEMON/露露乐蒙__男": 2
+};
+
+export const COMPETITOR_BRAND_SEGMENT_FIT_LENGTH = Object.fromEntries(
+  Object.entries(COMPETITOR_BRAND_SEGMENT_FIT_LENGTH_CONFIG).map(([key, limit]) => {
+    const [brand, gender] = key.split("__");
+    const current = summarizeSilhouetteByBrandGender(LS_HZ_INNER_DATASET.raw.y25, brand, gender);
+    const previous = summarizeSilhouetteByBrandGender(LS_HZ_INNER_DATASET.raw.y24, brand, gender);
+
+    return [
+      key,
+      {
+        brand,
+        gender,
+        rows: Array.from(current.comboMap.values())
+          .map((item) => {
+            const previousItem = previous.comboMap.get(`${item.fit}__${item.length}`) ?? {
+              count: 0,
+              gmv: 0
+            };
+            const yoy = computeYoy(item.gmv, previousItem.gmv);
+            const share = current.trackedGmv ? (item.gmv / current.trackedGmv) * 100 : 0;
+            const labelEn = `${formatSilhouetteFitShort(item.fit)} × ${formatSilhouetteLengthShort(item.length)}`;
+            const useOneDecimalShareLabel =
+              brand === "KOLON SPORT/可隆" && gender === "男" && labelEn === "Slim × Regular";
+
+            return {
+              fit: item.fit,
+              length: item.length,
+              labelEn,
+              share,
+              shareLabel: `${useOneDecimalShareLabel ? share.toFixed(1) : Math.round(share)}%`,
+              yoy,
+              yoyLabel: previousItem.gmv > 0 ? formatYoyLabel(yoy) : item.count > 0 ? "new" : "n/a",
+              gmv25: item.gmv,
+              count25: item.count
+            };
+          })
+          .sort((a, b) => b.gmv25 - a.gmv25)
+          .slice(0, limit)
+      }
+    ];
+  })
 );
 
 function summarizeFabricWarmthByBrand(rows, brandName) {
