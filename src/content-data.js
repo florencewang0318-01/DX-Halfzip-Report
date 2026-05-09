@@ -776,6 +776,58 @@ function summarizeFunctionCoverageByBrand(rows, brandName) {
   };
 }
 
+function summarizeFunctionCoverageByBrandGender(rows, brandName, gender) {
+  const filteredRows = rows.filter((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return false;
+    }
+
+    return getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"])) === brandName && row.gender === gender;
+  });
+
+  const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
+  const totalCount = filteredRows.length;
+  let functionGmv = 0;
+  let functionCount = 0;
+  const bucketMap = new Map(
+    FUNCTION_BUCKETS.map((bucket) => [
+      bucket.key,
+      {
+        ...bucket,
+        gmv: 0,
+        count: 0
+      }
+    ])
+  );
+
+  filteredRows.forEach((row) => {
+    const gmv = toNumber(row["销售额"]);
+    const bucketKeys = getFunctionBucketKeys(row);
+    if (bucketKeys.length) {
+      functionGmv += gmv;
+      functionCount += 1;
+    }
+
+    bucketKeys.forEach((key) => {
+      const current = bucketMap.get(key);
+      if (!current) {
+        return;
+      }
+
+      current.gmv += gmv;
+      current.count += 1;
+    });
+  });
+
+  return {
+    totalGmv,
+    totalCount,
+    functionGmv,
+    functionCount,
+    buckets: Array.from(bucketMap.values())
+  };
+}
+
 function buildFunctionRows(current, previous, denominator = current.totalGmv) {
   return current.buckets
     .map((bucket) => {
@@ -976,6 +1028,24 @@ export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.fl
     }))
 );
 
+export const COMPETITOR_BRAND_SEGMENT_METRICS = Object.fromEntries(
+  FEMALE_OPPORTUNITY_BRAND_GENDER.flatMap((row) =>
+    row.cells
+      .filter((cell) => cell.gender === "女" || cell.gender === "男")
+      .map((cell) => [
+        `${row.brand}__${cell.gender}`,
+        {
+          brand: row.brand,
+          gender: cell.gender,
+          share: cell.share,
+          shareLabel: cell.shareLabel,
+          yoy: cell.yoy,
+          yoyLabel: cell.yoyLabel
+        }
+      ])
+  )
+);
+
 const FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25);
 const FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24);
 const FUNCTION_OPPORTUNITY_VIEWS = [
@@ -1134,6 +1204,34 @@ export const COMPETITOR_BRAND_FUNCTION_RADARS = Object.fromEntries(
       }
     ];
   })
+);
+
+const COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS = [
+  "ARC'TERYX/始祖鸟",
+  "KAILAS/凯乐石",
+  "KOLON SPORT/可隆",
+  "DESCENTE/迪桑特",
+  "LULULEMON/露露乐蒙"
+];
+
+const COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS = ["女", "男"];
+
+export const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
+  COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS.flatMap((brand) =>
+    COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS.map((gender) => {
+      const current = summarizeFunctionCoverageByBrandGender(LS_HZ_INNER_DATASET.raw.y25, brand, gender);
+      const previous = summarizeFunctionCoverageByBrandGender(LS_HZ_INNER_DATASET.raw.y24, brand, gender);
+
+      return [
+        `${brand}__${gender}`,
+        {
+          brand,
+          gender,
+          rows: buildFunctionRows(current, previous, current.totalGmv).slice(0, 5)
+        }
+      ];
+    })
+  )
 );
 
 function summarizeFabricWarmthByBrand(rows, brandName) {

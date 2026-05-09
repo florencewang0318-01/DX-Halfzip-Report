@@ -3571,10 +3571,6 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   margin-top: 14px;
 }
 
-article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
-  padding-bottom: 10px;
-}
-
 .competitor-function-radar-combos strong {
   color: #344054;
   font-weight: 800;
@@ -3689,10 +3685,10 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
 }
 
 .competitor-metric-pill {
-  min-width: 60px;
+  min-width: 72px;
   min-height: 38px;
   padding: 6px 8px;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px solid rgba(203, 213, 225, 0.82);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
   display: flex;
@@ -3704,17 +3700,14 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
 }
 
 .competitor-metric-pill strong {
-  color: transparent;
-  font-size: 0;
+  color: #94a3b8;
+  font-size: 13px;
   line-height: 1;
+  font-weight: 800;
 }
 
 .competitor-metric-pill strong::after {
-  content: "--";
-  color: #94a3b8;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1;
+  content: none;
 }
 
 .competitor-board.segment.female .competitor-metric-pill {
@@ -3733,6 +3726,33 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
 .competitor-board.segment.male .competitor-metric-pill.positive {
   background: linear-gradient(180deg, rgba(243, 252, 246, 0.98), rgba(232, 249, 238, 0.98));
   border-color: rgba(201, 236, 212, 0.96);
+}
+
+.competitor-board.segment.female .competitor-metric-pill.negative,
+.competitor-board.segment.male .competitor-metric-pill.negative {
+  background: linear-gradient(180deg, rgba(255, 246, 247, 0.98), rgba(254, 236, 238, 0.98));
+  border-color: rgba(246, 205, 210, 0.96);
+}
+
+.competitor-metric-pill.positive strong {
+  color: var(--green);
+}
+
+.competitor-metric-pill.negative strong {
+  color: var(--red);
+}
+
+.competitor-metric-pill.neutral strong {
+  color: #94a3b8;
+}
+
+.competitor-metric-pill.is-filled:not(.positive):not(.negative):not(.neutral) strong {
+  color: #94a3b8;
+}
+
+.competitor-segment-metrics .competitor-metric-pill:first-child.is-filled:not(.positive):not(.negative):not(.neutral) strong,
+.competitor-segment-metrics .competitor-metric-pill:first-child.neutral strong {
+  color: #111827f9;
 }
 
 .competitor-function-list {
@@ -3768,11 +3788,11 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
 }
 
 .competitor-board.segment.female .competitor-function-title {
-  color: var(--segment-note);
+  color: #8f5577;
 }
 
 .competitor-board.segment.male .competitor-function-title {
-  color: var(--segment-note);
+  color: #4e67ae;
 }
 
 .competitor-board.segment.female .competitor-placeholder,
@@ -3794,15 +3814,116 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
   min-height: 104px;
 }
 
+.competitor-function-list.is-filled {
+  min-height: 170px;
+  padding: 40px 18px 14px;
+  display: grid;
+  align-content: start;
+  justify-content: stretch;
+  text-align: left;
+  gap: 11px;
+}
+
+.competitor-function-list.is-filled::after {
+  content: none;
+}
+
 .competitor-function-title {
   position: absolute;
-  top: 12px;
+  top: 14px;
   left: 14px;
+  font-size: 12px;
 }
 
 .competitor-function-row,
 .competitor-function-track {
   display: none;
+}
+
+.competitor-function-list.is-filled .competitor-function-row {
+  display: grid;
+  grid-template-columns: 138px minmax(0, 92px) 40px 54px;
+  align-items: center;
+  gap: 8px;
+}
+
+.competitor-function-list.is-filled .competitor-function-row label {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+  padding-left: 6px;
+  color: #677084;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.competitor-function-label-cn {
+  color: #5f687b;
+  flex: 0 0 auto;
+}
+
+.competitor-function-label-en {
+  color: #9aa3b4;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.competitor-function-list.is-filled .competitor-function-track {
+  display: block;
+  position: relative;
+  height: 10px;
+  margin-left: -14px;
+  border-radius: 999px;
+  background: #edf1f7;
+  overflow: hidden;
+}
+
+.competitor-function-list.is-filled .competitor-function-track span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #95a3e5 0%, #7f90db 100%);
+}
+
+.competitor-board.segment.female .competitor-function-list.is-filled .competitor-function-track span {
+  background: linear-gradient(90deg, #d9a9c3 0%, #c98bb0 100%);
+}
+
+.competitor-function-list.is-filled .competitor-function-row em,
+.competitor-function-list.is-filled .competitor-function-row b {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.competitor-function-list.is-filled .competitor-function-row em {
+  color: #667085;
+}
+
+.competitor-function-list.is-filled .competitor-function-row b {
+  color: #94a3b8;
+}
+
+.competitor-function-list.is-filled .competitor-function-row b.positive {
+  color: var(--green);
+}
+
+.competitor-function-list.is-filled .competitor-function-row b.negative {
+  color: var(--red);
+}
+
+.competitor-function-list.is-filled .competitor-function-row b.neutral {
+  color: #94a3b8;
 }
 
 @media (max-width: 1200px) {
@@ -4261,7 +4382,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
         <div class="content-frame">
           <div class="section-head reveal competitor-page-head">
             <div>
-              <div class="section-kicker"><span class="section-badge">08</span><span>Competitor</span></div>
+              <div class="section-kicker"><span class="section-badge">08</span><span>ARC'TERYX</span></div>
               <h2 class="section-title competitor-page-title">ARC'TERYX</h2>
             </div>
           </div>
@@ -4296,7 +4417,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               </div>
             </article>
 
-            <article class="competitor-board segment female">
+            <article class="competitor-board segment female" data-brand="ARC'TERYX/始祖鸟" data-gender="女">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Female</div>
@@ -4308,7 +4429,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4319,7 +4440,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
-            <article class="competitor-board segment male">
+            <article class="competitor-board segment male" data-brand="ARC'TERYX/始祖鸟" data-gender="男">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Male</div>
@@ -4331,7 +4452,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4356,7 +4477,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
         <div class="content-frame">
           <div class="section-head reveal competitor-page-head">
             <div>
-              <div class="section-kicker"><span class="section-badge">09</span><span>Competitor</span></div>
+              <div class="section-kicker"><span class="section-badge">09</span><span>KAILAS</span></div>
               <h2 class="section-title competitor-page-title">KAILAS</h2>
             </div>
           </div>
@@ -4391,7 +4512,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               </div>
             </article>
 
-            <article class="competitor-board segment female">
+            <article class="competitor-board segment female" data-brand="KAILAS/凯乐石" data-gender="女">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Female</div>
@@ -4403,7 +4524,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4414,7 +4535,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
-            <article class="competitor-board segment male">
+            <article class="competitor-board segment male" data-brand="KAILAS/凯乐石" data-gender="男">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Male</div>
@@ -4426,7 +4547,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4451,7 +4572,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
         <div class="content-frame">
           <div class="section-head reveal competitor-page-head">
             <div>
-              <div class="section-kicker"><span class="section-badge">10</span><span>Competitor</span></div>
+              <div class="section-kicker"><span class="section-badge">10</span><span>KOLON</span></div>
               <h2 class="section-title competitor-page-title">KOLON</h2>
             </div>
           </div>
@@ -4486,7 +4607,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               </div>
             </article>
 
-            <article class="competitor-board segment female">
+            <article class="competitor-board segment female" data-brand="KOLON SPORT/可隆" data-gender="女">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Female</div>
@@ -4498,7 +4619,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4508,7 +4629,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
-            <article class="competitor-board segment male">
+            <article class="competitor-board segment male" data-brand="KOLON SPORT/可隆" data-gender="男">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Male</div>
@@ -4520,7 +4641,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4545,7 +4666,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
         <div class="content-frame">
           <div class="section-head reveal competitor-page-head">
             <div>
-              <div class="section-kicker"><span class="section-badge">11</span><span>Competitor</span></div>
+              <div class="section-kicker"><span class="section-badge">11</span><span>DESCENTE</span></div>
               <h2 class="section-title competitor-page-title">DESCENTE</h2>
             </div>
           </div>
@@ -4580,7 +4701,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               </div>
             </article>
 
-            <article class="competitor-board segment female">
+            <article class="competitor-board segment female" data-brand="DESCENTE/迪桑特" data-gender="女">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Female</div>
@@ -4592,7 +4713,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4603,7 +4724,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
-            <article class="competitor-board segment male">
+            <article class="competitor-board segment male" data-brand="DESCENTE/迪桑特" data-gender="男">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Male</div>
@@ -4615,7 +4736,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4640,7 +4761,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
         <div class="content-frame">
           <div class="section-head reveal competitor-page-head">
             <div>
-              <div class="section-kicker"><span class="section-badge">12</span><span>Competitor</span></div>
+              <div class="section-kicker"><span class="section-badge">12</span><span>LULULEMON</span></div>
               <h2 class="section-title competitor-page-title">LULULEMON</h2>
             </div>
           </div>
@@ -4675,7 +4796,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               </div>
             </article>
 
-            <article class="competitor-board segment female">
+            <article class="competitor-board segment female" data-brand="LULULEMON/露露乐蒙" data-gender="女">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Female</div>
@@ -4687,7 +4808,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -4698,7 +4819,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
               <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
             </article>
 
-            <article class="competitor-board segment male">
+            <article class="competitor-board segment male" data-brand="LULULEMON/露露乐蒙" data-gender="男">
               <div class="competitor-segment-top">
                 <div class="competitor-segment-meta">
                   <div class="competitor-segment-title">Male</div>
@@ -4710,7 +4831,7 @@ article[data-brand="DESCENTE/迪桑特"] .competitor-function-radar-card {
                   <div class="competitor-metric-pill positive"><span>YoY</span><strong>+270%</strong></div>
                 </div>
               </div>
-              <div class="competitor-function-list">
+              <div class="competitor-function-list" data-top-functions="true">
                 <div class="competitor-function-title">Top Function</div>
                 <div class="competitor-function-row"><label>Lightweight</label><div class="competitor-function-track"><span style="width:45%"></span></div><em>45%</em><b>+449%</b></div>
                 <div class="competitor-function-row"><label>Water-repellent</label><div class="competitor-function-track"><span style="width:38%"></span></div><em>38%</em><b>+21890%</b></div>
@@ -5592,6 +5713,58 @@ function summarizeFunctionCoverageByBrand(rows, brandName) {
   };
 }
 
+function summarizeFunctionCoverageByBrandGender(rows, brandName, gender) {
+  const filteredRows = rows.filter((row) => {
+    if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
+      return false;
+    }
+
+    return getMarketScopeDisplayBrandName(normalizeBrandName(row["品牌"])) === brandName && row.gender === gender;
+  });
+
+  const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
+  const totalCount = filteredRows.length;
+  let functionGmv = 0;
+  let functionCount = 0;
+  const bucketMap = new Map(
+    FUNCTION_BUCKETS.map((bucket) => [
+      bucket.key,
+      {
+        ...bucket,
+        gmv: 0,
+        count: 0
+      }
+    ])
+  );
+
+  filteredRows.forEach((row) => {
+    const gmv = toNumber(row["销售额"]);
+    const bucketKeys = getFunctionBucketKeys(row);
+    if (bucketKeys.length) {
+      functionGmv += gmv;
+      functionCount += 1;
+    }
+
+    bucketKeys.forEach((key) => {
+      const current = bucketMap.get(key);
+      if (!current) {
+        return;
+      }
+
+      current.gmv += gmv;
+      current.count += 1;
+    });
+  });
+
+  return {
+    totalGmv,
+    totalCount,
+    functionGmv,
+    functionCount,
+    buckets: Array.from(bucketMap.values())
+  };
+}
+
 function buildFunctionRows(current, previous, denominator = current.totalGmv) {
   return current.buckets
     .map((bucket) => {
@@ -5792,6 +5965,24 @@ const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.flatMap((
     }))
 );
 
+const COMPETITOR_BRAND_SEGMENT_METRICS = Object.fromEntries(
+  FEMALE_OPPORTUNITY_BRAND_GENDER.flatMap((row) =>
+    row.cells
+      .filter((cell) => cell.gender === "女" || cell.gender === "男")
+      .map((cell) => [
+        `${row.brand}__${cell.gender}`,
+        {
+          brand: row.brand,
+          gender: cell.gender,
+          share: cell.share,
+          shareLabel: cell.shareLabel,
+          yoy: cell.yoy,
+          yoyLabel: cell.yoyLabel
+        }
+      ])
+  )
+);
+
 const FUNCTION_COVERAGE_Y25 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y25);
 const FUNCTION_COVERAGE_Y24 = summarizeFunctionCoverage(LS_HZ_INNER_DATASET.raw.y24);
 const FUNCTION_OPPORTUNITY_VIEWS = [
@@ -5950,6 +6141,34 @@ const COMPETITOR_BRAND_FUNCTION_RADARS = Object.fromEntries(
       }
     ];
   })
+);
+
+const COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS = [
+  "ARC'TERYX/始祖鸟",
+  "KAILAS/凯乐石",
+  "KOLON SPORT/可隆",
+  "DESCENTE/迪桑特",
+  "LULULEMON/露露乐蒙"
+];
+
+const COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS = ["女", "男"];
+
+const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS = Object.fromEntries(
+  COMPETITOR_SEGMENT_TOP_FUNCTION_BRANDS.flatMap((brand) =>
+    COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS.map((gender) => {
+      const current = summarizeFunctionCoverageByBrandGender(LS_HZ_INNER_DATASET.raw.y25, brand, gender);
+      const previous = summarizeFunctionCoverageByBrandGender(LS_HZ_INNER_DATASET.raw.y24, brand, gender);
+
+      return [
+        `${brand}__${gender}`,
+        {
+          brand,
+          gender,
+          rows: buildFunctionRows(current, previous, current.totalGmv).slice(0, 5)
+        }
+      ];
+    })
+  )
 );
 
 function summarizeFabricWarmthByBrand(rows, brandName) {
@@ -10271,6 +10490,118 @@ function bootstrapCompetitorBrandSnapshotCards() {
   });
 }
 
+function bootstrapCompetitorSegmentMetricCards() {
+  const segmentCards = Array.from(document.querySelectorAll(".competitor-board.segment[data-brand][data-gender]"));
+  if (!segmentCards.length) {
+    return;
+  }
+
+  segmentCards.forEach((segmentCard) => {
+    const brand = segmentCard.dataset.brand;
+    const gender = segmentCard.dataset.gender;
+    if (!brand || !gender) {
+      return;
+    }
+
+    const segmentData = COMPETITOR_BRAND_SEGMENT_METRICS[`${brand}__${gender}`];
+    if (!segmentData) {
+      return;
+    }
+
+    const pills = Array.from(segmentCard.querySelectorAll(".competitor-segment-metrics .competitor-metric-pill"));
+    const sharePill = pills[0];
+    const yoyPill = pills[1];
+
+    if (sharePill) {
+      const valueNode = sharePill.querySelector("strong");
+      if (valueNode instanceof HTMLElement) {
+        valueNode.textContent = segmentData.shareLabel ?? "--";
+      }
+      sharePill.classList.add("is-filled");
+    }
+
+    if (yoyPill) {
+      const valueNode = yoyPill.querySelector("strong");
+      if (valueNode instanceof HTMLElement) {
+        valueNode.textContent = segmentData.yoyLabel ?? "--";
+      }
+
+      yoyPill.classList.remove("positive", "negative", "neutral");
+      yoyPill.classList.add("is-filled");
+
+      if (segmentData.yoyLabel === "n/a") {
+        yoyPill.classList.add("neutral");
+      } else if ((segmentData.yoy ?? 0) > 0) {
+        yoyPill.classList.add("positive");
+      } else if ((segmentData.yoy ?? 0) < 0) {
+        yoyPill.classList.add("negative");
+      } else {
+        yoyPill.classList.add("neutral");
+      }
+    }
+  });
+}
+
+function bootstrapCompetitorSegmentTopFunctionCards() {
+  const lists = Array.from(document.querySelectorAll(".competitor-function-list[data-top-functions='true']"));
+  if (!lists.length) {
+    return;
+  }
+
+  lists.forEach((list) => {
+    const segmentCard = list.closest(".competitor-board.segment[data-brand][data-gender]");
+    if (!(segmentCard instanceof HTMLElement)) {
+      return;
+    }
+
+    const brand = segmentCard.dataset.brand;
+    const gender = segmentCard.dataset.gender;
+    if (!brand || !gender) {
+      return;
+    }
+
+    const functionData = COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS[`${brand}__${gender}`];
+    if (!functionData?.rows?.length) {
+      return;
+    }
+
+    const rowsMarkup = functionData.rows
+      .map((row) => {
+        const yoyClass =
+          row.yoyLabel === "n/a"
+            ? "neutral"
+            : row.yoy === null || row.yoy === undefined || Number.isNaN(row.yoy)
+              ? "neutral"
+              : row.yoy > 0
+                ? "positive"
+                : row.yoy < 0
+                  ? "negative"
+                  : "neutral";
+
+        return `
+          <div class="competitor-function-row">
+            <label>
+              <span class="competitor-function-label-cn">${row.label}</span>
+              ${row.labelEn ? `<span class="competitor-function-label-en">${row.labelEn}</span>` : ""}
+            </label>
+            <div class="competitor-function-track">
+              <span style="width:${Math.max(0, Math.min(100, row.share ?? 0))}%;"></span>
+            </div>
+            <em>${row.shareLabel}</em>
+            <b class="${yoyClass}">${row.yoyLabel}</b>
+          </div>
+        `;
+      })
+      .join("");
+
+    list.classList.add("is-filled");
+    list.innerHTML = `
+      <div class="competitor-function-title">Top Function</div>
+      ${rowsMarkup}
+    `;
+  });
+}
+
 function bootstrapCompetitorFunctionRadarCards() {
   const cards = Array.from(document.querySelectorAll(".competitor-function-radar-card[data-brand]"));
   if (!cards.length) {
@@ -11299,6 +11630,8 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapFabricOverviewPage();
   bootstrapFabricWarmthFunctionPage();
   bootstrapCompetitorBrandSnapshotCards();
+  bootstrapCompetitorSegmentMetricCards();
+  bootstrapCompetitorSegmentTopFunctionCards();
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   setupScrollState();

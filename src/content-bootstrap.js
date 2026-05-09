@@ -1,4 +1,6 @@
 import {
+  COMPETITOR_BRAND_SEGMENT_METRICS,
+  COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS,
   COMPETITOR_BRAND_FABRIC_RADARS,
   COMPETITOR_BRAND_FUNCTION_RADARS,
   COMPETITOR_BRAND_SNAPSHOT,
@@ -383,6 +385,118 @@ function bootstrapCompetitorBrandSnapshotCards() {
         kpiCard.classList.add("is-neutral");
       }
     });
+  });
+}
+
+function bootstrapCompetitorSegmentMetricCards() {
+  const segmentCards = Array.from(document.querySelectorAll(".competitor-board.segment[data-brand][data-gender]"));
+  if (!segmentCards.length) {
+    return;
+  }
+
+  segmentCards.forEach((segmentCard) => {
+    const brand = segmentCard.dataset.brand;
+    const gender = segmentCard.dataset.gender;
+    if (!brand || !gender) {
+      return;
+    }
+
+    const segmentData = COMPETITOR_BRAND_SEGMENT_METRICS[`${brand}__${gender}`];
+    if (!segmentData) {
+      return;
+    }
+
+    const pills = Array.from(segmentCard.querySelectorAll(".competitor-segment-metrics .competitor-metric-pill"));
+    const sharePill = pills[0];
+    const yoyPill = pills[1];
+
+    if (sharePill) {
+      const valueNode = sharePill.querySelector("strong");
+      if (valueNode instanceof HTMLElement) {
+        valueNode.textContent = segmentData.shareLabel ?? "--";
+      }
+      sharePill.classList.add("is-filled");
+    }
+
+    if (yoyPill) {
+      const valueNode = yoyPill.querySelector("strong");
+      if (valueNode instanceof HTMLElement) {
+        valueNode.textContent = segmentData.yoyLabel ?? "--";
+      }
+
+      yoyPill.classList.remove("positive", "negative", "neutral");
+      yoyPill.classList.add("is-filled");
+
+      if (segmentData.yoyLabel === "n/a") {
+        yoyPill.classList.add("neutral");
+      } else if ((segmentData.yoy ?? 0) > 0) {
+        yoyPill.classList.add("positive");
+      } else if ((segmentData.yoy ?? 0) < 0) {
+        yoyPill.classList.add("negative");
+      } else {
+        yoyPill.classList.add("neutral");
+      }
+    }
+  });
+}
+
+function bootstrapCompetitorSegmentTopFunctionCards() {
+  const lists = Array.from(document.querySelectorAll(".competitor-function-list[data-top-functions='true']"));
+  if (!lists.length) {
+    return;
+  }
+
+  lists.forEach((list) => {
+    const segmentCard = list.closest(".competitor-board.segment[data-brand][data-gender]");
+    if (!(segmentCard instanceof HTMLElement)) {
+      return;
+    }
+
+    const brand = segmentCard.dataset.brand;
+    const gender = segmentCard.dataset.gender;
+    if (!brand || !gender) {
+      return;
+    }
+
+    const functionData = COMPETITOR_BRAND_SEGMENT_TOP_FUNCTIONS[`${brand}__${gender}`];
+    if (!functionData?.rows?.length) {
+      return;
+    }
+
+    const rowsMarkup = functionData.rows
+      .map((row) => {
+        const yoyClass =
+          row.yoyLabel === "n/a"
+            ? "neutral"
+            : row.yoy === null || row.yoy === undefined || Number.isNaN(row.yoy)
+              ? "neutral"
+              : row.yoy > 0
+                ? "positive"
+                : row.yoy < 0
+                  ? "negative"
+                  : "neutral";
+
+        return `
+          <div class="competitor-function-row">
+            <label>
+              <span class="competitor-function-label-cn">${row.label}</span>
+              ${row.labelEn ? `<span class="competitor-function-label-en">${row.labelEn}</span>` : ""}
+            </label>
+            <div class="competitor-function-track">
+              <span style="width:${Math.max(0, Math.min(100, row.share ?? 0))}%;"></span>
+            </div>
+            <em>${row.shareLabel}</em>
+            <b class="${yoyClass}">${row.yoyLabel}</b>
+          </div>
+        `;
+      })
+      .join("");
+
+    list.classList.add("is-filled");
+    list.innerHTML = `
+      <div class="competitor-function-title">Top Function</div>
+      ${rowsMarkup}
+    `;
   });
 }
 
@@ -1414,6 +1528,8 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapFabricOverviewPage();
   bootstrapFabricWarmthFunctionPage();
   bootstrapCompetitorBrandSnapshotCards();
+  bootstrapCompetitorSegmentMetricCards();
+  bootstrapCompetitorSegmentTopFunctionCards();
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   setupScrollState();

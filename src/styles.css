@@ -3678,10 +3678,10 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
 }
 
 .competitor-metric-pill {
-  min-width: 60px;
+  min-width: 72px;
   min-height: 38px;
   padding: 6px 8px;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px solid rgba(203, 213, 225, 0.82);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.96));
   display: flex;
@@ -3693,17 +3693,14 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
 }
 
 .competitor-metric-pill strong {
-  color: transparent;
-  font-size: 0;
+  color: #94a3b8;
+  font-size: 13px;
   line-height: 1;
+  font-weight: 800;
 }
 
 .competitor-metric-pill strong::after {
-  content: "--";
-  color: #94a3b8;
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1;
+  content: none;
 }
 
 .competitor-board.segment.female .competitor-metric-pill {
@@ -3722,6 +3719,33 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
 .competitor-board.segment.male .competitor-metric-pill.positive {
   background: linear-gradient(180deg, rgba(243, 252, 246, 0.98), rgba(232, 249, 238, 0.98));
   border-color: rgba(201, 236, 212, 0.96);
+}
+
+.competitor-board.segment.female .competitor-metric-pill.negative,
+.competitor-board.segment.male .competitor-metric-pill.negative {
+  background: linear-gradient(180deg, rgba(255, 246, 247, 0.98), rgba(254, 236, 238, 0.98));
+  border-color: rgba(246, 205, 210, 0.96);
+}
+
+.competitor-metric-pill.positive strong {
+  color: var(--green);
+}
+
+.competitor-metric-pill.negative strong {
+  color: var(--red);
+}
+
+.competitor-metric-pill.neutral strong {
+  color: #94a3b8;
+}
+
+.competitor-metric-pill.is-filled:not(.positive):not(.negative):not(.neutral) strong {
+  color: #94a3b8;
+}
+
+.competitor-segment-metrics .competitor-metric-pill:first-child.is-filled:not(.positive):not(.negative):not(.neutral) strong,
+.competitor-segment-metrics .competitor-metric-pill:first-child.neutral strong {
+  color: #111827f9;
 }
 
 .competitor-function-list {
@@ -3757,11 +3781,11 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
 }
 
 .competitor-board.segment.female .competitor-function-title {
-  color: var(--segment-note);
+  color: #8f5577;
 }
 
 .competitor-board.segment.male .competitor-function-title {
-  color: var(--segment-note);
+  color: #4e67ae;
 }
 
 .competitor-board.segment.female .competitor-placeholder,
@@ -3783,15 +3807,116 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-function-radar-card.has
   min-height: 104px;
 }
 
+.competitor-function-list.is-filled {
+  min-height: 170px;
+  padding: 40px 18px 14px;
+  display: grid;
+  align-content: start;
+  justify-content: stretch;
+  text-align: left;
+  gap: 11px;
+}
+
+.competitor-function-list.is-filled::after {
+  content: none;
+}
+
 .competitor-function-title {
   position: absolute;
-  top: 12px;
+  top: 14px;
   left: 14px;
+  font-size: 12px;
 }
 
 .competitor-function-row,
 .competitor-function-track {
   display: none;
+}
+
+.competitor-function-list.is-filled .competitor-function-row {
+  display: grid;
+  grid-template-columns: 138px minmax(0, 92px) 40px 54px;
+  align-items: center;
+  gap: 8px;
+}
+
+.competitor-function-list.is-filled .competitor-function-row label {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+  padding-left: 6px;
+  color: #677084;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.competitor-function-label-cn {
+  color: #5f687b;
+  flex: 0 0 auto;
+}
+
+.competitor-function-label-en {
+  color: #9aa3b4;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.competitor-function-list.is-filled .competitor-function-track {
+  display: block;
+  position: relative;
+  height: 10px;
+  margin-left: -14px;
+  border-radius: 999px;
+  background: #edf1f7;
+  overflow: hidden;
+}
+
+.competitor-function-list.is-filled .competitor-function-track span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #95a3e5 0%, #7f90db 100%);
+}
+
+.competitor-board.segment.female .competitor-function-list.is-filled .competitor-function-track span {
+  background: linear-gradient(90deg, #d9a9c3 0%, #c98bb0 100%);
+}
+
+.competitor-function-list.is-filled .competitor-function-row em,
+.competitor-function-list.is-filled .competitor-function-row b {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.competitor-function-list.is-filled .competitor-function-row em {
+  color: #667085;
+}
+
+.competitor-function-list.is-filled .competitor-function-row b {
+  color: #94a3b8;
+}
+
+.competitor-function-list.is-filled .competitor-function-row b.positive {
+  color: var(--green);
+}
+
+.competitor-function-list.is-filled .competitor-function-row b.negative {
+  color: var(--red);
+}
+
+.competitor-function-list.is-filled .competitor-function-row b.neutral {
+  color: #94a3b8;
 }
 
 @media (max-width: 1200px) {
