@@ -562,6 +562,222 @@ function bootstrapCompetitorSegmentFitLengthCards() {
   });
 }
 
+function bootstrapCompetitorColorCards() {
+  const cards = Array.from(document.querySelectorAll(".competitor-design-card"));
+  if (!cards.length) {
+    return;
+  }
+
+  const zoomModal = ensureCompetitorColorZoomModal();
+
+  const colorCardAssets = {
+    "ARC'TERYX/始祖鸟__女": [
+      { label: "黑色", imagePath: "../pic/始祖鸟_女_黑色.jpg" },
+      { label: "蓝黑色", imagePath: "../pic/始祖鸟_女_蓝黑色.jpg" },
+      { label: "浅紫色", imagePath: "../pic/始祖鸟_女_浅紫色.jpg" },
+      { label: "浅灰色", imagePath: "../pic/始祖鸟_女_浅灰色.jpg" },
+      { label: "层云蓝", imagePath: "../pic/始祖鸟_女_层云蓝.jpg" }
+    ],
+    "ARC'TERYX/始祖鸟__男": [
+      { label: "黑色", imagePath: "../pic/始祖鸟_男_黑色.jpg" },
+      { label: "榄苔绿", imagePath: "../pic/始祖鸟_男_榄苔绿.jpg" },
+      { label: "蓝黑色", imagePath: "../pic/始祖鸟_男_蓝黑色.jpg" },
+      { label: "火星红", imagePath: "../pic/始祖鸟_男_火星红.jpg" },
+      { label: "瀚空蓝", imagePath: "../pic/始祖鸟_男_瀚空蓝.jpg" }
+    ],
+    "KAILAS/凯乐石__女": [
+      { label: "米黄色", imagePath: "../pic/凯乐石_女_米黄色_v2.jpg" },
+      { label: "亮白色", imagePath: "../pic/凯乐石_女_亮白色.jpg" },
+      { label: "浅紫色", imagePath: "../pic/凯乐石_女_浅紫色.jpg" },
+      { label: "蓝黑色", imagePath: "../pic/凯乐石_女_蓝黑色.jpg" },
+      { label: "烟紫色", imagePath: "../pic/凯乐石_女_烟紫色.jpg" }
+    ],
+    "KAILAS/凯乐石__男": [
+      { label: "黑色", imagePath: "../pic/凯乐石_男_黑色.jpg" },
+      { label: "墨绿色", imagePath: "../pic/凯乐石_男_墨绿色.jpg" },
+      { label: "淡绿色", imagePath: "../pic/凯乐石_男_淡绿色.jpg" },
+      { label: "岩棕色", imagePath: "../pic/凯乐石_男_岩棕色.jpg" },
+      { label: "茶绿色", imagePath: "../pic/凯乐石_男_茶绿色.jpg" }
+    ],
+    "KOLON SPORT/可隆__女": [
+      { label: "黑色", imagePath: "../pic/可隆_女_黑色.jpg" },
+      { label: "奶油白", imagePath: "../pic/可隆_女_奶油白.jpg" },
+      { label: "薄荷绿", imagePath: "../pic/可隆_女_薄荷绿.jpg" },
+      { label: "红色", imagePath: "../pic/可隆_女_红色.jpg" },
+      { label: "浅蓝色", imagePath: "../pic/可隆_女_浅蓝色.jpg" }
+    ],
+    "KOLON SPORT/可隆__男": [
+      { label: "黑色", imagePath: "../pic/可隆_男_黑色.jpg" },
+      { label: "米灰色", imagePath: "../pic/可隆_男_米灰色.jpg" },
+      { label: "藏蓝色", imagePath: "../pic/可隆_男_藏蓝色.jpg" },
+      { label: "梅紫色", imagePath: "../pic/可隆_男_梅紫色.jpg" },
+      { label: "烟灰色", imagePath: "../pic/可隆_男_烟灰色.jpg" }
+    ],
+    "DESCENTE/迪桑特__女": [
+      { label: "黑色", imagePath: "../pic/迪桑特_女_黑色.jpg" },
+      { label: "奶油色", imagePath: "../pic/迪桑特_女_奶油色.jpg" },
+      { label: "深蓝色", imagePath: "../pic/迪桑特_女_深蓝色.jpg" },
+      { label: "白色", imagePath: "../pic/迪桑特_女_白色.jpg" },
+      { label: "炭灰色", imagePath: "../pic/迪桑特_女_炭灰色.jpg" }
+    ],
+    "DESCENTE/迪桑特__男": [
+      { label: "黑色", imagePath: "../pic/迪桑特_男_黑色.jpg" },
+      { label: "卡其色", imagePath: "../pic/迪桑特_男_卡其色.jpg" },
+      { label: "棕色", imagePath: "../pic/迪桑特_男_棕色.jpg" },
+      { label: "白色", imagePath: "../pic/迪桑特_男_白色.jpg" },
+      { label: "浅灰色", imagePath: "../pic/迪桑特_男_浅灰色.jpg" }
+    ],
+    "LULULEMON/露露乐蒙__女": [
+      { label: "黑色", imagePath: "../pic/Lulu_女_黑色.jpg" },
+      { label: "浅灰色", imagePath: "../pic/Lulu_女_浅灰色.jpg" },
+      { label: "鸽灰色", imagePath: "../pic/Lulu_女_鸽灰色.jpg" },
+      { label: "浆果红", imagePath: "../pic/Lulu_女_浆果红.jpg" },
+      { label: "银灰色", imagePath: "../pic/Lulu_女_银灰色.jpg" }
+    ],
+    "LULULEMON/露露乐蒙__男": [
+      { label: "黑色", imagePath: "../pic/Lulu_男_黑色.jpg" },
+      { label: "杂色灰", imagePath: "../pic/Lulu_男_杂色灰.jpg" },
+      { label: "象牙白", imagePath: "../pic/Lulu_男_象牙白.jpg" },
+      { label: "石墨灰", imagePath: "../pic/Lulu_男_石墨灰.jpg" },
+      { label: "杂色棕", imagePath: "../pic/Lulu_男_杂色棕.jpg" }
+    ]
+  };
+
+  cards.forEach((card) => {
+    const segmentCard = card.closest(".competitor-board.segment[data-brand][data-gender]");
+    const brand = segmentCard instanceof HTMLElement ? segmentCard.dataset.brand : "";
+    const gender = segmentCard instanceof HTMLElement ? segmentCard.dataset.gender : "";
+    const assetKey = brand && gender ? `${brand}__${gender}` : "";
+    const assets = colorCardAssets[assetKey] ?? [];
+    const slotsMarkup = Array.from({ length: 5 }, (_, index) => {
+      const asset = assets[index];
+      const slotNumber = index + 1;
+
+      if (asset) {
+        return `
+          <div class="competitor-color-slot">
+            <div class="competitor-color-slot-label">${asset.label}</div>
+            <button
+              type="button"
+              class="competitor-color-slot-frame competitor-color-zoom-trigger has-image"
+              data-image-src="${asset.imagePath}"
+              data-image-label="${asset.label}"
+              aria-label="放大查看${asset.label}"
+            >
+              <img src="${asset.imagePath}" alt="${asset.label}">
+            </button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="competitor-color-slot">
+          <div class="competitor-color-slot-label">Color ${slotNumber}</div>
+          <div class="competitor-color-slot-frame">
+            <span>Image</span>
+            <small>3:4</small>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    card.innerHTML = `
+      <div class="competitor-function-title">Colors</div>
+      <div class="competitor-color-grid">
+        ${slotsMarkup}
+      </div>
+    `;
+
+    card.querySelectorAll(".competitor-color-zoom-trigger").forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        zoomModal.open(trigger.dataset.imageSrc ?? "", trigger.dataset.imageLabel ?? "");
+      });
+    });
+  });
+}
+
+function ensureCompetitorColorZoomModal() {
+  let modal = document.querySelector("#competitorColorZoomModal");
+  if (modal instanceof HTMLElement) {
+    return modal;
+  }
+
+  modal = document.createElement("div");
+  modal.id = "competitorColorZoomModal";
+  modal.className = "competitor-color-zoom-modal";
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="competitor-color-zoom-backdrop"></div>
+    <div class="competitor-color-zoom-dialog" role="dialog" aria-modal="true" aria-label="颜色图片放大预览">
+      <button type="button" class="competitor-color-zoom-close" aria-label="关闭图片预览">Close</button>
+      <img class="competitor-color-zoom-image" alt="">
+      <div class="competitor-color-zoom-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const image = modal.querySelector(".competitor-color-zoom-image");
+  const caption = modal.querySelector(".competitor-color-zoom-caption");
+  const closeButton = modal.querySelector(".competitor-color-zoom-close");
+  const backdrop = modal.querySelector(".competitor-color-zoom-backdrop");
+
+  const closeModal = () => {
+    modal.hidden = true;
+    document.body.classList.remove("is-competitor-color-zoom-open");
+    if (image instanceof HTMLImageElement) {
+      image.removeAttribute("src");
+    }
+    if (caption instanceof HTMLElement) {
+      caption.textContent = "";
+    }
+  };
+
+  modal.open = (imageSrc, imageLabel) => {
+    if (!(image instanceof HTMLImageElement) || !(caption instanceof HTMLElement) || !imageSrc) {
+      return;
+    }
+
+    image.src = imageSrc;
+    image.alt = imageLabel || "颜色图片预览";
+    caption.textContent = imageLabel || "";
+    modal.hidden = false;
+    document.body.classList.add("is-competitor-color-zoom-open");
+  };
+
+  closeButton?.addEventListener("click", closeModal);
+  backdrop?.addEventListener("click", closeModal);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  if (!document.body.dataset.competitorColorZoomBound) {
+    document.body.dataset.competitorColorZoomBound = "true";
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        const activeModal = document.querySelector("#competitorColorZoomModal");
+        if (activeModal instanceof HTMLElement && !activeModal.hidden) {
+          activeModal.hidden = true;
+          document.body.classList.remove("is-competitor-color-zoom-open");
+          const activeImage = activeModal.querySelector(".competitor-color-zoom-image");
+          const activeCaption = activeModal.querySelector(".competitor-color-zoom-caption");
+          if (activeImage instanceof HTMLImageElement) {
+            activeImage.removeAttribute("src");
+          }
+          if (activeCaption instanceof HTMLElement) {
+            activeCaption.textContent = "";
+          }
+        }
+      }
+    });
+  }
+
+  modal.close = closeModal;
+
+  return modal;
+}
+
 function bootstrapCompetitorFunctionRadarCards() {
   const cards = Array.from(document.querySelectorAll(".competitor-function-radar-card[data-brand]"));
   if (!cards.length) {
@@ -1576,11 +1792,48 @@ function setupGenderBreakdownInteractions() {
   applyActiveState();
 }
 
+function setupLanguageSwitch() {
+  const switcher = document.querySelector("#langSwitch");
+  if (!(switcher instanceof HTMLButtonElement)) {
+    return;
+  }
+
+  const storageKey = "dx-halfzip-lang";
+  const applyLanguage = (lang) => {
+    const normalized = lang === "en" ? "en" : "zh";
+    switcher.dataset.lang = normalized;
+    switcher.setAttribute("aria-pressed", normalized === "en" ? "true" : "false");
+    switcher.setAttribute("aria-label", normalized === "en" ? "Switch to Chinese" : "切换到英文");
+    document.body.dataset.lang = normalized;
+    document.documentElement.lang = normalized === "en" ? "en" : "zh-CN";
+
+    try {
+      window.localStorage.setItem(storageKey, normalized);
+    } catch {
+      // Ignore storage failures and keep the switch visual-only.
+    }
+  };
+
+  let initialLanguage = "zh";
+  try {
+    initialLanguage = window.localStorage.getItem(storageKey) || "zh";
+  } catch {
+    initialLanguage = "zh";
+  }
+
+  applyLanguage(initialLanguage);
+
+  switcher.addEventListener("click", () => {
+    applyLanguage(switcher.dataset.lang === "en" ? "zh" : "en");
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   if (window.location.hash) {
     history.replaceState(null, "", window.location.pathname + window.location.search);
   }
 
+  setupLanguageSwitch();
   setupNavigation();
   setupRevealEffects();
   bootstrapMarketScopePage();
@@ -1593,6 +1846,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapCompetitorSegmentMetricCards();
   bootstrapCompetitorSegmentTopFunctionCards();
   bootstrapCompetitorSegmentFitLengthCards();
+  bootstrapCompetitorColorCards();
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   setupScrollState();

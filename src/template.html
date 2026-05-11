@@ -52,22 +52,32 @@
           </div>
         </div>
       </nav>
-      <div class="topbar-meta">Product Logic Draft</div>
+      <button class="topbar-lang-switch" id="langSwitch" type="button" data-lang="zh" aria-label="切换中文或英文" aria-pressed="false">
+        <span class="topbar-lang-option" data-lang-option="zh">中</span>
+        <span class="topbar-lang-track" aria-hidden="true">
+          <span class="topbar-lang-thumb"></span>
+        </span>
+        <span class="topbar-lang-option" data-lang-option="en">EN</span>
+      </button>
     </div>
     <div class="scroll-progress" id="scrollProgress"></div>
   </header>
 
   <main class="report" id="report">
     <section class="sheet report-section cover-page" id="cover" data-page-label="Cover">
-      <div class="page cover-page-shell">
-        <div class="cover-block reveal visible">
-          <div class="cover-kicker">Discovery Expedition</div>
-          <h1 class="cover-title">25AW 竞品半拉链长袖内搭研究应转化为女性导向的商品开发框架，而不是单纯的款式罗列</h1>
-          <p class="cover-sub">基于 25AW 7-12 月天猫全店内搭数据中已清洗出的 151 款半拉链长袖内搭样本，聚焦六个重点竞品品牌，提炼 27FW 商品开发机会。</p>
+      <div class="page">
+        <div class="cover-page-shell">
+          <div class="cover-block reveal visible">
+            <div class="cover-logo">
+              <img src="../pic/Discovery Logo.png" alt="Discovery Expedition">
+            </div>
+            <h1 class="cover-title">HALF-ZIP LONG-SLEEVE INNER</h1>
+            <p class="cover-sub">IN-DEPTH PIPELINE REPORT</p>
+            <div class="cover-season">For 27FW</div>
+          </div>
           <div class="cover-meta">
-            <div class="cover-meta-item"><span>研究范围</span><strong>25AW 7-12 月天猫全店上衣内搭</strong></div>
-            <div class="cover-meta-item"><span>核心品类</span><strong>半拉链长袖内搭</strong></div>
-            <div class="cover-meta-item"><span>分析重点</span><strong>性别、价格带、版型、衣长、面料、功能、设计、是否加绒</strong></div>
+            <div class="cover-meta-team">China Digital Team</div>
+            <div class="cover-meta-date">2026.5</div>
           </div>
         </div>
       </div>
@@ -394,7 +404,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
 
             <article class="competitor-board segment male" data-brand="ARC'TERYX/始祖鸟" data-gender="男">
@@ -419,7 +431,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
           </div>
 
@@ -493,7 +507,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
 
             <article class="competitor-board segment male" data-brand="KAILAS/凯乐石" data-gender="男">
@@ -518,7 +534,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
           </div>
 
@@ -591,7 +609,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
 
             <article class="competitor-board segment male" data-brand="KOLON SPORT/可隆" data-gender="男">
@@ -615,7 +635,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
 
           </div>
@@ -690,7 +712,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
 
             <article class="competitor-board segment male" data-brand="DESCENTE/迪桑特" data-gender="男">
@@ -715,7 +739,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
           </div>
 
@@ -789,7 +815,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design &amp; Color</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
 
             <article class="competitor-board segment male" data-brand="LULULEMON/露露乐蒙" data-gender="男">
@@ -814,7 +842,9 @@
               <div class="competitor-function-list competitor-fit-list" data-fit-length="true">
                 <div class="competitor-function-title">Fit &amp; Length</div>
               </div>
-              <div class="competitor-placeholder competitor-placeholder-xl"><span>Design</span></div>
+              <div class="competitor-placeholder competitor-placeholder-xl competitor-design-card">
+                <div class="competitor-function-title">Colors</div>
+              </div>
             </article>
           </div>
 

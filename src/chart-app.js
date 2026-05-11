@@ -1531,6 +1531,10 @@ export function renderSilhouetteGrowthChart(container, rows) {
           return false;
         }
 
+        if (genderItem.gender === "男女") {
+          return false;
+        }
+
         if (genderItem.yoyLabel === "new") {
           return false;
         }
@@ -1620,9 +1624,6 @@ export function renderSilhouetteGrowthChart(container, rows) {
       </button>
       <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
         <span class="gender-breakdown-swatch is-male"></span><span>Male</span>
-      </button>
-      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
-        <span class="gender-breakdown-swatch is-unisex"></span><span>Unisex</span>
       </button>
     </div>
     <div class="silhouette-growth-note">Bubble size = GMV</div>
