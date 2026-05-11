@@ -107,6 +107,14 @@ function getCompactBubbleRadius(value, min, max) {
   return 12 + normalized * 18;
 }
 
+function getChartLanguage() {
+  if (typeof document === "undefined") {
+    return "zh";
+  }
+
+  return document.body?.dataset.lang === "en" ? "en" : "zh";
+}
+
 function createStop(offset, color, opacity = 1) {
   return createSvgElement("stop", {
     offset,
@@ -189,6 +197,8 @@ export function renderMarketScopeBubbleChart(container, rows) {
     return;
   }
 
+  const lang = getChartLanguage();
+
   const width = 590;
   const height = 382;
   const margin = { top: 44, right: 28, bottom: 48, left: 56 };
@@ -211,7 +221,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
     class: "bubble-chart-svg",
     viewBox: `0 0 ${width} ${height}`,
     role: "img",
-    "aria-label": "竞品品牌半拉链布局深度、增长与规模气泡图"
+    "aria-label": lang === "en" ? "Half-Zipper distribution, growth and scale bubble chart" : "竞品品牌半拉链布局深度、增长与规模气泡图"
   });
 
   const defs = createSvgElement("defs");
@@ -350,7 +360,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
   overlay.appendChild(
     createChartOverlayText({
       className: "chart-overlay-axis-title is-x",
-      text: "半拉链占内搭总体的占比",
+      text: lang === "en" ? "Half-Zipper Share% in TTL Inner" : "半拉链占内搭总体的占比",
       x: margin.left + plotWidth / 2,
       y: height - 15 - xAxisLift,
       width,
@@ -377,12 +387,12 @@ export function renderMarketScopeBubbleChart(container, rows) {
   legend.className = "chart-overlay-legend bubble-chart-legend";
   legend.innerHTML = `
     <span class="chart-overlay-legend-circle bubble-legend-circle"></span>
-    <span class="chart-overlay-legend-text bubble-legend-text">气泡大小表示半拉链GMV</span>
+    <span class="chart-overlay-legend-text bubble-legend-text">${lang === "en" ? "Bubble Size = Half-Zipper GMV" : "气泡大小表示半拉链GMV"}</span>
   `;
   overlay.appendChild(legend);
 
   rows.forEach((row, index) => {
-    const brandLabel = row.brand.includes("SALOMON") ? "SALOMON*" : row.brand.split("/")[0];
+    const brandLabel = row.brand.split("/")[0];
     const cx = scaleValue(
       row.halfZipShareOfInner,
       xMin,
@@ -400,7 +410,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
     const r = getBubbleRadius(row.halfZipGmv25, gmvMin, gmvMax);
 
     const bubbleGroup = createSvgElement("g", {
-      class: `bubble-point-group${row.brand.includes("SALOMON") ? " is-outlier" : ""}`,
+      class: "bubble-point-group",
       "data-brand": row.brand,
       "data-share": row.halfZipShareLabel,
       "data-yoy": row.halfZipYoyLabel,
@@ -411,7 +421,7 @@ export function renderMarketScopeBubbleChart(container, rows) {
       cx,
       cy: stretchedCy,
       r,
-      class: `bubble-point${row.brand.includes("SALOMON") ? " is-outlier" : ""}`,
+      class: "bubble-point",
       "data-brand": row.brand,
       "data-share": row.halfZipShareLabel,
       "data-yoy": row.halfZipYoyLabel,
@@ -677,7 +687,7 @@ export function renderFabricOverviewChart(container, rows) {
 
   const note = document.createElement("p");
   note.className = "fabric-overview-note";
-  note.textContent = "6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON";
+  note.textContent = "5 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS and ARC'TERYX";
 
   root.appendChild(top);
   root.appendChild(priceStrip);
@@ -1484,7 +1494,7 @@ export function renderSilhouetteStructureChart(container, rows, meta = {}) {
         <br>
         Bottom Tag = Dominant Gender
         <br>
-        6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON
+        5 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS and ARC'TERYX
       </div>
     </div>
   `;
@@ -2107,8 +2117,9 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   const prices = validRows.map((row) => row.avgDealPrice);
   const yoyValues = validRows.map((row) => row.yoyMetric);
   const gmvValues = validRows.map((row) => row.gmv);
-  const xMin = Math.floor(Math.min(...prices) / 100) * 100;
-  const xMax = Math.ceil(Math.max(...prices) / 100) * 100;
+  const xMin = 400;
+  const xMax = 1800;
+  const xTickValues = [400, 800, 1200, 1600, 1800];
   const yMin = Math.min(-50, Math.floor(Math.min(...yoyValues) / 25) * 25);
   const yMax = Math.ceil(Math.max(...yoyValues) / 25) * 25;
   const gmvMin = Math.min(...gmvValues);
@@ -2162,11 +2173,8 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   });
   svg.appendChild(defs);
 
-  const xTickCount = 4;
-  for (let i = 0; i <= xTickCount; i += 1) {
-    const xValue = xMin + ((xMax - xMin) / xTickCount) * i;
-    const x = margin.left + (plotWidth / xTickCount) * i;
-
+  xTickValues.forEach((xValue) => {
+    const x = scaleValue(xValue, xMin, xMax, margin.left, margin.left + plotWidth);
     svg.appendChild(
       createSvgElement("line", {
         x1: x,
@@ -2189,7 +2197,7 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
         valign: "top"
       })
     );
-  }
+  });
 
   yTickValues.forEach((tickValue) => {
     const y = scaleValue(tickValue, yMin, yMax, margin.top + plotHeight, margin.top);
@@ -2261,7 +2269,7 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   overlay.appendChild(
     createChartOverlayText({
       className: "chart-overlay-axis-title is-x",
-      text: "成交价格",
+      text: document.body.dataset.lang === "en" ? "Price" : "成交价格",
       x: margin.left + plotWidth / 2,
       y: height - 18,
       width,
@@ -2288,15 +2296,14 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
     "DESCENTE/迪桑特__女": { dx: 0, dy: -18, anchor: "middle" },
     "DESCENTE/迪桑特__男": { dx: 14, dy: -10, anchor: "start" },
     "KOLON SPORT/可隆__女": { dx: 0, dy: -16, anchor: "middle" },
-    "KOLON SPORT/可隆__男": { dx: 12, dy: -10, anchor: "start" },
+    "KOLON SPORT/可隆__男": { dx: 16, dy: 4, anchor: "start" },
     "KOLON SPORT/可隆__男女": { dx: 0, dy: -16, anchor: "middle" },
-    "LULULEMON/露露乐蒙__女": { dx: -18, dy: -10, anchor: "end" },
-    "LULULEMON/露露乐蒙__男": { dx: 12, dy: 18, anchor: "start" },
-    "KAILAS/凯乐石__女": { dx: 12, dy: -10, anchor: "start" },
-    "KAILAS/凯乐石__男": { dx: 14, dy: -10, anchor: "start" },
-    "ARC'TERYX/始祖鸟__女": { dx: -12, dy: -10, anchor: "end" },
-    "ARC'TERYX/始祖鸟__男": { dx: -16, dy: 18, anchor: "end" },
-    "SALOMON/萨洛蒙__男女": { dx: 12, dy: -10, anchor: "start" }
+    "LULULEMON/露露乐蒙__女": { dx: 16, dy: -8, anchor: "start" },
+    "LULULEMON/露露乐蒙__男": { dx: 16, dy: -8, anchor: "start" },
+    "KAILAS/凯乐石__女": { dx: -14, dy: 18, anchor: "end" },
+    "KAILAS/凯乐石__男": { dx: 0, dy: -16, anchor: "middle" },
+    "ARC'TERYX/始祖鸟__女": { dx: -14, dy: -8, anchor: "end" },
+    "ARC'TERYX/始祖鸟__男": { dx: -16, dy: -8, anchor: "end" }
   };
 
   validRows.forEach((row, index) => {
@@ -2370,10 +2377,6 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
       <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男" aria-pressed="true">
         <span class="gender-breakdown-swatch is-male"></span>
         <span>Male</span>
-      </button>
-      <button type="button" class="gender-breakdown-legend-item gender-legend-toggle" data-gender="男女" aria-pressed="true">
-        <span class="gender-breakdown-swatch is-unisex"></span>
-        <span>Unisex</span>
       </button>
     </div>
     <div class="gender-price-size-note">Bubble size = GMV</div>
@@ -2854,7 +2857,7 @@ export function renderFunctionOpportunityMap(container, rowsByView, metaByView =
     note.innerHTML = `
       <p>Bubble Size = GMV</p>
       <p class="function-map-note-spacer" aria-hidden="true"></p>
-      <p>6 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS, ARC'TREYX and SALOMON</p>
+      <p>5 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS and ARC'TERYX</p>
     `;
     wrap.appendChild(note);
   };

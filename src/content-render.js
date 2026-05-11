@@ -14,11 +14,21 @@ function getMetricClass(value) {
   return "metric-cell";
 }
 
+function getContentRenderLanguage() {
+  if (typeof document === "undefined") {
+    return "zh";
+  }
+
+  return document.body?.dataset.lang === "en" ? "en" : "zh";
+}
+
 function renderShareCell(label, value) {
   const safeValue = Math.max(0, Math.min(100, Math.round(value ?? 0)));
+  const lang = getContentRenderLanguage();
+  const ariaLabel = lang === "en" ? `Half-Zipper share in TTL Inner ${label}` : `半拉链占内搭总体 ${label}`;
 
   return `
-    <div class="share-meter" aria-label="半拉链占内搭总体 ${label}">
+    <div class="share-meter" aria-label="${ariaLabel}">
       <div class="share-meter-track">
         <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
       </div>
@@ -28,13 +38,6 @@ function renderShareCell(label, value) {
 }
 
 function renderMarketScopeBrandCell(brand) {
-  if (brand.includes("SALOMON")) {
-    return `
-      <div class="brand-name market-scope-brand-main">SALOMON/萨洛蒙*</div>
-      <div class="market-scope-brand-sub">(仅 2 SKU)</div>
-    `;
-  }
-
   return `<div class="brand-name">${brand}</div>`;
 }
 
@@ -43,13 +46,15 @@ export function renderBrandCompareTable(container, rows) {
     return;
   }
 
+  const lang = getContentRenderLanguage();
+
   const header = `
     <thead>
       <tr>
-        <th>品牌</th>
-        <th>内搭总体<br>YoY%</th>
-        <th>半拉链占<br>内搭总体</th>
-        <th>半拉链<br>YoY%</th>
+        <th>${lang === "en" ? "Brand" : "品牌"}</th>
+        <th>${lang === "en" ? "TTL Inner<br>YOY%" : "内搭整体<br>YoY%"}</th>
+        <th>${lang === "en" ? "Half-Zipper%<br>In TTL Inner" : "半拉链占<br>内搭总体"}</th>
+        <th>${lang === "en" ? "Half-Zipper YOY%" : "半拉链<br>YoY%"}</th>
       </tr>
     </thead>
   `;
@@ -110,13 +115,6 @@ function getGenderFillClass(gender) {
 }
 
 function renderGenderBreakdownBrand(row) {
-  if (row.brand.includes("SALOMON")) {
-    return `
-      <div class="gender-breakdown-brand-main">SALOMON/萨洛蒙*</div>
-      <div class="gender-breakdown-brand-sub">(仅 2 SKU)</div>
-    `;
-  }
-
   return `<div class="gender-breakdown-brand-main">${row.brand}</div>`;
 }
 
@@ -135,15 +133,6 @@ function getGenderLegendLabel(gender) {
 function renderGenderBreakdownYoy(row, cell, width) {
   if (width < 10) {
     return "";
-  }
-
-  if (row.brand.includes("SALOMON") && cell.gender === "女") {
-    return `
-      <span class="gender-segment-yoy-inline gender-segment-yoy-new">
-        <span class="gender-segment-yoy-new-text">new</span>
-        <span class="gender-segment-yoy-sku">+1 SKU</span>
-      </span>
-    `;
   }
 
   if (cell.yoyLabel === "n/a") {

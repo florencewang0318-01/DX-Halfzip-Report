@@ -169,6 +169,11 @@ function Convert-SheetToObjects {
       $record[$headerText] = Get-CellText -Cell $cell -SharedStrings $SharedStrings
     }
 
+    $brandValue = [string]$record["品牌"]
+    if ($brandValue -match "SALOMON/萨洛蒙") {
+      continue
+    }
+
     $records.Add([pscustomobject]$record) | Out-Null
   }
 

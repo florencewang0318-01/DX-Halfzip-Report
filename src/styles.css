@@ -718,7 +718,7 @@ a {
   font-weight: 700;
   line-height: 1.45;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: none;
   text-align: left;
   vertical-align: bottom;
 }
@@ -772,13 +772,13 @@ a {
 .brand-compare-table td:nth-child(2),
 .brand-compare-table th:nth-child(4),
 .brand-compare-table td:nth-child(4) {
-  width: 16%;
+  width: 18%;
 }
 
 .brand-compare-table th:nth-child(3),
 .brand-compare-table td:nth-child(3),
 .brand-compare-table td.share-cell {
-  width: 33%;
+  width: 29%;
 }
 
 .brand-compare-table td:nth-child(2),

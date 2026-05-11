@@ -1231,6 +1231,7 @@ function formatPriceLabel(value) {
 }
 
 function createBubbleTooltipContent(target) {
+  const priceLabel = document.body.dataset.lang === "en" ? "ATV" : "成交价格";
   const brand = (target.dataset.brand ?? "").split("/")[0];
   const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
   const yoy = target.dataset.yoy ?? "n/a";
@@ -1241,18 +1242,19 @@ function createBubbleTooltipContent(target) {
   return `
     <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
     <div class="gender-breakdown-tooltip-line">YOY% <strong class="${yoyClass}">${yoy}</strong></div>
-    <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+    <div class="gender-breakdown-tooltip-line">${priceLabel} <strong>${price}</strong></div>
   `;
 }
 
 function createSegmentTooltipContent(target) {
+  const priceLabel = document.body.dataset.lang === "en" ? "ATV" : "成交价格";
   const brand = (target.dataset.brand ?? "").split("/")[0];
   const gender = target.dataset.genderLabel ?? getGenderLegendCopy(target.dataset.gender);
   const price = formatPriceLabel(target.dataset.price);
 
   return `
     <div class="gender-breakdown-tooltip-title">${brand} · ${gender}</div>
-    <div class="gender-breakdown-tooltip-line">成交价格 <strong>${price}</strong></div>
+    <div class="gender-breakdown-tooltip-line">${priceLabel} <strong>${price}</strong></div>
   `;
 }
 
@@ -1319,20 +1321,16 @@ function hideGenderBreakdownTooltip(tooltip) {
 
 function createMarketScopeTooltipContent(target) {
   const rawBrand = target.dataset.brand ?? "";
-  const brand = rawBrand.includes("SALOMON") ? "SALOMON*" : rawBrand.split("/")[0];
+  const brand = rawBrand.split("/")[0];
   const share = target.dataset.share ?? "n/a";
   const yoy = target.dataset.yoy ?? "n/a";
   const yoyClass =
     yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
-  const note = rawBrand.includes("SALOMON")
-    ? `<div class="gender-breakdown-tooltip-line">SALOMON 为低基数高增长的离群点</div>`
-    : "";
 
   return `
     <div class="gender-breakdown-tooltip-title">${brand}</div>
     <div class="gender-breakdown-tooltip-line">% in inner TTL <strong>${share}</strong></div>
     <div class="gender-breakdown-tooltip-line">Half-zip YOY <strong class="${yoyClass}">${yoy}</strong></div>
-    ${note}
   `;
 }
 
@@ -1466,6 +1464,11 @@ function setupMarketScopeInteractions() {
   if (!section) {
     return;
   }
+
+  if (section.dataset.marketScopeInteractionsBound === "true") {
+    return;
+  }
+  section.dataset.marketScopeInteractionsBound = "true";
 
   const tooltip = ensureGenderBreakdownTooltip();
   let activeBrand = null;
@@ -1799,6 +1802,16 @@ function setupLanguageSwitch() {
   }
 
   const storageKey = "dx-halfzip-lang";
+  const applyTranslatableText = (lang) => {
+    document.querySelectorAll("[data-zh][data-en]").forEach((node) => {
+      if (!(node instanceof HTMLElement)) {
+        return;
+      }
+
+      node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+    });
+  };
+
   const applyLanguage = (lang) => {
     const normalized = lang === "en" ? "en" : "zh";
     switcher.dataset.lang = normalized;
@@ -1806,6 +1819,9 @@ function setupLanguageSwitch() {
     switcher.setAttribute("aria-label", normalized === "en" ? "Switch to Chinese" : "切换到英文");
     document.body.dataset.lang = normalized;
     document.documentElement.lang = normalized === "en" ? "en" : "zh-CN";
+    applyTranslatableText(normalized);
+    bootstrapMarketScopePage();
+    bootstrapFemaleOpportunityPage();
 
     try {
       window.localStorage.setItem(storageKey, normalized);
