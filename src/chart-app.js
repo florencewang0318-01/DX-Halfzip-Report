@@ -1351,7 +1351,7 @@ function formatSilhouetteLengthLabel(length) {
   }
 
   if (length === "semi-crop短款") {
-    return "Semi-crop";
+    return "Semi‑Crop";
   }
 
   if (length === "regular常规") {
@@ -1361,9 +1361,139 @@ function formatSilhouetteLengthLabel(length) {
   return length;
 }
 
+const SILHOUETTE_COMPARE_IMAGE_MAP = {
+  "女__slim修身__regular常规": "../pic/Female_Slim X Regular.jpg",
+  "女__Active运动版型__regular常规": "../pic/Female_Active X Regular.jpg",
+  "女__regular合体__regular常规": "../pic/Female_Regular X Regular.jpg",
+  "女__slim修身__semi-crop短款": "../pic/Female_Slim X Semi-Crop.jpg",
+  "女__loose宽松__semi-crop短款": "../pic/Female_Loose X Semi-Crop.jpg",
+  "女__loose宽松__regular常规": "../pic/Female_Loose X Regular.jpg",
+  "女__regular合体__semi-crop短款": "../pic/Female_Regular X Semi-Crop.jpg",
+  "男__regular合体__regular常规": "../pic/Male_Regular X Regular.jpg",
+  "男__Active运动版型__regular常规": "../pic/Male_Active X Regular.jpg",
+  "男__slim修身__regular常规": "../pic/Male_Slim X Regular.jpg"
+};
+
+function ensureSilhouetteCompareLightbox() {
+  let modal = document.querySelector("#silhouetteCompareLightbox");
+  if (modal instanceof HTMLElement && modal.__silhouetteCompareLightboxApi) {
+    return modal.__silhouetteCompareLightboxApi;
+  }
+
+  modal = document.createElement("div");
+  modal.id = "silhouetteCompareLightbox";
+  modal.className = "silhouette-compare-lightbox";
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="silhouette-compare-lightbox-backdrop" data-silhouette-lightbox-close="true"></div>
+    <div class="silhouette-compare-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Silhouette image preview">
+      <button type="button" class="silhouette-compare-lightbox-close" aria-label="Close image preview" data-silhouette-lightbox-close="true">Close</button>
+      <button type="button" class="silhouette-compare-lightbox-nav is-prev" aria-label="Previous image">‹</button>
+      <div class="silhouette-compare-lightbox-media-wrap">
+        <img class="silhouette-compare-lightbox-media" alt="">
+      </div>
+      <button type="button" class="silhouette-compare-lightbox-nav is-next" aria-label="Next image">›</button>
+      <div class="silhouette-compare-lightbox-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const media = modal.querySelector(".silhouette-compare-lightbox-media");
+  const caption = modal.querySelector(".silhouette-compare-lightbox-caption");
+  const prevButton = modal.querySelector(".silhouette-compare-lightbox-nav.is-prev");
+  const nextButton = modal.querySelector(".silhouette-compare-lightbox-nav.is-next");
+  let items = [];
+  let currentIndex = 0;
+
+  const render = () => {
+    if (!(media instanceof HTMLImageElement) || !(caption instanceof HTMLElement) || !items.length) {
+      return;
+    }
+
+    const active = items[currentIndex];
+    media.src = active.src;
+    media.alt = active.label || "Silhouette preview";
+    caption.textContent = active.label || "";
+
+    if (prevButton instanceof HTMLButtonElement) {
+      prevButton.disabled = items.length <= 1;
+    }
+
+    if (nextButton instanceof HTMLButtonElement) {
+      nextButton.disabled = items.length <= 1;
+    }
+  };
+
+  const close = () => {
+    modal.hidden = true;
+    document.body.classList.remove("has-silhouette-compare-lightbox-open");
+    if (media instanceof HTMLImageElement) {
+      media.removeAttribute("src");
+    }
+  };
+
+  const open = (galleryItems, index = 0) => {
+    if (!Array.isArray(galleryItems) || !galleryItems.length) {
+      return;
+    }
+
+    items = galleryItems;
+    currentIndex = Math.max(0, Math.min(index, items.length - 1));
+    render();
+    modal.hidden = false;
+    document.body.classList.add("has-silhouette-compare-lightbox-open");
+  };
+
+  const step = (direction) => {
+    if (items.length <= 1) {
+      return;
+    }
+
+    currentIndex = (currentIndex + direction + items.length) % items.length;
+    render();
+  };
+
+  modal.addEventListener("click", (event) => {
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (!target) {
+      return;
+    }
+
+    if (target.closest("[data-silhouette-lightbox-close='true']")) {
+      close();
+    }
+  });
+
+  prevButton?.addEventListener("click", () => step(-1));
+  nextButton?.addEventListener("click", () => step(1));
+
+  document.addEventListener("keydown", (event) => {
+    if (modal.hidden) {
+      return;
+    }
+
+    if (event.key === "Escape") {
+      close();
+    } else if (event.key === "ArrowLeft") {
+      step(-1);
+    } else if (event.key === "ArrowRight") {
+      step(1);
+    }
+  });
+
+  const api = { open, close };
+  modal.__silhouetteCompareLightboxApi = api;
+  return api;
+}
+
 export function renderSilhouetteStructureChart(container, rows, meta = {}) {
   if (!container) {
     return;
+  }
+
+  if (container.__silhouetteStructureCleanup) {
+    container.__silhouetteStructureCleanup();
+    container.__silhouetteStructureCleanup = null;
   }
 
   const fitOrder = ["regular合体", "Active运动版型", "slim修身", "loose宽松"];
@@ -1470,34 +1600,140 @@ export function renderSilhouetteStructureChart(container, rows, meta = {}) {
     })
     .join("");
 
+  const totalGmv = rows.reduce((sum, row) => sum + (row.gmv || 0), 0);
+  const buildGenderCompareSlots = (gender, limit) =>
+    rows
+      .map((row) => {
+        const genderItem = row.genderBreakdown.find((item) => item.gender === gender);
+        const gmv = genderItem?.gmv ?? 0;
+        const share = totalGmv > 0 ? (gmv / totalGmv) * 100 : 0;
+
+        return {
+          key: `${gender}__${row.fit}__${row.length}`,
+          gmv,
+          share,
+          shareLabel: `${Math.round(share)}%`,
+          comboLabel: `${formatSilhouetteFitLabel(row.fit)} X ${formatSilhouetteLengthLabel(row.length)}`,
+          imageSrc: SILHOUETTE_COMPARE_IMAGE_MAP[`${gender}__${row.fit}__${row.length}`] || ""
+        };
+      })
+      .filter((item) => item.gmv > 0)
+      .sort((a, b) => b.gmv - a.gmv)
+      .slice(0, limit);
+
+  const femaleCompareSlots = buildGenderCompareSlots("女", 7);
+  const maleCompareSlots = buildGenderCompareSlots("男", 3);
+  const renderCompareSlot = (slot) => `
+    <div class="silhouette-compare-slot" data-silhouette-slot="${slot.key}">
+      <button
+        type="button"
+        class="silhouette-compare-frame${slot.imageSrc ? " silhouette-compare-zoom-trigger has-image" : ""}"
+        ${slot.imageSrc ? `data-image-src="${slot.imageSrc}" data-image-label="${slot.comboLabel}" aria-label="放大查看${slot.comboLabel}"` : "disabled aria-hidden=\"true\""}
+      >
+        ${
+          slot.imageSrc
+            ? `<img class="silhouette-compare-image" src="${slot.imageSrc}" alt="${slot.comboLabel}">`
+            : `<span class="silhouette-compare-frame-ratio">3:4</span>`
+        }
+      </button>
+      <div class="silhouette-compare-share">${slot.shareLabel}</div>
+      <div class="silhouette-compare-label">${slot.comboLabel}</div>
+    </div>
+  `;
+
   container.innerHTML = `
-    <div class="silhouette-matrix-wrap">
-      <div class="gender-breakdown-legend silhouette-matrix-legend">
-        <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female-led</span></span>
-        <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male-led</span></span>
-      </div>
-      <div class="silhouette-matrix-grid">
-        <div class="silhouette-matrix-corner">
-          <span class="silhouette-matrix-axis-length">Length</span>
-          <span class="silhouette-matrix-axis-fit">Fit</span>
-          <span class="silhouette-matrix-axis-diagonal"></span>
+    <div class="silhouette-structure-wrap" data-view="matrix">
+      <div class="silhouette-matrix-view">
+        <div class="silhouette-matrix-wrap">
+          <div class="gender-breakdown-legend silhouette-matrix-legend">
+            <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-female"></span><span>Female-led</span></span>
+            <span class="gender-breakdown-legend-item is-static"><span class="gender-breakdown-swatch is-male"></span><span>Male-led</span></span>
+          </div>
+          <div class="silhouette-matrix-grid">
+            <div class="silhouette-matrix-corner">
+              <span class="silhouette-matrix-axis-length">Length</span>
+              <span class="silhouette-matrix-axis-fit">Fit</span>
+              <span class="silhouette-matrix-axis-diagonal"></span>
+            </div>
+            ${lengthOrder
+              .map(
+                (length) => `<div class="silhouette-matrix-length-header">${formatSilhouetteLengthLabel(length)}</div>`
+              )
+              .join("")}
+            ${bodyMarkup}
+          </div>
+          <div class="silhouette-matrix-note">
+            Cell Depth = Y25 GMV
+            <br>
+            Bottom Tag = Dominant Gender
+            <br>
+            5 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS and ARC'TERYX
+          </div>
         </div>
-        ${lengthOrder
-          .map(
-            (length) => `<div class="silhouette-matrix-length-header">${formatSilhouetteLengthLabel(length)}</div>`
-          )
-          .join("")}
-        ${bodyMarkup}
       </div>
-      <div class="silhouette-matrix-note">
-        Cell Depth = Y25 GMV
-        <br>
-        Bottom Tag = Dominant Gender
-        <br>
-        5 Brands Integrated: DESCENTE, KOLON, LULULEMON, KAILAS and ARC'TERYX
+      <div class="silhouette-compare-view" hidden>
+        <div class="silhouette-compare-group is-female">
+          <div class="silhouette-compare-group-label">Female</div>
+          <div class="silhouette-compare-grid is-female">
+            ${femaleCompareSlots.map(renderCompareSlot).join("")}
+          </div>
+        </div>
+        <div class="silhouette-compare-group is-male">
+          <div class="silhouette-compare-group-label">Male</div>
+          <div class="silhouette-compare-grid is-male">
+            ${maleCompareSlots.map(renderCompareSlot).join("")}
+          </div>
+        </div>
       </div>
     </div>
   `;
+
+  const wrap = container.querySelector(".silhouette-structure-wrap");
+  const matrixView = container.querySelector(".silhouette-matrix-view");
+  const compareView = container.querySelector(".silhouette-compare-view");
+  const toggleButton = container.closest(".silhouette-structure-panel")?.querySelector(".silhouette-view-toggle");
+  const lightbox = ensureSilhouetteCompareLightbox();
+
+  if (wrap instanceof HTMLElement && matrixView instanceof HTMLElement && compareView instanceof HTMLElement && toggleButton instanceof HTMLButtonElement) {
+    const defaultLabel = toggleButton.dataset.defaultLabel || "查看图片";
+    const altLabel = toggleButton.dataset.altLabel || "查看矩阵";
+
+    const applyView = (view) => {
+      const nextView = view === "compare" ? "compare" : "matrix";
+      wrap.dataset.view = nextView;
+      matrixView.hidden = nextView !== "matrix";
+      compareView.hidden = nextView !== "compare";
+      toggleButton.textContent = nextView === "compare" ? altLabel : defaultLabel;
+      toggleButton.setAttribute("aria-pressed", nextView === "compare" ? "true" : "false");
+    };
+
+    const handleToggle = () => {
+      applyView(wrap.dataset.view === "compare" ? "matrix" : "compare");
+    };
+
+    const zoomTriggers = Array.from(compareView.querySelectorAll(".silhouette-compare-zoom-trigger"));
+    const galleryItems = zoomTriggers.map((trigger) => ({
+      src: trigger.dataset.imageSrc || "",
+      label: trigger.dataset.imageLabel || ""
+    }));
+    const handleZoomClick = (event) => {
+      const trigger = event.currentTarget;
+      const index = zoomTriggers.indexOf(trigger);
+      if (index < 0) {
+        return;
+      }
+
+      lightbox.open(galleryItems, index);
+    };
+
+    toggleButton.addEventListener("click", handleToggle);
+    zoomTriggers.forEach((trigger) => trigger.addEventListener("click", handleZoomClick));
+    applyView("matrix");
+    container.__silhouetteStructureCleanup = () => {
+      toggleButton.removeEventListener("click", handleToggle);
+      zoomTriggers.forEach((trigger) => trigger.removeEventListener("click", handleZoomClick));
+    };
+  }
 }
 
 export function renderSilhouetteGrowthChart(container, rows) {
@@ -1742,7 +1978,7 @@ export function renderSilhouetteGrowthChart(container, rows) {
     }
 
     const normalized = Math.sqrt((value - minGmv) / (maxGmv - minGmv));
-    return 12 + normalized * 17;
+    return 10 + normalized * 23;
   };
 
   const drawBubble = (point, projected) => {

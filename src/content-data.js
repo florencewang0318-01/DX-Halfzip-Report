@@ -292,7 +292,7 @@ function formatSilhouetteLengthShort(length) {
   }
 
   if (length === "semi-crop短款") {
-    return "Semi-crop";
+    return "Semi‑Crop";
   }
 
   if (length === "regular常规") {

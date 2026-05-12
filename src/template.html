@@ -101,6 +101,7 @@
             <article class="chart-panel panel">
               <div class="chart-kicker">Competitor Overview</div>
               <h3 class="panel-title" data-zh="竞品半拉链表现总览" data-en="Brand Performance Overview">竞品半拉链表现总览</h3>
+              <p class="market-scope-table-note" data-zh="（按内搭整体规模排序）" data-en="(Sorted by TTL Inner GMV)">（按内搭整体规模排序）</p>
               <div id="market-scope-brand-table" class="data-table-card"></div>
             </article>
             <article class="chart-panel panel">
@@ -170,8 +171,13 @@
 
           <div class="chart-grid evidence-grid two-up reveal">
             <article class="chart-panel panel silhouette-structure-panel">
-              <div class="chart-kicker">Silhouette Matrix</div>
-              <h3 class="panel-title">Fit × Length 主结构矩阵</h3>
+              <div class="silhouette-structure-head">
+                <div>
+                  <div class="chart-kicker">Silhouette Matrix</div>
+                  <h3 class="panel-title">Fit × Length 主结构矩阵</h3>
+                </div>
+                <button type="button" class="silhouette-view-toggle" data-default-label="查看图片" data-alt-label="查看矩阵" aria-pressed="false">查看图片</button>
+              </div>
               <div id="silhouette-structure-chart" class="silhouette-structure-card"></div>
             </article>
             <article class="chart-panel panel silhouette-growth-panel">
