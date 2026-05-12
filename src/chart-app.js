@@ -1545,22 +1545,22 @@ export function renderSilhouetteStructureChart(container, rows, meta = {}) {
       `data-length="${row.length}"`,
       `data-fit-label="${formatSilhouetteFitLabel(row.fit)}"`,
       `data-length-label="${formatSilhouetteLengthLabel(row.length)}"`,
-      femaleShare?.count
-        ? `data-female-share="${Math.round((femaleShare.count / row.count) * 100)}%"`
+      femaleShare?.gmv
+        ? `data-female-share="${Math.round((femaleShare.gmv / row.gmv) * 100)}%"`
         : "",
-      femaleShare?.count && femaleShare?.yoyLabel && femaleShare.yoyLabel !== "n/a"
+      femaleShare?.gmv && femaleShare?.yoyLabel && femaleShare.yoyLabel !== "n/a"
         ? `data-female-yoy="${femaleShare.yoyLabel}"`
         : "",
-      maleShare?.count
-        ? `data-male-share="${Math.round((maleShare.count / row.count) * 100)}%"`
+      maleShare?.gmv
+        ? `data-male-share="${Math.round((maleShare.gmv / row.gmv) * 100)}%"`
         : "",
-      maleShare?.count && maleShare?.yoyLabel && maleShare.yoyLabel !== "n/a"
+      maleShare?.gmv && maleShare?.yoyLabel && maleShare.yoyLabel !== "n/a"
         ? `data-male-yoy="${maleShare.yoyLabel}"`
         : "",
-      unisexShare?.count
-        ? `data-unisex-share="${Math.round((unisexShare.count / row.count) * 100)}%"`
+      unisexShare?.gmv
+        ? `data-unisex-share="${Math.round((unisexShare.gmv / row.gmv) * 100)}%"`
         : "",
-      unisexShare?.count && unisexShare?.yoyLabel && unisexShare.yoyLabel !== "n/a"
+      unisexShare?.gmv && unisexShare?.yoyLabel && unisexShare.yoyLabel !== "n/a"
         ? `data-unisex-yoy="${unisexShare.yoyLabel}"`
         : ""
     ]
@@ -1695,11 +1695,23 @@ export function renderSilhouetteStructureChart(container, rows, meta = {}) {
   const lightbox = ensureSilhouetteCompareLightbox();
 
   if (wrap instanceof HTMLElement && matrixView instanceof HTMLElement && compareView instanceof HTMLElement && toggleButton instanceof HTMLButtonElement) {
-    const defaultLabel = toggleButton.dataset.defaultLabel || "查看图片";
-    const altLabel = toggleButton.dataset.altLabel || "查看矩阵";
+    const getToggleLabels = () => {
+      const currentLang = document.body.dataset.lang === "en" ? "en" : "zh";
+      return {
+        defaultLabel:
+          currentLang === "en"
+            ? toggleButton.dataset.defaultLabelEn || "Pictures"
+            : toggleButton.dataset.defaultLabel || "查看图片",
+        altLabel:
+          currentLang === "en"
+            ? toggleButton.dataset.altLabelEn || "Matrix"
+            : toggleButton.dataset.altLabel || "查看矩阵"
+      };
+    };
 
     const applyView = (view) => {
       const nextView = view === "compare" ? "compare" : "matrix";
+      const { defaultLabel, altLabel } = getToggleLabels();
       wrap.dataset.view = nextView;
       matrixView.hidden = nextView !== "matrix";
       compareView.hidden = nextView !== "compare";
@@ -1785,10 +1797,6 @@ export function renderSilhouetteGrowthChart(container, rows) {
           return false;
         }
 
-        if (row.fit === "slim修身" && row.length === "regular常规" && genderItem.gender === "男") {
-          return false;
-        }
-
         return true;
       })
       .map((genderItem) => {
@@ -1815,6 +1823,8 @@ export function renderSilhouetteGrowthChart(container, rows) {
           fitLabel: formatSilhouetteFitLabel(row.fit),
           length: row.length,
           lengthLabel: formatSilhouetteLengthLabel(row.length),
+          share: row.share,
+          shareLabel: genderItem.gmvShareLabel ?? row.shareLabel,
           gender: genderItem.gender,
           genderLabel: getGenderLabel(genderItem.gender),
           yoyLabel: genderItem.yoyLabel,
@@ -1972,18 +1982,32 @@ export function renderSilhouetteGrowthChart(container, rows) {
     ctx.stroke();
   };
 
-  const getBubbleRadius3d = (value) => {
+  const getBubbleRadius3d = (point) => {
     if (maxGmv === minGmv) {
       return 20;
     }
 
-    const normalized = Math.sqrt((value - minGmv) / (maxGmv - minGmv));
-    return 10 + normalized * 23;
+    const normalized = Math.sqrt((point.gmv25 - minGmv) / (maxGmv - minGmv));
+    const baseRadius = 10 + normalized * 23;
+    const isSlightlySmallerPoint =
+      (point.gender === "女" &&
+        (
+          (point.fit === "regular合体" && point.length === "regular常规") ||
+          (point.fit === "slim修身" && point.length === "semi-crop短款") ||
+          (point.fit === "Active运动版型" && point.length === "regular常规")
+        )) ||
+      (point.gender === "男" && point.fit === "slim修身" && point.length === "regular常规");
+
+    if (isSlightlySmallerPoint) {
+      return baseRadius * 0.88;
+    }
+
+    return point.share <= 6 ? baseRadius * 0.76 : baseRadius;
   };
 
   const drawBubble = (point, projected) => {
     const palette = getGenderBubblePalette(point.gender);
-    const radius = getBubbleRadius3d(point.gmv25) * projected.scale;
+    const radius = getBubbleRadius3d(point) * projected.scale;
     const gradient = ctx.createRadialGradient(
       projected.x - radius * 0.32,
       projected.y - radius * 0.34,
@@ -2188,6 +2212,7 @@ export function renderSilhouetteGrowthChart(container, rows) {
     tooltip.innerHTML = `
       <div class="gender-breakdown-tooltip-title">${point.fitLabel} X ${point.lengthLabel}</div>
       <div class="gender-breakdown-tooltip-line">Gender <strong>${point.genderLabel}</strong></div>
+      <div class="gender-breakdown-tooltip-line">GMV Share <strong>${point.shareLabel}</strong></div>
       <div class="gender-breakdown-tooltip-line">YOY% <strong class="${yoyClass}">${point.yoyLabel}</strong></div>
     `;
     tooltip.classList.add("is-visible");
@@ -2649,8 +2674,8 @@ export function renderFunctionOpportunityMap(container, rowsByView, metaByView =
 
   const viewConfigs = {
     all: { key: "all", label: "ALL", titleLabel: "ALL", tone: "all" },
-    male: { key: "male", label: "MALE", titleLabel: "MALE", tone: "male" },
-    female: { key: "female", label: "FEMALE", titleLabel: "FEMALE", tone: "female" }
+    male: { key: "male", label: "MALE", titleLabel: "Male", tone: "male" },
+    female: { key: "female", label: "FEMALE", titleLabel: "Female", tone: "female" }
   };
   let activeView = "all";
 
@@ -2727,7 +2752,12 @@ export function renderFunctionOpportunityMap(container, rowsByView, metaByView =
 
     const panelTitle = container.closest(".function-opportunity-panel")?.querySelector(".panel-title");
     if (panelTitle) {
-      panelTitle.textContent = `Function Opportunity Map | ${viewConfigs[viewKey]?.titleLabel ?? "ALL"}`;
+      const currentLang = document.body.dataset.lang === "en" ? "en" : "zh";
+      const baseTitle =
+        currentLang === "en"
+          ? panelTitle.dataset.titleEnBase || panelTitle.dataset.en || "Function Opportunity Map"
+          : panelTitle.dataset.titleZhBase || panelTitle.dataset.zh || "半拉链功能机会矩阵";
+      panelTitle.textContent = `${baseTitle} | ${viewConfigs[viewKey]?.titleLabel ?? "ALL"}`;
     }
 
     const width = 600;

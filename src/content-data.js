@@ -1643,7 +1643,7 @@ export const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
     });
 
     const dominantGender = genderBreakdown.reduce(
-      (best, item) => (item.count > best.count ? item : best),
+      (best, item) => (item.gmv > best.gmv ? item : best),
       { gender: "男女", count: 0, gmv: 0 }
     );
 
@@ -1663,9 +1663,9 @@ export const SILHOUETTE_MATRIX_DATA = SILHOUETTE_FIT_ORDER.flatMap((fit) =>
       shareLabel: `${Math.round(share)}%`,
       gmvShare,
       gmvShareLabel: `${Math.round(gmvShare)}%`,
-      dominantGender: dominantGender.count > 0 ? dominantGender.gender : null,
-      dominantGenderShare: current.count ? (dominantGender.count / current.count) * 100 : 0,
-      dominantGenderShareLabel: current.count ? `${Math.round((dominantGender.count / current.count) * 100)}%` : "",
+      dominantGender: dominantGender.gmv > 0 ? dominantGender.gender : null,
+      dominantGenderShare: current.gmv ? (dominantGender.gmv / current.gmv) * 100 : 0,
+      dominantGenderShareLabel: current.gmv ? `${Math.round((dominantGender.gmv / current.gmv) * 100)}%` : "",
       genderBreakdown
     };
   })
@@ -1714,6 +1714,7 @@ export const SILHOUETTE_GROWTH_DATA = SILHOUETTE_GROWTH_SOURCE.map((item) => {
           gmv: 0
         };
         const shareInCombo = item.count ? (current.count / item.count) * 100 : 0;
+        const gmvShare = SILHOUETTE_Y25.trackedGmv ? (current.gmv / SILHOUETTE_Y25.trackedGmv) * 100 : 0;
         const yoy = computeYoy(current.gmv, previous.gmv);
 
         return {
@@ -1723,6 +1724,8 @@ export const SILHOUETTE_GROWTH_DATA = SILHOUETTE_GROWTH_SOURCE.map((item) => {
           gmv24: previous.gmv,
           shareInCombo,
           shareInComboLabel: `${Math.round(shareInCombo)}%`,
+          gmvShare,
+          gmvShareLabel: `${Math.round(gmvShare)}%`,
           yoy,
           yoyLabel: previous.gmv > 0 ? formatYoyLabel(yoy) : current.count > 0 ? "new" : "n/a"
         };

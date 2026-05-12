@@ -1810,6 +1810,17 @@ function setupLanguageSwitch() {
 
       node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
     });
+
+    document.querySelectorAll(".silhouette-view-toggle").forEach((node) => {
+      if (!(node instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const isCompare = node.getAttribute("aria-pressed") === "true";
+      const defaultLabel = lang === "en" ? node.dataset.defaultLabelEn || "Pictures" : node.dataset.defaultLabel || "查看图片";
+      const altLabel = lang === "en" ? node.dataset.altLabelEn || "Matrix" : node.dataset.altLabel || "查看矩阵";
+      node.textContent = isCompare ? altLabel : defaultLabel;
+    });
   };
 
   const applyLanguage = (lang) => {
@@ -1822,6 +1833,7 @@ function setupLanguageSwitch() {
     applyTranslatableText(normalized);
     bootstrapMarketScopePage();
     bootstrapFemaleOpportunityPage();
+    bootstrapFunctionPage();
 
     try {
       window.localStorage.setItem(storageKey, normalized);
