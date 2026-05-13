@@ -978,7 +978,15 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
   const sortedBubbles = [...bubbleRows].sort((a, b) => b.gmv25 - a.gmv25);
   sortedBubbles.forEach((row, index) => {
     const cx = scaleValue(row.avgDealPrice25, xMin, xMax, margin.left, width - margin.right);
-    const radius = scaleSqrtValue(row.gmv25, 0, bubbleMax, 10, 22);
+    const baseRadius = scaleSqrtValue(row.gmv25, 0, bubbleMax, 8, 22);
+    const radius =
+      row.share25 <= 5
+        ? baseRadius * 0.56
+        : row.share25 <= 10
+          ? baseRadius * 0.72
+          : row.share25 <= 15
+            ? baseRadius * 0.86
+            : baseRadius;
     const rawYoy = Number.isFinite(row.yoy) ? row.yoy : 0;
     const cappedYoy = Math.max(-50, Math.min(500, rawYoy));
     const rawCy = scaleWarmthY(cappedYoy);
@@ -1169,6 +1177,7 @@ export function renderFabricFunctionMatrix(container, rows, columns) {
     return;
   }
 
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
   const root = document.createElement("div");
   root.className = "fabric-function-matrix-root";
   const tooltip = document.createElement("div");
@@ -1243,7 +1252,7 @@ export function renderFabricFunctionMatrix(container, rows, columns) {
       cellNode.style.borderColor = hexToRgba(row.color, borderAlpha);
       cellNode.innerHTML = `
         <strong>${cell.shareLabel}</strong>
-        <small>${cell.share >= 50 ? "强表达" : cell.share >= 25 ? "可感知" : cell.share > 0 ? "弱表达" : "-"}</small>
+        <small>${cell.share >= 50 ? (lang === "en" ? "Strong" : "强表达") : cell.share >= 25 ? (lang === "en" ? "Perceptible" : "可感知") : cell.share > 0 ? (lang === "en" ? "Low" : "弱表达") : "-"}</small>
       `;
       if (cell.share > 0) {
         cellNode.addEventListener("mouseenter", (event) => {

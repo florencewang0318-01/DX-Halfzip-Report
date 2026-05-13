@@ -572,74 +572,74 @@ function bootstrapCompetitorColorCards() {
 
   const colorCardAssets = {
     "ARC'TERYX/始祖鸟__女": [
-      { label: "黑色", imagePath: "../pic/始祖鸟_女_黑色.jpg" },
-      { label: "蓝黑色", imagePath: "../pic/始祖鸟_女_蓝黑色.jpg" },
-      { label: "浅紫色", imagePath: "../pic/始祖鸟_女_浅紫色.jpg" },
-      { label: "浅灰色", imagePath: "../pic/始祖鸟_女_浅灰色.jpg" },
-      { label: "层云蓝", imagePath: "../pic/始祖鸟_女_层云蓝.jpg" }
+      { label: "黑色", imagePath: "../pic/始祖鸟_女_黑色.jpg", shareLabel: "40%" },
+      { label: "蓝黑色", imagePath: "../pic/始祖鸟_女_蓝黑色.jpg", shareLabel: "22%" },
+      { label: "浅紫色", imagePath: "../pic/始祖鸟_女_浅紫色.jpg", shareLabel: "22%" },
+      { label: "浅灰色", imagePath: "../pic/始祖鸟_女_浅灰色.jpg", shareLabel: "14%" },
+      { label: "层云蓝", imagePath: "../pic/始祖鸟_女_层云蓝.jpg", shareLabel: "2%" }
     ],
     "ARC'TERYX/始祖鸟__男": [
-      { label: "黑色", imagePath: "../pic/始祖鸟_男_黑色.jpg" },
-      { label: "榄苔绿", imagePath: "../pic/始祖鸟_男_榄苔绿.jpg" },
-      { label: "蓝黑色", imagePath: "../pic/始祖鸟_男_蓝黑色.jpg" },
-      { label: "火星红", imagePath: "../pic/始祖鸟_男_火星红.jpg" },
-      { label: "瀚空蓝", imagePath: "../pic/始祖鸟_男_瀚空蓝.jpg" }
+      { label: "黑色", imagePath: "../pic/始祖鸟_男_黑色.jpg", shareLabel: "47%" },
+      { label: "榄苔绿", imagePath: "../pic/始祖鸟_男_榄苔绿.jpg", shareLabel: "18%" },
+      { label: "蓝黑色", imagePath: "../pic/始祖鸟_男_蓝黑色.jpg", shareLabel: "10%" },
+      { label: "火星红", imagePath: "../pic/始祖鸟_男_火星红.jpg", shareLabel: "8%" },
+      { label: "瀚空蓝", imagePath: "../pic/始祖鸟_男_瀚空蓝.jpg", shareLabel: "6%" }
     ],
     "KAILAS/凯乐石__女": [
-      { label: "米黄色", imagePath: "../pic/凯乐石_女_米黄色_v2.jpg" },
-      { label: "亮白色", imagePath: "../pic/凯乐石_女_亮白色.jpg" },
-      { label: "浅紫色", imagePath: "../pic/凯乐石_女_浅紫色.jpg" },
-      { label: "蓝黑色", imagePath: "../pic/凯乐石_女_蓝黑色.jpg" },
-      { label: "烟紫色", imagePath: "../pic/凯乐石_女_烟紫色.jpg" }
+      { label: "米黄色", imagePath: "../pic/凯乐石_女_米黄色_v2.jpg", shareLabel: "24%" },
+      { label: "亮白色", imagePath: "../pic/凯乐石_女_亮白色.jpg", shareLabel: "18%" },
+      { label: "浅紫色", imagePath: "../pic/凯乐石_女_浅紫色.jpg", shareLabel: "13%" },
+      { label: "蓝黑色", imagePath: "../pic/凯乐石_女_蓝黑色.jpg", shareLabel: "13%" },
+      { label: "烟紫色", imagePath: "../pic/凯乐石_女_烟紫色.jpg", shareLabel: "9%" }
     ],
     "KAILAS/凯乐石__男": [
-      { label: "黑色", imagePath: "../pic/凯乐石_男_黑色.jpg" },
-      { label: "墨绿色", imagePath: "../pic/凯乐石_男_墨绿色.jpg" },
-      { label: "淡绿色", imagePath: "../pic/凯乐石_男_淡绿色.jpg" },
-      { label: "岩棕色", imagePath: "../pic/凯乐石_男_岩棕色.jpg" },
-      { label: "茶绿色", imagePath: "../pic/凯乐石_男_茶绿色.jpg" }
+      { label: "黑色", imagePath: "../pic/凯乐石_男_黑色.jpg", shareLabel: "43%" },
+      { label: "墨绿色", imagePath: "../pic/凯乐石_男_墨绿色.jpg", shareLabel: "12%" },
+      { label: "淡绿色", imagePath: "../pic/凯乐石_男_淡绿色.jpg", shareLabel: "11%" },
+      { label: "岩棕色", imagePath: "../pic/凯乐石_男_岩棕色.jpg", shareLabel: "9%" },
+      { label: "茶绿色", imagePath: "../pic/凯乐石_男_茶绿色.jpg", shareLabel: "8%" }
     ],
     "KOLON SPORT/可隆__女": [
-      { label: "黑色", imagePath: "../pic/可隆_女_黑色.jpg" },
-      { label: "奶油白", imagePath: "../pic/可隆_女_奶油白.jpg" },
-      { label: "薄荷绿", imagePath: "../pic/可隆_女_薄荷绿.jpg" },
-      { label: "红色", imagePath: "../pic/可隆_女_红色.jpg" },
-      { label: "浅蓝色", imagePath: "../pic/可隆_女_浅蓝色.jpg" }
+      { label: "黑色", imagePath: "../pic/可隆_女_黑色.jpg", shareLabel: "51%" },
+      { label: "奶油白", imagePath: "../pic/可隆_女_奶油白.jpg", shareLabel: "25%" },
+      { label: "薄荷绿", imagePath: "../pic/可隆_女_薄荷绿.jpg", shareLabel: "9%" },
+      { label: "红色", imagePath: "../pic/可隆_女_红色.jpg", shareLabel: "5%" },
+      { label: "浅蓝色", imagePath: "../pic/可隆_女_浅蓝色.jpg", shareLabel: "4%" }
     ],
     "KOLON SPORT/可隆__男": [
-      { label: "黑色", imagePath: "../pic/可隆_男_黑色.jpg" },
-      { label: "米灰色", imagePath: "../pic/可隆_男_米灰色.jpg" },
-      { label: "藏蓝色", imagePath: "../pic/可隆_男_藏蓝色.jpg" },
-      { label: "梅紫色", imagePath: "../pic/可隆_男_梅紫色.jpg" },
-      { label: "烟灰色", imagePath: "../pic/可隆_男_烟灰色.jpg" }
+      { label: "黑色", imagePath: "../pic/可隆_男_黑色.jpg", shareLabel: "44%" },
+      { label: "米灰色", imagePath: "../pic/可隆_男_米灰色.jpg", shareLabel: "12%" },
+      { label: "藏蓝色", imagePath: "../pic/可隆_男_藏蓝色.jpg", shareLabel: "9%" },
+      { label: "梅紫色", imagePath: "../pic/可隆_男_梅紫色.jpg", shareLabel: "7%" },
+      { label: "烟灰色", imagePath: "../pic/可隆_男_烟灰色.jpg", shareLabel: "6%" }
     ],
     "DESCENTE/迪桑特__女": [
-      { label: "黑色", imagePath: "../pic/迪桑特_女_黑色.jpg" },
-      { label: "奶油色", imagePath: "../pic/迪桑特_女_奶油色.jpg" },
-      { label: "深蓝色", imagePath: "../pic/迪桑特_女_深蓝色.jpg" },
-      { label: "白色", imagePath: "../pic/迪桑特_女_白色.jpg" },
-      { label: "炭灰色", imagePath: "../pic/迪桑特_女_炭灰色.jpg" }
+      { label: "黑色", imagePath: "../pic/迪桑特_女_黑色.jpg", shareLabel: "27%" },
+      { label: "奶油色", imagePath: "../pic/迪桑特_女_奶油色.jpg", shareLabel: "18%" },
+      { label: "深蓝色", imagePath: "../pic/迪桑特_女_深蓝色.jpg", shareLabel: "16%" },
+      { label: "白色", imagePath: "../pic/迪桑特_女_白色.jpg", shareLabel: "12%" },
+      { label: "炭灰色", imagePath: "../pic/迪桑特_女_炭灰色.jpg", shareLabel: "7%" }
     ],
     "DESCENTE/迪桑特__男": [
-      { label: "黑色", imagePath: "../pic/迪桑特_男_黑色.jpg" },
-      { label: "卡其色", imagePath: "../pic/迪桑特_男_卡其色.jpg" },
-      { label: "棕色", imagePath: "../pic/迪桑特_男_棕色.jpg" },
-      { label: "白色", imagePath: "../pic/迪桑特_男_白色.jpg" },
-      { label: "浅灰色", imagePath: "../pic/迪桑特_男_浅灰色.jpg" }
+      { label: "黑色", imagePath: "../pic/迪桑特_男_黑色.jpg", shareLabel: "37%" },
+      { label: "卡其色", imagePath: "../pic/迪桑特_男_卡其色.jpg", shareLabel: "15%" },
+      { label: "棕色", imagePath: "../pic/迪桑特_男_棕色.jpg", shareLabel: "14%" },
+      { label: "白色", imagePath: "../pic/迪桑特_男_白色.jpg", shareLabel: "7%" },
+      { label: "浅灰色", imagePath: "../pic/迪桑特_男_浅灰色.jpg", shareLabel: "7%" }
     ],
     "LULULEMON/露露乐蒙__女": [
-      { label: "黑色", imagePath: "../pic/Lulu_女_黑色.jpg" },
-      { label: "浅灰色", imagePath: "../pic/Lulu_女_浅灰色.jpg" },
-      { label: "鸽灰色", imagePath: "../pic/Lulu_女_鸽灰色.jpg" },
-      { label: "浆果红", imagePath: "../pic/Lulu_女_浆果红.jpg" },
-      { label: "银灰色", imagePath: "../pic/Lulu_女_银灰色.jpg" }
+      { label: "黑色", imagePath: "../pic/Lulu_女_黑色.jpg", shareLabel: "30%" },
+      { label: "浅灰色", imagePath: "../pic/Lulu_女_浅灰色.jpg", shareLabel: "25%" },
+      { label: "鸽灰色", imagePath: "../pic/Lulu_女_鸽灰色.jpg", shareLabel: "11%" },
+      { label: "浆果红", imagePath: "../pic/Lulu_女_浆果红.jpg", shareLabel: "10%" },
+      { label: "银灰色", imagePath: "../pic/Lulu_女_银灰色.jpg", shareLabel: "7%" }
     ],
     "LULULEMON/露露乐蒙__男": [
-      { label: "黑色", imagePath: "../pic/Lulu_男_黑色.jpg" },
-      { label: "杂色灰", imagePath: "../pic/Lulu_男_杂色灰.jpg" },
-      { label: "象牙白", imagePath: "../pic/Lulu_男_象牙白.jpg" },
-      { label: "石墨灰", imagePath: "../pic/Lulu_男_石墨灰.jpg" },
-      { label: "杂色棕", imagePath: "../pic/Lulu_男_杂色棕.jpg" }
+      { label: "黑色", imagePath: "../pic/Lulu_男_黑色.jpg", shareLabel: "51%" },
+      { label: "杂色灰", imagePath: "../pic/Lulu_男_杂色灰.jpg", shareLabel: "8%" },
+      { label: "象牙白", imagePath: "../pic/Lulu_男_象牙白.jpg", shareLabel: "6%" },
+      { label: "石墨灰", imagePath: "../pic/Lulu_男_石墨灰.jpg", shareLabel: "6%" },
+      { label: "杂色棕", imagePath: "../pic/Lulu_男_杂色棕.jpg", shareLabel: "6%" }
     ]
   };
 
@@ -666,6 +666,7 @@ function bootstrapCompetitorColorCards() {
             >
               <img src="${asset.imagePath}" alt="${asset.label}">
             </button>
+            <div class="competitor-color-slot-share">${asset.shareLabel ?? ""}</div>
           </div>
         `;
       }
@@ -974,10 +975,15 @@ function bootstrapCompetitorFunctionRadarCards() {
           const yoyDisplay = row.yoyLabel === "new" ? "New" : row.yoyLabel;
           const yoyClass =
             row.yoy > 0 ? "is-positive" : row.yoy < 0 ? "is-negative" : "is-neutral";
-          return [
+          const lines = [
             `<div class="gender-breakdown-tooltip-line">GMV Share <strong>${row.shareLabel}</strong></div>`,
             `<div class="gender-breakdown-tooltip-line">YOY <strong class="${yoyClass}">${yoyDisplay}</strong></div>`
           ];
+          const techNote = radarData.techNotes?.[row.key];
+          if (techNote) {
+            lines.push(`<div class="gender-breakdown-tooltip-line">${techNote}</div>`);
+          }
+          return lines;
         }
       })
     );
@@ -1834,6 +1840,7 @@ function setupLanguageSwitch() {
     bootstrapMarketScopePage();
     bootstrapFemaleOpportunityPage();
     bootstrapFunctionPage();
+    bootstrapFabricWarmthFunctionPage();
 
     try {
       window.localStorage.setItem(storageKey, normalized);

@@ -1169,13 +1169,22 @@ export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => 
 const COMPETITOR_FUNCTION_RADAR_CONFIG = [
   {
     brand: "ARC'TERYX/始祖鸟",
-    conclusion: "功能非增长重心，主要以保暖为核心叠加弹力、速干、透气。",
-    radarKeys: ["warmth", "stretch", "quick-dry", "breathable", "durable", "lightweight"]
+    conclusion: "以保暖为绝对核心叠加透气、弹力、速干和轻量。",
+    radarKeys: ["warmth", "stretch", "quick-dry", "breathable", "durable", "lightweight"],
+    techNotes: {
+      breathable: "Tech: Phasic AR II, 中空纤维结构",
+      warmth: "Tech: Polartec, Torrent抓绒面料"
+    }
   },
   {
     brand: "KAILAS/凯乐石",
     conclusion: "以吸湿速干、抑菌、保暖、透气为多重核心形成强复合功能层。",
     radarKeys: ["quick-dry", "antibacterial", "warmth", "breathable", "stretch", "lightweight"],
+    techNotes: {
+      "quick-dry": "Tech: 自研拒水速排科技, 美利奴羊毛混纺速干面料",
+      warmth: "Tech: 自研Polarmate面料, Polartec",
+      antibacterial: "Tech: Polygiene抑菌银离子"
+    },
     strongCombos: [
       {
         label: "吸湿速干+抑菌防臭",
@@ -1195,6 +1204,10 @@ const COMPETITOR_FUNCTION_RADAR_CONFIG = [
     brand: "KOLON SPORT/可隆",
     conclusion: "以弹力与速干为核心，偏通勤户外的舒适功能层。",
     radarKeys: ["stretch", "quick-dry", "antibacterial", "warmth", "anti-static"],
+    techNotes: {
+      "quick-dry": "Tech: S-Functional",
+      warmth: "Tech: Polartec"
+    },
     strongCombos: [
       {
         label: "弹力+吸湿速干",
@@ -1207,12 +1220,20 @@ const COMPETITOR_FUNCTION_RADAR_CONFIG = [
   {
     brand: "DESCENTE/迪桑特",
     conclusion: "以弹力和吸湿速干为双核心，整体偏性能训练导向。",
-    radarKeys: ["stretch", "quick-dry", "warmth", "lightweight", "sun-protect"]
+    radarKeys: ["stretch", "quick-dry", "warmth", "lightweight", "sun-protect"],
+    techNotes: {
+      stretch: "Tech: Solotex",
+      warmth: "Tech: Heatnavi科技纱线"
+    }
   },
   {
     brand: "LULULEMON/露露乐蒙",
     conclusion: "以弹力为核心叠加速干、保暖与抑菌，整体偏运动休闲舒适功能。",
     radarKeys: ["stretch", "quick-dry", "warmth", "antibacterial", "lightweight"],
+    techNotes: {
+      stretch: "Tech: Rulu面料+Lycra",
+      antibacterial: "Tech: No-Stink Zinc"
+    },
     strongCombos: [
       {
         label: "弹力+抑菌防臭",
@@ -1235,6 +1256,7 @@ export const COMPETITOR_BRAND_FUNCTION_RADARS = Object.fromEntries(
         brand: item.brand,
         conclusion: item.conclusion,
         strongCombos: item.strongCombos ?? [],
+        techNotes: item.techNotes ?? {},
         functionPenetrationShare: currentSummary.totalGmv
           ? (currentSummary.functionGmv / currentSummary.totalGmv) * 100
           : 0,
@@ -1261,7 +1283,7 @@ const COMPETITOR_SEGMENT_TOP_FUNCTION_GENDERS = ["女", "男"];
 
 const COMPETITOR_BRAND_SEGMENT_TOP_FUNCTION_CONCLUSIONS = {
   "ARC'TERYX/始祖鸟__女": "保暖+弹力双核心，综合需求驱动功能全面强化。",
-  "ARC'TERYX/始祖鸟__男": "仅聚焦保暖核心，其他附加功能动力不足。",
+  "ARC'TERYX/始祖鸟__男": "保暖为绝对核心，轻量增长迅速，其他附加功能动力不足。",
   "KAILAS/凯乐石__女": "速干、抑菌需求爆发，功能复合度高。",
   "KAILAS/凯乐石__男": "吸湿速干全面渗透。",
   "KOLON SPORT/可隆__女": "弹力、吸湿速干为高增速核心升级点。",
