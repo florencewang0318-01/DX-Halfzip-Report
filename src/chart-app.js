@@ -2656,6 +2656,135 @@ export function renderGenderBreakdownPriceBubbleChart(container, rows) {
   container.appendChild(wrap);
 }
 
+export function renderBrandCompareRadarChart(container, radar) {
+  if (!container || !radar?.axes?.length || !radar?.series?.length) {
+    return;
+  }
+
+  const width = 300;
+  const height = 232;
+  const centerX = width / 2;
+  const centerY = 98;
+  const radius = 62;
+  const levels = [0.25, 0.5, 0.75, 1];
+
+  const polarPoint = (ratio, angleDeg) => {
+    const angle = ((angleDeg - 90) * Math.PI) / 180;
+    return {
+      x: centerX + Math.cos(angle) * radius * ratio,
+      y: centerY + Math.sin(angle) * radius * ratio
+    };
+  };
+
+  const pointsToString = (points) => points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+
+  const svg = createSvgElement("svg", {
+    class: "bubble-chart-svg",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": "品牌对比雷达图"
+  });
+
+  const defs = createSvgElement("defs");
+  radar.series.forEach((series, index) => {
+    const gradient = createSvgElement("linearGradient", {
+      id: `brand-compare-radar-fill-${index}`,
+      x1: "0%",
+      y1: "0%",
+      x2: "0%",
+      y2: "100%"
+    });
+    gradient.appendChild(createStop("0%", series.color, 0.18));
+    gradient.appendChild(createStop("100%", series.color, 0.04));
+    defs.appendChild(gradient);
+  });
+  svg.appendChild(defs);
+
+  levels.forEach((level) => {
+    const ringPoints = radar.axes.map((_, index) => polarPoint(level, (360 / radar.axes.length) * index));
+    const ring = createSvgElement("polygon", {
+      points: pointsToString(ringPoints),
+      fill: "none",
+      stroke: "rgba(203, 213, 225, 0.9)",
+      "stroke-width": "1"
+    });
+    svg.appendChild(ring);
+  });
+
+  radar.axes.forEach((axis, index) => {
+    const angle = (360 / radar.axes.length) * index;
+    const axisPoint = polarPoint(1, angle);
+    const line = createSvgElement("line", {
+      x1: centerX,
+      y1: centerY,
+      x2: axisPoint.x,
+      y2: axisPoint.y,
+      stroke: "rgba(203, 213, 225, 0.95)",
+      "stroke-width": "1"
+    });
+    svg.appendChild(line);
+
+    const labelRatio =
+      axis.key === "femaleOpportunity"
+        ? 1.28
+        : axis.key === "maleOpportunity"
+          ? 1.2
+          : 1.16;
+    const labelPoint = polarPoint(labelRatio, angle);
+    const label = createSvgElement("text", {
+      x: labelPoint.x,
+      y: labelPoint.y,
+      "text-anchor": labelPoint.x < centerX - 8 ? "end" : labelPoint.x > centerX + 8 ? "start" : "middle",
+      class: "competitor-function-radar-label"
+    });
+    label.textContent = axis.label;
+    svg.appendChild(label);
+  });
+
+  radar.series.forEach((series, seriesIndex) => {
+    const points = series.values.map((value, index) =>
+      polarPoint(Math.max(0, Math.min(1, value / 100)), (360 / radar.axes.length) * index)
+    );
+
+    const area = createSvgElement("polygon", {
+      points: pointsToString(points),
+      fill: `url(#brand-compare-radar-fill-${seriesIndex})`,
+      stroke: series.color,
+      "stroke-width": "2"
+    });
+    svg.appendChild(area);
+
+    points.forEach((point) => {
+      const node = createSvgElement("circle", {
+        cx: point.x,
+        cy: point.y,
+        r: 3.5,
+        fill: series.color,
+        stroke: "#ffffff",
+        "stroke-width": "1.5"
+      });
+      svg.appendChild(node);
+    });
+  });
+
+  const legend = document.createElement("div");
+  legend.className = "compare-radar-legend";
+  legend.innerHTML = radar.series
+    .map(
+      (series) => `
+        <div class="compare-radar-legend-item">
+          <span class="compare-radar-legend-dot" style="background:${series.color};"></span>
+          <span>${series.label}</span>
+        </div>
+      `
+    )
+    .join("");
+
+  container.innerHTML = "";
+  container.appendChild(legend);
+  container.appendChild(svg);
+}
+
 function formatFunctionMapTick(value) {
   return `${Math.round(value)}%`;
 }

@@ -41,6 +41,94 @@ function renderMarketScopeBrandCell(brand) {
   return `<div class="brand-name">${brand}</div>`;
 }
 
+function renderCompareColorCell(cell, toneClass, brandClass) {
+  const renderSwatches = (swatches = []) =>
+    swatches
+      .map((swatch) => `<span class="compare-color-swatch" style="background:${swatch};"></span>`)
+      .join("");
+
+  return `
+    <div class="compare-matrix-cell ${toneClass} ${brandClass}">
+      <div class="compare-color-stack">
+        <div class="compare-color-line">
+          <span class="compare-color-label">男</span>
+          <span class="compare-color-swatch-row">${renderSwatches(cell.male?.swatches)}</span>
+        </div>
+        <div class="compare-color-line">
+          <span class="compare-color-label">女</span>
+          <span class="compare-color-swatch-row">${renderSwatches(cell.female?.swatches)}</span>
+        </div>
+      </div>
+      <div class="compare-cell-sub compare-cell-sub-split">
+        <span>${cell.male?.note ?? ""}</span>
+        <span>${cell.female?.note ?? ""}</span>
+      </div>
+    </div>
+  `;
+}
+
+export function renderBrandCompareMatrix(table, matrix) {
+  if (!table || !matrix) {
+    return;
+  }
+
+  const header = `
+    <thead>
+      <tr>
+        <th>维度</th>
+        ${matrix.brands
+          .map(
+            (brand) => `
+              <th class="${brand.className}">
+                <span class="compare-column-head">
+                  <span class="compare-column-dot ${brand.className}"></span>
+                  <span>${brand.shortLabel}</span>
+                </span>
+              </th>
+            `
+          )
+          .join("")}
+      </tr>
+    </thead>
+  `;
+
+  const body = matrix.rows
+    .map((row) => {
+      const cellsMarkup = row.cells
+        .map((cell) => {
+          const brandClass = matrix.brands.find((item) => item.brand === cell.brand)?.className ?? "";
+          const content =
+            row.key === "color"
+              ? renderCompareColorCell(cell, row.tone, brandClass)
+              : `
+                <div class="compare-matrix-cell ${row.tone} ${brandClass}">
+                  <div class="compare-cell-main">${cell.main ?? ""}</div>
+                  <div class="compare-cell-sub">${cell.sub ?? ""}</div>
+                </div>
+              `;
+          return `<td>${content}</td>`;
+        })
+        .join("");
+
+      return `
+        <tr>
+          <th>
+            <div class="compare-dimension-label">
+              <div class="compare-dimension-top">
+                <div class="compare-dimension-main">${row.label}</div>
+              </div>
+              <div class="compare-dimension-sub">${row.labelEn}</div>
+            </div>
+          </th>
+          ${cellsMarkup}
+        </tr>
+      `;
+    })
+    .join("");
+
+  table.innerHTML = `${header}<tbody>${body}</tbody>`;
+}
+
 export function renderBrandCompareTable(container, rows) {
   if (!container) {
     return;

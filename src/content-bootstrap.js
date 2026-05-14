@@ -5,6 +5,10 @@ import {
   COMPETITOR_BRAND_FABRIC_RADARS,
   COMPETITOR_BRAND_FUNCTION_RADARS,
   COMPETITOR_BRAND_SNAPSHOT,
+  BRAND_COMPARE_BRAND_META,
+  BRAND_COMPARE_MATRIX,
+  BRAND_COMPARE_RADAR,
+  BRAND_COMPARE_READOUT,
   FABRIC_CATEGORY_DEFINITIONS,
   FABRIC_FUNCTION_MATRIX_COLUMNS,
   FABRIC_FUNCTION_MATRIX_DATA,
@@ -22,10 +26,12 @@ import {
   SILHOUETTE_PAGE_DRAFT
 } from "./content-data.js";
 import {
+  renderBrandCompareMatrix,
   renderBrandCompareTable,
   renderFemaleOpportunityGenderMatrix
 } from "./content-render.js";
 import {
+  renderBrandCompareRadarChart,
   renderFabricFunctionMatrix,
   renderFabricOverviewChart,
   renderFabricWarmthBubbleChart,
@@ -184,6 +190,41 @@ function bootstrapMarketScopePage() {
   renderBrandCompareTable(tableContainer, MARKET_SCOPE_BRAND_COMPARE);
   renderMarketScopeBubbleChart(bubbleContainer, MARKET_SCOPE_BRAND_COMPARE);
   setupMarketScopeInteractions();
+}
+
+function bootstrapBrandComparePage() {
+  const matrixTable = document.querySelector("#compareMatrixTable");
+  const radarContainer = document.querySelector("#brandCompareRadarChart");
+  const readoutContainer = document.querySelector("#compareRadarInsight");
+
+  renderBrandCompareMatrix(matrixTable, BRAND_COMPARE_MATRIX);
+  renderBrandCompareRadarChart(radarContainer, BRAND_COMPARE_RADAR);
+
+  if (readoutContainer) {
+    readoutContainer.innerHTML = `
+      <div class="compare-radar-insight-head">
+        <div class="compare-radar-insight-title">品牌读数</div>
+        <div class="compare-radar-insight-note">key read</div>
+      </div>
+      <div class="compare-radar-insight-list">
+        ${BRAND_COMPARE_READOUT.map((item) => {
+          const meta = BRAND_COMPARE_BRAND_META[item.brand];
+          return `
+            <article class="compare-radar-insight-item">
+              <div class="compare-radar-insight-top">
+                <span class="compare-radar-insight-dot" style="background:${meta?.color ?? "#64748b"};"></span>
+                <span class="compare-radar-insight-brand">${meta?.shortLabel ?? item.brand}</span>
+              </div>
+              <div class="compare-radar-insight-line">
+                <div class="compare-radar-insight-main">${item.main}</div>
+                <div class="compare-radar-insight-sub">${item.sub}</div>
+              </div>
+            </article>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
 }
 
 function bootstrapFemaleOpportunityPage() {
@@ -1801,6 +1842,53 @@ function setupGenderBreakdownInteractions() {
   applyActiveState();
 }
 
+function bootstrapDesignCuesGallery() {
+  const section = document.querySelector("#design-cues");
+  if (!(section instanceof HTMLElement)) {
+    return;
+  }
+
+  const lightbox = ensureFabricImageLightbox();
+  const frames = Array.from(section.querySelectorAll(".design-core-frame"));
+
+  frames.forEach((frame) => {
+    if (!(frame instanceof HTMLElement) || frame.dataset.designCueZoomBound === "true") {
+      return;
+    }
+
+    const image = frame.querySelector("img");
+    if (!(image instanceof HTMLImageElement) || !image.getAttribute("src")) {
+      return;
+    }
+
+    const item = frame.closest(".design-core-item");
+    const label = item?.querySelector(".design-core-label")?.textContent?.replace(/\s+/g, " ").trim() || image.alt || "";
+
+    frame.classList.add("has-image");
+    frame.setAttribute("role", "button");
+    frame.setAttribute("tabindex", "0");
+    frame.setAttribute("aria-label", `查看图片：${label}`);
+
+    const open = () => {
+      lightbox.open({
+        src: image.getAttribute("src"),
+        alt: image.alt || label,
+        brand: label
+      });
+    };
+
+    frame.addEventListener("click", open);
+    frame.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
+    });
+
+    frame.dataset.designCueZoomBound = "true";
+  });
+}
+
 function setupLanguageSwitch() {
   const switcher = document.querySelector("#langSwitch");
   if (!(switcher instanceof HTMLButtonElement)) {
@@ -1841,6 +1929,7 @@ function setupLanguageSwitch() {
     bootstrapFemaleOpportunityPage();
     bootstrapFunctionPage();
     bootstrapFabricWarmthFunctionPage();
+    bootstrapBrandComparePage();
 
     try {
       window.localStorage.setItem(storageKey, normalized);
@@ -1877,6 +1966,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapFunctionPage();
   bootstrapFabricOverviewPage();
   bootstrapFabricWarmthFunctionPage();
+  bootstrapBrandComparePage();
   bootstrapCompetitorBrandSnapshotCards();
   bootstrapCompetitorSegmentMetricCards();
   bootstrapCompetitorSegmentTopFunctionCards();
@@ -1884,5 +1974,6 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapCompetitorColorCards();
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
+  bootstrapDesignCuesGallery();
   setupScrollState();
 });
