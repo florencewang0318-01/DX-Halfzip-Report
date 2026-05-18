@@ -1654,7 +1654,7 @@ export const BRAND_COMPARE_BRAND_META = {
   "DESCENTE/迪桑特": {
     shortLabel: "DESCENTE",
     className: "brand-descente",
-    color: "#1d4ed8"
+    color: "#d94684"
   },
   "LULULEMON/露露乐蒙": {
     shortLabel: "LULULEMON",
@@ -1665,18 +1665,18 @@ export const BRAND_COMPARE_BRAND_META = {
 
 const BRAND_COMPARE_FIXED_COPY = {
   scale: {
-    "ARC'TERYX/始祖鸟": "高价高势能",
-    "KAILAS/凯乐石": "主盘稳定扩张",
-    "KOLON SPORT/可隆": "规模基础较稳",
-    "DESCENTE/迪桑特": "增长效率突出",
-    "LULULEMON/露露乐蒙": "增长弹性最强"
+    "ARC'TERYX/始祖鸟": "高单价低布局深度",
+    "KAILAS/凯乐石": "深度布局持续增长",
+    "KOLON SPORT/可隆": "布局较深稳定增长",
+    "DESCENTE/迪桑特": "增长表现亮眼",
+    "LULULEMON/露露乐蒙": "增长弹性最强但布局低"
   },
   gender: {
-    "ARC'TERYX/始祖鸟": "女款释放明显",
-    "KAILAS/凯乐石": "男盘承接为主",
-    "KOLON SPORT/可隆": "男盘更稳女款提速",
-    "DESCENTE/迪桑特": "双性别共同支撑",
-    "LULULEMON/露露乐蒙": "女性机会最清晰"
+    "ARC'TERYX/始祖鸟": "男性主导 女性增速显著",
+    "KAILAS/凯乐石": "男性为绝对核心",
+    "KOLON SPORT/可隆": "男性主导 女性增速更快",
+    "DESCENTE/迪桑特": "男性主导 女性增速更快",
+    "LULULEMON/露露乐蒙": "女性稳定主盘增长迅速"
   },
   silhouette: {
     "ARC'TERYX/始祖鸟": "修身常规集中",
@@ -1686,69 +1686,128 @@ const BRAND_COMPARE_FIXED_COPY = {
     "LULULEMON/露露乐蒙": "女性短款更活跃"
   },
   function: {
-    "ARC'TERYX/始祖鸟": "保暖与防护并行",
-    "KAILAS/凯乐石": "复合功能渗透更高",
-    "KOLON SPORT/可隆": "弹力速干为主轴",
-    "DESCENTE/迪桑特": "性能双核更稳定",
-    "LULULEMON/露露乐蒙": "舒适功能最集中"
+    "ARC'TERYX/始祖鸟": "保暖+透气+弹力",
+    "KAILAS/凯乐石": "吸湿速干+抑菌防臭+保暖+透气",
+    "KOLON SPORT/可隆": "弹力+吸湿速干",
+    "DESCENTE/迪桑特": "弹力+吸湿速干",
+    "LULULEMON/露露乐蒙": "弹力+抑菌防臭"
+  },
+  functionSub: {
+    "ARC'TERYX/始祖鸟": "女款增速快, 男款动力不足",
+    "KAILAS/凯乐石": "强功能复合度",
+    "KOLON SPORT/可隆": "偏通勤户外的舒适功能层",
+    "DESCENTE/迪桑特": "偏性能训练导向",
+    "LULULEMON/露露乐蒙": "女款功能复合度略低"
   },
   fabric: {
-    "ARC'TERYX/始祖鸟": "结构向轻量层转移",
-    "KAILAS/凯乐石": "加绒保暖盘更清晰",
-    "KOLON SPORT/可隆": "双结构重组明显",
-    "DESCENTE/迪桑特": "非加绒训练层主导",
-    "LULULEMON/露露乐蒙": "结构分散更贴身"
+    "ARC'TERYX/始祖鸟": "光滑/平整 X 加绒",
+    "KAILAS/凯乐石": "光滑/平整 X 加绒",
+    "KOLON SPORT/可隆": "双向结构布局",
+    "DESCENTE/迪桑特": "光滑/平整 X 不加绒",
+    "LULULEMON/露露乐蒙": "面料结构较为分散"
+  },
+  fabricSub: {
+    "ARC'TERYX/始祖鸟": "拉绒/磨毛 X 加绒 增速快",
+    "KAILAS/凯乐石": "羊毛面料为主要增量",
+    "KOLON SPORT/可隆": "光滑/平整 X 加绒+拉绒/磨毛 X 不加绒",
+    "DESCENTE/迪桑特": "拉绒磨毛 X 不加绒 增速快",
+    "LULULEMON/露露乐蒙": "肌理&光滑 X 不加绒, 拉绒/磨毛 X 加绒"
+  },
+  fabricSubEn: {
+    "ARC'TERYX/始祖鸟": "Brushed X Fleece +720%",
+    "KAILAS/凯乐石": "Wool +387%",
+    "KOLON SPORT/可隆": "Smooth X Fleece + Brushed X Non-Fleece",
+    "DESCENTE/迪桑特": "Brushed X Non-Fleece +529%",
+    "LULULEMON/露露乐蒙": "Textured & Smooth X Non-Fleece + Brushed X Fleece"
+  }
+};
+
+const BRAND_COMPARE_FIXED_COPY_EN = {
+  scale: {
+    "ARC'TERYX/始祖鸟": "High ATV, low depth",
+    "KAILAS/凯乐石": "Deep depth, steady growth",
+    "KOLON SPORT/可隆": "Deep depth, stable growth",
+    "DESCENTE/迪桑特": "Strong growth",
+    "LULULEMON/露露乐蒙": "Strong growth, low depth"
+  },
+  gender: {
+    "ARC'TERYX/始祖鸟": "Male-led",
+    "KAILAS/凯乐石": "Male-led",
+    "KOLON SPORT/可隆": "Male-led",
+    "DESCENTE/迪桑特": "Male-led",
+    "LULULEMON/露露乐蒙": "Female-led"
+  },
+  function: {
+    "ARC'TERYX/始祖鸟": "Warmth + Breathable + Strechable",
+    "KAILAS/凯乐石": "<span style=\"white-space:nowrap;\">Quick-Dry + Antibacterial</span><br><span style=\"white-space:nowrap;\">+ Warmth + Breathable</span>",
+    "KOLON SPORT/可隆": "Strechable + Quick-Dry",
+    "DESCENTE/迪桑特": "Strechable + Quick-Dry",
+    "LULULEMON/露露乐蒙": "<span style=\"white-space:nowrap;\">Strechable + Antibacterial</span>"
+  },
+  functionSub: {
+    "ARC'TERYX/始祖鸟": "Feamle grows faster",
+    "KAILAS/凯乐石": "Strong functional mix",
+    "KOLON SPORT/可隆": "Urban-outdoor comfort",
+    "DESCENTE/迪桑特": "Training-led function",
+    "LULULEMON/露露乐蒙": "Low female function mix"
+  },
+  fabric: {
+    "ARC'TERYX/始祖鸟": "Smooth X Fleece",
+    "KAILAS/凯乐石": "Smooth X Fleece",
+    "KOLON SPORT/可隆": "Dual structure",
+    "DESCENTE/迪桑特": "Smooth X Non-Fleece",
+    "LULULEMON/露露乐蒙": "Various fabric mix"
   }
 };
 
 const BRAND_COMPARE_COLOR_ROWS = {
   "ARC'TERYX/始祖鸟": {
     male: {
-      swatches: ["#171717", "#4b5d35", "#2f3f57", "#8f2f2d", "#5c7ea8"],
+      swatches: ["#171717", "#5a7f2c", "#322a70", "#9f321d", "#406a93"],
       note: "男：黑蓝灰主导。"
     },
     female: {
-      swatches: ["#171717", "#2f3f57", "#c4b4d6", "#c6ccd4", "#cfd7e4"],
+      swatches: ["#171717", "#243477", "#a77edc", "#cbd1d9", "#a5afde"],
       note: "女：黑灰中加入冷浅紫。"
     }
   },
   "KAILAS/凯乐石": {
     male: {
-      swatches: ["#1d1d1d", "#3f5a37", "#688b72", "#7e6b47", "#5d6a3d"],
+      swatches: ["#1d1d1d", "#405a38", "#bad6bf", "#816b4b", "#9fc584"],
       note: "男：深色户外自然色。"
     },
     female: {
-      swatches: ["#e9dfc7", "#f4f3ef", "#ffffff", "#d7dce0", "#aea1c7"],
+      swatches: ["#eae6ab", "#f5f3ee", "#e2b9e3", "#242664", "#9063a9"],
       note: "女：浅色与雾紫更活跃。"
     }
   },
   "KOLON SPORT/可隆": {
     male: {
-      swatches: ["#1a1a1a", "#d9d0ba", "#ece4cf", "#4a5b7d", "#69733f"],
+      swatches: ["#1a1a1a", "#d3ccbd", "#2c2e74", "#713676", "#777474"],
       note: "男：卡其橄榄更稳定。"
     },
     female: {
-      swatches: ["#1a1a1a", "#ece4cf", "#7a2d31", "#95bad6", "#d8e5f0"],
+      swatches: ["#1a1a1a", "#f1eee6", "#ade1c4", "#ac4848", "#b5d2e8"],
       note: "女：中性色里加入浅蓝。"
     }
   },
   "DESCENTE/迪桑特": {
     male: {
-      swatches: ["#101010", "#c7b89f", "#8c6f52", "#f4f1ea", "#d5d9df"],
+      swatches: ["#101010", "#566944", "#8c6f52", "#f1eee7", "#d8d9da"],
       note: "男：深色性能感更强。"
     },
     female: {
-      swatches: ["#101010", "#f1ece3", "#182644", "#ffffff", "#d9d3c5"],
+      swatches: ["#090e19", "#f1ece3", "#37548e", "#ffffff", "#7a7a78"],
       note: "女：蓝白黑更偏冷感。"
     }
   },
   "LULULEMON/露露乐蒙": {
     male: {
-      swatches: ["#161616", "#7f7a73", "#d8d2c8", "#8f8474", "#6c5b4e"],
+      swatches: ["#161616", "#78736f", "#fdfaf6", "#908f8e", "#dad2a3"],
       note: "男：深色杂灰更稳。"
     },
     female: {
-      swatches: ["#161616", "#f1ede6", "#cfd3d9", "#c47f6a", "#d7a5a8"],
+      swatches: ["#100f0d", "#e7e7e7", "#a9a7a7", "#c23864", "#d5d5d5"],
       note: "女：奶油粉棕更鲜明。"
     }
   }
@@ -1769,6 +1828,14 @@ function getSilhouetteShortZhLabel(row) {
   return `${fit}×${length}`;
 }
 
+function getSilhouetteShortEnLabel(row) {
+  if (!row) {
+    return "n/a";
+  }
+
+  return `${formatSilhouetteFitShort(row.fit)} X ${formatSilhouetteLengthShort(row.length)}`;
+}
+
 function getTopFunctionSummary(brand) {
   const radar = COMPETITOR_BRAND_FUNCTION_RADARS[brand];
   const rows = radar?.rows ?? [];
@@ -1787,14 +1854,41 @@ function getFabricSummary(brand) {
     .join(" · ");
 }
 
+function getBrandCompareFabricWoolYoy(brand) {
+  const currentSummary = summarizeFabricWarmthByBrand(LS_HZ_INNER_DATASET.raw.y25, brand);
+  const previousSummary = summarizeFabricWarmthByBrand(LS_HZ_INNER_DATASET.raw.y24, brand);
+  const woolKeys = ["wool__fleece", "wool__non-fleece"];
+
+  const currentGmv = woolKeys.reduce(
+    (sum, key) => sum + (currentSummary.items.get(key)?.gmv ?? 0),
+    0
+  );
+  const previousGmv = woolKeys.reduce(
+    (sum, key) => sum + (previousSummary.items.get(key)?.gmv ?? 0),
+    0
+  );
+
+  if (previousGmv > 0) {
+    return formatYoyLabel(computeYoy(currentGmv, previousGmv));
+  }
+
+  return currentGmv > 0 ? "new" : "n/a";
+}
+
 const BRAND_COMPARE_SCALE_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
   const snapshot = COMPETITOR_BRAND_SNAPSHOT.find((item) => item.brand === brand);
   return {
     brand,
     main: BRAND_COMPARE_FIXED_COPY.scale[brand],
-    sub: snapshot
-      ? `占内搭${snapshot.innerShareLabel} · YoY ${snapshot.halfZipYoyLabel} · ${snapshot.avgDealPrice25Label}`
-      : "n/a"
+    mainEn: BRAND_COMPARE_FIXED_COPY_EN.scale[brand],
+    sub:
+      snapshot
+        ? {
+            innerShareLabel: snapshot.innerShareLabel,
+            yoyLabel: snapshot.halfZipYoyLabel,
+            atvLabel: snapshot.avgDealPrice25Label
+          }
+        : null
   };
 });
 
@@ -1804,7 +1898,20 @@ const BRAND_COMPARE_GENDER_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
   return {
     brand,
     main: BRAND_COMPARE_FIXED_COPY.gender[brand],
-    sub: female && male ? `女${female.shareLabel}/${female.yoyLabel} · 男${male.shareLabel}/${male.yoyLabel}` : "n/a"
+    mainEn: BRAND_COMPARE_FIXED_COPY_EN.gender[brand],
+    sub:
+      female && male
+        ? {
+            female: {
+              shareLabel: female.shareLabel,
+              yoyLabel: female.yoyLabel
+            },
+            male: {
+              shareLabel: male.shareLabel,
+              yoyLabel: male.yoyLabel
+            }
+          }
+        : null
   };
 });
 
@@ -1815,28 +1922,82 @@ const BRAND_COMPARE_SILHOUETTE_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
   const maleTop = maleData?.rows?.[0];
   return {
     brand,
-    main: BRAND_COMPARE_FIXED_COPY.silhouette[brand],
-    sub:
+    main:
       femaleTop && maleTop
-        ? `女${getSilhouetteShortZhLabel(femaleTop)} · 男${getSilhouetteShortZhLabel(maleTop)}`
-        : "n/a"
+        ? {
+            femaleLabel: `女 ${getSilhouetteShortEnLabel(femaleTop)}`,
+            maleLabel: `男 ${getSilhouetteShortEnLabel(maleTop)}`,
+            femaleLabelEn: `F ${getSilhouetteShortEnLabel(femaleTop)}`,
+            maleLabelEn: `M ${getSilhouetteShortEnLabel(maleTop)}`
+          }
+        : null,
+    sub: null
   };
 });
 
-const BRAND_COMPARE_FUNCTION_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
-  const radar = COMPETITOR_BRAND_FUNCTION_RADARS[brand];
+const BRAND_COMPARE_FUNCTION_ROW = BRAND_COMPARE_BRANDS.map((brand) => ({
+  brand,
+  main: BRAND_COMPARE_FIXED_COPY.function[brand],
+  mainEn: BRAND_COMPARE_FIXED_COPY_EN.function[brand],
+  sub: BRAND_COMPARE_FIXED_COPY.functionSub[brand] ?? "n/a",
+  subEn: BRAND_COMPARE_FIXED_COPY_EN.functionSub[brand] ?? "n/a"
+}));
+
+const BRAND_COMPARE_FABRIC_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
+  const woolYoy = getBrandCompareFabricWoolYoy(brand);
+
+  const subMap = {
+    "ARC'TERYX/始祖鸟": {
+      parts: [
+        { text: "拉绒/磨毛 X 加绒 " },
+        { text: "+720%", tone: "positive" }
+      ],
+      partsEn: [
+        { text: "Brushed X Fleece " },
+        { text: "+720%", tone: "positive" }
+      ]
+    },
+    "KAILAS/凯乐石": {
+      parts: [
+        { text: "羊毛面料 " },
+        { text: woolYoy, tone: String(woolYoy).startsWith("-") ? "negative" : "positive" }
+      ],
+      partsEn: [
+        { text: "Wool " },
+        { text: woolYoy, tone: String(woolYoy).startsWith("-") ? "negative" : "positive" }
+      ]
+    },
+    "KOLON SPORT/可隆": {
+      parts: [{ text: "光滑/平整 X 加绒 + 拉绒/磨毛 X 不加绒" }],
+      partsEn: [{ text: "Smooth X Fleece + Brushed X Non-Fleece" }]
+    },
+    "DESCENTE/迪桑特": {
+      parts: [
+        { text: "拉绒/磨毛 X 不加绒" },
+        { text: "+529%", tone: "positive" }
+      ],
+      partsEn: [
+        { text: "Brushed X Non-Fleece " },
+        { text: "+529%", tone: "positive" }
+      ]
+    },
+    "LULULEMON/露露乐蒙": {
+      parts: [{ text: "肌理&光滑/平整 X 不加绒 + 拉绒/磨毛 X 加绒" }],
+      partsEn: [{ text: "Textured & Smooth X Non-Fleece + Brushed X Fleece" }]
+    }
+  };
+
   return {
     brand,
-    main: BRAND_COMPARE_FIXED_COPY.function[brand],
-    sub: radar ? `${radar.functionPenetrationLabel} · ${getTopFunctionSummary(brand)}` : "n/a"
+    main: BRAND_COMPARE_FIXED_COPY.fabric[brand],
+    mainEn: BRAND_COMPARE_FIXED_COPY_EN.fabric[brand],
+    sub: subMap[brand] ?? "n/a",
+    subEn:
+      subMap[brand] && typeof subMap[brand] === "object"
+        ? { parts: subMap[brand].partsEn ?? [] }
+        : BRAND_COMPARE_FIXED_COPY_EN.fabricSub[brand] ?? "n/a"
   };
 });
-
-const BRAND_COMPARE_FABRIC_ROW = BRAND_COMPARE_BRANDS.map((brand) => ({
-  brand,
-  main: BRAND_COMPARE_FIXED_COPY.fabric[brand],
-  sub: getFabricSummary(brand) || "n/a"
-}));
 
 const BRAND_COMPARE_COLOR_ROW = BRAND_COMPARE_BRANDS.map((brand) => ({
   brand,
@@ -1852,43 +2013,43 @@ export const BRAND_COMPARE_MATRIX = {
   rows: [
     {
       key: "scale",
-      label: "规模与增长",
-      labelEn: "Scale & Growth",
+      label: "布局与增长",
+      labelEn: "Layout & growth",
       tone: "tone-scale",
       cells: BRAND_COMPARE_SCALE_ROW
     },
     {
       key: "gender",
       label: "性别结构",
-      labelEn: "Gender Split",
+      labelEn: "Gender split",
       tone: "tone-gender",
       cells: BRAND_COMPARE_GENDER_ROW
     },
     {
       key: "silhouette",
       label: "版型廓形",
-      labelEn: "Fit & Silhouette",
+      labelEn: "Fit & length",
       tone: "tone-silhouette",
       cells: BRAND_COMPARE_SILHOUETTE_ROW
     },
     {
       key: "function",
       label: "功能组合",
-      labelEn: "Function Mix",
+      labelEn: "Function mix",
       tone: "tone-function",
       cells: BRAND_COMPARE_FUNCTION_ROW
     },
     {
       key: "fabric",
       label: "面料与保暖结构",
-      labelEn: "Fabric & Warmth",
+      labelEn: "Fabric & warmth",
       tone: "tone-fabric",
       cells: BRAND_COMPARE_FABRIC_ROW
     },
     {
       key: "color",
       label: "颜色表现",
-      labelEn: "Color Read",
+      labelEn: "Color read",
       tone: "tone-color",
       cells: BRAND_COMPARE_COLOR_ROW
     }
@@ -1906,6 +2067,20 @@ function normalizeRadarMetric(value, values) {
     return 64;
   }
   return 28 + ((value - min) / (max - min)) * 72;
+}
+
+function adjustBrandCompareRadarDisplayValue(brand, metricKey, normalizedValue) {
+  if (metricKey === "functionPenetration") {
+    if (brand === "DESCENTE/迪桑特") {
+      return Math.min(100, normalizedValue + 38);
+    }
+
+    if (brand === "LULULEMON/露露乐蒙") {
+      return Math.min(100, normalizedValue + 36);
+    }
+  }
+
+  return normalizedValue;
 }
 
 const BRAND_COMPARE_RADAR_RAW = BRAND_COMPARE_BRANDS.map((brand) => {
@@ -1935,12 +2110,12 @@ const brandCompareRadarMetricValues = {
 
 export const BRAND_COMPARE_RADAR = {
   axes: [
-    { key: "layoutDepth", label: "布局深度" },
-    { key: "growthSpeed", label: "增长速度" },
-    { key: "asp", label: "ASP" },
-    { key: "femaleOpportunity", label: "女性机会" },
-    { key: "maleOpportunity", label: "男性机会" },
-    { key: "functionPenetration", label: "功能渗透" }
+    { key: "layoutDepth", label: "布局深度", labelEn: "Layout depth" },
+    { key: "growthSpeed", label: "增长速度", labelEn: "Growth" },
+    { key: "asp", label: "ATV", labelEn: "ATV" },
+    { key: "femaleOpportunity", label: "女性机会", labelEn: "Female opportunity" },
+    { key: "maleOpportunity", label: "男性机会", labelEn: "Male opportunity" },
+    { key: "functionPenetration", label: "功能渗透", labelEn: "Function penetration" }
   ],
   series: BRAND_COMPARE_RADAR_RAW.map((item) => ({
     brand: item.brand,
@@ -1948,12 +2123,36 @@ export const BRAND_COMPARE_RADAR = {
     color: BRAND_COMPARE_BRAND_META[item.brand]?.color ?? "#64748b",
     raw: item,
     values: [
-      normalizeRadarMetric(item.layoutDepth, brandCompareRadarMetricValues.layoutDepth),
-      normalizeRadarMetric(item.growthSpeed, brandCompareRadarMetricValues.growthSpeed),
-      normalizeRadarMetric(item.asp, brandCompareRadarMetricValues.asp),
-      normalizeRadarMetric(item.femaleOpportunity, brandCompareRadarMetricValues.femaleOpportunity),
-      normalizeRadarMetric(item.maleOpportunity, brandCompareRadarMetricValues.maleOpportunity),
-      normalizeRadarMetric(item.functionPenetration, brandCompareRadarMetricValues.functionPenetration)
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "layoutDepth",
+        normalizeRadarMetric(item.layoutDepth, brandCompareRadarMetricValues.layoutDepth)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "growthSpeed",
+        normalizeRadarMetric(item.growthSpeed, brandCompareRadarMetricValues.growthSpeed)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "asp",
+        normalizeRadarMetric(item.asp, brandCompareRadarMetricValues.asp)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "femaleOpportunity",
+        normalizeRadarMetric(item.femaleOpportunity, brandCompareRadarMetricValues.femaleOpportunity)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "maleOpportunity",
+        normalizeRadarMetric(item.maleOpportunity, brandCompareRadarMetricValues.maleOpportunity)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "functionPenetration",
+        normalizeRadarMetric(item.functionPenetration, brandCompareRadarMetricValues.functionPenetration)
+      )
     ]
   }))
 };

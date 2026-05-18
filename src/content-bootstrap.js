@@ -195,36 +195,9 @@ function bootstrapMarketScopePage() {
 function bootstrapBrandComparePage() {
   const matrixTable = document.querySelector("#compareMatrixTable");
   const radarContainer = document.querySelector("#brandCompareRadarChart");
-  const readoutContainer = document.querySelector("#compareRadarInsight");
 
   renderBrandCompareMatrix(matrixTable, BRAND_COMPARE_MATRIX);
   renderBrandCompareRadarChart(radarContainer, BRAND_COMPARE_RADAR);
-
-  if (readoutContainer) {
-    readoutContainer.innerHTML = `
-      <div class="compare-radar-insight-head">
-        <div class="compare-radar-insight-title">品牌读数</div>
-        <div class="compare-radar-insight-note">key read</div>
-      </div>
-      <div class="compare-radar-insight-list">
-        ${BRAND_COMPARE_READOUT.map((item) => {
-          const meta = BRAND_COMPARE_BRAND_META[item.brand];
-          return `
-            <article class="compare-radar-insight-item">
-              <div class="compare-radar-insight-top">
-                <span class="compare-radar-insight-dot" style="background:${meta?.color ?? "#64748b"};"></span>
-                <span class="compare-radar-insight-brand">${meta?.shortLabel ?? item.brand}</span>
-              </div>
-              <div class="compare-radar-insight-line">
-                <div class="compare-radar-insight-main">${item.main}</div>
-                <div class="compare-radar-insight-sub">${item.sub}</div>
-              </div>
-            </article>
-          `;
-        }).join("")}
-      </div>
-    `;
-  }
 }
 
 function bootstrapFemaleOpportunityPage() {

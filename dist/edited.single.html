@@ -820,7 +820,7 @@ a {
 
 .compare-main {
   display: grid;
-  grid-template-columns: minmax(0, 1.78fr) minmax(280px, 0.78fr);
+  grid-template-columns: minmax(0, 1.92fr) minmax(260px, 0.64fr);
   gap: 12px;
   align-items: stretch;
   min-height: 0;
@@ -845,28 +845,31 @@ a {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  justify-content: center;
 }
 
 .compare-card-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 10px;
   padding: 12px 14px 11px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.7);
 }
 
 .compare-card-title {
-  font-size: 14px;
-  font-weight: 800;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 850;
   color: #0f172a;
 }
 
-.compare-card-note {
-  font-size: 10px;
+.compare-card-title-sub {
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: #94a3b8;
 }
 
@@ -890,7 +893,18 @@ a {
 
 .compare-matrix thead th:first-child {
   text-align: left;
-  width: 16%;
+  width: 14%;
+}
+
+body[data-lang="en"] .compare-matrix thead th:nth-child(2),
+body[data-lang="en"] .compare-matrix thead th:nth-child(5) {
+  width: 15.25%;
+}
+
+body[data-lang="en"] .compare-matrix thead th:nth-child(3),
+body[data-lang="en"] .compare-matrix thead th:nth-child(4),
+body[data-lang="en"] .compare-matrix thead th:nth-child(6) {
+  width: 18.5%;
 }
 
 .compare-matrix thead th:not(:first-child) {
@@ -901,6 +915,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-size: 12px;
 }
 
 .compare-column-dot {
@@ -1001,14 +1016,14 @@ a {
 }
 
 .compare-dimension-main {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   line-height: 1.35;
   color: #334155;
 }
 
 .compare-dimension-sub {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: 0.06em;
@@ -1054,6 +1069,20 @@ a {
   background: rgba(245, 248, 252, 0.95);
 }
 
+body[data-lang="en"] .compare-matrix-cell.tone-function .compare-cell-main {
+  font-size: 11px;
+}
+
+body[data-lang="en"] .compare-matrix-cell.tone-scale .compare-cell-main,
+body[data-lang="en"] .compare-matrix-cell.tone-gender .compare-cell-main,
+body[data-lang="en"] .compare-matrix-cell.tone-silhouette .compare-cell-main {
+  font-size: 11px;
+}
+
+body[data-lang="en"] .compare-matrix-cell.tone-fabric .compare-cell-main {
+  font-size: 11px;
+}
+
 .compare-matrix-cell.tone-fabric {
   background: rgba(250, 248, 243, 0.95);
 }
@@ -1075,7 +1104,7 @@ a {
 }
 
 .compare-matrix-cell.brand-descente {
-  box-shadow: inset 2px 0 0 rgba(29, 78, 216, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  box-shadow: inset 2px 0 0 rgba(217, 70, 132, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.88);
 }
 
 .compare-matrix-cell.brand-lululemon {
@@ -1089,10 +1118,55 @@ a {
   color: #0f172a;
 }
 
+.compare-cell-main-split {
+  display: grid;
+  gap: 2px;
+}
+
+.compare-cell-main-line {
+  line-height: 1.35;
+}
+
 .compare-cell-sub {
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.4;
   color: #64748b;
+}
+
+.compare-cell-sub-multiline {
+  display: grid;
+  gap: 2px;
+}
+
+.compare-cell-sub-line {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.compare-yoy {
+  font-weight: 700;
+}
+
+.compare-yoy.is-positive {
+  font-weight: 750;
+  color: #15803d;
+}
+
+.compare-yoy.is-negative {
+  font-weight: 750;
+  color: #dc2626;
+}
+
+.compare-yoy.is-neutral {
+  font-weight: 750;
+  color: #64748b;
+}
+
+.compare-emphasis-value {
+  font-weight: 750;
+  color: #475569;
 }
 
 .compare-cell-sub-split {
@@ -1114,13 +1188,13 @@ a {
 
 .compare-color-line {
   display: grid;
-  grid-template-columns: 14px minmax(0, 1fr);
+  grid-template-columns: 16px minmax(0, 1fr);
   align-items: center;
   gap: 6px;
 }
 
 .compare-color-label {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   line-height: 1;
   color: #64748b;
@@ -1128,8 +1202,8 @@ a {
 }
 
 .compare-color-swatch {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   border: 1px solid rgba(15, 23, 42, 0.12);
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
@@ -1153,7 +1227,7 @@ a {
 
 .compare-matrix thead th.brand-descente::after,
 .compare-column-dot.brand-descente {
-  background: #1d4ed8;
+  background: #d94684;
 }
 
 .compare-matrix thead th.brand-lululemon::after,
@@ -1162,9 +1236,12 @@ a {
 }
 
 .compare-radar-wrap {
-  padding: 8px 8px 0;
+  padding: 2px 8px 10px;
   flex: 1;
   min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .compare-radar-wrap:has(.compare-radar-chart:empty) {
@@ -1172,7 +1249,17 @@ a {
 }
 
 .compare-radar-chart {
-  height: 224px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.compare-radar-chart svg {
+  display: block;
+  margin: 0 auto;
 }
 
 .compare-radar-chart:empty {
@@ -1184,19 +1271,47 @@ a {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  row-gap: 4px;
   flex-wrap: wrap;
-  padding: 8px 8px 2px;
+  padding: 0 8px 10px;
+  margin-top: -18px;
+  margin-bottom: 18px;
+  max-width: 100%;
 }
 
 .compare-radar-legend-item {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.04em;
   color: #475569;
   text-transform: uppercase;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.compare-radar-legend-item:hover {
+  transform: translateY(-1px);
+}
+
+.compare-radar-legend-item.is-hidden {
+  opacity: 0.35;
+}
+
+.compare-radar-legend-item:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.45);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.compare-radar-legend-break {
+  flex-basis: 100%;
+  height: 0;
 }
 
 .compare-radar-legend-dot {
@@ -1207,100 +1322,250 @@ a {
 }
 
 #brandCompareRadarChart .competitor-function-radar-label {
-  font-size: 9px;
-}
-
-.compare-radar-insight {
-  margin: 6px 12px 10px;
-  padding: 10px 10px 8px;
-  border: 1px solid rgba(226, 232, 240, 0.82);
-  border-radius: 14px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.96) 100%);
-}
-
-.compare-radar-insight-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.compare-radar-insight-title {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #36506f;
-}
-
-.compare-radar-insight-note {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #94a3b8;
-}
-
-.compare-radar-insight-list {
-  display: grid;
-  gap: 6px;
-}
-
-.compare-radar-insight-item {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 7px 8px;
-  border-radius: 12px;
-  border: 1px solid rgba(226, 232, 240, 0.75);
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
-}
-
-.compare-radar-insight-top {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.compare-radar-insight-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex: 0 0 auto;
-}
-
-.compare-radar-insight-brand {
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #24364d;
-}
-
-.compare-radar-insight-main {
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.25;
-  color: #0f172a;
-}
-
-.compare-radar-insight-sub {
-  font-size: 9px;
-  line-height: 1.35;
-  color: #64748b;
-}
-
-.compare-radar-insight-line {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  flex-wrap: wrap;
+  font-size: 13px;
 }
 
 .compare-page .page-foot {
   margin-top: 12px;
+}
+
+.strategy-main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+#product-direction .section-head {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+#product-direction .strategy-main {
+  margin-top: -10px;
+}
+
+.strategy-editorial {
+  position: relative;
+  display: grid;
+  align-content: start;
+  grid-auto-rows: max-content;
+  gap: 16px;
+  min-width: 0;
+  min-height: 610px;
+  padding: 18px;
+  border-radius: 28px;
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.93) 40%, rgba(247, 250, 252, 0.98) 100%);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.strategy-editorial::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(31, 70, 118, 0.95), rgba(31, 70, 118, 0.22));
+}
+
+.strategy-editorial-female::before {
+  background: linear-gradient(90deg, rgba(190, 24, 93, 0.95), rgba(190, 24, 93, 0.22));
+}
+
+.strategy-editorial-male {
+  box-shadow: 0 20px 42px rgba(29, 78, 216, 0.08);
+}
+
+.strategy-editorial-female {
+  box-shadow: 0 20px 42px rgba(190, 24, 93, 0.08);
+}
+
+.strategy-editorial-topline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.strategy-editorial-hero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+}
+
+.strategy-editorial-index {
+  font-size: 50px;
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #1f4676;
+}
+
+.strategy-editorial-female .strategy-editorial-index {
+  color: #be185d;
+}
+
+.strategy-editorial-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  font-weight: 780;
+  color: #24324d;
+}
+
+.strategy-editorial-lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.58;
+  color: #46556c;
+}
+
+.strategy-editorial-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 138px;
+  gap: 12px;
+}
+
+.strategy-editorial-strip-block,
+.strategy-editorial-note {
+  min-width: 0;
+  height: 138px;
+  box-sizing: border-box;
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 250, 252, 0.92) 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  display: flex;
+  flex-direction: column;
+}
+
+.strategy-editorial-strip-block-tall {
+  min-height: 0;
+}
+
+.strategy-editorial-strip-label {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.strategy-editorial-strip-value,
+.strategy-editorial-note-value {
+  font-size: 15px;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 760;
+  color: #0f172a;
+}
+
+.strategy-editorial-strip-sub,
+.strategy-editorial-note p {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.strategy-editorial-strip-sub-split {
+  display: grid;
+  gap: 2px;
+}
+
+.strategy-editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 138px;
+  gap: 12px;
+}
+
+.strategy-editorial-note-title {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.strategy-editorial-strip-block:nth-child(1) .strategy-editorial-strip-label,
+.strategy-editorial-strip-block:nth-child(1) .strategy-editorial-note-title,
+.strategy-editorial-note:nth-child(1) .strategy-editorial-note-title {
+  color: #37569a;
+}
+
+.strategy-editorial-strip-block:nth-child(2) .strategy-editorial-strip-label {
+  color: #7e46a3;
+}
+
+.strategy-editorial-strip-block:nth-child(3) .strategy-editorial-strip-label {
+  color: #257f63;
+}
+
+.strategy-editorial-strip-block:nth-child(4) .strategy-editorial-strip-label {
+  color: #c36d0b;
+}
+
+.strategy-editorial-note:nth-child(1) .strategy-editorial-note-title {
+  color: #107e99;
+}
+
+.strategy-editorial-note:nth-child(2) .strategy-editorial-note-title {
+  color: #c0246a;
+}
+
+.strategy-editorial-swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.strategy-editorial-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 18px);
+  gap: 10px;
+  margin-top: 10px;
+  align-content: start;
+}
+
+.strategy-editorial-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--sw);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+body[data-lang="en"] .strategy-editorial-topline,
+body[data-lang="en"] .strategy-editorial-strip-label,
+body[data-lang="en"] .strategy-editorial-note-title {
+  text-transform: none;
+}
+
+body[data-lang="en"] .strategy-editorial-title {
+  font-size: 26px;
+}
+
+body[data-lang="en"] .strategy-editorial-strip-value,
+body[data-lang="en"] .strategy-editorial-note-value {
+  font-size: 13px;
 }
 
 @media (max-width: 1280px) {
@@ -1310,6 +1575,15 @@ a {
 
   .compare-radar-chart {
     height: 300px;
+  }
+
+  .strategy-main {
+    grid-template-columns: 1fr;
+  }
+
+  .strategy-editorial-strip,
+  .strategy-editorial-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -6251,15 +6525,17 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">13</span><span>Brand Compare</span></div>
-              <h2 class="section-title">五个竞品在布局深度、性别机会与功能渗透上形成清晰分工</h2>
+              <h2 class="section-title" data-zh="竞品品牌半拉链核心维度比较" data-en="Half-Zipper Competitor Comparison">竞品品牌半拉链核心维度比较</h2>
             </div>
           </div>
 
           <div class="compare-main reveal">
             <section class="compare-matrix-card">
               <div class="compare-card-head">
-                <div class="compare-card-title">品牌对比矩阵</div>
-                <div class="compare-card-note">5-brand readout</div>
+                <div class="compare-card-title">
+                  <span class="compare-card-title-main" data-zh="品牌对比矩阵" data-en="Brand compare matrix">品牌对比矩阵</span>
+                  <span class="compare-card-title-sub">Brand Compare Matrix</span>
+                </div>
               </div>
               <table class="compare-matrix" id="compareMatrixTable">
                 <thead>
@@ -6457,75 +6733,19 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
 
             <section class="compare-radar-card">
               <div class="compare-card-head">
-                <div class="compare-card-title">品牌雷达图</div>
-                <div class="compare-card-note">cross-brand read</div>
+                <div class="compare-card-title">
+                  <span class="compare-card-title-main" data-zh="品牌雷达图" data-en="Brand radar">品牌雷达图</span>
+                  <span class="compare-card-title-sub">Brand Radar</span>
+                </div>
               </div>
               <div class="compare-radar-wrap">
                 <div class="compare-radar-chart" id="brandCompareRadarChart"></div>
-              </div>
-              <div class="compare-radar-insight" id="compareRadarInsight">
-                <div class="compare-radar-insight-head">
-                  <div class="compare-radar-insight-title">品牌读数</div>
-                  <div class="compare-radar-insight-note">key read</div>
-                </div>
-                <div class="compare-radar-insight-list">
-                  <article class="compare-radar-insight-item">
-                    <div class="compare-radar-insight-top">
-                      <span class="compare-radar-insight-dot" style="background:#4f46e5;"></span>
-                      <span class="compare-radar-insight-brand">ARC'TERYX</span>
-                    </div>
-                    <div class="compare-radar-insight-line">
-                      <div class="compare-radar-insight-main">高端价格感最强</div>
-                      <div class="compare-radar-insight-sub">后续接入 ASP 与布局深度读数</div>
-                    </div>
-                  </article>
-                  <article class="compare-radar-insight-item">
-                    <div class="compare-radar-insight-top">
-                      <span class="compare-radar-insight-dot" style="background:#d4a34e;"></span>
-                      <span class="compare-radar-insight-brand">KAILAS</span>
-                    </div>
-                    <div class="compare-radar-insight-line">
-                      <div class="compare-radar-insight-main">功能渗透最完整</div>
-                      <div class="compare-radar-insight-sub">后续接入功能渗透与男盘机会读数</div>
-                    </div>
-                  </article>
-                  <article class="compare-radar-insight-item">
-                    <div class="compare-radar-insight-top">
-                      <span class="compare-radar-insight-dot" style="background:#1f7a67;"></span>
-                      <span class="compare-radar-insight-brand">KOLON</span>
-                    </div>
-                    <div class="compare-radar-insight-line">
-                      <div class="compare-radar-insight-main">结构平衡感更强</div>
-                      <div class="compare-radar-insight-sub">后续接入男女盘与版型迁移读数</div>
-                    </div>
-                  </article>
-                  <article class="compare-radar-insight-item">
-                    <div class="compare-radar-insight-top">
-                      <span class="compare-radar-insight-dot" style="background:#1d4ed8;"></span>
-                      <span class="compare-radar-insight-brand">DESCENTE</span>
-                    </div>
-                    <div class="compare-radar-insight-line">
-                      <div class="compare-radar-insight-main">增长效率更突出</div>
-                      <div class="compare-radar-insight-sub">后续接入增长速度与男性机会读数</div>
-                    </div>
-                  </article>
-                  <article class="compare-radar-insight-item">
-                    <div class="compare-radar-insight-top">
-                      <span class="compare-radar-insight-dot" style="background:#f97316;"></span>
-                      <span class="compare-radar-insight-brand">LULULEMON</span>
-                    </div>
-                    <div class="compare-radar-insight-line">
-                      <div class="compare-radar-insight-main">女性机会最鲜明</div>
-                      <div class="compare-radar-insight-sub">后续接入女性机会与增长读数</div>
-                    </div>
-                  </article>
-                </div>
               </div>
             </section>
           </div>
 
           <div class="page-foot">
-            <span>Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
+            <span data-zh="Data source: LS HZ Inner汇总表.xlsx / Y25-Y24" data-en="Data source: LS HZ Inner summary.xlsx / Y25-Y24">Data source: LS HZ Inner汇总表.xlsx / Y25-Y24</span>
             <span>Page 13</span>
           </div>
         </div>
@@ -6537,40 +6757,133 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
         <div class="content-frame">
           <div class="section-head reveal">
             <div>
-              <div class="section-kicker"><span class="section-badge">14</span><span>Product Direction</span></div>
-              <h2 class="section-title">27FW应以三层商品结构承接半拉链机会</h2>
-              <ul class="section-bullets">
-                <li>27FW 半拉链机会不在“补一个基础款”，而在把内搭做成更清晰的三层商品结构：引流、场景、形象升级各自承担不同任务。</li>
-                <li>女性机会已经不适合继续附着在男款逻辑上，短款、外穿化和单独版型开发更可能成为下一季拉开差异的关键。</li>
-                <li>真正决定开发效率的不是单一功能或单一面料，而是价位、加绒比例、版型策略与设计语言能否被组合成清晰的商品提案。</li>
-              </ul>
+              <div class="section-kicker"><span class="section-badge">14</span><span data-zh="Strategy" data-en="Strategy">Strategy</span></div>
+              <h2 class="section-title" data-zh="27FW半拉链内搭应双线推进：男款稳盘，女款扩容" data-en="27FW Half-Zip Innerwear Should Run on Two Tracks: Male Scale, Female Expansion">27FW半拉链内搭应双线推进：男款稳盘，女款扩容</h2>
             </div>
           </div>
 
-          <div class="chart-grid evidence-grid two-up reveal">
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Recommendation A</div>
-              <h3 class="panel-title">三级商品矩阵</h3>
-              <div class="note-stack">
-                <p>基础引流款：轻保暖、弹力、常规衣长、合体版型。</p>
-                <p>核心场景款：滑雪 / 徒步导向，微抓绒或高性能针织，强调保暖排汗。</p>
-                <p>形象升级款：女性短款或高级肌理面料，强化外穿属性。</p>
+          <section class="strategy-main reveal">
+            <article class="strategy-editorial strategy-editorial-male">
+              <div class="strategy-editorial-topline" data-zh="男款方向" data-en="Male Direction">男款方向</div>
+              <div class="strategy-editorial-hero">
+                <div class="strategy-editorial-index">01</div>
+                <div>
+                  <h3 class="strategy-editorial-title" data-zh="男款稳盘方向" data-en="Male Scale Direction">男款稳盘方向</h3>
+                  <p class="strategy-editorial-lead" data-zh="以常规/运动版型和核心功能承接主盘，用功能与细节升级实现稳定增长。" data-en="Use regular and active fits with core functions to hold the core volume, then drive steady growth through function and detail upgrades.">以常规/运动版型和核心功能承接主盘，用功能与细节升级实现稳定增长。</p>
+                </div>
+              </div>
+              <div class="strategy-editorial-strip">
+                <div class="strategy-editorial-strip-block">
+                  <div class="strategy-editorial-strip-label" data-zh="方向定位" data-en="Direction">方向定位</div>
+                  <div class="strategy-editorial-strip-value" data-zh="男款承接稳定主盘" data-en="Male holds the stable core volume">男款承接稳定主盘</div>
+                  <div class="strategy-editorial-strip-sub strategy-editorial-strip-sub-split">
+                    <span data-zh="建议分布：45%-55%" data-en="Suggested mix: 45%-55%">建议分布：45%-55%</span>
+                    <span data-zh="主推价位：¥700-1,200" data-en="Price band: ¥700-1,200">主推价位：¥700-1,200</span>
+                  </div>
+                </div>
+                <div class="strategy-editorial-strip-block">
+                  <div class="strategy-editorial-strip-label" data-zh="核心版型" data-en="Core Fit">核心版型</div>
+                  <div class="strategy-editorial-strip-value" data-zh="Regular × Regular, Active × Regular" data-en="Regular × Regular, Active × Regular">Regular × Regular, Active × Regular</div>
+                  <div class="strategy-editorial-strip-sub" data-zh="Regular × Regular 承接主盘，Active × Regular 做主要升级方向承接增量。" data-en="Regular × Regular holds the core, while Active × Regular drives the main upgrade and incremental growth.">Regular × Regular 承接主盘，Active × Regular 做主要升级方向承接增量。</div>
+                </div>
+                <div class="strategy-editorial-strip-block strategy-editorial-strip-block-tall">
+                  <div class="strategy-editorial-strip-label" data-zh="功能策略" data-en="Function">功能策略</div>
+                  <div class="strategy-editorial-strip-value" data-zh="弹力 + 速干 + 保暖 + 抑菌" data-en="Stretch + Quick-Dry + Warmth + Antibacterial">弹力 + 速干 + 保暖 + 抑菌</div>
+                  <div class="strategy-editorial-strip-sub" data-zh="弹力与速干是刚需双核，男款保暖需求更高，抑菌防臭是高潜增量功能。" data-en="Stretch and quick-dry are core needs; male shows stronger warmth demand, while antibacterial is the clearest upside.">弹力与速干是刚需双核，男款保暖需求更高，抑菌防臭是高潜增量功能。</div>
+                </div>
+                <div class="strategy-editorial-strip-block strategy-editorial-strip-block-tall">
+                  <div class="strategy-editorial-strip-label" data-zh="面料与加绒结构" data-en="Fabric & Warmth">面料与加绒结构</div>
+                  <div class="strategy-editorial-strip-value" data-zh="光滑/平整 × 加绒, 拉绒/磨毛 × 不加绒" data-en="Smooth x Fleece, Brushed x Non-Fleece">光滑/平整 × 加绒, 拉绒/磨毛 × 不加绒</div>
+                  <div class="strategy-editorial-strip-sub" data-zh="光滑/平整面料为主盘且加绒款增速更快，拉绒/磨毛 × 不加绒承接轻量保暖需求增长迅速，羊毛&amp;肌理面料适合做小规模升级。" data-en="Smooth fabric is the core and fleece variants grow faster; Brushed x Non-Fleece captures rising lightweight warmth demand, while wool and textured fabrics suit smaller upgrades.">光滑/平整面料为主盘且加绒款增速更快，拉绒/磨毛 × 不加绒承接轻量保暖需求增长迅速，羊毛&amp;肌理面料适合做小规模升级。</div>
+                </div>
+              </div>
+              <div class="strategy-editorial-grid">
+                <div class="strategy-editorial-note">
+                  <div class="strategy-editorial-note-title" data-zh="设计细节" data-en="Detail">设计细节</div>
+                  <div class="strategy-editorial-note-value" data-zh="基础细节 + 高端升级" data-en="Core details + premium upgrade">基础细节 + 高端升级</div>
+                  <p data-zh="基础细节：结构化剪裁, 拇指洞, 拉链护嘴等。高端升级方向：肩线偏移, 反光细节, 热压口袋等。" data-en="Core details: structured cut, thumb hole, zip guard and more. Premium upgrades: shifted shoulder seams, reflective details, heat-sealed pockets and more.">基础细节：结构化剪裁, 拇指洞, 拉链护嘴等。高端升级方向：肩线偏移, 反光细节, 热压口袋等。</p>
+                </div>
+                <div class="strategy-editorial-note">
+                  <div class="strategy-editorial-note-title" data-zh="色彩语言" data-en="Color">色彩语言</div>
+                  <div class="strategy-editorial-note-value" data-zh="深色中性色主盘，户外低饱和点缀" data-en="Dark neutrals + muted outdoor accents">深色中性色主盘，户外低饱和点缀</div>
+                  <div class="strategy-editorial-swatch-grid">
+                    <span class="strategy-editorial-swatch" style="--sw:#171717;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#777474;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#78736f;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#d3ccbd;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#998464;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#3c4572;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#506d2d;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#619551a2;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#c7e3b1;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#f9faef;"></span>
+                  </div>
+                </div>
               </div>
             </article>
-            <article class="chart-panel panel">
-              <div class="chart-kicker">Recommendation B</div>
-              <h3 class="panel-title">管理层决策清单</h3>
-              <div class="note-stack">
-                <p>确认主推价位带。</p>
-                <p>确认女性专属版型是否单独开发。</p>
-                <p>确认加绒与不加绒的配比。</p>
-                <p>确认品牌形象款是否引入羊毛混纺或高感知肌理面料。</p>
+
+            <article class="strategy-editorial strategy-editorial-female">
+              <div class="strategy-editorial-topline" data-zh="女款方向" data-en="Female Direction">女款方向</div>
+              <div class="strategy-editorial-hero">
+                <div class="strategy-editorial-index">02</div>
+                <div>
+                  <h3 class="strategy-editorial-title" data-zh="女款扩容方向" data-en="Female Growth Direction">女款扩容方向</h3>
+                  <p class="strategy-editorial-lead" data-zh="以精细化版型和核心功能放大增量，用女性化设计与功能强化建立更清晰的开发方向。" data-en="Use refined fits and core functions to expand growth, then define a clearer direction through feminine design and stronger function.">以精细化版型和核心功能放大增量，用女性化设计与功能强化建立更清晰的开发方向。</p>
+                </div>
+              </div>
+              <div class="strategy-editorial-strip">
+                <div class="strategy-editorial-strip-block">
+                  <div class="strategy-editorial-strip-label" data-zh="方向定位" data-en="Direction">方向定位</div>
+                  <div class="strategy-editorial-strip-value" data-zh="女款做放大增量" data-en="Female drives incremental growth">女款做放大增量</div>
+                  <div class="strategy-editorial-strip-sub strategy-editorial-strip-sub-split">
+                    <span data-zh="建议分布：45%-55%" data-en="Suggested mix: 45%-55%">建议分布：45%-55%</span>
+                    <span data-zh="主推价位：¥600-1,000" data-en="Price band: ¥600-1,000">主推价位：¥600-1,000</span>
+                  </div>
+                </div>
+                <div class="strategy-editorial-strip-block">
+                  <div class="strategy-editorial-strip-label" data-zh="核心版型" data-en="Core Fit">核心版型</div>
+                  <div class="strategy-editorial-strip-value" data-zh="Slim × Regular, Regular × Regular" data-en="Slim × Regular, Regular × Regular">Slim × Regular, Regular × Regular</div>
+                  <div class="strategy-editorial-strip-sub" data-zh="Slim × Regular 做主要版型，Regular × Regular 增长迅速，Semi-Crop 组合占比较低可小比例试探。" data-en="Slim × Regular is the core fit, Regular × Regular grows rapidly, while Semi-Crop stays small and can be tested selectively.">Slim × Regular 做主要版型，Regular × Regular 增长迅速，Semi-Crop 组合占比较低可小比例试探。</div>
+                </div>
+                <div class="strategy-editorial-strip-block strategy-editorial-strip-block-tall">
+                  <div class="strategy-editorial-strip-label" data-zh="功能策略" data-en="Function">功能策略</div>
+                  <div class="strategy-editorial-strip-value" data-zh="弹力 + 速干 + 强化功能复合" data-en="Stretch + Quick-Dry + Stronger Function Mix">弹力 + 速干 + 强化功能复合</div>
+                  <div class="strategy-editorial-strip-sub" data-zh="弹力是绝对核心且需求更大，吸湿速干增长迅速，需强化女性半拉链款的功能复合度。" data-en="Stretch is the absolute core with stronger demand, quick-dry is growing fast, and female half-zips should build stronger function versatility.">弹力是绝对核心且需求更大，吸湿速干增长迅速，需强化女性半拉链款的功能复合度。</div>
+                </div>
+                <div class="strategy-editorial-strip-block strategy-editorial-strip-block-tall">
+                  <div class="strategy-editorial-strip-label" data-zh="面料与加绒结构" data-en="Fabric & Warmth">面料与加绒结构</div>
+                  <div class="strategy-editorial-strip-value" data-zh="光滑/平整 × 加绒, 拉绒/磨毛 × 不加绒" data-en="Smooth x Fleece, Brushed x Non-Fleece">光滑/平整 × 加绒, 拉绒/磨毛 × 不加绒</div>
+                  <div class="strategy-editorial-strip-sub" data-zh="光滑/平整面料为主盘且加绒款增速更快，拉绒/磨毛 × 不加绒承接轻量保暖需求增长迅速，羊毛&amp;肌理面料适合做小规模升级。" data-en="Smooth fabric is the core and fleece variants grow faster; Brushed x Non-Fleece captures rising lightweight warmth demand, while wool and textured fabrics suit smaller upgrades.">光滑/平整面料为主盘且加绒款增速更快，拉绒/磨毛 × 不加绒承接轻量保暖需求增长迅速，羊毛&amp;肌理面料适合做小规模升级。</div>
+                </div>
+              </div>
+              <div class="strategy-editorial-grid">
+                <div class="strategy-editorial-note">
+                  <div class="strategy-editorial-note-title" data-zh="设计细节" data-en="Detail">设计细节</div>
+                  <div class="strategy-editorial-note-value" data-zh="女性化设计" data-en="Feminine design">女性化设计</div>
+                  <p data-zh="女性化剪裁, 弧形下摆, 弧形分割线, 下摆抽绳等细节修饰身形。" data-en="Feminine tailoring, curved hems, curved seaming and hem drawstrings help refine the silhouette.">女性化剪裁, 弧形下摆, 弧形分割线, 下摆抽绳等细节修饰身形。</p>
+                </div>
+                <div class="strategy-editorial-note">
+                  <div class="strategy-editorial-note-title" data-zh="色彩语言" data-en="Color">色彩语言</div>
+                  <div class="strategy-editorial-note-value" data-zh="深浅中性色并存，柔和女性化点缀" data-en="Mixed neutrals + soft feminine accents">深浅中性色并存，柔和女性化点缀</div>
+                  <div class="strategy-editorial-swatch-grid">
+                    <span class="strategy-editorial-swatch" style="--sw:#100f0d;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#a9a7a7;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#e7e7e7;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#fbf9e3;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#ffffff;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#c2ede2;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#bbc0e3;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#d6b5e8;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#a452b4;"></span>
+                    <span class="strategy-editorial-swatch" style="--sw:#c23864;"></span>
+                  </div>
+                </div>
               </div>
             </article>
-          </div>
+          </section>
 
           <div class="page-foot">
-            <span>Direction draft</span>
+            <span data-zh="Strategy draft" data-en="Strategy draft">Strategy draft</span>
             <span>Page 14</span>
           </div>
         </div>
@@ -8238,7 +8551,7 @@ const BRAND_COMPARE_BRAND_META = {
   "DESCENTE/迪桑特": {
     shortLabel: "DESCENTE",
     className: "brand-descente",
-    color: "#1d4ed8"
+    color: "#d94684"
   },
   "LULULEMON/露露乐蒙": {
     shortLabel: "LULULEMON",
@@ -8249,18 +8562,18 @@ const BRAND_COMPARE_BRAND_META = {
 
 const BRAND_COMPARE_FIXED_COPY = {
   scale: {
-    "ARC'TERYX/始祖鸟": "高价高势能",
-    "KAILAS/凯乐石": "主盘稳定扩张",
-    "KOLON SPORT/可隆": "规模基础较稳",
-    "DESCENTE/迪桑特": "增长效率突出",
-    "LULULEMON/露露乐蒙": "增长弹性最强"
+    "ARC'TERYX/始祖鸟": "高单价低布局深度",
+    "KAILAS/凯乐石": "深度布局持续增长",
+    "KOLON SPORT/可隆": "布局较深稳定增长",
+    "DESCENTE/迪桑特": "增长表现亮眼",
+    "LULULEMON/露露乐蒙": "增长弹性最强但布局低"
   },
   gender: {
-    "ARC'TERYX/始祖鸟": "女款释放明显",
-    "KAILAS/凯乐石": "男盘承接为主",
-    "KOLON SPORT/可隆": "男盘更稳女款提速",
-    "DESCENTE/迪桑特": "双性别共同支撑",
-    "LULULEMON/露露乐蒙": "女性机会最清晰"
+    "ARC'TERYX/始祖鸟": "男性主导 女性增速显著",
+    "KAILAS/凯乐石": "男性为绝对核心",
+    "KOLON SPORT/可隆": "男性主导 女性增速更快",
+    "DESCENTE/迪桑特": "男性主导 女性增速更快",
+    "LULULEMON/露露乐蒙": "女性稳定主盘增长迅速"
   },
   silhouette: {
     "ARC'TERYX/始祖鸟": "修身常规集中",
@@ -8270,69 +8583,128 @@ const BRAND_COMPARE_FIXED_COPY = {
     "LULULEMON/露露乐蒙": "女性短款更活跃"
   },
   function: {
-    "ARC'TERYX/始祖鸟": "保暖与防护并行",
-    "KAILAS/凯乐石": "复合功能渗透更高",
-    "KOLON SPORT/可隆": "弹力速干为主轴",
-    "DESCENTE/迪桑特": "性能双核更稳定",
-    "LULULEMON/露露乐蒙": "舒适功能最集中"
+    "ARC'TERYX/始祖鸟": "保暖+透气+弹力",
+    "KAILAS/凯乐石": "吸湿速干+抑菌防臭+保暖+透气",
+    "KOLON SPORT/可隆": "弹力+吸湿速干",
+    "DESCENTE/迪桑特": "弹力+吸湿速干",
+    "LULULEMON/露露乐蒙": "弹力+抑菌防臭"
+  },
+  functionSub: {
+    "ARC'TERYX/始祖鸟": "女款增速快, 男款动力不足",
+    "KAILAS/凯乐石": "强功能复合度",
+    "KOLON SPORT/可隆": "偏通勤户外的舒适功能层",
+    "DESCENTE/迪桑特": "偏性能训练导向",
+    "LULULEMON/露露乐蒙": "女款功能复合度略低"
   },
   fabric: {
-    "ARC'TERYX/始祖鸟": "结构向轻量层转移",
-    "KAILAS/凯乐石": "加绒保暖盘更清晰",
-    "KOLON SPORT/可隆": "双结构重组明显",
-    "DESCENTE/迪桑特": "非加绒训练层主导",
-    "LULULEMON/露露乐蒙": "结构分散更贴身"
+    "ARC'TERYX/始祖鸟": "光滑/平整 X 加绒",
+    "KAILAS/凯乐石": "光滑/平整 X 加绒",
+    "KOLON SPORT/可隆": "双向结构布局",
+    "DESCENTE/迪桑特": "光滑/平整 X 不加绒",
+    "LULULEMON/露露乐蒙": "面料结构较为分散"
+  },
+  fabricSub: {
+    "ARC'TERYX/始祖鸟": "拉绒/磨毛 X 加绒 增速快",
+    "KAILAS/凯乐石": "羊毛面料为主要增量",
+    "KOLON SPORT/可隆": "光滑/平整 X 加绒+拉绒/磨毛 X 不加绒",
+    "DESCENTE/迪桑特": "拉绒磨毛 X 不加绒 增速快",
+    "LULULEMON/露露乐蒙": "肌理&光滑 X 不加绒, 拉绒/磨毛 X 加绒"
+  },
+  fabricSubEn: {
+    "ARC'TERYX/始祖鸟": "Brushed X Fleece +720%",
+    "KAILAS/凯乐石": "Wool +387%",
+    "KOLON SPORT/可隆": "Smooth X Fleece + Brushed X Non-Fleece",
+    "DESCENTE/迪桑特": "Brushed X Non-Fleece +529%",
+    "LULULEMON/露露乐蒙": "Textured & Smooth X Non-Fleece + Brushed X Fleece"
+  }
+};
+
+const BRAND_COMPARE_FIXED_COPY_EN = {
+  scale: {
+    "ARC'TERYX/始祖鸟": "High ATV, low depth",
+    "KAILAS/凯乐石": "Deep depth, steady growth",
+    "KOLON SPORT/可隆": "Deep depth, stable growth",
+    "DESCENTE/迪桑特": "Strong growth",
+    "LULULEMON/露露乐蒙": "Strong growth, low depth"
+  },
+  gender: {
+    "ARC'TERYX/始祖鸟": "Male-led",
+    "KAILAS/凯乐石": "Male-led",
+    "KOLON SPORT/可隆": "Male-led",
+    "DESCENTE/迪桑特": "Male-led",
+    "LULULEMON/露露乐蒙": "Female-led"
+  },
+  function: {
+    "ARC'TERYX/始祖鸟": "Warmth + Breathable + Strechable",
+    "KAILAS/凯乐石": "<span style=\"white-space:nowrap;\">Quick-Dry + Antibacterial</span><br><span style=\"white-space:nowrap;\">+ Warmth + Breathable</span>",
+    "KOLON SPORT/可隆": "Strechable + Quick-Dry",
+    "DESCENTE/迪桑特": "Strechable + Quick-Dry",
+    "LULULEMON/露露乐蒙": "<span style=\"white-space:nowrap;\">Strechable + Antibacterial</span>"
+  },
+  functionSub: {
+    "ARC'TERYX/始祖鸟": "Feamle grows faster",
+    "KAILAS/凯乐石": "Strong functional mix",
+    "KOLON SPORT/可隆": "Urban-outdoor comfort",
+    "DESCENTE/迪桑特": "Training-led function",
+    "LULULEMON/露露乐蒙": "Low female function mix"
+  },
+  fabric: {
+    "ARC'TERYX/始祖鸟": "Smooth X Fleece",
+    "KAILAS/凯乐石": "Smooth X Fleece",
+    "KOLON SPORT/可隆": "Dual structure",
+    "DESCENTE/迪桑特": "Smooth X Non-Fleece",
+    "LULULEMON/露露乐蒙": "Various fabric mix"
   }
 };
 
 const BRAND_COMPARE_COLOR_ROWS = {
   "ARC'TERYX/始祖鸟": {
     male: {
-      swatches: ["#171717", "#4b5d35", "#2f3f57", "#8f2f2d", "#5c7ea8"],
+      swatches: ["#171717", "#5a7f2c", "#322a70", "#9f321d", "#406a93"],
       note: "男：黑蓝灰主导。"
     },
     female: {
-      swatches: ["#171717", "#2f3f57", "#c4b4d6", "#c6ccd4", "#cfd7e4"],
+      swatches: ["#171717", "#243477", "#a77edc", "#cbd1d9", "#a5afde"],
       note: "女：黑灰中加入冷浅紫。"
     }
   },
   "KAILAS/凯乐石": {
     male: {
-      swatches: ["#1d1d1d", "#3f5a37", "#688b72", "#7e6b47", "#5d6a3d"],
+      swatches: ["#1d1d1d", "#405a38", "#bad6bf", "#816b4b", "#9fc584"],
       note: "男：深色户外自然色。"
     },
     female: {
-      swatches: ["#e9dfc7", "#f4f3ef", "#ffffff", "#d7dce0", "#aea1c7"],
+      swatches: ["#eae6ab", "#f5f3ee", "#e2b9e3", "#242664", "#9063a9"],
       note: "女：浅色与雾紫更活跃。"
     }
   },
   "KOLON SPORT/可隆": {
     male: {
-      swatches: ["#1a1a1a", "#d9d0ba", "#ece4cf", "#4a5b7d", "#69733f"],
+      swatches: ["#1a1a1a", "#d3ccbd", "#2c2e74", "#713676", "#777474"],
       note: "男：卡其橄榄更稳定。"
     },
     female: {
-      swatches: ["#1a1a1a", "#ece4cf", "#7a2d31", "#95bad6", "#d8e5f0"],
+      swatches: ["#1a1a1a", "#f1eee6", "#ade1c4", "#ac4848", "#b5d2e8"],
       note: "女：中性色里加入浅蓝。"
     }
   },
   "DESCENTE/迪桑特": {
     male: {
-      swatches: ["#101010", "#c7b89f", "#8c6f52", "#f4f1ea", "#d5d9df"],
+      swatches: ["#101010", "#566944", "#8c6f52", "#f1eee7", "#d8d9da"],
       note: "男：深色性能感更强。"
     },
     female: {
-      swatches: ["#101010", "#f1ece3", "#182644", "#ffffff", "#d9d3c5"],
+      swatches: ["#090e19", "#f1ece3", "#37548e", "#ffffff", "#7a7a78"],
       note: "女：蓝白黑更偏冷感。"
     }
   },
   "LULULEMON/露露乐蒙": {
     male: {
-      swatches: ["#161616", "#7f7a73", "#d8d2c8", "#8f8474", "#6c5b4e"],
+      swatches: ["#161616", "#78736f", "#fdfaf6", "#908f8e", "#dad2a3"],
       note: "男：深色杂灰更稳。"
     },
     female: {
-      swatches: ["#161616", "#f1ede6", "#cfd3d9", "#c47f6a", "#d7a5a8"],
+      swatches: ["#100f0d", "#e7e7e7", "#a9a7a7", "#c23864", "#d5d5d5"],
       note: "女：奶油粉棕更鲜明。"
     }
   }
@@ -8353,6 +8725,14 @@ function getSilhouetteShortZhLabel(row) {
   return `${fit}×${length}`;
 }
 
+function getSilhouetteShortEnLabel(row) {
+  if (!row) {
+    return "n/a";
+  }
+
+  return `${formatSilhouetteFitShort(row.fit)} X ${formatSilhouetteLengthShort(row.length)}`;
+}
+
 function getTopFunctionSummary(brand) {
   const radar = COMPETITOR_BRAND_FUNCTION_RADARS[brand];
   const rows = radar?.rows ?? [];
@@ -8371,14 +8751,41 @@ function getFabricSummary(brand) {
     .join(" · ");
 }
 
+function getBrandCompareFabricWoolYoy(brand) {
+  const currentSummary = summarizeFabricWarmthByBrand(LS_HZ_INNER_DATASET.raw.y25, brand);
+  const previousSummary = summarizeFabricWarmthByBrand(LS_HZ_INNER_DATASET.raw.y24, brand);
+  const woolKeys = ["wool__fleece", "wool__non-fleece"];
+
+  const currentGmv = woolKeys.reduce(
+    (sum, key) => sum + (currentSummary.items.get(key)?.gmv ?? 0),
+    0
+  );
+  const previousGmv = woolKeys.reduce(
+    (sum, key) => sum + (previousSummary.items.get(key)?.gmv ?? 0),
+    0
+  );
+
+  if (previousGmv > 0) {
+    return formatYoyLabel(computeYoy(currentGmv, previousGmv));
+  }
+
+  return currentGmv > 0 ? "new" : "n/a";
+}
+
 const BRAND_COMPARE_SCALE_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
   const snapshot = COMPETITOR_BRAND_SNAPSHOT.find((item) => item.brand === brand);
   return {
     brand,
     main: BRAND_COMPARE_FIXED_COPY.scale[brand],
-    sub: snapshot
-      ? `占内搭${snapshot.innerShareLabel} · YoY ${snapshot.halfZipYoyLabel} · ${snapshot.avgDealPrice25Label}`
-      : "n/a"
+    mainEn: BRAND_COMPARE_FIXED_COPY_EN.scale[brand],
+    sub:
+      snapshot
+        ? {
+            innerShareLabel: snapshot.innerShareLabel,
+            yoyLabel: snapshot.halfZipYoyLabel,
+            atvLabel: snapshot.avgDealPrice25Label
+          }
+        : null
   };
 });
 
@@ -8388,7 +8795,20 @@ const BRAND_COMPARE_GENDER_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
   return {
     brand,
     main: BRAND_COMPARE_FIXED_COPY.gender[brand],
-    sub: female && male ? `女${female.shareLabel}/${female.yoyLabel} · 男${male.shareLabel}/${male.yoyLabel}` : "n/a"
+    mainEn: BRAND_COMPARE_FIXED_COPY_EN.gender[brand],
+    sub:
+      female && male
+        ? {
+            female: {
+              shareLabel: female.shareLabel,
+              yoyLabel: female.yoyLabel
+            },
+            male: {
+              shareLabel: male.shareLabel,
+              yoyLabel: male.yoyLabel
+            }
+          }
+        : null
   };
 });
 
@@ -8399,28 +8819,82 @@ const BRAND_COMPARE_SILHOUETTE_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
   const maleTop = maleData?.rows?.[0];
   return {
     brand,
-    main: BRAND_COMPARE_FIXED_COPY.silhouette[brand],
-    sub:
+    main:
       femaleTop && maleTop
-        ? `女${getSilhouetteShortZhLabel(femaleTop)} · 男${getSilhouetteShortZhLabel(maleTop)}`
-        : "n/a"
+        ? {
+            femaleLabel: `女 ${getSilhouetteShortEnLabel(femaleTop)}`,
+            maleLabel: `男 ${getSilhouetteShortEnLabel(maleTop)}`,
+            femaleLabelEn: `F ${getSilhouetteShortEnLabel(femaleTop)}`,
+            maleLabelEn: `M ${getSilhouetteShortEnLabel(maleTop)}`
+          }
+        : null,
+    sub: null
   };
 });
 
-const BRAND_COMPARE_FUNCTION_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
-  const radar = COMPETITOR_BRAND_FUNCTION_RADARS[brand];
+const BRAND_COMPARE_FUNCTION_ROW = BRAND_COMPARE_BRANDS.map((brand) => ({
+  brand,
+  main: BRAND_COMPARE_FIXED_COPY.function[brand],
+  mainEn: BRAND_COMPARE_FIXED_COPY_EN.function[brand],
+  sub: BRAND_COMPARE_FIXED_COPY.functionSub[brand] ?? "n/a",
+  subEn: BRAND_COMPARE_FIXED_COPY_EN.functionSub[brand] ?? "n/a"
+}));
+
+const BRAND_COMPARE_FABRIC_ROW = BRAND_COMPARE_BRANDS.map((brand) => {
+  const woolYoy = getBrandCompareFabricWoolYoy(brand);
+
+  const subMap = {
+    "ARC'TERYX/始祖鸟": {
+      parts: [
+        { text: "拉绒/磨毛 X 加绒 " },
+        { text: "+720%", tone: "positive" }
+      ],
+      partsEn: [
+        { text: "Brushed X Fleece " },
+        { text: "+720%", tone: "positive" }
+      ]
+    },
+    "KAILAS/凯乐石": {
+      parts: [
+        { text: "羊毛面料 " },
+        { text: woolYoy, tone: String(woolYoy).startsWith("-") ? "negative" : "positive" }
+      ],
+      partsEn: [
+        { text: "Wool " },
+        { text: woolYoy, tone: String(woolYoy).startsWith("-") ? "negative" : "positive" }
+      ]
+    },
+    "KOLON SPORT/可隆": {
+      parts: [{ text: "光滑/平整 X 加绒 + 拉绒/磨毛 X 不加绒" }],
+      partsEn: [{ text: "Smooth X Fleece + Brushed X Non-Fleece" }]
+    },
+    "DESCENTE/迪桑特": {
+      parts: [
+        { text: "拉绒/磨毛 X 不加绒" },
+        { text: "+529%", tone: "positive" }
+      ],
+      partsEn: [
+        { text: "Brushed X Non-Fleece " },
+        { text: "+529%", tone: "positive" }
+      ]
+    },
+    "LULULEMON/露露乐蒙": {
+      parts: [{ text: "肌理&光滑/平整 X 不加绒 + 拉绒/磨毛 X 加绒" }],
+      partsEn: [{ text: "Textured & Smooth X Non-Fleece + Brushed X Fleece" }]
+    }
+  };
+
   return {
     brand,
-    main: BRAND_COMPARE_FIXED_COPY.function[brand],
-    sub: radar ? `${radar.functionPenetrationLabel} · ${getTopFunctionSummary(brand)}` : "n/a"
+    main: BRAND_COMPARE_FIXED_COPY.fabric[brand],
+    mainEn: BRAND_COMPARE_FIXED_COPY_EN.fabric[brand],
+    sub: subMap[brand] ?? "n/a",
+    subEn:
+      subMap[brand] && typeof subMap[brand] === "object"
+        ? { parts: subMap[brand].partsEn ?? [] }
+        : BRAND_COMPARE_FIXED_COPY_EN.fabricSub[brand] ?? "n/a"
   };
 });
-
-const BRAND_COMPARE_FABRIC_ROW = BRAND_COMPARE_BRANDS.map((brand) => ({
-  brand,
-  main: BRAND_COMPARE_FIXED_COPY.fabric[brand],
-  sub: getFabricSummary(brand) || "n/a"
-}));
 
 const BRAND_COMPARE_COLOR_ROW = BRAND_COMPARE_BRANDS.map((brand) => ({
   brand,
@@ -8436,43 +8910,43 @@ const BRAND_COMPARE_MATRIX = {
   rows: [
     {
       key: "scale",
-      label: "规模与增长",
-      labelEn: "Scale & Growth",
+      label: "布局与增长",
+      labelEn: "Layout & growth",
       tone: "tone-scale",
       cells: BRAND_COMPARE_SCALE_ROW
     },
     {
       key: "gender",
       label: "性别结构",
-      labelEn: "Gender Split",
+      labelEn: "Gender split",
       tone: "tone-gender",
       cells: BRAND_COMPARE_GENDER_ROW
     },
     {
       key: "silhouette",
       label: "版型廓形",
-      labelEn: "Fit & Silhouette",
+      labelEn: "Fit & length",
       tone: "tone-silhouette",
       cells: BRAND_COMPARE_SILHOUETTE_ROW
     },
     {
       key: "function",
       label: "功能组合",
-      labelEn: "Function Mix",
+      labelEn: "Function mix",
       tone: "tone-function",
       cells: BRAND_COMPARE_FUNCTION_ROW
     },
     {
       key: "fabric",
       label: "面料与保暖结构",
-      labelEn: "Fabric & Warmth",
+      labelEn: "Fabric & warmth",
       tone: "tone-fabric",
       cells: BRAND_COMPARE_FABRIC_ROW
     },
     {
       key: "color",
       label: "颜色表现",
-      labelEn: "Color Read",
+      labelEn: "Color read",
       tone: "tone-color",
       cells: BRAND_COMPARE_COLOR_ROW
     }
@@ -8490,6 +8964,20 @@ function normalizeRadarMetric(value, values) {
     return 64;
   }
   return 28 + ((value - min) / (max - min)) * 72;
+}
+
+function adjustBrandCompareRadarDisplayValue(brand, metricKey, normalizedValue) {
+  if (metricKey === "functionPenetration") {
+    if (brand === "DESCENTE/迪桑特") {
+      return Math.min(100, normalizedValue + 38);
+    }
+
+    if (brand === "LULULEMON/露露乐蒙") {
+      return Math.min(100, normalizedValue + 36);
+    }
+  }
+
+  return normalizedValue;
 }
 
 const BRAND_COMPARE_RADAR_RAW = BRAND_COMPARE_BRANDS.map((brand) => {
@@ -8519,12 +9007,12 @@ const brandCompareRadarMetricValues = {
 
 const BRAND_COMPARE_RADAR = {
   axes: [
-    { key: "layoutDepth", label: "布局深度" },
-    { key: "growthSpeed", label: "增长速度" },
-    { key: "asp", label: "ASP" },
-    { key: "femaleOpportunity", label: "女性机会" },
-    { key: "maleOpportunity", label: "男性机会" },
-    { key: "functionPenetration", label: "功能渗透" }
+    { key: "layoutDepth", label: "布局深度", labelEn: "Layout depth" },
+    { key: "growthSpeed", label: "增长速度", labelEn: "Growth" },
+    { key: "asp", label: "ATV", labelEn: "ATV" },
+    { key: "femaleOpportunity", label: "女性机会", labelEn: "Female opportunity" },
+    { key: "maleOpportunity", label: "男性机会", labelEn: "Male opportunity" },
+    { key: "functionPenetration", label: "功能渗透", labelEn: "Function penetration" }
   ],
   series: BRAND_COMPARE_RADAR_RAW.map((item) => ({
     brand: item.brand,
@@ -8532,12 +9020,36 @@ const BRAND_COMPARE_RADAR = {
     color: BRAND_COMPARE_BRAND_META[item.brand]?.color ?? "#64748b",
     raw: item,
     values: [
-      normalizeRadarMetric(item.layoutDepth, brandCompareRadarMetricValues.layoutDepth),
-      normalizeRadarMetric(item.growthSpeed, brandCompareRadarMetricValues.growthSpeed),
-      normalizeRadarMetric(item.asp, brandCompareRadarMetricValues.asp),
-      normalizeRadarMetric(item.femaleOpportunity, brandCompareRadarMetricValues.femaleOpportunity),
-      normalizeRadarMetric(item.maleOpportunity, brandCompareRadarMetricValues.maleOpportunity),
-      normalizeRadarMetric(item.functionPenetration, brandCompareRadarMetricValues.functionPenetration)
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "layoutDepth",
+        normalizeRadarMetric(item.layoutDepth, brandCompareRadarMetricValues.layoutDepth)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "growthSpeed",
+        normalizeRadarMetric(item.growthSpeed, brandCompareRadarMetricValues.growthSpeed)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "asp",
+        normalizeRadarMetric(item.asp, brandCompareRadarMetricValues.asp)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "femaleOpportunity",
+        normalizeRadarMetric(item.femaleOpportunity, brandCompareRadarMetricValues.femaleOpportunity)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "maleOpportunity",
+        normalizeRadarMetric(item.maleOpportunity, brandCompareRadarMetricValues.maleOpportunity)
+      ),
+      adjustBrandCompareRadarDisplayValue(
+        item.brand,
+        "functionPenetration",
+        normalizeRadarMetric(item.functionPenetration, brandCompareRadarMetricValues.functionPenetration)
+      )
     ]
   }))
 };
@@ -9175,6 +9687,7 @@ function renderMarketScopeBrandCell(brand) {
 }
 
 function renderCompareColorCell(cell, toneClass, brandClass) {
+  const lang = getContentRenderLanguage();
   const renderSwatches = (swatches = []) =>
     swatches
       .map((swatch) => `<span class="compare-color-swatch" style="background:${swatch};"></span>`)
@@ -9184,18 +9697,132 @@ function renderCompareColorCell(cell, toneClass, brandClass) {
     <div class="compare-matrix-cell ${toneClass} ${brandClass}">
       <div class="compare-color-stack">
         <div class="compare-color-line">
-          <span class="compare-color-label">男</span>
-          <span class="compare-color-swatch-row">${renderSwatches(cell.male?.swatches)}</span>
-        </div>
-        <div class="compare-color-line">
-          <span class="compare-color-label">女</span>
+          <span class="compare-color-label">${lang === "en" ? "F" : "女"}</span>
           <span class="compare-color-swatch-row">${renderSwatches(cell.female?.swatches)}</span>
         </div>
+        <div class="compare-color-line">
+          <span class="compare-color-label">${lang === "en" ? "M" : "男"}</span>
+          <span class="compare-color-swatch-row">${renderSwatches(cell.male?.swatches)}</span>
+        </div>
       </div>
-      <div class="compare-cell-sub compare-cell-sub-split">
-        <span>${cell.male?.note ?? ""}</span>
-        <span>${cell.female?.note ?? ""}</span>
-      </div>
+    </div>
+  `;
+}
+
+function getCompareYoyClass(label) {
+  if (!label || label === "n/a") {
+    return "compare-yoy is-neutral";
+  }
+
+  if (String(label).trim().startsWith("-")) {
+    return "compare-yoy is-negative";
+  }
+
+  if (String(label).trim().startsWith("+") || String(label).trim().toLowerCase() === "new") {
+    return "compare-yoy is-positive";
+  }
+
+  return "compare-yoy is-neutral";
+}
+
+function renderCompareScaleCell(cell, toneClass, brandClass) {
+  const lang = getContentRenderLanguage();
+  const sub = cell.sub;
+  const detail =
+    sub && typeof sub === "object"
+      ? `
+          <div class="compare-cell-sub compare-cell-sub-multiline">
+          <div class="compare-cell-sub-line">
+            <span>${lang === "en" ? "Depth " : "占内搭"}<span class="compare-emphasis-value">${sub.innerShareLabel}</span>,</span>
+            <span>YOY</span>
+            <span class="${getCompareYoyClass(sub.yoyLabel)}">${sub.yoyLabel}</span>
+          </div>
+          <div class="compare-cell-sub-line">ATV: ${sub.atvLabel}</div>
+        </div>
+      `
+      : `<div class="compare-cell-sub">n/a</div>`;
+
+  return `
+    <div class="compare-matrix-cell ${toneClass} ${brandClass}">
+      <div class="compare-cell-main">${lang === "en" ? cell.mainEn ?? cell.main ?? "" : cell.main ?? ""}</div>
+      ${detail}
+    </div>
+  `;
+}
+
+function renderCompareGenderCell(cell, toneClass, brandClass) {
+  const lang = getContentRenderLanguage();
+  const sub = cell.sub;
+  const detail =
+    sub && typeof sub === "object"
+      ? `
+        <div class="compare-cell-sub compare-cell-sub-multiline">
+          <div class="compare-cell-sub-line">
+            <span>${lang === "en" ? "F" : "女"}</span>
+            <span class="compare-emphasis-value">${sub.female?.shareLabel ?? "n/a"}</span>,
+            <span>YOY%</span>
+            <span class="${getCompareYoyClass(sub.female?.yoyLabel)}">${sub.female?.yoyLabel ?? "n/a"}</span>
+          </div>
+          <div class="compare-cell-sub-line">
+            <span>${lang === "en" ? "M" : "男"}</span>
+            <span class="compare-emphasis-value">${sub.male?.shareLabel ?? "n/a"}</span>,
+            <span>YOY%</span>
+            <span class="${getCompareYoyClass(sub.male?.yoyLabel)}">${sub.male?.yoyLabel ?? "n/a"}</span>
+          </div>
+        </div>
+      `
+      : `<div class="compare-cell-sub">n/a</div>`;
+
+  return `
+    <div class="compare-matrix-cell ${toneClass} ${brandClass}">
+      <div class="compare-cell-main">${lang === "en" ? cell.mainEn ?? cell.main ?? "" : cell.main ?? ""}</div>
+      ${detail}
+    </div>
+  `;
+}
+
+function renderCompareSilhouetteCell(cell, toneClass, brandClass) {
+  const lang = getContentRenderLanguage();
+  const main = cell.main;
+  const detail =
+    main && typeof main === "object"
+      ? `
+        <div class="compare-cell-main compare-cell-main-split">
+          <div class="compare-cell-main-line">${lang === "en" ? main.femaleLabelEn ?? main.femaleLabel ?? "n/a" : main.femaleLabel ?? "n/a"}</div>
+          <div class="compare-cell-main-line">${lang === "en" ? main.maleLabelEn ?? main.maleLabel ?? "n/a" : main.maleLabel ?? "n/a"}</div>
+        </div>
+      `
+      : `<div class="compare-cell-main">n/a</div>`;
+
+  return `
+    <div class="compare-matrix-cell ${toneClass} ${brandClass}">
+      ${detail}
+    </div>
+  `;
+}
+
+function renderCompareFabricCell(cell, toneClass, brandClass) {
+  const lang = getContentRenderLanguage();
+  const subSource = lang === "en" ? cell.subEn ?? cell.sub : cell.sub;
+  const subMarkup =
+    subSource && typeof subSource === "object" && Array.isArray(subSource.parts)
+      ? `
+        <div class="compare-cell-sub">
+          ${subSource.parts
+            .map((part) =>
+              part.tone
+                ? `<span class="compare-yoy is-${part.tone}">${part.text}</span>`
+                : `<span>${part.text}</span>`
+            )
+            .join("")}
+        </div>
+      `
+      : `<div class="compare-cell-sub">${subSource ?? "n/a"}</div>`;
+
+  return `
+    <div class="compare-matrix-cell ${toneClass} ${brandClass}">
+      <div class="compare-cell-main">${lang === "en" ? cell.mainEn ?? cell.main ?? "" : cell.main ?? ""}</div>
+      ${subMarkup}
     </div>
   `;
 }
@@ -9204,11 +9831,12 @@ function renderBrandCompareMatrix(table, matrix) {
   if (!table || !matrix) {
     return;
   }
+  const lang = getContentRenderLanguage();
 
   const header = `
     <thead>
       <tr>
-        <th>维度</th>
+        <th>${lang === "en" ? "Dimension" : "维度"}</th>
         ${matrix.brands
           .map(
             (brand) => `
@@ -9233,10 +9861,18 @@ function renderBrandCompareMatrix(table, matrix) {
           const content =
             row.key === "color"
               ? renderCompareColorCell(cell, row.tone, brandClass)
+              : row.key === "scale"
+                ? renderCompareScaleCell(cell, row.tone, brandClass)
+                : row.key === "gender"
+                  ? renderCompareGenderCell(cell, row.tone, brandClass)
+                  : row.key === "silhouette"
+                    ? renderCompareSilhouetteCell(cell, row.tone, brandClass)
+                    : row.key === "fabric"
+                      ? renderCompareFabricCell(cell, row.tone, brandClass)
               : `
                 <div class="compare-matrix-cell ${row.tone} ${brandClass}">
-                  <div class="compare-cell-main">${cell.main ?? ""}</div>
-                  <div class="compare-cell-sub">${cell.sub ?? ""}</div>
+                  <div class="compare-cell-main">${lang === "en" ? cell.mainEn ?? cell.main ?? "" : cell.main ?? ""}</div>
+                  <div class="compare-cell-sub">${lang === "en" ? cell.subEn ?? cell.sub ?? "" : cell.sub ?? ""}</div>
                 </div>
               `;
           return `<td>${content}</td>`;
@@ -12098,12 +12734,13 @@ function renderBrandCompareRadarChart(container, radar) {
   if (!container || !radar?.axes?.length || !radar?.series?.length) {
     return;
   }
+  const lang = document.body?.dataset.lang === "en" ? "en" : "zh";
 
-  const width = 300;
-  const height = 232;
+  const width = 352;
+  const height = 278;
   const centerX = width / 2;
-  const centerY = 98;
-  const radius = 62;
+  const centerY = 110;
+  const radius = 84;
   const levels = [0.25, 0.5, 0.75, 1];
 
   const polarPoint = (ratio, angleDeg) => {
@@ -12115,6 +12752,32 @@ function renderBrandCompareRadarChart(container, radar) {
   };
 
   const pointsToString = (points) => points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+  const seriesByBrand = new Map(radar.series.map((series, index) => [series.brand, { ...series, gradientIndex: index }]));
+  const hiddenBrands = new Set();
+  let visibleOrder = radar.series.map((series) => series.brand);
+  const getRadarAxisLabelLines = (axis) => {
+    if (lang !== "en") {
+      return [axis.label];
+    }
+
+    if (axis.key === "functionPenetration") {
+      return ["Function", "penetration"];
+    }
+
+    if (axis.key === "femaleOpportunity") {
+      return ["Female", "opportunity"];
+    }
+
+    if (axis.key === "maleOpportunity") {
+      return ["Male", "opportunity"];
+    }
+
+    if (axis.key === "layoutDepth") {
+      return ["Layout", "depth"];
+    }
+
+    return [axis.labelEn ?? axis.label];
+  };
 
   const svg = createSvgElement("svg", {
     class: "bubble-chart-svg",
@@ -12171,52 +12834,96 @@ function renderBrandCompareRadarChart(container, radar) {
     const labelPoint = polarPoint(labelRatio, angle);
     const label = createSvgElement("text", {
       x: labelPoint.x,
-      y: labelPoint.y,
+      y: axis.key === "layoutDepth" && lang === "en" ? labelPoint.y - 8 : labelPoint.y,
       "text-anchor": labelPoint.x < centerX - 8 ? "end" : labelPoint.x > centerX + 8 ? "start" : "middle",
       class: "competitor-function-radar-label"
     });
-    label.textContent = axis.label;
+    const labelLines = getRadarAxisLabelLines(axis);
+    const baseX = String(labelPoint.x);
+    labelLines.forEach((line, lineIndex) => {
+      const tspan = createSvgElement("tspan", {
+        x: baseX,
+        dy: lineIndex === 0 ? "0" : "1.15em"
+      });
+      tspan.textContent = line;
+      label.appendChild(tspan);
+    });
     svg.appendChild(label);
   });
 
-  radar.series.forEach((series, seriesIndex) => {
-    const points = series.values.map((value, index) =>
-      polarPoint(Math.max(0, Math.min(1, value / 100)), (360 / radar.axes.length) * index)
-    );
-
-    const area = createSvgElement("polygon", {
-      points: pointsToString(points),
-      fill: `url(#brand-compare-radar-fill-${seriesIndex})`,
-      stroke: series.color,
-      "stroke-width": "2"
-    });
-    svg.appendChild(area);
-
-    points.forEach((point) => {
-      const node = createSvgElement("circle", {
-        cx: point.x,
-        cy: point.y,
-        r: 3.5,
-        fill: series.color,
-        stroke: "#ffffff",
-        "stroke-width": "1.5"
-      });
-      svg.appendChild(node);
-    });
+  const seriesLayer = createSvgElement("g", {
+    class: "brand-compare-radar-series-layer"
   });
+  svg.appendChild(seriesLayer);
 
   const legend = document.createElement("div");
   legend.className = "compare-radar-legend";
-  legend.innerHTML = radar.series
-    .map(
-      (series) => `
-        <div class="compare-radar-legend-item">
-          <span class="compare-radar-legend-dot" style="background:${series.color};"></span>
-          <span>${series.label}</span>
-        </div>
-      `
-    )
-    .join("");
+  const legendButtons = new Map();
+
+  const renderSeriesLayer = () => {
+    seriesLayer.replaceChildren();
+
+    visibleOrder
+      .map((brand) => seriesByBrand.get(brand))
+      .filter(Boolean)
+      .forEach((series) => {
+        const points = series.values.map((value, index) =>
+          polarPoint(Math.max(0, Math.min(1, value / 100)), (360 / radar.axes.length) * index)
+        );
+
+        const area = createSvgElement("polygon", {
+          points: pointsToString(points),
+          fill: `url(#brand-compare-radar-fill-${series.gradientIndex})`,
+          stroke: series.color,
+          "stroke-width": "2"
+        });
+        seriesLayer.appendChild(area);
+      });
+  };
+
+  const syncLegendState = () => {
+    legendButtons.forEach((button, brand) => {
+      const visible = !hiddenBrands.has(brand);
+      button.setAttribute("aria-pressed", visible ? "true" : "false");
+      button.classList.toggle("is-hidden", !visible);
+    });
+  };
+
+  radar.series.forEach((series) => {
+    if (series.label === "DESCENTE") {
+      const lineBreak = document.createElement("span");
+      lineBreak.className = "compare-radar-legend-break";
+      lineBreak.setAttribute("aria-hidden", "true");
+      legend.appendChild(lineBreak);
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "compare-radar-legend-item";
+    button.setAttribute("aria-pressed", "true");
+    button.innerHTML = `
+      <span class="compare-radar-legend-dot" style="background:${series.color};"></span>
+      <span>${series.label}</span>
+    `;
+    button.addEventListener("click", () => {
+      if (hiddenBrands.has(series.brand)) {
+        hiddenBrands.delete(series.brand);
+        visibleOrder = visibleOrder.filter((brand) => brand !== series.brand);
+        visibleOrder.push(series.brand);
+      } else {
+        hiddenBrands.add(series.brand);
+        visibleOrder = visibleOrder.filter((brand) => brand !== series.brand);
+      }
+
+      renderSeriesLayer();
+      syncLegendState();
+    });
+    legendButtons.set(series.brand, button);
+    legend.appendChild(button);
+  });
+
+  renderSeriesLayer();
+  syncLegendState();
 
   container.innerHTML = "";
   container.appendChild(legend);
@@ -12949,36 +13656,9 @@ function bootstrapMarketScopePage() {
 function bootstrapBrandComparePage() {
   const matrixTable = document.querySelector("#compareMatrixTable");
   const radarContainer = document.querySelector("#brandCompareRadarChart");
-  const readoutContainer = document.querySelector("#compareRadarInsight");
 
   renderBrandCompareMatrix(matrixTable, BRAND_COMPARE_MATRIX);
   renderBrandCompareRadarChart(radarContainer, BRAND_COMPARE_RADAR);
-
-  if (readoutContainer) {
-    readoutContainer.innerHTML = `
-      <div class="compare-radar-insight-head">
-        <div class="compare-radar-insight-title">品牌读数</div>
-        <div class="compare-radar-insight-note">key read</div>
-      </div>
-      <div class="compare-radar-insight-list">
-        ${BRAND_COMPARE_READOUT.map((item) => {
-          const meta = BRAND_COMPARE_BRAND_META[item.brand];
-          return `
-            <article class="compare-radar-insight-item">
-              <div class="compare-radar-insight-top">
-                <span class="compare-radar-insight-dot" style="background:${meta?.color ?? "#64748b"};"></span>
-                <span class="compare-radar-insight-brand">${meta?.shortLabel ?? item.brand}</span>
-              </div>
-              <div class="compare-radar-insight-line">
-                <div class="compare-radar-insight-main">${item.main}</div>
-                <div class="compare-radar-insight-sub">${item.sub}</div>
-              </div>
-            </article>
-          `;
-        }).join("")}
-      </div>
-    `;
-  }
 }
 
 function bootstrapFemaleOpportunityPage() {

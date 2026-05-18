@@ -2660,12 +2660,13 @@ export function renderBrandCompareRadarChart(container, radar) {
   if (!container || !radar?.axes?.length || !radar?.series?.length) {
     return;
   }
+  const lang = document.body?.dataset.lang === "en" ? "en" : "zh";
 
-  const width = 300;
-  const height = 232;
+  const width = 352;
+  const height = 278;
   const centerX = width / 2;
-  const centerY = 98;
-  const radius = 62;
+  const centerY = 110;
+  const radius = 84;
   const levels = [0.25, 0.5, 0.75, 1];
 
   const polarPoint = (ratio, angleDeg) => {
@@ -2677,6 +2678,32 @@ export function renderBrandCompareRadarChart(container, radar) {
   };
 
   const pointsToString = (points) => points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ");
+  const seriesByBrand = new Map(radar.series.map((series, index) => [series.brand, { ...series, gradientIndex: index }]));
+  const hiddenBrands = new Set();
+  let visibleOrder = radar.series.map((series) => series.brand);
+  const getRadarAxisLabelLines = (axis) => {
+    if (lang !== "en") {
+      return [axis.label];
+    }
+
+    if (axis.key === "functionPenetration") {
+      return ["Function", "penetration"];
+    }
+
+    if (axis.key === "femaleOpportunity") {
+      return ["Female", "opportunity"];
+    }
+
+    if (axis.key === "maleOpportunity") {
+      return ["Male", "opportunity"];
+    }
+
+    if (axis.key === "layoutDepth") {
+      return ["Layout", "depth"];
+    }
+
+    return [axis.labelEn ?? axis.label];
+  };
 
   const svg = createSvgElement("svg", {
     class: "bubble-chart-svg",
@@ -2733,52 +2760,96 @@ export function renderBrandCompareRadarChart(container, radar) {
     const labelPoint = polarPoint(labelRatio, angle);
     const label = createSvgElement("text", {
       x: labelPoint.x,
-      y: labelPoint.y,
+      y: axis.key === "layoutDepth" && lang === "en" ? labelPoint.y - 8 : labelPoint.y,
       "text-anchor": labelPoint.x < centerX - 8 ? "end" : labelPoint.x > centerX + 8 ? "start" : "middle",
       class: "competitor-function-radar-label"
     });
-    label.textContent = axis.label;
+    const labelLines = getRadarAxisLabelLines(axis);
+    const baseX = String(labelPoint.x);
+    labelLines.forEach((line, lineIndex) => {
+      const tspan = createSvgElement("tspan", {
+        x: baseX,
+        dy: lineIndex === 0 ? "0" : "1.15em"
+      });
+      tspan.textContent = line;
+      label.appendChild(tspan);
+    });
     svg.appendChild(label);
   });
 
-  radar.series.forEach((series, seriesIndex) => {
-    const points = series.values.map((value, index) =>
-      polarPoint(Math.max(0, Math.min(1, value / 100)), (360 / radar.axes.length) * index)
-    );
-
-    const area = createSvgElement("polygon", {
-      points: pointsToString(points),
-      fill: `url(#brand-compare-radar-fill-${seriesIndex})`,
-      stroke: series.color,
-      "stroke-width": "2"
-    });
-    svg.appendChild(area);
-
-    points.forEach((point) => {
-      const node = createSvgElement("circle", {
-        cx: point.x,
-        cy: point.y,
-        r: 3.5,
-        fill: series.color,
-        stroke: "#ffffff",
-        "stroke-width": "1.5"
-      });
-      svg.appendChild(node);
-    });
+  const seriesLayer = createSvgElement("g", {
+    class: "brand-compare-radar-series-layer"
   });
+  svg.appendChild(seriesLayer);
 
   const legend = document.createElement("div");
   legend.className = "compare-radar-legend";
-  legend.innerHTML = radar.series
-    .map(
-      (series) => `
-        <div class="compare-radar-legend-item">
-          <span class="compare-radar-legend-dot" style="background:${series.color};"></span>
-          <span>${series.label}</span>
-        </div>
-      `
-    )
-    .join("");
+  const legendButtons = new Map();
+
+  const renderSeriesLayer = () => {
+    seriesLayer.replaceChildren();
+
+    visibleOrder
+      .map((brand) => seriesByBrand.get(brand))
+      .filter(Boolean)
+      .forEach((series) => {
+        const points = series.values.map((value, index) =>
+          polarPoint(Math.max(0, Math.min(1, value / 100)), (360 / radar.axes.length) * index)
+        );
+
+        const area = createSvgElement("polygon", {
+          points: pointsToString(points),
+          fill: `url(#brand-compare-radar-fill-${series.gradientIndex})`,
+          stroke: series.color,
+          "stroke-width": "2"
+        });
+        seriesLayer.appendChild(area);
+      });
+  };
+
+  const syncLegendState = () => {
+    legendButtons.forEach((button, brand) => {
+      const visible = !hiddenBrands.has(brand);
+      button.setAttribute("aria-pressed", visible ? "true" : "false");
+      button.classList.toggle("is-hidden", !visible);
+    });
+  };
+
+  radar.series.forEach((series) => {
+    if (series.label === "DESCENTE") {
+      const lineBreak = document.createElement("span");
+      lineBreak.className = "compare-radar-legend-break";
+      lineBreak.setAttribute("aria-hidden", "true");
+      legend.appendChild(lineBreak);
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "compare-radar-legend-item";
+    button.setAttribute("aria-pressed", "true");
+    button.innerHTML = `
+      <span class="compare-radar-legend-dot" style="background:${series.color};"></span>
+      <span>${series.label}</span>
+    `;
+    button.addEventListener("click", () => {
+      if (hiddenBrands.has(series.brand)) {
+        hiddenBrands.delete(series.brand);
+        visibleOrder = visibleOrder.filter((brand) => brand !== series.brand);
+        visibleOrder.push(series.brand);
+      } else {
+        hiddenBrands.add(series.brand);
+        visibleOrder = visibleOrder.filter((brand) => brand !== series.brand);
+      }
+
+      renderSeriesLayer();
+      syncLegendState();
+    });
+    legendButtons.set(series.brand, button);
+    legend.appendChild(button);
+  });
+
+  renderSeriesLayer();
+  syncLegendState();
 
   container.innerHTML = "";
   container.appendChild(legend);
