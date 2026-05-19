@@ -5582,6 +5582,70 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
   }
 }
 
+body.is-inline-editor-enabled .inline-editor-toolbar {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 10000;
+  width: 220px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f2a44;
+  margin-bottom: 8px;
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-actions button {
+  flex: 1;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #1f2a44;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-note {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+body.is-inline-editor-enabled [data-zh][data-en].is-inline-editable {
+  outline: 1px dashed rgba(99, 102, 241, 0.28);
+  outline-offset: 2px;
+  cursor: text;
+  transition: outline-color 0.18s ease, background-color 0.18s ease;
+}
+
+body.is-inline-editor-enabled [data-zh][data-en].is-inline-editable:hover {
+  outline-color: rgba(99, 102, 241, 0.54);
+  background: rgba(99, 102, 241, 0.06);
+}
+
+body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
+  outline: 2px solid rgba(99, 102, 241, 0.72);
+  background: rgba(99, 102, 241, 0.08);
+}
+
 </style>
 </head>
 <body>
@@ -5662,10 +5726,10 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">01</span><span>Competitor Scope</span></div>
-              <h2 class="section-title" data-zh="半拉链长袖在竞品内搭中表现突出" data-en="Half-Zip Long-Sleeve Stands Out in Competitor Innerwear">半拉链长袖在竞品内搭中表现突出</h2>
+              <h2 class="section-title" data-zh="半拉链长袖在竞品内搭中表现突出" data-en="Half-Zip Long-Sleeve Stands Out in Competitor Inner">半拉链长袖在竞品内搭中表现突出</h2>
               <ul class="section-bullets">
-                <li data-zh="竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式。" data-en="Across the competitor sample, half-zip long-sleeve innerwear is growing faster than innerwear overall, making it a growth sub-segment worth close attention.">竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式。</li>
-                <li data-zh="KAILAS、KOLON 在内搭整体中的半拉链长袖布局深度较大，DESCENTE、LULULEMON在该细分款式增长迅速。" data-en="KAILAS and KOLON show deeper half-zip penetration within total innerwear, while DESCENTE and LULULEMON are growing quickly in this sub-segment.">KAILAS、KOLON 在内搭整体中的半拉链长袖布局深度较大，DESCENTE、LULULEMON在该细分款式增长迅速。</li>
+                <li data-zh="竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式。" data-en="Across key competitors, half-zip long-sleeve style is growing faster than inner overall, making it a growth sub-segment worth close attention.">竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式。</li>
+                <li data-zh="KAILAS、KOLON 在内搭整体中的半拉链长袖布局深度较大，DESCENTE、LULULEMON在该细分款式增长迅速。" data-en="KAILAS and KOLON show deeper half-zip penetration within total inner, while DESCENTE and LULULEMON are growing quickly in this sub-segment.">KAILAS、KOLON 在内搭整体中的半拉链长袖布局深度较大，DESCENTE、LULULEMON在该细分款式增长迅速。</li>
               </ul>
             </div>
           </div>
@@ -5679,7 +5743,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
             </article>
             <article class="chart-panel panel">
               <div class="chart-kicker">Brand Landscape</div>
-              <h3 class="panel-title" data-zh="布局深度 x 增长 x 规模" data-en="Distribution x Growth x Scale">布局深度 x 增长 x 规模</h3>
+              <h3 class="panel-title" data-zh="布局深度 x 增长 x 规模" data-en="Layout Depth x Growth x Scale">布局深度 x 增长 x 规模</h3>
               <div id="market-scope-bubble-chart" class="bubble-chart-card"></div>
             </article>
           </div>
@@ -5700,8 +5764,8 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
               <div class="section-kicker"><span class="section-badge">02</span><span>Gender Breakdown</span></div>
               <h2 class="section-title" data-zh="女性款增长表现突出，但整体客单价低于男性款" data-en="Female Grows Faster, but Overall ATV Remains Lower Than Male">女性款增长表现突出，但整体客单价低于男性款</h2>
               <ul class="section-bullets">
-                <li data-zh="关注竞品的半拉链长袖整体由男性主导，但女性增速高于男性：LULULEMON女款占比相对较高且增速快，DESCENTE、ARC'TERYX女款增速显著高于男款，KAILAS仍由男性绝对主导。" data-en="Across key competitors, half-zip long-sleeve inner still male-led overall, but female growth is outpacing male: LULULEMON has a relatively high female share with rapid growth, DESCENTE and ARC'TERYX show female growth far above male, while KAILAS remains overwhelmingly male-led.">关注竞品的半拉链长袖整体由男性主导，但女性增速高于男性：LULULEMON女款占比相对较高且增速快，DESCENTE、ARC'TERYX女款增速显著高于男款，KAILAS仍由男性绝对主导。</li>
-                <li data-zh="各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。" data-en="Female styles are generally priced below male, with ATV mostly in 600-1000RMB range, and ATV of male mostly in 700-1200RMB range.">各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。</li>
+                <li data-zh="关注竞品的半拉链长袖整体由男性主导，但女性增速高于男性：LULULEMON女款占比相对较高且增速快，DESCENTE、ARC'TERYX女款增速显著高于男款，KAILAS仍由男性绝对主导。" data-en="Across key competitors, half-zip long-sleeve inner is still male-led overall, but female growth is outpacing male: LULULEMON has a relatively high female share with rapid growth, DESCENTE and ARC'TERYX show female growth far above male, while KAILAS remains overwhelmingly male-led.">关注竞品的半拉链长袖整体由男性主导，但女性增速高于男性：LULULEMON女款占比相对较高且增速快，DESCENTE、ARC'TERYX女款增速显著高于男款，KAILAS仍由男性绝对主导。</li>
+                <li data-zh="各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。" data-en="Female styles are generally priced below male, with ATV mostly in the 600-1000RMB range, and ATV of male mostly in the 700-1200RMB range.">各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。</li>
               </ul>
             </div>
           </div>
@@ -5714,7 +5778,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
             </article>
             <article class="chart-panel panel gender-price-bubble-panel">
               <div class="chart-kicker">Price Landscape</div>
-              <h3 class="panel-title" data-zh="性别 X 成交价格 X 增长" data-en="Gender X Price X Growth">性别 X 成交价格 X 增长</h3>
+              <h3 class="panel-title" data-zh="性别 X 成交价格 X 增长" data-en="Gender x Price x Growth">性别 X 成交价格 X 增长</h3>
               <div id="gender-breakdown-price-chart" class="gender-price-bubble-card"></div>
             </article>
           </div>
@@ -5733,11 +5797,11 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">03</span><span>Silhouette</span></div>
-              <h2 class="section-title" data-zh="女款修身/男款常规版型+常规衣长为核心，女款常规/男款运动版型增速快" data-en="Female Slim &amp; Male Regular Fit are Core, Female Regular &amp; Male Active Fit Grow Fast">女款修身/男款常规版型+常规衣长为核心，女款常规/男款运动版型增速快</h2>
+              <h2 class="section-title" data-zh="女款修身/男款常规版型+常规衣长为核心，女款常规/男款运动版型增速快" data-en="Female Slim &amp; Male Regular Fits Lead, Female Regular &amp; Male Active Fits Grow Fast">女款修身/男款常规版型+常规衣长为核心，女款常规/男款运动版型增速快</h2>
               <ul class="section-bullets">
-                <li data-zh="常规衣长是绝对主盘，占比超过90%，廓形机会更多来自常规长度下不同Fit的分化。" data-en="Regular length half-zipper remains the core, accounting for over 90%, showing that growth opportunity comes more from fit differentiation.">常规衣长是绝对主盘，占比超过90%，廓形机会更多来自常规长度下不同Fit的分化。</li>
-                <li data-zh="女款呈现多种廓形并行增长，Slim × Regular是女款最成熟、最明确的主力版型，Regular × Regular增长最快，短款衣长组合占比较低仍需观望。" data-en="Female styles grows across various silhouettes: Slim × Regular is the most mature core shape, Regular × Regular grows the fastest. However, semi-crop length has low share which needs to be cautiously invested.">女款呈现多种廓形并行增长，Slim × Regular是女款最成熟、最明确的主力版型，Regular × Regular增长最快，短款衣长组合占比较低仍需观望。</li>
-                <li data-zh="男款仍以Regular × Regular为绝对核心，Active × Regular 增长迅速成为男款扩张最强的结构升级方向。" data-en="Male styles are still anchored by Regular × Regular, while Active × Regular growths rapidly and has become the strongest upgrade direction for male.">男款仍以Regular × Regular为绝对核心，Active × Regular 增长迅速成为男款扩张最强的结构升级方向。</li>
+                <li data-zh="常规衣长是绝对主盘，占比超过90%，廓形机会更多来自常规长度下不同Fit的分化。" data-en="Regular length remains the core at over 90%, showing that growth opportunity comes more from fit differentiation.">常规衣长是绝对主盘，占比超过90%，廓形机会更多来自常规长度下不同Fit的分化。</li>
+                <li data-zh="女款呈现多种廓形并行增长，Slim × Regular是女款最成熟、最明确的主力版型，Regular × Regular增长最快，短款衣长组合占比较低仍需观望。" data-en="Female styles grow across multiple silhouettes: Slim × Regular is the clearest core shape, Regular × Regular grows the fastest. However, semi-crop length remains low share but grows fast, suggesting a small-scale test.">女款呈现多种廓形并行增长，Slim × Regular是女款最成熟、最明确的主力版型，Regular × Regular增长最快，短款衣长组合占比较低仍需观望。</li>
+                <li data-zh="男款仍以Regular × Regular为绝对核心，Active × Regular 增长迅速成为男款扩张最强的结构升级方向。" data-en="Male styles are still anchored by Regular × Regular, while Active × Regular grows rapidly and has become the strongest upgrade direction.">男款仍以Regular × Regular为绝对核心，Active × Regular 增长迅速成为男款扩张最强的结构升级方向。</li>
               </ul>
             </div>
           </div>
@@ -5747,7 +5811,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
               <div class="silhouette-structure-head">
                 <div>
                   <div class="chart-kicker">Silhouette Matrix</div>
-                  <h3 class="panel-title" data-zh="Fit X Length结构矩阵" data-en="Fit X Length Structure Matrix">Fit X Length结构矩阵</h3>
+                  <h3 class="panel-title" data-zh="Fit X Length结构矩阵" data-en="Fit x Length Matrix">Fit X Length结构矩阵</h3>
                 </div>
                 <button type="button" class="silhouette-view-toggle" data-default-label="查看图片" data-alt-label="查看矩阵" data-default-label-en="Pictures" data-alt-label-en="Matrix" aria-pressed="false">查看图片</button>
               </div>
@@ -5755,7 +5819,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
             </article>
             <article class="chart-panel panel silhouette-growth-panel">
               <div class="chart-kicker">Growth by Gender</div>
-              <h3 class="panel-title" data-zh="性别 X 廓形 X 增长" data-en="Gender X Silhouette X Growth">性别 X 廓形 X 增长</h3>
+              <h3 class="panel-title" data-zh="性别 X 廓形 X 增长" data-en="Gender x Silhouette x Growth">性别 X 廓形 X 增长</h3>
               <div id="silhouette-growth-chart" class="silhouette-growth-card"></div>
             </article>
           </div>
@@ -5774,11 +5838,11 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">04</span><span>Function</span></div>
-              <h2 class="section-title" data-zh="弹力与速干双核心，女性款功能增长更快但复合度低" data-en="Female Function Grows Faster but with Lower Complexity">弹力与速干双核心，女性款功能增长更快但复合度低</h2>
+              <h2 class="section-title" data-zh="弹力与速干双核心，女性款功能增长更快但复合度低" data-en="Female Function Grows Faster but with Lower Versatility">弹力与速干双核心，女性款功能增长更快但复合度低</h2>
               <ul class="section-bullets">
-                <li data-zh="整体来看，男性款和女性款半拉链长袖内搭的功能渗透率都在90%以上，弹力和吸湿速干为两大核心刚需功能，具有高占比、高增长。" data-en="Across both male and female styles, function penetration exceeds 90%. Stretchable and quick-dry are the two must-have functions, which both have high penetration with strong growth.">整体来看，男性款和女性款半拉链长袖内搭的功能渗透率都在90%以上，弹力和吸湿速干为两大核心刚需功能，具有高占比、高增长。</li>
-                <li data-zh="女性功能款半拉链的增速较男性更高，弹力功能是绝对核心且相较男性需求更大，吸湿速干渗透率略低于男性但增长迅速，但其它辅助功能复合程度较低。" data-en="Compare to male, female function grows faster, stretchable takes the highest share and is more demanded, and demand of quick-dry is lower but grows faster, while the complexity of function is lower.">女性功能款半拉链的增速较男性更高，弹力功能是绝对核心且相较男性需求更大，吸湿速干渗透率略低于男性但增长迅速，但其它辅助功能复合程度较低。</li>
-                <li data-zh="男性对半拉链内搭的保暖功能需求更高但增长进入缓慢成熟期，抑菌防臭增速翻倍，是男性市场的高潜力赛道。" data-en="Male show stronger demand for warmth, which has entered a slow and mature phase. Antibacterial doubles in growth, marking a high-potential direction for male.">男性对半拉链内搭的保暖功能需求更高但增长进入缓慢成熟期，抑菌防臭增速翻倍，是男性市场的高潜力赛道。</li>
+                <li data-zh="整体来看，男性款和女性款半拉链长袖内搭的功能渗透率都在90%以上，弹力和吸湿速干为两大核心刚需功能，具有高占比、高增长。" data-en="Across both male and female styles, function penetration exceeds 90%. Stretchable and Quick-dry are the two must-have functions, which both have high penetration with strong growth.">整体来看，男性款和女性款半拉链长袖内搭的功能渗透率都在90%以上，弹力和吸湿速干为两大核心刚需功能，具有高占比、高增长。</li>
+                <li data-zh="女性功能款半拉链的增速较男性更高，弹力功能是绝对核心且相较男性需求更大，吸湿速干渗透率略低于男性但增长迅速，但其它辅助功能复合程度较低。" data-en="Compared with male, female functional styles grow faster; Stretchable is the absolute core that shows stronger demand, Quick-dry has lower penetration but grows faster, while the function versatility is lower.">女性功能款半拉链的增速较男性更高，弹力功能是绝对核心且相较男性需求更大，吸湿速干渗透率略低于男性但增长迅速，但其它辅助功能复合程度较低。</li>
+                <li data-zh="男性对半拉链内搭的保暖功能需求更高但增长进入缓慢成熟期，抑菌防臭增速翻倍，是男性市场的高潜力赛道。" data-en="Male styles show stronger demand for warmth, which has entered a slow and mature phase. Antibacterial doubles in growth, marking a high-potential direction for male.">男性对半拉链内搭的保暖功能需求更高但增长进入缓慢成熟期，抑菌防臭增速翻倍，是男性市场的高潜力赛道。</li>
               </ul>
             </div>
           </div>
@@ -5810,10 +5874,10 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">05</span><span>Fabric Overview</span></div>
-              <h2 class="section-title" data-zh="顺滑与绒感占据面料结构主盘，羊毛面料承接高端化升级" data-en="Smooth and Brushed Fabrics Dominate, Wool Supports High-End Upgrade.">顺滑与绒感占据面料结构主盘，羊毛面料承接高端化升级</h2>
+              <h2 class="section-title" data-zh="顺滑与绒感占据面料结构主盘，羊毛面料承接高端化升级" data-en="Smooth and Brushed Fabrics Dominate, Wool Supports Premium Upgrade">顺滑与绒感占据面料结构主盘，羊毛面料承接高端化升级</h2>
               <ul class="section-bullets">
-                <li data-zh="半拉链长袖内搭的面料结构由“基础顺滑表面”与“亲肤保暖绒感”主导，光滑/平整面料占据规模主盘，表面拉绒/磨毛面料占据第二。" data-en="Basic smooth and brushed fabrics are two main fabric types: half-zipper with smooth surface accounts for the highest share, followed by brushed textile.">半拉链长袖内搭的面料结构由“基础顺滑表面”与“亲肤保暖绒感”主导，光滑/平整面料占据规模主盘，表面拉绒/磨毛面料占据第二。</li>
-                <li data-zh="增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。" data-en="Growth comes from niche segments: textured fabric and wool grows rapidly, with wool being the high-end upgrade direction. Both are better suited for brand image enhancement and differentiation than for driving overall volume.">增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。</li>
+                <li data-zh="半拉链长袖内搭的面料结构由“基础顺滑表面”与“亲肤保暖绒感”主导，光滑/平整面料占据规模主盘，表面拉绒/磨毛面料占据第二。" data-en="Smooth and Brushed Fabrics are two main fabric types: half-zip with smooth surface accounts for the highest share, followed by brushed textile.">半拉链长袖内搭的面料结构由“基础顺滑表面”与“亲肤保暖绒感”主导，光滑/平整面料占据规模主盘，表面拉绒/磨毛面料占据第二。</li>
+                <li data-zh="增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。" data-en="Growth comes from niche segments: Textured Fabric and Wool grow rapidly, with Wool being the premium upgrade direction. Both are better suited for brand image enhancement and differentiation than for driving overall volume.">增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。</li>
               </ul>
             </div>
           </div>
@@ -5848,7 +5912,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
               <h2 class="section-title" data-zh="面料不加绒主导，羊毛面料功能复合度高" data-en="Non-Fleece Leads Overall, Wool Shows Strong Functional Versatility">面料不加绒主导，羊毛面料功能复合度高</h2>
               <ul class="section-bullets">
                 <li data-zh="从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。" data-en="By inner structure, Non-Fleece overall remains the core and grows faster, while Fleece gains higher prices. However, growth varies by fabric type: Smooth Fabric X Fleece grows faster, while Brushed Fabric X Non-Fleece shows stronger upgrade.">从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。</li>
-                <li data-zh="从功能承接看，光滑/平整是稳定的基础功能载体，拉绒/磨毛、肌理面料功能表达集中，羊毛面料展现出最强的的功能复合度。" data-en="By functional positioning, Smooth Fabric carries basic functions, Brushed &amp; Textured Fabrics show more focused functional claims, while Wool delivers the strongest function versatility.">从功能承接看，光滑/平整是稳定的基础功能载体，拉绒/磨毛、肌理面料功能表达集中，羊毛面料展现出最强的的功能复合度。</li>
+                <li data-zh="从功能承接看，光滑/平整面料的功能覆盖范围最广，拉绒/磨毛、肌理面料功能表达比较集中，而羊毛面料展现出最强的的功能复合度。" data-en="By functional positioning, Smooth Fabric carries more functions, Brushed &amp; Textured Fabrics show more focused functional claims, while Wool delivers the strongest function versatility.">从功能承接看，光滑/平整面料的功能覆盖范围最广，拉绒/磨毛、肌理面料功能表达比较集中，而羊毛面料展现出最强的的功能复合度。</li>
               </ul>
             </div>
           </div>
@@ -5880,9 +5944,9 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">07</span><span>Design</span></div>
-              <h2 class="section-title" data-zh="半拉链设计聚焦于功能性细节与精细化剪裁" data-en="Half-Zipper Design Focuses on Functional Details and Refined Tailoring">半拉链设计聚焦于功能性细节与精细化剪裁</h2>
+              <h2 class="section-title" data-zh="半拉链设计聚焦于功能性细节与精细化剪裁" data-en="Half-Zip Design Focuses on Functional Details and Refined Tailoring">半拉链设计聚焦于功能性细节与精细化剪裁</h2>
               <ul class="section-bullets">
-                <li data-zh="半拉链必做基础细节通过结构化剪裁、拉链护嘴、拇指洞/拇指扣等来提升半拉链的活动自由度与贴身舒适感。" data-en="Core basic designs in half-zipper focus on enhancing active freedom and comfort experience through structured cutting, zipper guards, and thumbhole or thumb loop details.">半拉链必做基础细节通过结构化剪裁、拉链护嘴、拇指洞/拇指扣等来提升半拉链的活动自由度与贴身舒适感。</li>
+                <li data-zh="半拉链必做基础细节通过结构化剪裁、拉链护嘴、拇指洞/拇指扣等来提升半拉链的活动自由度与贴身舒适感。" data-en="Core basic designs in half-zip focus on improving active freedom and comfort experience through structured cutting, zipper guards, and thumbhole or thumb loop details.">半拉链必做基础细节通过结构化剪裁、拉链护嘴、拇指洞/拇指扣等来提升半拉链的活动自由度与贴身舒适感。</li>
                 <li data-zh="半拉链设计的高端升级并不依赖堆砌零件，而是通过肩线偏移、反光、导电线与热压/层压口袋等，把专业感转化为可见、可感知的品质提升。" data-en="Premium upgrades do not rely on excessive components, but on shifted shoulder seams, reflective details, anti-static conductive lines, and heat-seamed pockets that turn performance into visible quality.">半拉链设计的高端升级并不依赖堆砌零件，而是通过肩线偏移、反光、导电线与热压/层压口袋等，把专业感转化为可见、可感知的品质提升。</li>
                 <li data-zh="女性化设计主要围绕修身、收腰、短款与下摆处理凸显女性的身体曲线、优化比例。" data-en="Feminine design focuses on tailored fit, waist cinching, cropped length, and hem treatments to highlight the female silhouette and refine body proportions.">女性化设计主要围绕修身、收腰、短款与下摆处理凸显女性的身体曲线、优化比例。</li>
               </ul>
@@ -6043,7 +6107,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal competitor-page-head">
             <div>
               <div class="section-kicker"><span class="section-badge">08</span><span>ARC'TERYX</span></div>
-              <h2 class="section-title competitor-page-title" data-zh="ARC'TERYX：功能需求爆发带动女性款迅速增长，男性款功能进入成熟期" data-en="ARC'TERYX: Female Grows Rapidly Driven by Surging Function Demands, Male Function Moves into Mature Stage.">ARC'TERYX：功能需求爆发带动女性款迅速增长，男性款功能进入成熟期</h2>
+              <h2 class="section-title competitor-page-title" data-zh="ARC'TERYX：功能需求爆发带动女性款迅速增长，男性款功能进入成熟期" data-en="ARC'TERYX: Female Grows Rapidly Driven by Surging Functional Demands, Male Function Moves into Mature Stage">ARC'TERYX：功能需求爆发带动女性款迅速增长，男性款功能进入成熟期</h2>
             </div>
           </div>
 
@@ -6557,7 +6621,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">13</span><span>Brand Compare</span></div>
-              <h2 class="section-title" data-zh="竞品品牌半拉链核心维度比较" data-en="Half-Zipper Competitor Comparison">竞品品牌半拉链核心维度比较</h2>
+              <h2 class="section-title" data-zh="竞品品牌半拉链核心维度比较" data-en="Half-Zip Competitor Comparison">竞品品牌半拉链核心维度比较</h2>
             </div>
           </div>
 
@@ -6565,7 +6629,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
             <section class="compare-matrix-card">
               <div class="compare-card-head">
                 <div class="compare-card-title">
-                  <span class="compare-card-title-main" data-zh="品牌对比矩阵" data-en="Brand compare matrix">品牌对比矩阵</span>
+                  <span class="compare-card-title-main" data-zh="品牌对比矩阵" data-en="Brand Compare Matrix">品牌对比矩阵</span>
                   <span class="compare-card-title-sub">Brand Compare Matrix</span>
                 </div>
               </div>
@@ -6766,7 +6830,7 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
             <section class="compare-radar-card">
               <div class="compare-card-head">
                 <div class="compare-card-title">
-                  <span class="compare-card-title-main" data-zh="品牌雷达图" data-en="Brand radar">品牌雷达图</span>
+                  <span class="compare-card-title-main" data-zh="品牌雷达图" data-en="Brand Radar">品牌雷达图</span>
                   <span class="compare-card-title-sub">Brand Radar</span>
                 </div>
               </div>
@@ -7295,9 +7359,12 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     label: "光滑/平整面料",
     labelEn: "Smooth Fabric",
     color: "#b0c3f0",
-    functionConclusion: "基础功能承接最稳",
+    functionConclusion: "功能承接最广泛",
+    functionConclusionEn: "Broad function coverage",
     textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
+    textileEn: "Smooth, flat surface with no obvious texture or fuzz.",
     positioning: "运动功能层、日常舒适层、基础半拉链",
+    positioningEn: "Base functional layer, daily comfort & basic offer.",
     sampleCount: 5,
     sampleImages: [
       "../pic/smooth01.jpg",
@@ -7320,8 +7387,11 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     labelEn: "Brushed Fabric",
     color: "#ebc58c",
     functionConclusion: "保暖+弹性舒适导向",
+    functionConclusionEn: "Warmth + Stretchable focus",
     textile: "有绒感/毛感、表面磨毛感或仿羊毛",
+    textileEn: "Soft brushed or fuzzy surface, including wool-like touch.",
     positioning: "秋冬保暖层、轻保暖、亲肤感",
+    positioningEn: "Warm layer, light insulation, soft touch.",
     sampleCount: 5,
     sampleImages: [
       "../pic/brushed01.jpg",
@@ -7344,8 +7414,11 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     labelEn: "Textured Fabric",
     color: "#e4a7b5",
     functionConclusion: "速干+弹力强表达",
+    functionConclusionEn: "Quick-dry + Stretchable strong claim",
     textile: "表面有明确视觉纹理或结构感，如罗纹、华夫格等",
+    textileEn: "Visible surface texture, such as rib or waffle.",
     positioning: "具有透气结构、设计感、风格化面料",
+    positioningEn: "Breathable structure, design expression, more styled option.",
     sampleCount: 5,
     sampleImages: [
       "../pic/textured01.jpg",
@@ -7368,8 +7441,11 @@ const FABRIC_CATEGORY_DEFINITIONS = [
     labelEn: "Wool",
     color: "#99cce8",
     functionConclusion: "功能复合度最高",
+    functionConclusionEn: "High function versatility",
     textile: "明确含羊毛/美利奴羊毛等天然羊毛成分",
+    textileEn: "Contains wool or merino wool as a clear natural fiber component.",
     positioning: "贴身功能层、高端保暖、专业户外",
+    positioningEn: "Next-to-skin, premium warmth, technical outdoor use.",
     sampleCount: 5,
     sampleImages: [
       "../pic/wool01.jpg",
@@ -9619,6 +9695,7 @@ const FABRIC_FUNCTION_MATRIX_DATA = FABRIC_OVERVIEW_DATA.map((definition) => {
     labelEn: definition.labelEn,
     color: definition.color,
     functionConclusion: definition.functionConclusion ?? `功能表达 ${matrixRow.functionCoverageLabel}`,
+    functionConclusionEn: definition.functionConclusionEn ?? definition.functionConclusion ?? "n/a",
     gmv25: definition.gmv25,
     gmv25Label: `¥${Math.round(definition.gmv25 / 10000)}w`,
     count25: matrixRow.count,
@@ -10578,6 +10655,7 @@ function renderFabricOverviewChart(container, rows) {
   if (!container) {
     return;
   }
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
 
   const fabricEnglishLabelMap = {
     smooth: "Smooth Fabric",
@@ -10776,7 +10854,7 @@ function renderFabricOverviewChart(container, rows) {
       </div>
       <div class="fabric-price-card-metric">
         <strong>${row.avgDealPrice25 > 0 ? row.avgDealPrice25Label : "n/a"}</strong>
-        <small>成交均价</small>
+        <small>${lang === "en" ? "ATV" : "成交均价"}</small>
       </div>
     `;
     card.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
@@ -10807,6 +10885,7 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
   if (!container) {
     return;
   }
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
 
   const warmthCardToneMap = {
     "non-fleece": {
@@ -10826,9 +10905,19 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
     textured: "肌理",
     wool: "羊毛"
   };
+  const shortFabricLabelMapEn = {
+    smooth: "Smooth",
+    brushed: "Brushed",
+    textured: "Textured",
+    wool: "Wool"
+  };
   const warmthLabelMap = {
     "non-fleece": "不加绒",
     fleece: "加绒"
+  };
+  const warmthLabelMapEn = {
+    "non-fleece": "Non-Fleece",
+    fleece: "Fleece"
   };
   const width = 560;
   const height = 286;
@@ -10907,7 +10996,7 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
         </div>
         <div class="fabric-warmth-kpi-metrics">
           <div class="fabric-warmth-kpi-metric">
-            <span>占比</span>
+            <span>${lang === "en" ? "Share" : "占比"}</span>
             <strong>${row.share25Label}</strong>
           </div>
           <div class="fabric-warmth-kpi-metric">
@@ -10915,7 +11004,7 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
             <strong class="${row.yoyLabel.startsWith("-") ? "is-negative" : row.yoyLabel === "n/a" ? "is-neutral" : "is-positive"}">${row.yoyLabel}</strong>
           </div>
           <div class="fabric-warmth-kpi-metric">
-            <span>成交均价</span>
+            <span>${lang === "en" ? "ATV" : "成交均价"}</span>
             <strong>${row.avgDealPrice25Label}</strong>
           </div>
         </div>
@@ -10926,7 +11015,7 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
         data-warmth-key="${row.key}"
         aria-pressed="false"
       >
-        <span class="fabric-warmth-visibility-button-text">展开气泡</span>
+        <span class="fabric-warmth-visibility-button-text">${lang === "en" ? "Show" : "展开气泡"}</span>
       </button>
     `;
     item.querySelector(".fabric-warmth-visibility-toggle")?.addEventListener("click", () => {
@@ -11113,7 +11202,6 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
     const yoyClass =
       row.yoyLabel === "n/a" ? "is-neutral" : row.yoyLabel.startsWith("-") ? "is-negative" : "is-positive";
     const labelPlacementMap = {
-      "textured__non-fleece": { anchor: "middle", x: cx, labelY: cy - radius - 16, yoyOffset: 13 },
       "smooth__fleece": { anchor: "middle", x: cx, labelY: cy - radius - 16, yoyOffset: 13 },
       "smooth__non-fleece": {
         anchor: "end",
@@ -11123,7 +11211,10 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
       },
       "textured__fleece": { anchor: "middle", x: cx, labelY: cy + radius + 12, yoyOffset: 13 },
       "brushed__fleece": { anchor: "start", x: cx + radius + 6, labelY: cy - radius - 12, yoyOffset: 13 },
-      "wool__fleece": { anchor: "end", x: cx - radius - 14, labelY: cy - 2, yoyOffset: 13 }
+      "wool__fleece": { anchor: "end", x: cx - radius - 14, labelY: cy - 2, yoyOffset: 13 },
+      "wool__non-fleece": { anchor: "start", x: cx + radius + 12, labelY: cy - 2, yoyOffset: 13 },
+      "brushed__non-fleece": { anchor: "start", x: cx + radius + 12, labelY: cy - 2, yoyOffset: 13 },
+      "textured__non-fleece": { anchor: "middle", x: cx, labelY: cy + radius + 16, yoyOffset: 13 }
     };
     const defaultLabelToRight = cx < width * 0.58;
     const defaultLabelOffset = radius + 30;
@@ -11170,7 +11261,10 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
       class: "fabric-warmth-bubble-label",
       "text-anchor": placement.anchor
     });
-    bubbleLabel.textContent = `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
+    bubbleLabel.textContent =
+      lang === "en"
+        ? `${shortFabricLabelMapEn[row.fabricKey] ?? row.fabricLabelEn ?? row.fabricLabel} X ${warmthLabelMapEn[row.warmthKey] ?? row.warmthLabelEn ?? row.warmthLabel}`
+        : `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
     bubbleGroup.appendChild(bubbleLabel);
 
     bubbleGroup.addEventListener("mouseenter", (event) => {
@@ -11216,11 +11310,14 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
   };
 
   const showTooltip = (event, row, yoyClass) => {
-    const comboLabel = `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
+    const comboLabel =
+      lang === "en"
+        ? `${shortFabricLabelMapEn[row.fabricKey] ?? row.fabricLabelEn ?? row.fabricLabel} X ${warmthLabelMapEn[row.warmthKey] ?? row.warmthLabelEn ?? row.warmthLabel}`
+        : `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
     tooltip.innerHTML = `
       <div class="fabric-warmth-bubble-tooltip-title">${comboLabel}</div>
       <div class="fabric-warmth-bubble-tooltip-row">
-        <span>GMV占比</span>
+        <span>${lang === "en" ? "GMV Share" : "GMV占比"}</span>
         <strong>${row.share25Label}</strong>
       </div>
       <div class="fabric-warmth-bubble-tooltip-row">
@@ -11228,7 +11325,7 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
         <strong class="${yoyClass}">${row.yoyLabel}</strong>
       </div>
       <div class="fabric-warmth-bubble-tooltip-row">
-        <span>成交均价</span>
+        <span>${lang === "en" ? "ATV" : "成交均价"}</span>
         <strong>${row.avgDealPrice25Label}</strong>
       </div>
     `;
@@ -11248,7 +11345,7 @@ function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRows) {
       button.setAttribute("aria-pressed", String(!isVisible));
       const label = button.querySelector(".fabric-warmth-visibility-button-text");
       if (label) {
-        label.textContent = isVisible ? "展开气泡" : "隐藏气泡";
+        label.textContent = lang === "en" ? (isVisible ? "Show" : "Hide") : isVisible ? "展开气泡" : "隐藏气泡";
       }
     });
     applyWarmthEmphasis();
@@ -11323,11 +11420,11 @@ function renderFabricFunctionMatrix(container, rows, columns) {
     rowHeader.innerHTML = `
       <div class="fabric-function-matrix-row-head">
         <span class="fabric-function-matrix-row-dot" style="background:${row.color};"></span>
-        <strong>${row.label}</strong>
+        <strong>${lang === "en" ? row.labelEn : row.label}</strong>
       </div>
       <div class="fabric-function-matrix-row-meta">
-        <span>${row.labelEn}</span>
-        <span>${row.functionConclusion}</span>
+        ${lang === "en" ? "" : `<span>${row.labelEn}</span>`}
+        <span>${lang === "en" ? row.functionConclusionEn ?? row.functionConclusion : row.functionConclusion}</span>
       </div>
     `;
     grid.appendChild(rowHeader);
@@ -13396,9 +13493,10 @@ function renderFunctionOpportunityMap(container, rowsByView, metaByView = {}) {
           "弹力": { dx: r + 6, dy: 18, anchor: "start" }
         },
         female: {
-          "弹力": { dx: -(r + 6), dy: 18, anchor: "end" },
+          "弹力": { dx: 0, dy: r + 14, anchor: "middle", valign: "top" },
+          "透气": { dx: 0, dy: -(r + 10), anchor: "middle", valign: "bottom" },
           "吸湿速干": { dx: -(r + 6), dy: 10, anchor: "end" },
-          "抑菌防臭": { dx: -(r + 6), dy: -5, anchor: "end" },
+          "抑菌防臭": { dx: 0, dy: -(r + 10), anchor: "middle", valign: "bottom" },
           "防静电": { dx: -(r + 6), dy: -14, anchor: "end" },
           "凉感": { dx: -(r + 6), dy: -12, anchor: "end" },
           "轻量": { dx: 0, dy: r - 6, anchor: "middle", valign: "top" },
@@ -13532,6 +13630,242 @@ function renderFunctionGenderSplit(container, groups) {
       `
     )
     .join("");
+}
+
+
+// src\inline-editor.js
+function canUseInlineEditor() {
+  const params = new URLSearchParams(window.location.search);
+  const editFlag = params.get("edit");
+  const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const isLocalFile = window.location.protocol === "file:";
+  return editFlag === "1" && (isLocalHost || isLocalFile);
+}
+
+function computeEditableKey(node) {
+  if (!(node instanceof HTMLElement)) {
+    return "";
+  }
+
+  if (node.dataset.editKey) {
+    return node.dataset.editKey;
+  }
+
+  const segments = [];
+  let current = node;
+  while (current && current !== document.body) {
+    const parent = current.parentElement;
+    const siblings = parent ? Array.from(parent.children).filter((child) => child.tagName === current.tagName) : [];
+    const index = siblings.indexOf(current);
+    const idPart = current.id ? `#${current.id}` : "";
+    const classPart =
+      current.classList.length > 0
+        ? `.${Array.from(current.classList)
+            .slice(0, 2)
+            .join(".")}`
+        : "";
+    segments.unshift(`${current.tagName.toLowerCase()}${idPart}${classPart}[${index}]`);
+    current = parent;
+  }
+
+  const key = segments.join(">");
+  node.dataset.editKey = key;
+  return key;
+}
+
+function loadInlineEdits() {
+  try {
+    return JSON.parse(window.localStorage.getItem("dx-inline-edits") || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveInlineEdits(edits) {
+  try {
+    window.localStorage.setItem("dx-inline-edits", JSON.stringify(edits));
+  } catch {
+    // ignore storage failures
+  }
+}
+
+function downloadInlineEdits(edits) {
+  const blob = new Blob([JSON.stringify(edits, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "edits.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function applyStoredEditsToNode(node, edits) {
+  if (!(node instanceof HTMLElement) || !node.dataset.zh || !node.dataset.en) {
+    return;
+  }
+
+  const key = computeEditableKey(node);
+  const patch = edits[key];
+  if (!patch) {
+    return;
+  }
+
+  if (typeof patch.zh === "string") {
+    node.dataset.zh = patch.zh;
+  }
+  if (typeof patch.en === "string") {
+    node.dataset.en = patch.en;
+  }
+
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
+  node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+}
+
+function bindEditableNode(node, edits) {
+  if (!(node instanceof HTMLElement) || node.dataset.inlineEditorBound === "true") {
+    return;
+  }
+  if (!node.dataset.zh || !node.dataset.en) {
+    return;
+  }
+
+  node.dataset.inlineEditorBound = "true";
+  node.classList.add("is-inline-editable");
+  computeEditableKey(node);
+
+  node.addEventListener("dblclick", () => {
+    if (node.isContentEditable) {
+      return;
+    }
+
+    const lang = document.body.dataset.lang === "en" ? "en" : "zh";
+    const key = computeEditableKey(node);
+    const originalZh = node.dataset.zh || "";
+    const originalEn = node.dataset.en || "";
+
+    node.contentEditable = "true";
+    node.classList.add("is-inline-editing");
+    node.focus();
+
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+
+    const finishEdit = (commit) => {
+      node.contentEditable = "false";
+      node.classList.remove("is-inline-editing");
+
+      if (!commit) {
+        node.textContent = lang === "en" ? originalEn : originalZh;
+        return;
+      }
+
+      const nextText = node.textContent.trim();
+      if (lang === "en") {
+        node.dataset.en = nextText;
+      } else {
+        node.dataset.zh = nextText;
+      }
+
+      edits[key] = {
+        zh: node.dataset.zh || "",
+        en: node.dataset.en || ""
+      };
+      saveInlineEdits(edits);
+      node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+    };
+
+    const handleBlur = () => {
+      finishEdit(true);
+      node.removeEventListener("blur", handleBlur);
+      node.removeEventListener("keydown", handleKeyDown);
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        node.blur();
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        finishEdit(false);
+        node.removeEventListener("blur", handleBlur);
+        node.removeEventListener("keydown", handleKeyDown);
+      }
+    };
+
+    node.addEventListener("blur", handleBlur);
+    node.addEventListener("keydown", handleKeyDown);
+  });
+}
+
+function ensureInlineEditorToolbar(edits) {
+  let toolbar = document.querySelector(".inline-editor-toolbar");
+  if (toolbar) {
+    return toolbar;
+  }
+
+  toolbar = document.createElement("div");
+  toolbar.className = "inline-editor-toolbar";
+  toolbar.innerHTML = `
+    <div class="inline-editor-toolbar-title">Local Edit Mode</div>
+    <div class="inline-editor-toolbar-actions">
+      <button type="button" data-inline-export="true">Export JSON</button>
+      <button type="button" data-inline-clear="true">Clear Saved</button>
+    </div>
+    <div class="inline-editor-toolbar-note">Double-click any highlighted text to edit.</div>
+  `;
+
+  toolbar.querySelector("[data-inline-export='true']")?.addEventListener("click", () => {
+    const exportPayload = {};
+    document.querySelectorAll("[data-zh][data-en]").forEach((node) => {
+      if (!(node instanceof HTMLElement)) {
+        return;
+      }
+      const key = computeEditableKey(node);
+      if (edits[key]) {
+        exportPayload[key] = edits[key];
+      }
+    });
+    downloadInlineEdits(exportPayload);
+  });
+
+  toolbar.querySelector("[data-inline-clear='true']")?.addEventListener("click", () => {
+    window.localStorage.removeItem("dx-inline-edits");
+    window.location.reload();
+  });
+
+  document.body.appendChild(toolbar);
+  return toolbar;
+}
+
+function refreshInlineEditor() {
+  if (!canUseInlineEditor()) {
+    return;
+  }
+
+  const edits = loadInlineEdits();
+  document.body.classList.add("is-inline-editor-enabled");
+  ensureInlineEditorToolbar(edits);
+
+  document.querySelectorAll("[data-zh][data-en]").forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+    applyStoredEditsToNode(node, edits);
+    bindEditableNode(node, edits);
+  });
+}
+
+function setupInlineEditor() {
+  if (!canUseInlineEditor()) {
+    return;
+  }
+
+  refreshInlineEditor();
+  window.__dxInlineEditorRefresh = refreshInlineEditor;
 }
 
 
@@ -13723,6 +14057,7 @@ function bootstrapFabricOverviewPage() {
   const chartContainer = document.querySelector("#fabric-overview-chart");
   const definitionContainer = document.querySelector("#fabric-overview-definitions");
   const fabricImageLightbox = ensureFabricImageLightbox();
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
 
   renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
 
@@ -13779,10 +14114,10 @@ function bootstrapFabricOverviewPage() {
             <div class="fabric-accordion-panel-inner">
               <div class="fabric-accordion-copy">
                 <div class="fabric-accordion-copy-block">
-                  <p><em>Textile:</em><span>${item.textile}</span></p>
+                  <p><em>${lang === "en" ? "Textile" : "质地"}:</em><span>${lang === "en" ? item.textileEn ?? item.textile : item.textile}</span></p>
                 </div>
                 <div class="fabric-accordion-copy-block">
-                  <p><em>Positioning:</em><span>${item.positioning}</span></p>
+                  <p><em>${lang === "en" ? "Use Case" : "使用定位"}:</em><span>${lang === "en" ? item.positioningEn ?? item.positioning : item.positioning}</span></p>
                 </div>
               </div>
               <div class="fabric-accordion-samples ${sampleClass}">
@@ -15394,8 +15729,10 @@ function setupLanguageSwitch() {
     bootstrapMarketScopePage();
     bootstrapFemaleOpportunityPage();
     bootstrapFunctionPage();
+    bootstrapFabricOverviewPage();
     bootstrapFabricWarmthFunctionPage();
     bootstrapBrandComparePage();
+    window.__dxInlineEditorRefresh?.();
 
     try {
       window.localStorage.setItem(storageKey, normalized);
@@ -15441,6 +15778,7 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   bootstrapDesignCuesGallery();
+  setupInlineEditor();
   setupScrollState();
 });
 

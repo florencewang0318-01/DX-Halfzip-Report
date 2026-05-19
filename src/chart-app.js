@@ -472,6 +472,7 @@ export function renderFabricOverviewChart(container, rows) {
   if (!container) {
     return;
   }
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
 
   const fabricEnglishLabelMap = {
     smooth: "Smooth Fabric",
@@ -670,7 +671,7 @@ export function renderFabricOverviewChart(container, rows) {
       </div>
       <div class="fabric-price-card-metric">
         <strong>${row.avgDealPrice25 > 0 ? row.avgDealPrice25Label : "n/a"}</strong>
-        <small>成交均价</small>
+        <small>${lang === "en" ? "ATV" : "成交均价"}</small>
       </div>
     `;
     card.addEventListener("mouseenter", () => setActiveFabricKey(row.key));
@@ -701,6 +702,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
   if (!container) {
     return;
   }
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
 
   const warmthCardToneMap = {
     "non-fleece": {
@@ -720,9 +722,19 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
     textured: "肌理",
     wool: "羊毛"
   };
+  const shortFabricLabelMapEn = {
+    smooth: "Smooth",
+    brushed: "Brushed",
+    textured: "Textured",
+    wool: "Wool"
+  };
   const warmthLabelMap = {
     "non-fleece": "不加绒",
     fleece: "加绒"
+  };
+  const warmthLabelMapEn = {
+    "non-fleece": "Non-Fleece",
+    fleece: "Fleece"
   };
   const width = 560;
   const height = 286;
@@ -801,7 +813,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
         </div>
         <div class="fabric-warmth-kpi-metrics">
           <div class="fabric-warmth-kpi-metric">
-            <span>占比</span>
+            <span>${lang === "en" ? "Share" : "占比"}</span>
             <strong>${row.share25Label}</strong>
           </div>
           <div class="fabric-warmth-kpi-metric">
@@ -809,7 +821,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
             <strong class="${row.yoyLabel.startsWith("-") ? "is-negative" : row.yoyLabel === "n/a" ? "is-neutral" : "is-positive"}">${row.yoyLabel}</strong>
           </div>
           <div class="fabric-warmth-kpi-metric">
-            <span>成交均价</span>
+            <span>${lang === "en" ? "ATV" : "成交均价"}</span>
             <strong>${row.avgDealPrice25Label}</strong>
           </div>
         </div>
@@ -820,7 +832,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
         data-warmth-key="${row.key}"
         aria-pressed="false"
       >
-        <span class="fabric-warmth-visibility-button-text">展开气泡</span>
+        <span class="fabric-warmth-visibility-button-text">${lang === "en" ? "Show" : "展开气泡"}</span>
       </button>
     `;
     item.querySelector(".fabric-warmth-visibility-toggle")?.addEventListener("click", () => {
@@ -1007,7 +1019,6 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
     const yoyClass =
       row.yoyLabel === "n/a" ? "is-neutral" : row.yoyLabel.startsWith("-") ? "is-negative" : "is-positive";
     const labelPlacementMap = {
-      "textured__non-fleece": { anchor: "middle", x: cx, labelY: cy - radius - 16, yoyOffset: 13 },
       "smooth__fleece": { anchor: "middle", x: cx, labelY: cy - radius - 16, yoyOffset: 13 },
       "smooth__non-fleece": {
         anchor: "end",
@@ -1017,7 +1028,10 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
       },
       "textured__fleece": { anchor: "middle", x: cx, labelY: cy + radius + 12, yoyOffset: 13 },
       "brushed__fleece": { anchor: "start", x: cx + radius + 6, labelY: cy - radius - 12, yoyOffset: 13 },
-      "wool__fleece": { anchor: "end", x: cx - radius - 14, labelY: cy - 2, yoyOffset: 13 }
+      "wool__fleece": { anchor: "end", x: cx - radius - 14, labelY: cy - 2, yoyOffset: 13 },
+      "wool__non-fleece": { anchor: "start", x: cx + radius + 12, labelY: cy - 2, yoyOffset: 13 },
+      "brushed__non-fleece": { anchor: "start", x: cx + radius + 12, labelY: cy - 2, yoyOffset: 13 },
+      "textured__non-fleece": { anchor: "middle", x: cx, labelY: cy + radius + 16, yoyOffset: 13 }
     };
     const defaultLabelToRight = cx < width * 0.58;
     const defaultLabelOffset = radius + 30;
@@ -1064,7 +1078,10 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
       class: "fabric-warmth-bubble-label",
       "text-anchor": placement.anchor
     });
-    bubbleLabel.textContent = `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
+    bubbleLabel.textContent =
+      lang === "en"
+        ? `${shortFabricLabelMapEn[row.fabricKey] ?? row.fabricLabelEn ?? row.fabricLabel} X ${warmthLabelMapEn[row.warmthKey] ?? row.warmthLabelEn ?? row.warmthLabel}`
+        : `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
     bubbleGroup.appendChild(bubbleLabel);
 
     bubbleGroup.addEventListener("mouseenter", (event) => {
@@ -1110,11 +1127,14 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
   };
 
   const showTooltip = (event, row, yoyClass) => {
-    const comboLabel = `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
+    const comboLabel =
+      lang === "en"
+        ? `${shortFabricLabelMapEn[row.fabricKey] ?? row.fabricLabelEn ?? row.fabricLabel} X ${warmthLabelMapEn[row.warmthKey] ?? row.warmthLabelEn ?? row.warmthLabel}`
+        : `${shortFabricLabelMap[row.fabricKey] ?? row.fabricLabel} X ${warmthLabelMap[row.warmthKey] ?? row.warmthLabel}`;
     tooltip.innerHTML = `
       <div class="fabric-warmth-bubble-tooltip-title">${comboLabel}</div>
       <div class="fabric-warmth-bubble-tooltip-row">
-        <span>GMV占比</span>
+        <span>${lang === "en" ? "GMV Share" : "GMV占比"}</span>
         <strong>${row.share25Label}</strong>
       </div>
       <div class="fabric-warmth-bubble-tooltip-row">
@@ -1122,7 +1142,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
         <strong class="${yoyClass}">${row.yoyLabel}</strong>
       </div>
       <div class="fabric-warmth-bubble-tooltip-row">
-        <span>成交均价</span>
+        <span>${lang === "en" ? "ATV" : "成交均价"}</span>
         <strong>${row.avgDealPrice25Label}</strong>
       </div>
     `;
@@ -1142,7 +1162,7 @@ export function renderFabricWarmthBubbleChart(container, overviewRows, bubbleRow
       button.setAttribute("aria-pressed", String(!isVisible));
       const label = button.querySelector(".fabric-warmth-visibility-button-text");
       if (label) {
-        label.textContent = isVisible ? "展开气泡" : "隐藏气泡";
+        label.textContent = lang === "en" ? (isVisible ? "Show" : "Hide") : isVisible ? "展开气泡" : "隐藏气泡";
       }
     });
     applyWarmthEmphasis();
@@ -1217,11 +1237,11 @@ export function renderFabricFunctionMatrix(container, rows, columns) {
     rowHeader.innerHTML = `
       <div class="fabric-function-matrix-row-head">
         <span class="fabric-function-matrix-row-dot" style="background:${row.color};"></span>
-        <strong>${row.label}</strong>
+        <strong>${lang === "en" ? row.labelEn : row.label}</strong>
       </div>
       <div class="fabric-function-matrix-row-meta">
-        <span>${row.labelEn}</span>
-        <span>${row.functionConclusion}</span>
+        ${lang === "en" ? "" : `<span>${row.labelEn}</span>`}
+        <span>${lang === "en" ? row.functionConclusionEn ?? row.functionConclusion : row.functionConclusion}</span>
       </div>
     `;
     grid.appendChild(rowHeader);
@@ -3290,9 +3310,10 @@ export function renderFunctionOpportunityMap(container, rowsByView, metaByView =
           "弹力": { dx: r + 6, dy: 18, anchor: "start" }
         },
         female: {
-          "弹力": { dx: -(r + 6), dy: 18, anchor: "end" },
+          "弹力": { dx: 0, dy: r + 14, anchor: "middle", valign: "top" },
+          "透气": { dx: 0, dy: -(r + 10), anchor: "middle", valign: "bottom" },
           "吸湿速干": { dx: -(r + 6), dy: 10, anchor: "end" },
-          "抑菌防臭": { dx: -(r + 6), dy: -5, anchor: "end" },
+          "抑菌防臭": { dx: 0, dy: -(r + 10), anchor: "middle", valign: "bottom" },
           "防静电": { dx: -(r + 6), dy: -14, anchor: "end" },
           "凉感": { dx: -(r + 6), dy: -12, anchor: "end" },
           "轻量": { dx: 0, dy: r - 6, anchor: "middle", valign: "top" },

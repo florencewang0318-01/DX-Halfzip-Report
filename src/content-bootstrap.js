@@ -230,6 +230,7 @@ function bootstrapFabricOverviewPage() {
   const chartContainer = document.querySelector("#fabric-overview-chart");
   const definitionContainer = document.querySelector("#fabric-overview-definitions");
   const fabricImageLightbox = ensureFabricImageLightbox();
+  const lang = document.body.dataset.lang === "en" ? "en" : "zh";
 
   renderFabricOverviewChart(chartContainer, FABRIC_OVERVIEW_DATA);
 
@@ -286,10 +287,10 @@ function bootstrapFabricOverviewPage() {
             <div class="fabric-accordion-panel-inner">
               <div class="fabric-accordion-copy">
                 <div class="fabric-accordion-copy-block">
-                  <p><em>Textile:</em><span>${item.textile}</span></p>
+                  <p><em>${lang === "en" ? "Textile" : "质地"}:</em><span>${lang === "en" ? item.textileEn ?? item.textile : item.textile}</span></p>
                 </div>
                 <div class="fabric-accordion-copy-block">
-                  <p><em>Positioning:</em><span>${item.positioning}</span></p>
+                  <p><em>${lang === "en" ? "Use Case" : "使用定位"}:</em><span>${lang === "en" ? item.positioningEn ?? item.positioning : item.positioning}</span></p>
                 </div>
               </div>
               <div class="fabric-accordion-samples ${sampleClass}">
@@ -1901,8 +1902,10 @@ function setupLanguageSwitch() {
     bootstrapMarketScopePage();
     bootstrapFemaleOpportunityPage();
     bootstrapFunctionPage();
+    bootstrapFabricOverviewPage();
     bootstrapFabricWarmthFunctionPage();
     bootstrapBrandComparePage();
+    window.__dxInlineEditorRefresh?.();
 
     try {
       window.localStorage.setItem(storageKey, normalized);
@@ -1948,5 +1951,6 @@ window.addEventListener("DOMContentLoaded", () => {
   bootstrapCompetitorFunctionRadarCards();
   bootstrapCompetitorFabricRadarCards();
   bootstrapDesignCuesGallery();
+  setupInlineEditor();
   setupScrollState();
 });

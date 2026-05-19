@@ -5574,3 +5574,67 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
     transition: none !important;
   }
 }
+
+body.is-inline-editor-enabled .inline-editor-toolbar {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 10000;
+  width: 220px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f2a44;
+  margin-bottom: 8px;
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-actions button {
+  flex: 1;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #1f2a44;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.is-inline-editor-enabled .inline-editor-toolbar-note {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+body.is-inline-editor-enabled [data-zh][data-en].is-inline-editable {
+  outline: 1px dashed rgba(99, 102, 241, 0.28);
+  outline-offset: 2px;
+  cursor: text;
+  transition: outline-color 0.18s ease, background-color 0.18s ease;
+}
+
+body.is-inline-editor-enabled [data-zh][data-en].is-inline-editable:hover {
+  outline-color: rgba(99, 102, 241, 0.54);
+  background: rgba(99, 102, 241, 0.06);
+}
+
+body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
+  outline: 2px solid rgba(99, 102, 241, 0.72);
+  background: rgba(99, 102, 241, 0.08);
+}

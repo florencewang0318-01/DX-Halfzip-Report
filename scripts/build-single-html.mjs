@@ -13,6 +13,7 @@ const modulePaths = [
   path.join(srcDir, "content-data.js"),
   path.join(srcDir, "content-render.js"),
   path.join(srcDir, "chart-app.js"),
+  path.join(srcDir, "inline-editor.js"),
   path.join(srcDir, "content-bootstrap.js")
 ];
 
