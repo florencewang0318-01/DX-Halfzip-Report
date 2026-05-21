@@ -750,6 +750,10 @@ a {
   cursor: pointer;
 }
 
+.market-scope-row.is-discovery td {
+  background: rgba(218, 232, 255, 0.34);
+}
+
 .market-scope-row.is-dimmed {
   opacity: 0.22;
 }
@@ -2536,7 +2540,7 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
   border-bottom: none;
 }
 
@@ -2553,9 +2557,7 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
 }
 
 .function-gender-subtitle,
-.function-gender-head-label,
-.function-gender-metric span,
-.function-ranking-name span {
+.function-gender-head-label {
   color: #94a3b8;
   font-size: 10px;
   font-weight: 800;
@@ -2563,92 +2565,143 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
   text-transform: uppercase;
 }
 
-.function-gender-metrics {
+.function-gender-stack {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 8px 0 12px;
+  gap: 12px;
+  margin-top: 8px;
 }
 
-.function-gender-metric {
-  padding: 10px 12px;
-  border: 1px solid rgba(226, 232, 240, 0.76);
+.function-gender-section {
+  padding: 10px 12px 11px;
+  border: 1px solid rgba(226, 232, 240, 0.78);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.76);
 }
 
-.function-gender-metric span,
-.function-gender-metric strong {
-  display: block;
+.function-gender-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
 }
 
-.function-gender-metric strong {
-  margin-top: 3px;
-  color: var(--accent);
-  font-size: 20px;
-  line-height: 1;
-  font-weight: 900;
-}
-
-.function-ranking-list {
-  display: grid;
-  gap: 9px;
-}
-
-.function-ranking-row {
-  display: grid;
-  grid-template-columns: 86px minmax(44px, 1fr) 44px 54px;
-  gap: 10px;
-  align-items: center;
-  min-height: 34px;
-}
-
-.function-ranking-name {
-  min-width: 0;
-  line-height: 1.05;
-}
-
-.function-ranking-name strong {
-  display: block;
-  color: var(--accent);
+.function-gender-section-head strong,
+.function-gender-stat-label strong {
+  color: #94a3b8;
   font-size: 12px;
   font-weight: 900;
 }
 
-.function-ranking-bar {
-  height: 10px;
+.function-gender-section-head span,
+.function-gender-combo-badge {
+  color: #94a3b8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.function-gender-stat-list {
+  display: grid;
+  gap: 3px;
+}
+
+.function-gender-stat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 60px 60px;
+  gap: 10px;
+  align-items: center;
+  min-height: 28px;
+}
+
+.function-gender-stat-row.is-complexity {
+  grid-template-columns: 54px minmax(0, 1fr) 50px 54px;
+  gap: 8px;
+  min-height: 22px;
+}
+
+.function-gender-stat-label {
+  min-width: 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.function-gender-stat-row.is-complexity .function-gender-stat-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.function-gender-stat-bar {
+  height: 8px;
+  align-self: center;
   border-radius: 999px;
   background: rgba(226, 232, 240, 0.82);
   overflow: hidden;
 }
 
-.function-ranking-bar span {
+.function-gender-stat-bar span {
   display: block;
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, #88a4d8 0%, #6288cc 100%);
 }
 
-.function-gender-card.is-female .function-ranking-bar span {
+.function-gender-card.is-female .function-gender-stat-bar span {
   background: linear-gradient(90deg, #e8add1 0%, #d97eb4 100%);
 }
 
-.function-ranking-share,
-.function-ranking-yoy {
-  font-size: 12px;
-  font-weight: 900;
+.function-gender-stat-metric {
   color: #64748b;
+  font-size: 11px;
+  font-weight: 900;
   text-align: right;
   white-space: nowrap;
 }
 
-.function-ranking-yoy.is-positive,
-.function-gender-metric strong.is-positive {
+.function-gender-combo-list {
+  display: grid;
+  gap: 5px;
+}
+
+.function-gender-combo-item {
+  display: grid;
+  gap: 2px;
+}
+
+.function-gender-combo-label {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.function-gender-combo-label strong {
+  color: var(--accent);
+  font-size: 11px;
+  line-height: 1.15;
+}
+
+.function-gender-combo-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 50px 54px;
+  gap: 8px;
+  align-items: center;
+}
+
+.function-gender-stat-bar.is-combo {
+  height: 7px;
+}
+
+.function-gender-stat-metric.is-positive {
   color: #009a50;
 }
 
-.function-ranking-yoy.is-negative,
-.function-gender-metric strong.is-negative {
+.function-gender-stat-metric.is-negative {
   color: #ff2b2b;
 }
 

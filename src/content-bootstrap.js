@@ -186,9 +186,10 @@ function setupScrollState() {
 function bootstrapMarketScopePage() {
   const tableContainer = document.querySelector("#market-scope-brand-table");
   const bubbleContainer = document.querySelector("#market-scope-bubble-chart");
+  const bubbleRows = MARKET_SCOPE_BRAND_COMPARE.filter((row) => row.brand !== "DISCOVERY");
 
   renderBrandCompareTable(tableContainer, MARKET_SCOPE_BRAND_COMPARE);
-  renderMarketScopeBubbleChart(bubbleContainer, MARKET_SCOPE_BRAND_COMPARE);
+  renderMarketScopeBubbleChart(bubbleContainer, bubbleRows);
   setupMarketScopeInteractions();
 }
 

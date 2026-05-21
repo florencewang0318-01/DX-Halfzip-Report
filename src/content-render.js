@@ -37,8 +37,20 @@ function renderShareCell(label, value) {
   `;
 }
 
+function getDiscoverySkuNote(brand) {
+  return String(brand).toUpperCase().includes("DISCOVERY")
+    ? "(仅 4 SKU，Y24FW 仅 1 SKU)"
+    : "";
+}
+
 function renderMarketScopeBrandCell(brand) {
-  return `<div class="brand-name">${brand}</div>`;
+  const note = getDiscoverySkuNote(brand);
+  return `
+    <div class="brand-name">
+      <div class="market-scope-brand-main">${brand}</div>
+      ${note ? `<div class="market-scope-brand-sub">${note}</div>` : ""}
+    </div>
+  `;
 }
 
 function renderCompareColorCell(cell, toneClass, brandClass) {
@@ -275,7 +287,7 @@ export function renderBrandCompareTable(container, rows) {
     .map(
       (row) => `
         <tr
-          class="market-scope-row"
+          class="market-scope-row${row.brand === "DISCOVERY" ? " is-discovery" : ""}"
           data-brand="${row.brand}"
           data-share="${row.halfZipShareLabel}"
           data-yoy="${row.halfZipYoyLabel}"
@@ -327,7 +339,11 @@ function getGenderFillClass(gender) {
 }
 
 function renderGenderBreakdownBrand(row) {
-  return `<div class="gender-breakdown-brand-main">${row.brand}</div>`;
+  const note = getDiscoverySkuNote(row.brand);
+  return `
+    <div class="gender-breakdown-brand-main">${row.brand}</div>
+    ${note ? `<div class="gender-breakdown-brand-sub">${note}</div>` : ""}
+  `;
 }
 
 function getGenderLegendLabel(gender) {
@@ -343,6 +359,10 @@ function getGenderLegendLabel(gender) {
 }
 
 function renderGenderBreakdownYoy(row, cell, width) {
+  if (String(row.brand).toUpperCase().includes("DISCOVERY") && cell.gender === "女" && width >= 10) {
+    return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">new</span>`;
+  }
+
   if (width < 10) {
     return "";
   }

@@ -3400,11 +3400,7 @@ export function renderFunctionGenderSplit(container, groups) {
   if (!container) {
     return;
   }
-
-  const maxShare = Math.max(
-    ...groups.flatMap((group) => group.rows.map((row) => row.share)),
-    1
-  );
+  const isEnglish = document.body.dataset.lang === "en";
 
   container.innerHTML = groups
     .map(
@@ -3414,34 +3410,53 @@ export function renderFunctionGenderSplit(container, groups) {
             <div class="function-gender-title">${group.label}</div>
             <div class="function-gender-head-label">Share / YOY</div>
           </div>
-          <div class="function-gender-metrics">
-            <div class="function-gender-metric">
-              <span>TTL Function%</span>
-              <strong>${group.salesShareLabel}</strong>
-            </div>
-            <div class="function-gender-metric">
-              <span>TTL YOY%</span>
-              <strong class="${getYoyTone(group.yoyLabel)}">${group.yoyLabel}</strong>
-            </div>
-          </div>
-          <div class="function-ranking-list">
-            ${group.rows
-              .map(
-                (row) => `
-                  <div class="function-ranking-row">
-                    <div class="function-ranking-name">
-                      <strong>${row.label}</strong>
-                      <span>${row.labelEn}</span>
-                    </div>
-                    <div class="function-ranking-bar">
-                      <span style="width:${Math.max(4, (row.share / maxShare) * 100).toFixed(1)}%;"></span>
-                    </div>
-                    <div class="function-ranking-share">${row.shareLabel}</div>
-                    <div class="function-ranking-yoy ${getYoyTone(row.yoyLabel)}">${row.yoyLabel}</div>
-                  </div>
-                `
-              )
-              .join("")}
+          <div class="function-gender-stack">
+            <section class="function-gender-section">
+              <div class="function-gender-section-head">
+                <strong>${isEnglish ? "Function Mix" : "功能复合"}</strong>
+              </div>
+              <div class="function-gender-stat-list">
+                ${group.complexityRows
+                  .map(
+                    (row) => `
+                      <div class="function-gender-stat-row is-complexity">
+                        <div class="function-gender-stat-label">${row.shortLabel}</div>
+                        <div class="function-gender-stat-bar">
+                          <span style="width:${Math.max(4, row.share).toFixed(1)}%;"></span>
+                        </div>
+                        <div class="function-gender-stat-metric">${row.shareLabel}</div>
+                        <div class="function-gender-stat-metric ${getYoyTone(row.yoyLabel)}">${row.yoyLabel}</div>
+                      </div>
+                    `
+                  )
+                  .join("")}
+              </div>
+            </section>
+            <section class="function-gender-section">
+              <div class="function-gender-section-head">
+                <strong>${isEnglish ? "Suggested Mix" : "优先开发组合"}</strong>
+              </div>
+              <div class="function-gender-combo-list">
+                ${group.comboRows
+                  .map(
+                    (row) => `
+                      <div class="function-gender-combo-item">
+                        <div class="function-gender-combo-label">
+                          <strong>${isEnglish ? row.labelEn : row.label}</strong>
+                        </div>
+                        <div class="function-gender-combo-meta">
+                          <div class="function-gender-stat-bar is-combo">
+                            <span style="width:${Math.max(4, row.share).toFixed(1)}%;"></span>
+                          </div>
+                          <div class="function-gender-stat-metric">${row.shareLabel}</div>
+                          <div class="function-gender-stat-metric ${getYoyTone(row.yoyLabel)}">${row.yoyLabel}</div>
+                        </div>
+                      </div>
+                    `
+                  )
+                  .join("")}
+              </div>
+            </section>
           </div>
         </article>
       `
