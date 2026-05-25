@@ -107,6 +107,27 @@ function formatYoyLabel(value) {
   return `${rounded > 0 ? "+" : ""}${rounded.toLocaleString("en-US")}%`;
 }
 
+function formatMetricPercent(value, digits = 1) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "n/a";
+  }
+
+  return `${Number(value).toFixed(digits)}%`;
+}
+
+function formatSignedMetricPercent(value, digits = 1) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "n/a";
+  }
+
+  const numeric = Number(value);
+  if (numeric === 0) {
+    return `0.${"0".repeat(Math.max(0, digits - 1))}%`.replace(".%", "%");
+  }
+
+  return `${numeric > 0 ? "+" : ""}${numeric.toFixed(digits)}%`;
+}
+
 function getMarketScopeDisplayBrandName(brand) {
   if (brand === "lululemon/露露乐蒙") {
     return "LULULEMON/露露乐蒙";
@@ -368,8 +389,8 @@ export const FABRIC_CATEGORY_DEFINITIONS = [
     color: "#b0c3f0",
     functionConclusion: "功能承接最广泛",
     functionConclusionEn: "Broad function coverage",
-    textile: "表面无明显肌理和绒感，整体视觉光滑或平整",
-    textileEn: "Smooth, flat surface with no obvious texture or fuzz.",
+    textile: "表面无明显肌理和绒感，整体视觉光滑或平整，包含尼龙、氨纶混纺等表层面料",
+    textileEn: "Smooth, flat surface with no obvious texture or fuzz, including Nylon, Spandex, etc.",
     positioning: "运动功能层、日常舒适层、基础半拉链",
     positioningEn: "Base functional layer, daily comfort & basic offer.",
     sampleCount: 5,
@@ -685,6 +706,151 @@ function getFunctionBucketKeys(row) {
   return Array.from(keys);
 }
 
+const FUNCTION_BUCKET_BY_KEY = new Map(FUNCTION_BUCKETS.map((bucket) => [bucket.key, bucket]));
+const FUNCTION_COMPLEXITY_BUCKETS = [
+  { key: "1", label: "1个功能款", labelEn: "1 Function" },
+  { key: "2", label: "2个功能款", labelEn: "2 Functions" },
+  { key: "3", label: "3个功能款", labelEn: "3 Functions" },
+  { key: "4+", label: "3个以上功能款", labelEn: "3+ Functions" }
+];
+const FUNCTION_RECOMMENDED_COMBOS = {
+  男: {
+    two: [
+      ["quick-dry", "stretch"],
+      ["quick-dry", "lightweight"]
+    ],
+    three: [
+      ["quick-dry", "stretch", "antibacterial"],
+      ["quick-dry", "stretch", "lightweight"]
+    ]
+  },
+  女: {
+    two: [
+      ["quick-dry", "stretch"],
+      ["warmth", "stretch"],
+      ["stretch", "sun-protect"]
+    ],
+    three: [
+      ["quick-dry", "stretch", "breathable"]
+    ]
+  }
+};
+
+function formatFunctionComboLabel(keys, lang = "zh") {
+  return keys
+    .map((key) => {
+      const bucket = FUNCTION_BUCKET_BY_KEY.get(key);
+      return lang === "en" ? bucket?.labelEn ?? key : bucket?.label ?? key;
+    })
+    .join(" + ");
+}
+
+function getFunctionComplexityBucketKey(count) {
+  if (count >= 4) {
+    return "4+";
+  }
+
+  return String(count);
+}
+
+function summarizeFunctionComplexity(rows, gender) {
+  const filteredRows = rows.filter((row) => row["LS HZ Inner"] === TARGET_CATEGORY && (!gender || row.gender === gender));
+  const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
+  const bucketMap = new Map(FUNCTION_COMPLEXITY_BUCKETS.map((bucket) => [bucket.key, { ...bucket, gmv: 0, count: 0 }]));
+
+  filteredRows.forEach((row) => {
+    const functionCount = getFunctionBucketKeys(row).length;
+    if (!functionCount) {
+      return;
+    }
+
+    const bucketKey = getFunctionComplexityBucketKey(functionCount);
+    const current = bucketMap.get(bucketKey);
+    if (!current) {
+      return;
+    }
+
+    current.gmv += toNumber(row["销售额"]);
+    current.count += 1;
+  });
+
+  return {
+    totalGmv,
+    buckets: FUNCTION_COMPLEXITY_BUCKETS.map((bucket) => bucketMap.get(bucket.key))
+  };
+}
+
+function buildFunctionComplexityRows(current, previous) {
+  return current.buckets.map((bucket) => {
+    const previousBucket = previous.buckets.find((item) => item.key === bucket.key) ?? { gmv: 0 };
+    const share = current.totalGmv ? (bucket.gmv / current.totalGmv) * 100 : 0;
+    const yoy = computeYoy(bucket.gmv, previousBucket.gmv);
+    const shortLabelMap = {
+      "1": "1 Func",
+      "2": "2 Func",
+      "3": "3 Func",
+      "4+": "3+"
+    };
+
+    return {
+      key: bucket.key,
+      label: bucket.label,
+      labelEn: bucket.labelEn,
+      shortLabel: shortLabelMap[bucket.key] ?? bucket.labelEn,
+      share,
+      shareLabel: formatMetricPercent(share, 0),
+      yoy,
+      yoyLabel: previousBucket.gmv > 0 ? formatSignedMetricPercent(yoy, 0) : bucket.gmv > 0 ? "new" : "n/a"
+    };
+  });
+}
+
+function summarizeIncludedFunctionCombo(rows, gender, requiredKeys) {
+  const filteredRows = rows.filter((row) => row["LS HZ Inner"] === TARGET_CATEGORY && (!gender || row.gender === gender));
+  const totalGmv = filteredRows.reduce((sum, row) => sum + toNumber(row["销售额"]), 0);
+  let comboGmv = 0;
+  let comboCount = 0;
+
+  filteredRows.forEach((row) => {
+    const bucketKeys = getFunctionBucketKeys(row);
+    if (!requiredKeys.every((key) => bucketKeys.includes(key))) {
+      return;
+    }
+
+    comboGmv += toNumber(row["销售额"]);
+    comboCount += 1;
+  });
+
+  return {
+    totalGmv,
+    comboGmv,
+    comboCount
+  };
+}
+
+function buildIncludedFunctionComboRows(gender, comboGroups) {
+  return comboGroups.flatMap((group) =>
+    group.keys.map((comboKeys) => {
+      const current = summarizeIncludedFunctionCombo(LS_HZ_INNER_DATASET.raw.y25, gender, comboKeys);
+      const previous = summarizeIncludedFunctionCombo(LS_HZ_INNER_DATASET.raw.y24, gender, comboKeys);
+      const share = current.totalGmv ? (current.comboGmv / current.totalGmv) * 100 : 0;
+      const yoy = computeYoy(current.comboGmv, previous.comboGmv);
+
+      return {
+        tierKey: group.key,
+        tierLabel: group.label,
+        tierLabelEn: group.labelEn,
+        label: formatFunctionComboLabel(comboKeys, "zh"),
+        labelEn: formatFunctionComboLabel(comboKeys, "en"),
+        share,
+        shareLabel: formatMetricPercent(share, 0),
+        yoy,
+        yoyLabel: previous.comboGmv > 0 ? formatSignedMetricPercent(yoy, 0) : current.comboGmv > 0 ? "new" : "n/a"
+      };
+    })
+  );
+}
+
 function summarizeFunctionCoverage(rows, gender) {
   const filteredRows = rows.filter((row) => {
     if (row["LS HZ Inner"] !== TARGET_CATEGORY) {
@@ -966,22 +1132,24 @@ export const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.value
       halfZipGmv: 0
     };
 
-    const innerYoy = computeYoy(item.innerGmv, previous.innerGmv);
-    const halfZipYoy = computeYoy(item.halfZipGmv, previous.halfZipGmv);
+    const brand = getMarketScopeDisplayBrandName(item.brand);
+    const isDiscovery = brand === "DISCOVERY";
+    const innerYoy = isDiscovery ? null : computeYoy(item.innerGmv, previous.innerGmv);
+    const halfZipYoy = isDiscovery ? null : computeYoy(item.halfZipGmv, previous.halfZipGmv);
     const halfZipShareOfInner = item.innerGmv ? (item.halfZipGmv / item.innerGmv) * 100 : 0;
 
     return {
-      brand: getMarketScopeDisplayBrandName(item.brand),
+      brand,
       innerGmv25: item.innerGmv,
       innerGmv24: previous.innerGmv,
       innerYoy,
-      innerYoyLabel: formatPercent(innerYoy),
+      innerYoyLabel: isDiscovery ? "" : formatPercent(innerYoy),
       halfZipGmv25: item.halfZipGmv,
       halfZipGmv24: previous.halfZipGmv,
       halfZipShareOfInner,
       halfZipShareLabel: `${Math.round(halfZipShareOfInner)}%`,
       halfZipYoy,
-      halfZipYoyLabel: formatPercent(halfZipYoy)
+      halfZipYoyLabel: isDiscovery ? "" : formatPercent(halfZipYoy)
     };
   })
   .sort((a, b) => b.innerGmv25 - a.innerGmv25);
@@ -1062,6 +1230,7 @@ export const GENDER_BREAKDOWN_PRICE_BUBBLES = FEMALE_OPPORTUNITY_BRAND_GENDER.fl
     .filter(
       (cell) =>
         cell.gmv25 > 0 &&
+        !String(row.brand).toUpperCase().includes("DISCOVERY") &&
         !(row.brand === "DESCENTE/迪桑特" && cell.gender === "男女")
     )
     .map((cell) => ({
@@ -1156,25 +1325,31 @@ const FUNCTION_GENDER_COVERAGE_Y25 = FUNCTION_GENDER_KEYS.map((item) => ({
 }));
 
 export const FUNCTION_GENDER_SPLIT = FUNCTION_GENDER_COVERAGE_Y25.map((item) => {
-  const rows = buildFunctionRows(item.summary, item.previousSummary, item.summary.totalGmv).slice(0, 7);
-  const yoy = computeYoy(item.summary.totalGmv, item.previousSummary.totalGmv);
-  const share = item.summary.totalGmv ? (item.summary.functionGmv / item.summary.totalGmv) * 100 : 0;
+  const complexityRows = buildFunctionComplexityRows(
+    summarizeFunctionComplexity(LS_HZ_INNER_DATASET.raw.y25, item.gender),
+    summarizeFunctionComplexity(LS_HZ_INNER_DATASET.raw.y24, item.gender)
+  );
+  const comboRows = buildIncludedFunctionComboRows(item.gender, [
+    {
+      key: "two",
+      label: "2功能组合",
+      labelEn: "2-Function Combo",
+      keys: FUNCTION_RECOMMENDED_COMBOS[item.gender].two
+    },
+    {
+      key: "three",
+      label: "3功能组合",
+      labelEn: "3-Function Combo",
+      keys: FUNCTION_RECOMMENDED_COMBOS[item.gender].three
+    }
+  ]);
 
   return {
     gender: item.gender,
     label: item.label,
     className: item.className,
-    totalGmv25: item.summary.totalGmv,
-    totalGmv24: item.previousSummary.totalGmv,
-    totalCount25: item.summary.totalCount,
-    functionGmv25: item.summary.functionGmv,
-    functionGmv24: item.previousSummary.functionGmv,
-    functionCount25: item.summary.functionCount,
-    salesShare: share,
-    salesShareLabel: `${Math.round(share)}%`,
-    yoy,
-    yoyLabel: formatYoyLabel(yoy),
-    rows
+    complexityRows,
+    comboRows
   };
 });
 

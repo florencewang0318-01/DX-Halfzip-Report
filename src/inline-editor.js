@@ -82,7 +82,12 @@ function applyStoredEditsToNode(node, edits) {
   }
 
   const lang = document.body.dataset.lang === "en" ? "en" : "zh";
-  node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+  const nextValue = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+  if (node.dataset.rich === "true") {
+    node.innerHTML = nextValue;
+  } else {
+    node.textContent = nextValue;
+  }
 }
 
 function bindEditableNode(node, edits) {
@@ -106,6 +111,7 @@ function bindEditableNode(node, edits) {
     const key = computeEditableKey(node);
     const originalZh = node.dataset.zh || "";
     const originalEn = node.dataset.en || "";
+    const isRich = node.dataset.rich === "true";
 
     node.contentEditable = "true";
     node.classList.add("is-inline-editing");
@@ -122,15 +128,20 @@ function bindEditableNode(node, edits) {
       node.classList.remove("is-inline-editing");
 
       if (!commit) {
-        node.textContent = lang === "en" ? originalEn : originalZh;
+        const originalValue = lang === "en" ? originalEn : originalZh;
+        if (isRich) {
+          node.innerHTML = originalValue;
+        } else {
+          node.textContent = originalValue;
+        }
         return;
       }
 
-      const nextText = node.textContent.trim();
+      const nextValue = isRich ? node.innerHTML.trim() : node.textContent.trim();
       if (lang === "en") {
-        node.dataset.en = nextText;
+        node.dataset.en = nextValue;
       } else {
-        node.dataset.zh = nextText;
+        node.dataset.zh = nextValue;
       }
 
       edits[key] = {
@@ -138,7 +149,12 @@ function bindEditableNode(node, edits) {
         en: node.dataset.en || ""
       };
       saveInlineEdits(edits);
-      node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+      const renderValue = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+      if (isRich) {
+        node.innerHTML = renderValue;
+      } else {
+        node.textContent = renderValue;
+      }
     };
 
     const handleBlur = () => {

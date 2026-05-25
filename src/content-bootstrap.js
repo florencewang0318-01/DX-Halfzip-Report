@@ -186,9 +186,10 @@ function setupScrollState() {
 function bootstrapMarketScopePage() {
   const tableContainer = document.querySelector("#market-scope-brand-table");
   const bubbleContainer = document.querySelector("#market-scope-bubble-chart");
+  const bubbleRows = MARKET_SCOPE_BRAND_COMPARE.filter((row) => row.brand !== "DISCOVERY");
 
   renderBrandCompareTable(tableContainer, MARKET_SCOPE_BRAND_COMPARE);
-  renderMarketScopeBubbleChart(bubbleContainer, MARKET_SCOPE_BRAND_COMPARE);
+  renderMarketScopeBubbleChart(bubbleContainer, bubbleRows);
   setupMarketScopeInteractions();
 }
 
@@ -1876,7 +1877,13 @@ function setupLanguageSwitch() {
         return;
       }
 
-      node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+      const value = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+      if (node.dataset.rich === "true") {
+        node.innerHTML = value;
+        return;
+      }
+
+      node.textContent = value;
     });
 
     document.querySelectorAll(".silhouette-view-toggle").forEach((node) => {
