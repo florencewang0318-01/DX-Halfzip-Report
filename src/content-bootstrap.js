@@ -1877,7 +1877,13 @@ function setupLanguageSwitch() {
         return;
       }
 
-      node.textContent = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+      const value = lang === "en" ? node.dataset.en || "" : node.dataset.zh || "";
+      if (node.dataset.rich === "true") {
+        node.innerHTML = value;
+        return;
+      }
+
+      node.textContent = value;
     });
 
     document.querySelectorAll(".silhouette-view-toggle").forEach((node) => {
