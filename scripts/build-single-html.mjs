@@ -5,7 +5,7 @@ const rootDir = process.cwd();
 const srcDir = path.join(rootDir, "src");
 const distDir = path.join(rootDir, "dist");
 const distFile = path.join(distDir, "edited.single.html");
-const publishFile = path.join(rootDir, "DX Half-Zip Inner PPL for 27FW.html");
+const publishedFile = path.join(rootDir, "DX Half-Zip Inner PPL for 27FW.html");
 
 const templatePath = path.join(srcDir, "template.html");
 const stylesPath = path.join(srcDir, "styles.css");
@@ -51,10 +51,9 @@ async function build() {
 
   await mkdir(distDir, { recursive: true });
   await writeFile(distFile, finalHtml, "utf8");
-  await writeFile(publishFile, finalHtml, "utf8");
+  await writeFile(publishedFile, finalHtml, "utf8");
 
   console.log(`Built ${path.relative(rootDir, distFile)}`);
-  console.log(`Published ${path.relative(rootDir, publishFile)}`);
 }
 
 build().catch((error) => {
