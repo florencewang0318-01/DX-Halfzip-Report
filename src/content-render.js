@@ -397,7 +397,7 @@ function renderGenderBreakdownYoy(row, cell, width) {
     return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">${cell.yoyLabel}</span>`;
   }
 
-  if (String(row.brand).toUpperCase().includes("DISCOVERY") && cell.gender === "女" && width >= 10) {
+  if (row.brand !== "DISCOVERY_PLAN" && String(row.brand).toUpperCase().includes("DISCOVERY") && cell.gender === "女" && width >= 10) {
     return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">new</span>`;
   }
 
@@ -443,8 +443,8 @@ export function renderFemaleOpportunityGenderMatrix(container, rows) {
     {
       brand: "DISCOVERY_PLAN",
       cells: [
-        { gender: "女", share: 54, shareLabel: "54%", yoyLabel: "4 STY" },
-        { gender: "男", share: 46, shareLabel: "46%", yoyLabel: "3 STY" }
+        { gender: "女", share: 54, shareLabel: "54%", yoyLabel: "" },
+        { gender: "男", share: 46, shareLabel: "46%", yoyLabel: "" }
       ]
     }
   ];

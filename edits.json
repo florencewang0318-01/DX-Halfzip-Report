@@ -1,7 +1,31 @@
 {
+  "main#report.report[0]>section#competitor-scope.sheet.report-section[1]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[0]": {
+    "zh": "竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式，建议增加 DX 27FW 半拉链的款数至 15 STY。",
+    "en": "Across key competitors, half-zip long-sleeve style is growing faster than inner overall, making it a growth sub-segment worth close attention; suggested increase to 15 STY for DX 27FW."
+  },
+  "main#report.report[0]>section#competitor-scope.sheet.report-section[1]>div.page[0]>div.content-frame[0]>div.chart-grid.evidence-grid[1]>article.chart-panel.panel[0]>p.market-scope-table-note[0]": {
+    "zh": "(按内搭整体规模排序)",
+    "en": "(Sorted by TTL Inner GMV)"
+  },
+  "main#report.report[0]>section#female-opportunity.sheet.report-section[2]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[1]": {
+    "zh": "各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。",
+    "en": "Female styles are generally priced below male, with ATV mostly in the 600-1000RMB range, and ATV of male mostly in the 700-1200RMB range."
+  },
+  "main#report.report[0]>section#female-opportunity.sheet.report-section[2]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[2]": {
+    "zh": "DX 26FW 女款/男款半拉链订单金额占比为 54% : 46% (女4款，男3款)，基于DX超过80%的购买人群为女性，建议 27FW 女款占比增加到70%，更多侧重女性运营。",
+    "en": "DX 26FW half-zip order value split is 54% female (4 STY) / 46% male (3 STY); As over 80% of DX consumers are female, it is suggested to increase their share to 70% in 27FW and focus more on female-led operations."
+  },
   "main#report.report[0]>section#female-opportunity.sheet.report-section[2]>div.page[0]>div.content-frame[0]>div.chart-grid.evidence-grid[1]>article.chart-panel.panel[1]>h3.panel-title[0]": {
     "zh": "性别 x 成交价格 x 增长",
     "en": "Gender x Price x Growth"
+  },
+  "main#report.report[0]>section#silhouette.sheet.report-section[3]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[0]": {
+    "zh": "整体来看，女款 Slim × Regular 是最明确的主力廓形，Regular × Regular 增速快，短款衣长组合增速快但占比仍较小 (LULULEMON 女款中 Slim × Semi-Crop 占51%GMV，但主要驱动廓形为 Slim × Regular，YOY+1162%)。男款仍以 Regular × Regular为绝对核心，Active × Regular 增长迅速成为最强的廓形升级方向。",
+    "en": "Overall, female Slim × Regular is the core silhouette, with Regular × Regular growing fast and Semi-Crop still low-share (For LULULEMON, Although female Slim × Semi-Crop accounts for 51% GMV, Slim × Regular drives  growth at +1162%YOY). Male Regular × Regular remains the absolute core, while Active × Regular has become the strongest upgrade direction."
+  },
+  "main#report.report[0]>section#silhouette.sheet.report-section[3]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[1]": {
+    "zh": "26FW DX女款无 Slim × Regular 廓形，建议27FW新增并占比约50%，Regular × Regular 及 Slim × Semi-Crop 约25%。26FW DX男款全部为 Regular × Regular，建议新增 Active 版型约30%。",
+    "en": "DX 26FW female styles have no Slim × Regular silhouette; add it to around 50% in 27FW, with Regular × Regular and Slim × Semi-Crop at 25% each. All male styles are Regular × Regular in 26FW; add Active Fit to around 30% in 27FW."
   },
   "main#report.report[0]>section#silhouette.sheet.report-section[3]>div.page[0]>div.content-frame[0]>div.chart-grid.evidence-grid[1]>article.chart-panel.panel[0]>div.silhouette-structure-head[0]>div[0]>h3.panel-title[0]": {
     "zh": "Fit x Length结构矩阵",
@@ -12,20 +36,44 @@
     "en": "Gender x Silhouette x Growth"
   },
   "main#report.report[0]>section#function-scene.sheet.report-section[4]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>h2.section-title[0]": {
-    "zh": "弹力与速干为半拉链核心功能底盘，双功能成主流，三功能加速爆发",
-    "en": "Stretchable & Quick-Dry are core, with 2-Func Mainstream and 3-Func Surge"
+    "zh": "弹力与速干为半拉链核心功能底盘，多功能组合成主流",
+    "en": "Stretchable & Quick-Dry lead,  Multi-Function Becomes Mainstream"
+  },
+  "main#report.report[0]>section#function-scene.sheet.report-section[4]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[0]": {
+    "zh": "弹力和吸湿速干为两大核心刚需功能，在男女款中都具有高占比、高增长，女款对弹力功能需求更集中，男款则对吸湿速干需求更高。",
+    "en": "Stretchable and Quick-dry are 2 must-have functions, which all have high penetration with strong growth. Female show more focused demand for Stretchable, and Male show stronger demand for Quick-Dry."
   },
   "main#report.report[0]>section#function-scene.sheet.report-section[4]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[1]": {
-    "zh": "男女用户都不再满足单一功能，2项功能组合是当前需求主流，3项功能组合是最快升级方向；女性的多功能复合度相比男性略低。",
-    "en": "Both female and male expect multi-functions: 2 Func remain the base, 3 Func grow fast, while female show lower function complexity than male."
+    "zh": "男女用户都不再满足单一功能：双功能为主流，三功能爆发增长。女款功能组合增长机会点在弹力基础上叠加速干/保暖/防晒；男款功能组合机会点在吸湿速干或弹力的基础上叠加轻量化或抑菌防臭。",
+    "en": "Multi-functions are expected: 2-Func are mainstream, 3-Func grow fast. Female 2-Func growth lie in Stretchable+Quick-Dry/Warmth/Sunscreen; Male muti-func growth lie in Stretchable/Quick-Dry+Lightweight/Antibacterial."
   },
   "main#report.report[0]>section#function-scene.sheet.report-section[4]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[2]": {
-    "zh": "女款对弹力+吸湿速干核心组合的需求更集中、增长更高，机会点在核心功能基础上延展到防晒/保暖/透气；男款机会点则在弹力+吸湿速干与轻量化或抑菌防臭的组合。",
-    "en": "Female show stronger, more focused demand for Stretchable + Quick-Dry, with opportunities in added Warmth / Sunscreen / Breathability. Male's key chances lie in Lightweight or Antibacterial added combos."
+    "zh": "26FW DX女款包含50%STY吸湿速干功能，建议27FW新增弹力占比约80%，两者形成约60%双功能组合；26FW男款已全部包含吸湿速干，27FW建议新增弹力/轻量/抑菌防臭形成约40%双功能组合和约20%三功能组合。",
+    "en": "26FW DX female styles include 50%STY Quick-Dry; add Stretchable to ~80% and form ~60% 2-Func combo in 27FW. 26FW male styles already fully cover Quick-Dry; add Stretchable/Lightweight/Antibacterial to build ~40% 2-Func combos and ~20% 3-Func combos in 27FW."
   },
   "main#report.report[0]>section#function-scene.sheet.report-section[4]>div.page[0]>div.content-frame[0]>div.chart-grid.evidence-grid[1]>article.chart-panel.panel[1]>h3.panel-title[0]": {
     "zh": "男女性半拉链功能组合",
     "en": "Function Mix by Gender"
+  },
+  "main#report.report[0]>section#fabric-overview.sheet.report-section[5]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[1]": {
+    "zh": "增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。",
+    "en": "Growth comes from niche segments: Textured Fabric and Wool grow rapidly, with Wool being the premium upgrade. Both are better suited for brand image enhancement and differentiation than for driving overall volume."
+  },
+  "main#report.report[0]>section#fabric-overview.sheet.report-section[5]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[2]": {
+    "zh": "26FW DX 半拉链内搭均为光滑/平整面料，建议27FW光滑/平整面料占比约60%，拉绒/磨毛面料占比约30%，羊毛&肌理面料约10%。",
+    "en": "In 26FW, DX half-zip styles all use Smooth Fabrics, it is recommended to have around 60% Smooth, 30% Brushed and 10% Wool & Textured Fabrics in 27FW."
+  },
+  "main#report.report[0]>section#fabric-warmth-function.sheet.report-section[6]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>h2.section-title[0]": {
+    "zh": "光滑X加绒 和 拉绒X不加绒 增速快，羊毛面料功能复合度高",
+    "en": "Smooth X Fleece & Brushed X Non-Fleece Grow Fast, Wool Shows Strong Versatility"
+  },
+  "main#report.report[0]>section#fabric-warmth-function.sheet.report-section[6]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[0]": {
+    "zh": "从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。",
+    "en": "By inner layer, Non-Fleece overall remains the core and grows faster, while Fleece gains higher prices. However, growth varies: Smooth Fabric X Fleece grows faster, while Brushed Fabric X Non-Fleece shows stronger upgrade."
+  },
+  "main#report.report[0]>section#fabric-warmth-function.sheet.report-section[6]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>ul.section-bullets[0]>li[2]": {
+    "zh": "26FW DX 半拉链内搭中有57% STY为光滑/平整X加绒面料，建议27FW维持主盘占比约50%，同时增加约30%拉绒/磨毛X不加绒款式。",
+    "en": "DX 26FW half-zip styles are led by Smooth × Fleece at 57%; maintain it as the core in 27FW at around 50%, while adding 30% Brushed × Non-Fleece options."
   },
   "main#report.report[0]>section#fabric-warmth-function.sheet.report-section[6]>div.page[0]>div.content-frame[0]>div.chart-grid.evidence-grid[1]>article.chart-panel.panel[0]>h3.panel-title[0]": {
     "zh": "是否加绒 x 价格 x YOY%",
@@ -36,12 +84,20 @@
     "en": "Fabric x Function Matrix"
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>div.section-head.reveal[0]>div[0]>h2.section-title[0]": {
-    "zh": "27FW半拉链内搭：增加布局，女款扩容",
+    "zh": "27FW半拉链长袖内搭：增加布局，女款扩容",
     "en": "Strategies for 27FW Half-Zip: Increase Depth, Expand Female Styles"
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-overall[0]>div.strategy-pillar-head[0]>div[0]>h3.strategy-pillar-title[0]": {
     "zh": "整体策略",
     "en": "Overall Strategy"
+  },
+  "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-overall[0]>div.strategy-pillar-head[0]>div.strategy-pillar-metrics[1]>div.strategy-pillar-metric[0]>span[0]": {
+    "zh": "半拉链建议款数",
+    "en": "Suggested Half-Zip Style"
+  },
+  "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-overall[0]>div.strategy-pillar-modules.strategy-pillar-modules-overall[1]>div.strategy-pillar-module[0]>div.strategy-pillar-module-value[1]": {
+    "zh": "<span class=\"strategy-pillar-module-line\">50% 光滑/平整 × 加绒，10% 光滑/平整 × 不加绒</span><span class=\"strategy-pillar-module-line\">30% 拉绒/磨毛 × 不加绒，10% 羊毛 &amp; 肌理</span>",
+    "en": "<span class=\"strategy-pillar-module-line\">50% Smooth × Non-Fleece, 10% Smooth × Fleece</span><span class=\"strategy-pillar-module-line\">30% Brushed × Non-Fleece, 10% Wool &amp; Textured</span>"
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-overall[0]>div.strategy-pillar-modules.strategy-pillar-modules-overall[1]>div.strategy-pillar-module[1]>div.strategy-pillar-dual-copy[1]>div.strategy-pillar-mini-group[0]>div.strategy-pillar-mini-title[0]": {
     "zh": "基础细节 + 高端升级",
@@ -60,31 +116,35 @@
     "en": "Female Strategy"
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-female[1]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[0]>p.strategy-pillar-module-copy[0]": {
-    "zh": "女款半拉链应建立以修身感更强的主版型作为核心，再用常规版型补充增长，短款组合做小比例试验。",
-    "en": "Female half-zip should focus on Slim-Fit, then use Regular to support growth, try cropped length for small-scale test."
+    "zh": "女款半拉链应以修身X常规长度作为主版型，再用常规版型补充增长，降低修身X短款组合的比例。",
+    "en": "Female half-zip should focus on Slim-Fit, then use Regular to support growth, reduce share of Slim × Semi-Crop."
   },
-  "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-female[1]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[1]>div.strategy-pillar-module-value[1]": {
-    "zh": "<span class='strategy-pillar-module-line'>60% 2功能组合：吸湿速干+弹力</span><span class='strategy-pillar-module-line'>25% 3功能组合：吸湿速干+弹力+保暖/防晒/透气</span>",
-    "en": "<span class=\"strategy-pillar-module-line\">60% 2-Func: Quick-Dry + Stretchable</span><span class=\"strategy-pillar-module-line\">25% 3-Func: Quick-Dry + Stretchable + Warmth / Sunscreen / Breathable</span>"
+  "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-female[1]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[1]>div.strategy-pillar-module-value.strategy-pillar-module-value-split[1]": {
+    "zh": "<span class=\"strategy-pillar-module-line\">80% 弹力，50% 吸湿速干</span><span class=\"strategy-pillar-module-line\">60% 2功能组合：吸湿速干+弹力</span>",
+    "en": "<span class=\"strategy-pillar-module-line\">80% Stretchable, 50% Quick-Dry</span><span class=\"strategy-pillar-module-line\">60% 2-Func: Stretchable + Quick-Dry</span>"
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-female[1]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[1]>p.strategy-pillar-module-copy[0]": {
-    "zh": "27FW 应把女款功能主轴从单一保暖升级为以弹力 + 速干为核心，并叠加保暖、透气或抑菌，强化女款的功能复合度。",
-    "en": "For 27FW, female should upgrade from single warmth to Stretch + Quick-Dry as the core, then add Warmth, Breathable or Antibacterial to strengthen function mix."
+    "zh": "27FW DX女款应大力新增弹力功能，并以形成以弹力 + 吸湿速干为核心的双功能组合。",
+    "en": "Female styles need to expand Stretchable and build Stretchable + Quick-Dry as the core 2-Func combo."
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-male[2]>div.strategy-pillar-head[0]>div[0]>h3.strategy-pillar-title[0]": {
     "zh": "男款策略",
     "en": "Male Strategy"
   },
+  "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-male[2]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[0]>div.strategy-pillar-module-value[1]": {
+    "zh": "70% Regular × Regular，30% Active × Regular",
+    "en": "60% Regular × Regular, 40% Active × Regular"
+  },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-male[2]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[0]>p.strategy-pillar-module-copy[0]": {
-    "zh": "男款半拉链的廓形升级重点，是在常规合体稳盘基础上，明显增加 Active 运动版型占比承接增量",
+    "zh": "男款半拉链的廓形升级重点，是在常规合体稳盘基础上，明显增加 Active 运动版型占比承接增量。",
     "en": "Keep Regular silhouette as the base for male half-zip, while increasing the share of fast-growing Active Fit."
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-male[2]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[1]>div.strategy-pillar-module-value[1]": {
-    "zh": "<span class='strategy-pillar-module-line'>45% 2功能组合：吸湿速干+弹力/轻量</span><span class='strategy-pillar-module-line'>30% 3功能组合：吸湿速干+弹力+抑菌/保暖/轻量</span><span class='strategy-pillar-module-line'>15% 3+功能组合</span>",
-    "en": "<span class=\"strategy-pillar-module-line\">45% 2-Func: Quick-Dry + Stretchable / Lightweight</span><span class=\"strategy-pillar-module-line\">30% 3-Func: Quick-Dry + Stretchable + Antibacterial / Warmth / Lightweight;&nbsp;<span style=\"letter-spacing: -0.03em;\">15% 3+ Functions</span></span>"
+    "zh": "<span class=\"strategy-pillar-module-line\">40% 2功能组合：吸湿速干+弹力/轻量</span><span class=\"strategy-pillar-module-line\">20% 3功能组合：吸湿速干+弹力+抑菌/轻量</span>",
+    "en": "<span class=\"strategy-pillar-module-line\">40% 2-Func: Quick-Dry + Stretchable / Lightweight</span><span class=\"strategy-pillar-module-line\">20% 3-Func: Quick-Dry + Stretchable + Antibacterial / Lightweight</span>"
   },
   "main#report.report[0]>section#product-direction.sheet.report-section[14]>div.page[0]>div.content-frame[0]>section.strategy-main.reveal[0]>article.strategy-pillar-card.strategy-pillar-card-male[2]>div.strategy-pillar-modules.strategy-pillar-modules-gender[1]>div.strategy-pillar-module[1]>p.strategy-pillar-module-copy[0]": {
-    "zh": "27FW 应在保暖基础上补入弹力、速干与抑菌等核心功能，建立“基础双功能 + 升级三功能”的男款功能梯度。",
-    "en": "Increase male function mix by adding Stretchable, Quick-Dry or Antibacterial beyond Warmth, building '2-Func basics and 3-Func upgrades' structure."
+    "zh": "27FW DX男款应在吸湿速干基础上补入弹力、抑菌与轻量，建立“双功能为主流 + 三功能做升级”的功能结构。",
+    "en": "Increase male function mix by adding Stretchable,  Antibacterial or Lightweight beyond Quick-Dry, building '2-Func basics and 3-Func upgrades' structure."
   }
 }

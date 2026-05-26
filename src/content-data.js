@@ -726,12 +726,12 @@ const FUNCTION_RECOMMENDED_COMBOS = {
   },
   女: {
     two: [
-      ["quick-dry", "stretch"],
-      ["warmth", "stretch"],
+      ["stretch", "quick-dry"],
+      ["stretch", "warmth"],
       ["stretch", "sun-protect"]
     ],
     three: [
-      ["quick-dry", "stretch", "breathable"]
+      ["stretch", "quick-dry", "breathable"]
     ]
   }
 };

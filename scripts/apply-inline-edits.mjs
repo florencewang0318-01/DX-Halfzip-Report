@@ -20,16 +20,20 @@ function escapeText(value) {
     .replace(/>/g, "&gt;");
 }
 
+function toNodeContent(value, isRich) {
+  return isRich ? String(value) : escapeText(value);
+}
+
 function parseAttributes(rawTag) {
   const attrs = {};
-  const attrRegex = /([^\s=/>]+)(?:="([^"]*)")?/g;
+  const attrRegex = /([^\s=/>]+)(?:=(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
   let match;
   while ((match = attrRegex.exec(rawTag))) {
-    const [, name, value = ""] = match;
+    const [, name, doubleQuoted = "", singleQuoted = "", bareValue = ""] = match;
     if (name.startsWith("<") || name.startsWith("/")) {
       continue;
     }
-    attrs[name] = value;
+    attrs[name] = doubleQuoted || singleQuoted || bareValue;
   }
   return attrs;
 }
@@ -51,15 +55,60 @@ function buildPathSegment(tagName, attrs, siblingIndex) {
 
 function replaceAttribute(openTag, name, value) {
   const escaped = escapeAttr(value);
-  const attrPattern = new RegExp(`${name}="[^"]*"`);
+  const attrPattern = new RegExp(`${name}=(?:"[^"]*"|'[^']*')`);
   if (attrPattern.test(openTag)) {
     return openTag.replace(attrPattern, `${name}="${escaped}"`);
   }
   return openTag.replace(/>$/, ` ${name}="${escaped}">`);
 }
 
+function* iterateTags(html) {
+  let cursor = 0;
+
+  while (cursor < html.length) {
+    const start = html.indexOf("<", cursor);
+    if (start === -1) {
+      break;
+    }
+
+    if (html.startsWith("<!--", start)) {
+      const commentEnd = html.indexOf("-->", start + 4);
+      cursor = commentEnd === -1 ? html.length : commentEnd + 3;
+      continue;
+    }
+
+    let index = start + 1;
+    let quote = null;
+
+    while (index < html.length) {
+      const char = html[index];
+      if (quote) {
+        if (char === quote) {
+          quote = null;
+        }
+      } else if (char === '"' || char === "'") {
+        quote = char;
+      } else if (char === ">") {
+        break;
+      }
+      index += 1;
+    }
+
+    if (index >= html.length) {
+      break;
+    }
+
+    yield {
+      fullTag: html.slice(start, index + 1),
+      start,
+      end: index + 1
+    };
+
+    cursor = index + 1;
+  }
+}
+
 function collectEditableNodes(html) {
-  const tagRegex = /<\/?([a-zA-Z][\w:-]*)([^>]*)>/g;
   const root = {
     path: "",
     childCounters: new Map(),
@@ -67,19 +116,25 @@ function collectEditableNodes(html) {
   };
   const stack = [root];
   const nodes = [];
-  let match;
-
-  while ((match = tagRegex.exec(html))) {
-    const [fullTag, rawName, rawAttrs = ""] = match;
-    const tagName = rawName.toLowerCase();
+ 
+  for (const tag of iterateTags(html)) {
+    const { fullTag } = tag;
     const isClosing = fullTag.startsWith("</");
+    const tagMatch = isClosing
+      ? /^<\/([a-zA-Z][\w:-]*)/.exec(fullTag)
+      : /^<([a-zA-Z][\w:-]*)([\s\S]*?)\/?>$/.exec(fullTag);
+    if (!tagMatch) {
+      continue;
+    }
+    const tagName = tagMatch[1].toLowerCase();
+    const rawAttrs = isClosing ? "" : tagMatch[2] ?? "";
     const isVoid = /\/>$/.test(fullTag) || ["br", "img", "meta", "link", "input"].includes(tagName);
 
     if (isClosing) {
       while (stack.length > 1) {
         const current = stack.pop();
-        current.closeTagStart = match.index;
-        current.closeTagEnd = tagRegex.lastIndex;
+        current.closeTagStart = tag.start;
+        current.closeTagEnd = tag.end;
         if (current.tagName === tagName) {
           break;
         }
@@ -99,11 +154,11 @@ function collectEditableNodes(html) {
       tagName,
       path: nodePath,
       attrs,
-      openTagStart: match.index,
-      openTagEnd: tagRegex.lastIndex,
-      contentStart: tagRegex.lastIndex,
-      closeTagStart: tagRegex.lastIndex,
-      closeTagEnd: tagRegex.lastIndex,
+      openTagStart: tag.start,
+      openTagEnd: tag.end,
+      contentStart: tag.end,
+      closeTagStart: tag.end,
+      closeTagEnd: tag.end,
       hasChildTags: false,
       childCounters: new Map()
     };
@@ -147,6 +202,7 @@ async function main() {
     if (!node) {
       continue;
     }
+    const isRich = node.attrs["data-rich"] === "true";
 
     let nextOpenTag = html.slice(node.openTagStart, node.openTagEnd);
     nextOpenTag = replaceAttribute(nextOpenTag, "data-zh", patch.zh ?? node.attrs["data-zh"] ?? "");
@@ -157,13 +213,11 @@ async function main() {
       value: nextOpenTag
     });
 
-    if (!node.hasChildTags) {
-      replacements.push({
-        start: node.contentStart,
-        end: node.closeTagStart,
-        value: escapeText(patch.zh ?? "")
-      });
-    }
+    replacements.push({
+      start: node.contentStart,
+      end: node.closeTagStart,
+      value: toNodeContent(patch.zh ?? "", isRich)
+    });
 
     appliedCount += 1;
   }
