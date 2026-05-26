@@ -579,7 +579,7 @@ a {
 }
 
 .page-competitor-scope .evidence-grid.two-up {
-  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .page-gender-breakdown .chart-grid.emphasis-left {
@@ -691,7 +691,7 @@ a {
 }
 
 .page-competitor-scope .data-table-card {
-  max-width: 500px;
+  max-width: 620px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -707,9 +707,9 @@ a {
 }
 
 .market-scope-table-note {
-  margin: 6px auto 10px;
-  max-width: 500px;
-  width: 100%;
+  margin: 6px 0 10px;
+  max-width: none;
+  width: auto;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.4;
@@ -727,6 +727,28 @@ a {
   font-size: 13px;
 }
 
+.page-competitor-scope .brand-compare-table th:first-child,
+.page-competitor-scope .brand-compare-table td:first-child {
+  width: 31%;
+}
+
+.page-competitor-scope .brand-compare-table th:nth-child(2),
+.page-competitor-scope .brand-compare-table td:nth-child(2),
+.page-competitor-scope .brand-compare-table th:nth-child(5),
+.page-competitor-scope .brand-compare-table td:nth-child(5) {
+  width: 14%;
+}
+
+.page-competitor-scope .brand-compare-table th:nth-child(3),
+.page-competitor-scope .brand-compare-table td:nth-child(3) {
+  width: 10%;
+}
+
+.page-competitor-scope .brand-compare-table th:nth-child(4),
+.page-competitor-scope .brand-compare-table td:nth-child(4) {
+  width: 31%;
+}
+
 .brand-compare-table thead th {
   padding: 10px 10px 12px;
   border-bottom: 1px solid var(--line-strong);
@@ -742,8 +764,14 @@ a {
 
 .brand-compare-table thead th:nth-child(2),
 .brand-compare-table thead th:nth-child(3),
-.brand-compare-table thead th:nth-child(4) {
+.brand-compare-table thead th:nth-child(4),
+.brand-compare-table thead th:nth-child(5) {
   text-align: center;
+}
+
+.brand-compare-table thead th:nth-child(5) {
+  padding-left: 0;
+  padding-right: 10px;
 }
 
 .brand-compare-table tbody td {
@@ -759,6 +787,10 @@ a {
 
 .market-scope-row.is-discovery td {
   background: rgba(218, 232, 255, 0.34);
+}
+
+.market-scope-row.is-plan td {
+  background: rgba(236, 242, 255, 0.42);
 }
 
 .market-scope-row.is-dimmed {
@@ -804,12 +836,21 @@ a {
 
 .brand-compare-table td:nth-child(2),
 .brand-compare-table td:nth-child(3),
-.brand-compare-table td:nth-child(4) {
+.brand-compare-table td:nth-child(4),
+.brand-compare-table td:nth-child(5) {
   text-align: center;
 }
 
+.brand-compare-table td:nth-child(3) {
+  font-weight: 600;
+}
+
+.brand-compare-table td:nth-child(5) {
+  padding-right: 14px;
+}
+
 .brand-compare-table td.share-cell {
-  text-align: left;
+  text-align: center;
 }
 
 .compare-page .content-frame {
@@ -1488,48 +1529,6 @@ body[data-lang="en"] .compare-matrix-cell.tone-fabric .compare-cell-main {
   line-height: 1;
 }
 
-.strategy-pillar-metric-insight {
-  cursor: help;
-}
-
-.strategy-pillar-tooltip {
-  position: absolute;
-  top: calc(100% - 2px);
-  right: -34px;
-  z-index: 6;
-  width: 274px;
-  padding: 10px 11px;
-  border-radius: 12px;
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
-  color: #475569;
-  font-size: 11px;
-  line-height: 1.45;
-  text-align: left;
-  white-space: normal;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(4px);
-  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
-  pointer-events: none;
-}
-
-.strategy-pillar-tooltip strong {
-  font-weight: 800;
-  color: #334155;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-.strategy-pillar-metric-insight:hover .strategy-pillar-tooltip,
-.strategy-pillar-metric-insight:focus-within .strategy-pillar-tooltip,
-.strategy-pillar-metric-insight:focus .strategy-pillar-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
 .strategy-pillar-modules {
   display: grid;
   gap: 12px;
@@ -1581,6 +1580,11 @@ body[data-lang="en"] .compare-matrix-cell.tone-fabric .compare-cell-main {
   display: block;
 }
 
+.strategy-pillar-module-value-split {
+  gap: 8px;
+  align-content: start;
+}
+
 .strategy-pillar-module-copy,
 .strategy-pillar-mini-group p {
   margin: 8px 0 0;
@@ -1599,6 +1603,11 @@ body[data-lang="en"] .compare-matrix-cell.tone-fabric .compare-cell-main {
 
 .strategy-pillar-card-overall .strategy-pillar-module:nth-child(2) .strategy-pillar-module-label {
   color: #107e99;
+}
+
+.strategy-pillar-card-male .strategy-pillar-module:nth-child(1),
+.strategy-pillar-card-female .strategy-pillar-module:nth-child(1) {
+  min-height: 148px;
 }
 
 .strategy-pillar-card-male .strategy-pillar-module:nth-child(2) .strategy-pillar-module-label,
@@ -1968,18 +1977,25 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
   font-weight: 700;
 }
 
+.share-meter-stack {
+  display: grid;
+  gap: 4px;
+  width: max-content;
+  margin: 0 auto;
+}
+
 .share-meter {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 8px;
-  width: 100%;
+  width: max-content;
 }
 
 .share-meter-track {
   position: relative;
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 94px;
+  width: 94px;
   height: 12px;
   border-radius: 999px;
   background: linear-gradient(180deg, #edf1f7 0%, #e4eaf3 100%);
@@ -2003,6 +2019,34 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
   font-size: 13px;
   line-height: 1.2;
   white-space: nowrap;
+}
+
+.share-meter-note {
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--muted);
+  text-align: left;
+}
+
+.brand-compare-table td.share-cell.has-note {
+  position: relative;
+  vertical-align: middle;
+}
+
+.brand-compare-table td.share-cell.has-note .share-meter-stack {
+  position: relative;
+  overflow: visible;
+}
+
+.brand-compare-table td.share-cell.has-note .share-meter-note {
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 2px);
+  transform: translateX(-50%);
+  margin-top: 0;
+  white-space: nowrap;
+  width: 100%;
+  text-align: left;
 }
 
 .bubble-chart-wrap {
@@ -2266,7 +2310,7 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
 
 .gender-breakdown-rows {
   display: grid;
-  gap: 9px;
+  gap: 6px;
   padding: 12px 8px 0;
 }
 
@@ -2275,7 +2319,7 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
   grid-template-columns: 164px minmax(0, 1fr);
   column-gap: 18px;
   align-items: center;
-  padding: 5px 0 10px;
+  padding: 3px 0 7px;
   border-bottom: 1px solid rgba(226, 232, 240, 0.9);
 }
 
@@ -2302,10 +2346,20 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
   white-space: nowrap;
 }
 
+.gender-breakdown-brand-plan {
+  color: #9aa0aa;
+  font-weight: 700;
+}
+
 .market-scope-brand-main {
   font-weight: 700;
   font-size: 13px;
   white-space: nowrap;
+}
+
+.market-scope-brand-plan {
+  color: #9aa0aa;
+  font-weight: 700;
 }
 
 .market-scope-brand-sub {
@@ -2319,12 +2373,33 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
 .gender-breakdown-track {
   display: flex;
   width: 100%;
-  height: 40px;
+  height: 36px;
   border-radius: 8px;
   overflow: hidden;
   background: linear-gradient(180deg, #f5f7fa 0%, #eef2f6 100%);
   border: 1px solid rgba(223, 230, 240, 0.92);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.gender-breakdown-track-stack {
+  display: grid;
+  justify-items: start;
+  align-content: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.gender-breakdown-track-note {
+  margin-left: 0;
+  font-size: 10px;
+  line-height: 1.1;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: left;
+}
+
+.gender-breakdown-row.is-plan {
+  align-items: center;
 }
 
 .gender-segment {
@@ -2352,20 +2427,20 @@ body[data-lang="en"] .strategy-editorial-strip-block:nth-child(4) {
 
 .gender-segment-content {
   display: grid;
-  gap: 3px;
+  gap: 2px;
   place-items: center;
   line-height: 1;
   padding: 0 4px;
 }
 
 .gender-segment-share {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--accent);
 }
 
 .gender-segment-yoy-inline {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -6099,7 +6174,7 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
               <div class="section-kicker"><span class="section-badge">01</span><span>Competitor Scope</span></div>
               <h2 class="section-title" data-zh="半拉链长袖在竞品内搭中表现突出" data-en="Half-Zip Long-Sleeve Stands Out in Competitor Inner">半拉链长袖在竞品内搭中表现突出</h2>
               <ul class="section-bullets">
-                <li data-zh="竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式。" data-en="Across key competitors, half-zip long-sleeve style is growing faster than inner overall, making it a growth sub-segment worth close attention.">竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式。</li>
+                <li data-zh="竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式，建议增加 DX 27FW 半拉链的款数至 15 STY。" data-en="Across key competitors, half-zip long-sleeve style is growing faster than inner overall, making it a growth sub-segment worth close attention; suggested increase to 15 STY for DX 27FW.">竞品半拉链长袖内搭的增速高于其内搭整体的增速，是值得重点关注的增长型细分款式，建议增加 DX 27FW 半拉链的款数至 15 STY。</li>
                 <li data-zh="KAILAS、KOLON 在内搭整体中的半拉链长袖布局深度较大，DESCENTE、LULULEMON在该细分款式增长迅速。" data-en="KAILAS and KOLON show deeper half-zip penetration within total inner, while DESCENTE and LULULEMON are growing quickly in this sub-segment.">KAILAS、KOLON 在内搭整体中的半拉链长袖布局深度较大，DESCENTE、LULULEMON在该细分款式增长迅速。</li>
               </ul>
             </div>
@@ -6109,7 +6184,7 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
             <article class="chart-panel panel">
               <div class="chart-kicker">Competitor Overview</div>
               <h3 class="panel-title" data-zh="竞品半拉链表现总览" data-en="Brand Performance Overview">竞品半拉链表现总览</h3>
-              <p class="market-scope-table-note" data-zh="（按内搭整体规模排序）" data-en="(Sorted by TTL Inner GMV)">（按内搭整体规模排序）</p>
+              <p class="market-scope-table-note" data-zh="(按内搭整体规模排序)" data-en="(Sorted by TTL Inner GMV)">(按内搭整体规模排序)</p>
               <div id="market-scope-brand-table" class="data-table-card"></div>
             </article>
             <article class="chart-panel panel">
@@ -6137,6 +6212,7 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
               <ul class="section-bullets">
                 <li data-zh="关注竞品的半拉链长袖整体由男性主导，但女性增速高于男性：LULULEMON女款占比相对较高且增速快，DESCENTE、ARC'TERYX女款增速显著高于男款，KAILAS仍由男性绝对主导。" data-en="Across key competitors, half-zip long-sleeve inner is still male-led overall, but female growth is outpacing male: LULULEMON has a relatively high female share with rapid growth, DESCENTE and ARC'TERYX show female growth far above male, while KAILAS remains overwhelmingly male-led.">关注竞品的半拉链长袖整体由男性主导，但女性增速高于男性：LULULEMON女款占比相对较高且增速快，DESCENTE、ARC'TERYX女款增速显著高于男款，KAILAS仍由男性绝对主导。</li>
                 <li data-zh="各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。" data-en="Female styles are generally priced below male, with ATV mostly in the 600-1000RMB range, and ATV of male mostly in the 700-1200RMB range.">各竞品品牌女性款整体客单价低于男性款，在￥600-1000区间，男性款客单价在￥700-1200区间。</li>
+                <li data-zh="DX 26FW 女款/男款半拉链订单金额占比为 54% : 46% (女4款，男3款)，基于DX超过80%的购买人群为女性，建议 27FW 女款占比增加到70%，更多侧重女性运营。" data-en="DX 26FW half-zip order value split is 54% female (4 STY) / 46% male (3 STY); As over 80% of DX consumers are female, it is suggested to increase their share to 70% in 27FW and focus more on female-led operations.">DX 26FW 女款/男款半拉链订单金额占比为 54% : 46% (女4款，男3款)，基于DX超过80%的购买人群为女性，建议 27FW 女款占比增加到70%，更多侧重女性运营。</li>
               </ul>
             </div>
           </div>
@@ -6170,9 +6246,8 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
               <div class="section-kicker"><span class="section-badge">03</span><span>Silhouette</span></div>
               <h2 class="section-title" data-zh="女款修身/男款常规版型+常规衣长为核心，女款常规/男款运动版型增速快" data-en="Female Slim &amp; Male Regular Fits Lead, Female Regular &amp; Male Active Fits Grow Fast">女款修身/男款常规版型+常规衣长为核心，女款常规/男款运动版型增速快</h2>
               <ul class="section-bullets">
-                <li data-zh="常规衣长是绝对主盘，占比超过90%，廓形机会更多来自常规长度下不同Fit的分化。" data-en="Regular length remains the core at over 90%, showing that growth opportunity comes more from fit differentiation.">常规衣长是绝对主盘，占比超过90%，廓形机会更多来自常规长度下不同Fit的分化。</li>
-                <li data-zh="女款呈现多种廓形并行增长，Slim × Regular是女款最成熟、最明确的主力版型，Regular × Regular增长最快，短款衣长组合占比较低仍需观望。" data-en="Female styles grow across multiple silhouettes: Slim × Regular is the clearest core shape, Regular × Regular grows the fastest. However, semi-crop length remains low share but grows fast, suggesting a small-scale test.">女款呈现多种廓形并行增长，Slim × Regular是女款最成熟、最明确的主力版型，Regular × Regular增长最快，短款衣长组合占比较低仍需观望。</li>
-                <li data-zh="男款仍以Regular × Regular为绝对核心，Active × Regular 增长迅速成为男款扩张最强的结构升级方向。" data-en="Male styles are still anchored by Regular × Regular, while Active × Regular grows rapidly and has become the strongest upgrade direction.">男款仍以Regular × Regular为绝对核心，Active × Regular 增长迅速成为男款扩张最强的结构升级方向。</li>
+                <li data-zh="整体来看，女款 Slim × Regular 是最明确的主力廓形，Regular × Regular 增速快，短款衣长组合增速快但占比仍较小 (LULULEMON 女款中 Slim × Semi-Crop 占51%GMV，但主要驱动廓形为 Slim × Regular，YOY+1162%)。男款仍以 Regular × Regular为绝对核心，Active × Regular 增长迅速成为最强的廓形升级方向。" data-en="Overall, female Slim × Regular is the core silhouette, with Regular × Regular growing fast and Semi-Crop still low-share (For LULULEMON, Although female Slim × Semi-Crop accounts for 51% GMV, Slim × Regular drives  growth at +1162%YOY). Male Regular × Regular remains the absolute core, while Active × Regular has become the strongest upgrade direction.">整体来看，女款 Slim × Regular 是最明确的主力廓形，Regular × Regular 增速快，短款衣长组合增速快但占比仍较小 (LULULEMON 女款中 Slim × Semi-Crop 占51%GMV，但主要驱动廓形为 Slim × Regular，YOY+1162%)。男款仍以 Regular × Regular为绝对核心，Active × Regular 增长迅速成为最强的廓形升级方向。</li>
+                <li data-zh="26FW DX女款无 Slim × Regular 廓形，建议27FW新增并占比约50%，Regular × Regular 及 Slim × Semi-Crop 约25%。26FW DX男款全部为 Regular × Regular，建议新增 Active 版型约30%。" data-en="DX 26FW female styles have no Slim × Regular silhouette; add it to around 50% in 27FW, with Regular × Regular and Slim × Semi-Crop at 25% each. All male styles are Regular × Regular in 26FW; add Active Fit to around 30% in 27FW.">26FW DX女款无 Slim × Regular 廓形，建议27FW新增并占比约50%，Regular × Regular 及 Slim × Semi-Crop 约25%。26FW DX男款全部为 Regular × Regular，建议新增 Active 版型约30%。</li>
               </ul>
             </div>
           </div>
@@ -6209,11 +6284,11 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">04</span><span>Function</span></div>
-              <h2 class="section-title" data-zh="弹力与速干为半拉链核心功能底盘，双功能成主流，三功能加速爆发" data-en="Stretchable &amp; Quick-Dry are core, with 2-Func Mainstream and 3-Func Surge">弹力与速干为半拉链核心功能底盘，双功能成主流，三功能加速爆发</h2>
+              <h2 class="section-title" data-zh="弹力与速干为半拉链核心功能底盘，多功能组合成主流" data-en="Stretchable &amp; Quick-Dry lead,  Multi-Function Becomes Mainstream">弹力与速干为半拉链核心功能底盘，多功能组合成主流</h2>
               <ul class="section-bullets">
-                <li data-zh="整体来看，男性款和女性款半拉链长袖内搭的功能渗透率都在90%以上，弹力和吸湿速干为两大核心刚需功能，具有高占比、高增长。" data-en="Across both male and female styles, function penetration exceeds 90%. Stretchable and Quick-dry are the two must-have functions, which both have high penetration with strong growth.">整体来看，男性款和女性款半拉链长袖内搭的功能渗透率都在90%以上，弹力和吸湿速干为两大核心刚需功能，具有高占比、高增长。</li>
-                <li data-zh="男女用户都不再满足单一功能，2项功能组合是当前需求主流，3项功能组合是最快升级方向；女性的多功能复合度相比男性略低。" data-en="Both female and male expect multi-functions: 2 Func remain the base, 3 Func grow fast, while female show lower function complexity than male.">男女用户都不再满足单一功能，2项功能组合是当前需求主流，3项功能组合是最快升级方向；女性的多功能复合度相比男性略低。</li>
-                <li data-zh="女款对弹力+吸湿速干核心组合的需求更集中、增长更高，机会点在核心功能基础上延展到防晒/保暖/透气；男款机会点则在弹力+吸湿速干与轻量化或抑菌防臭的组合。" data-en="Female show stronger, more focused demand for Stretchable + Quick-Dry, with opportunities in added Warmth / Sunscreen / Breathability. Male's key chances lie in Lightweight or Antibacterial added combos.">女款对弹力+吸湿速干核心组合的需求更集中、增长更高，机会点在核心功能基础上延展到防晒/保暖/透气；男款机会点则在弹力+吸湿速干与轻量化或抑菌防臭的组合。</li>
+                <li data-zh="弹力和吸湿速干为两大核心刚需功能，在男女款中都具有高占比、高增长，女款对弹力功能需求更集中，男款则对吸湿速干需求更高。" data-en="Stretchable and Quick-dry are 2 must-have functions, which all have high penetration with strong growth. Female show more focused demand for Stretchable, and Male show stronger demand for Quick-Dry.">弹力和吸湿速干为两大核心刚需功能，在男女款中都具有高占比、高增长，女款对弹力功能需求更集中，男款则对吸湿速干需求更高。</li>
+                <li data-zh="男女用户都不再满足单一功能：双功能为主流，三功能爆发增长。女款功能组合增长机会点在弹力基础上叠加速干/保暖/防晒；男款功能组合机会点在吸湿速干或弹力的基础上叠加轻量化或抑菌防臭。" data-en="Multi-functions are expected: 2-Func are mainstream, 3-Func grow fast. Female 2-Func growth lie in Stretchable+Quick-Dry/Warmth/Sunscreen; Male muti-func growth lie in Stretchable/Quick-Dry+Lightweight/Antibacterial.">男女用户都不再满足单一功能：双功能为主流，三功能爆发增长。女款功能组合增长机会点在弹力基础上叠加速干/保暖/防晒；男款功能组合机会点在吸湿速干或弹力的基础上叠加轻量化或抑菌防臭。</li>
+                <li data-zh="26FW DX女款包含50%STY吸湿速干功能，建议27FW新增弹力占比约80%，两者形成约60%双功能组合；26FW男款已全部包含吸湿速干，27FW建议新增弹力/轻量/抑菌防臭形成约40%双功能组合和约20%三功能组合。" data-en="26FW DX female styles include 50%STY Quick-Dry; add Stretchable to ~80% and form ~60% 2-Func combo in 27FW. 26FW male styles already fully cover Quick-Dry; add Stretchable/Lightweight/Antibacterial to build ~40% 2-Func combos and ~20% 3-Func combos in 27FW.">26FW DX女款包含50%STY吸湿速干功能，建议27FW新增弹力占比约80%，两者形成约60%双功能组合；26FW男款已全部包含吸湿速干，27FW建议新增弹力/轻量/抑菌防臭形成约40%双功能组合和约20%三功能组合。</li>
               </ul>
             </div>
           </div>
@@ -6248,7 +6323,8 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
               <h2 class="section-title" data-zh="顺滑与绒感占据面料结构主盘，羊毛面料承接高端化升级" data-en="Smooth and Brushed Fabrics Dominate, Wool Supports Premium Upgrade">顺滑与绒感占据面料结构主盘，羊毛面料承接高端化升级</h2>
               <ul class="section-bullets">
                 <li data-zh="半拉链长袖内搭的面料结构由“基础顺滑表面”与“亲肤保暖绒感”主导，光滑/平整面料占据规模主盘，表面拉绒/磨毛面料占据第二。" data-en="Smooth and Brushed Fabrics are two main fabric types: half-zip with smooth surface accounts for the highest share, followed by brushed textile.">半拉链长袖内搭的面料结构由“基础顺滑表面”与“亲肤保暖绒感”主导，光滑/平整面料占据规模主盘，表面拉绒/磨毛面料占据第二。</li>
-                <li data-zh="增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。" data-en="Growth comes from niche segments: Textured Fabric and Wool grow rapidly, with Wool being the premium upgrade direction. Both are better suited for brand image enhancement and differentiation than for driving overall volume.">增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。</li>
+                <li data-zh="增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。" data-en="Growth comes from niche segments: Textured Fabric and Wool grow rapidly, with Wool being the premium upgrade. Both are better suited for brand image enhancement and differentiation than for driving overall volume.">增长亮点来自小基数升级方向：肌理面料、羊毛面料增长迅速，且羊毛是最明确的“高端化升级方向”，更适合作为形象升级与差异化开发，而非直接承担大盘规模。</li>
+                <li data-zh="26FW DX 半拉链内搭均为光滑/平整面料，建议27FW光滑/平整面料占比约60%，拉绒/磨毛面料占比约30%，羊毛&amp;肌理面料约10%。" data-en="In 26FW, DX half-zip styles all use Smooth Fabrics, it is recommended to have around 60% Smooth, 30% Brushed and 10% Wool &amp; Textured Fabrics in 27FW.">26FW DX 半拉链内搭均为光滑/平整面料，建议27FW光滑/平整面料占比约60%，拉绒/磨毛面料占比约30%，羊毛&amp;肌理面料约10%。</li>
               </ul>
             </div>
           </div>
@@ -6280,10 +6356,11 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">06</span><span>Fabric: Warmth &amp; Function</span></div>
-              <h2 class="section-title" data-zh="面料不加绒主导，羊毛面料功能复合度高" data-en="Non-Fleece Leads Overall, Wool Shows Strong Functional Versatility">面料不加绒主导，羊毛面料功能复合度高</h2>
+              <h2 class="section-title" data-zh="光滑X加绒 和 拉绒X不加绒 增速快，羊毛面料功能复合度高" data-en="Smooth X Fleece &amp; Brushed X Non-Fleece Grow Fast, Wool Shows Strong Versatility">光滑X加绒 和 拉绒X不加绒 增速快，羊毛面料功能复合度高</h2>
               <ul class="section-bullets">
-                <li data-zh="从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。" data-en="By inner structure, Non-Fleece overall remains the core and grows faster, while Fleece gains higher prices. However, growth varies by fabric type: Smooth Fabric X Fleece grows faster, while Brushed Fabric X Non-Fleece shows stronger upgrade.">从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。</li>
+                <li data-zh="从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。" data-en="By inner layer, Non-Fleece overall remains the core and grows faster, while Fleece gains higher prices. However, growth varies: Smooth Fabric X Fleece grows faster, while Brushed Fabric X Non-Fleece shows stronger upgrade.">从内里结构看，不加绒为主流结构且增速更快，加绒款承接更高价格，但不同面料结构呈现出不同的增长方向：光滑/平整面料X内里加绒增长相较不加绒更快，而拉绒/磨毛面料X不加绒表现出更强增长。</li>
                 <li data-zh="从功能承接看，光滑/平整面料的功能覆盖范围最广，拉绒/磨毛、肌理面料功能表达比较集中，而羊毛面料展现出最强的的功能复合度。" data-en="By functional positioning, Smooth Fabric carries more functions, Brushed &amp; Textured Fabrics show more focused functional claims, while Wool delivers the strongest function versatility.">从功能承接看，光滑/平整面料的功能覆盖范围最广，拉绒/磨毛、肌理面料功能表达比较集中，而羊毛面料展现出最强的的功能复合度。</li>
+                <li data-zh="26FW DX 半拉链内搭中有57% STY为光滑/平整X加绒面料，建议27FW维持主盘占比约50%，同时增加约30%拉绒/磨毛X不加绒款式。" data-en="DX 26FW half-zip styles are led by Smooth × Fleece at 57%; maintain it as the core in 27FW at around 50%, while adding 30% Brushed × Non-Fleece options.">26FW DX 半拉链内搭中有57% STY为光滑/平整X加绒面料，建议27FW维持主盘占比约50%，同时增加约30%拉绒/磨毛X不加绒款式。</li>
               </ul>
             </div>
           </div>
@@ -7225,7 +7302,7 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
           <div class="section-head reveal">
             <div>
               <div class="section-kicker"><span class="section-badge">14</span><span data-zh="Strategy" data-en="Strategy">Strategy</span></div>
-              <h2 class="section-title" data-zh="27FW半拉链内搭：增加布局，女款扩容" data-en="Strategies for 27FW Half-Zip: Increase Depth, Expand Female Styles">27FW半拉链内搭：增加布局，女款扩容</h2>
+              <h2 class="section-title" data-zh="27FW半拉链长袖内搭：增加布局，女款扩容" data-en="Strategies for 27FW Half-Zip: Increase Depth, Expand Female Styles">27FW半拉链长袖内搭：增加布局，女款扩容</h2>
             </div>
           </div>
 
@@ -7236,17 +7313,16 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
                   <h3 class="strategy-pillar-title" data-zh="整体策略" data-en="Overall Strategy">整体策略</h3>
                 </div>
                 <div class="strategy-pillar-metrics">
-                  <div class="strategy-pillar-metric strategy-pillar-metric-insight" tabindex="0">
-                    <span data-zh="半拉链占内搭建议比例" data-en="Suggested Half-Zip Share">半拉链占内搭建议比例</span>
-                    <strong><span class="strategy-pillar-metric-muted">6%</span><span class="strategy-pillar-metric-arrow">⟶</span>15%</strong>
-                    <div class="strategy-pillar-tooltip" data-rich="true" role="tooltip" data-zh="<strong>AI Insight：</strong>Discovery 25FW 半拉链在内搭中的布局深度仅 6%，明显偏低。结合竞品更深的布局表现，27FW 建议将半拉链在内搭中的布局深度提升至 15%，把半拉链从零散试水款升级为明确的小品类布局。" data-en="<strong>AI Insight:</strong> Discovery's half-zip depth within innerwear was only 6% in 25FW, which is clearly low. Based on deeper competitor layouts, 27FW should raise half-zip depth to 15%, upgrading it from scattered trial styles into a clearly defined sub-category."><strong>AI Insight：</strong>Discovery 25FW 半拉链在内搭中的布局深度仅 6%，明显偏低。结合竞品更深的布局表现，27FW 建议将半拉链在内搭中的布局深度提升至 15%，把半拉链从零散试水款升级为明确的小品类布局。</div>
+                  <div class="strategy-pillar-metric">
+                    <span data-zh="半拉链建议款数" data-en="Suggested Half-Zip Style">半拉链建议款数</span>
+                    <strong>15 STY</strong>
                   </div>
                 </div>
               </div>
               <div class="strategy-pillar-modules strategy-pillar-modules-overall">
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="面料与加绒结构" data-en="Fabric & Warmth">面料与加绒结构</div>
-                  <div class="strategy-pillar-module-value" data-zh="<span class='strategy-pillar-module-line'>30% 光滑/平整 × 不加绒，25% 光滑/平整 × 加绒</span><span class='strategy-pillar-module-line'>20% 拉绒/磨毛 × 不加绒</span>" data-en="<span class='strategy-pillar-module-line'>30% Smooth × Non-Fleece, 25% Smooth × Fleece</span><span class='strategy-pillar-module-line'>20% Brushed × Non-Fleece</span>" data-rich="true"><span class="strategy-pillar-module-line">30% 光滑/平整 × 不加绒，25% 光滑/平整 × 加绒</span><span class="strategy-pillar-module-line">20% 拉绒/磨毛 × 不加绒</span></div>
+                  <div class="strategy-pillar-module-value" data-zh="&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;50% 光滑/平整 × 加绒，10% 光滑/平整 × 不加绒&lt;/span&gt;&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;30% 拉绒/磨毛 × 不加绒，10% 羊毛 &amp;amp; 肌理&lt;/span&gt;" data-en="&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;50% Smooth × Non-Fleece, 10% Smooth × Fleece&lt;/span&gt;&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;30% Brushed × Non-Fleece, 10% Wool &amp;amp; Textured&lt;/span&gt;" data-rich="true"><span class="strategy-pillar-module-line">50% 光滑/平整 × 加绒，10% 光滑/平整 × 不加绒</span><span class="strategy-pillar-module-line">30% 拉绒/磨毛 × 不加绒，10% 羊毛 &amp; 肌理</span></div>
                   <p class="strategy-pillar-module-copy" data-zh="光滑/平整面料为主盘且加绒款增速更快，拉绒/磨毛 × 不加绒承接轻量保暖需求增长迅速，羊毛&肌理面料适合做小规模升级。" data-en="Smooth fabric remains the core and fleece grows faster; Brushed × Non-Fleece fits rising light-warm demand; Wool & Textured work for smaller-scale upgrades.">光滑/平整面料为主盘且加绒款增速更快，拉绒/磨毛 × 不加绒承接轻量保暖需求增长迅速，羊毛&肌理面料适合做小规模升级。</p>
                 </div>
                 <div class="strategy-pillar-module">
@@ -7268,13 +7344,12 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
             <article class="strategy-pillar-card strategy-pillar-card-female">
               <div class="strategy-pillar-head">
                 <div>
-                  <h3 class="strategy-pillar-title" data-zh="女款策略" data-en="Female Strategy">女款策略</h3>
+                  <h3 class="strategy-pillar-title" data-rich="true" data-zh="女款策略" data-en="Female<br>Strategy">女款策略</h3>
                 </div>
                 <div class="strategy-pillar-metrics">
-                  <div class="strategy-pillar-metric strategy-pillar-metric-insight" tabindex="0">
+                  <div class="strategy-pillar-metric">
                     <span data-zh="建议占比" data-en="Suggested Share">建议占比</span>
-                    <strong><span class="strategy-pillar-metric-muted">42%</span><span class="strategy-pillar-metric-arrow">⟶</span>60%</strong>
-                    <div class="strategy-pillar-tooltip" data-rich="true" role="tooltip" data-zh="<strong>AI Insight：</strong>考虑到 Discovery 品牌整体女性消费者占比已达约 80%，当前 42%女/58%男 的结构与品牌客群明显错位。27FW 建议调整至 60%女/40%男，以女款作为半拉链扩容的主方向，男款承担基础规模承接。" data-en="<strong>AI Insight:</strong> With female consumers accounting for around 80% of Discovery's overall customer base, the current 42% female / 58% male split is clearly misaligned with the brand's audience. For 27FW, the mix should shift to 60% female / 40% male, with female as the main growth direction and male covering base scale."><strong>AI Insight：</strong>考虑到 Discovery 品牌整体女性消费者占比已达约 80%，当前 42%女/58%男 的结构与品牌客群明显错位。27FW 建议调整至 60%女/40%男，以女款作为半拉链扩容的主方向，男款承担基础规模承接。</div>
+                    <strong>70%</strong>
                   </div>
                   <div class="strategy-pillar-metric">
                     <span data-zh="主推价位" data-en="Price Range">主推价位</span>
@@ -7285,13 +7360,13 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
               <div class="strategy-pillar-modules strategy-pillar-modules-gender">
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="核心版型" data-en="Core Silhouette">核心版型</div>
-                  <div class="strategy-pillar-module-value" data-zh="50% Slim × Regular，30% Regular × Regular" data-en="50% Slim × Regular, 30% Regular × Regular">50% Slim × Regular，30% Regular × Regular</div>
-                  <p class="strategy-pillar-module-copy" data-zh="女款半拉链应建立以修身感更强的主版型作为核心，再用常规版型补充增长，短款组合做小比例试验。" data-en="Female half-zip should focus on Slim-Fit, then use Regular to support growth, try cropped length for small-scale test.">女款半拉链应建立以修身感更强的主版型作为核心，再用常规版型补充增长，短款组合做小比例试验。</p>
+                  <div class="strategy-pillar-module-value strategy-pillar-module-value-split" data-rich="true" data-zh="&lt;span class='strategy-pillar-module-line'&gt;50% Slim × Regular，25% Regular × Regular&lt;/span&gt;&lt;span class='strategy-pillar-module-line'&gt;25% Slim × Semi-Crop&lt;/span&gt;" data-en="&lt;span class='strategy-pillar-module-line'&gt;50% Slim × Regular, 25% Regular × Regular&lt;/span&gt;&lt;span class='strategy-pillar-module-line'&gt;25% Slim × Semi-Crop&lt;/span&gt;"><span class='strategy-pillar-module-line'>50% Slim × Regular，25% Regular × Regular</span><span class='strategy-pillar-module-line'>25% Slim × Semi-Crop</span></div>
+                  <p class="strategy-pillar-module-copy" data-zh="女款半拉链应以修身X常规长度作为主版型，再用常规版型补充增长，降低修身X短款组合的比例。" data-en="Female half-zip should focus on Slim-Fit, then use Regular to support growth, reduce share of Slim × Semi-Crop.">女款半拉链应以修身X常规长度作为主版型，再用常规版型补充增长，降低修身X短款组合的比例。</p>
                 </div>
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="功能策略" data-en="Function Strategy">功能策略</div>
-                  <div class="strategy-pillar-module-value" data-rich="true" data-zh="<span class='strategy-pillar-module-line'>60% 2功能组合：吸湿速干+弹力</span><span class='strategy-pillar-module-line'>25% 3功能组合：吸湿速干+弹力+保暖/防晒/透气</span>" data-en="<span class='strategy-pillar-module-line'>60% 2-Func: Quick-Dry + Stretchable</span><span class='strategy-pillar-module-line'>25% 3-Func: Quick-Dry + Stretchable + Warmth / Sunscreen / Breathable</span>"><span class="strategy-pillar-module-line">60% 2功能组合：吸湿速干+弹力</span><span class="strategy-pillar-module-line">25% 3功能组合：吸湿速干+弹力+保暖/防晒/透气</span></div>
-                  <p class="strategy-pillar-module-copy" data-zh="27FW 应把女款功能主轴从单一保暖升级为以弹力 + 速干为核心，并叠加保暖、透气或抑菌，强化女款的功能复合度。" data-en="For 27FW, female should upgrade from single warmth to Stretchable + Quick-Dry as the core, then add Warmth, Breathable or Antibacterial to strengthen function mix.">27FW 应把女款功能主轴从单一保暖升级为以弹力 + 速干为核心，并叠加保暖、透气或抑菌，强化女款的功能复合度。</p>
+                  <div class="strategy-pillar-module-value strategy-pillar-module-value-split" data-rich="true" data-zh="&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;80% 弹力，50% 吸湿速干&lt;/span&gt;&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;60% 2功能组合：吸湿速干+弹力&lt;/span&gt;" data-en="&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;80% Stretchable, 50% Quick-Dry&lt;/span&gt;&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;60% 2-Func: Stretchable + Quick-Dry&lt;/span&gt;"><span class="strategy-pillar-module-line">80% 弹力，50% 吸湿速干</span><span class="strategy-pillar-module-line">60% 2功能组合：吸湿速干+弹力</span></div>
+                  <p class="strategy-pillar-module-copy" data-zh="27FW DX女款应大力新增弹力功能，并以形成以弹力 + 吸湿速干为核心的双功能组合。" data-en="Female styles need to expand Stretchable and build Stretchable + Quick-Dry as the core 2-Func combo.">27FW DX女款应大力新增弹力功能，并以形成以弹力 + 吸湿速干为核心的双功能组合。</p>
                 </div>
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="色彩语言" data-en="Suggested Color">色彩语言</div>
@@ -7315,13 +7390,12 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
             <article class="strategy-pillar-card strategy-pillar-card-male">
               <div class="strategy-pillar-head">
                 <div>
-                  <h3 class="strategy-pillar-title" data-zh="男款策略" data-en="Male Strategy">男款策略</h3>
+                  <h3 class="strategy-pillar-title" data-rich="true" data-zh="男款策略" data-en="Male<br>Strategy">男款策略</h3>
                 </div>
                 <div class="strategy-pillar-metrics">
-                  <div class="strategy-pillar-metric strategy-pillar-metric-insight" tabindex="0">
+                  <div class="strategy-pillar-metric">
                     <span data-zh="建议占比" data-en="Suggested Share">建议占比</span>
-                    <strong><span class="strategy-pillar-metric-muted">58%</span><span class="strategy-pillar-metric-arrow">⟶</span>40%</strong>
-                    <div class="strategy-pillar-tooltip" data-rich="true" role="tooltip" data-zh="<strong>AI Insight：</strong>考虑到 Discovery 品牌整体女性消费者占比已达约 80%，当前 42%女/58%男 的结构与品牌客群明显错位。27FW 建议调整至 60%女/40%男，以女款作为半拉链扩容的主方向，男款承担基础规模承接。" data-en="<strong>AI Insight:</strong> With female consumers accounting for around 80% of Discovery's overall customer base, the current 42% female / 58% male split is clearly misaligned with the brand's audience. For 27FW, the mix should shift to 60% female / 40% male, with female as the main growth direction and male covering base scale."><strong>AI Insight：</strong>考虑到 Discovery 品牌整体女性消费者占比已达约 80%，当前 42%女/58%男 的结构与品牌客群明显错位。27FW 建议调整至 60%女/40%男，以女款作为半拉链扩容的主方向，男款承担基础规模承接。</div>
+                    <strong>30%</strong>
                   </div>
                   <div class="strategy-pillar-metric">
                     <span data-zh="主推价位" data-en="Price Range">主推价位</span>
@@ -7332,13 +7406,13 @@ body.is-inline-editor-enabled [data-zh][data-en].is-inline-editing {
               <div class="strategy-pillar-modules strategy-pillar-modules-gender">
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="核心版型" data-en="Core Silhouette">核心版型</div>
-                  <div class="strategy-pillar-module-value" data-zh="60% Regular × Regular，40% Active × Regular" data-en="60% Regular × Regular, 40% Active × Regular">60% Regular × Regular，40% Active × Regular</div>
-                  <p class="strategy-pillar-module-copy" data-zh="男款半拉链的廓形升级重点，是在常规合体稳盘基础上，明显增加 Active 运动版型占比承接增量" data-en="Keep Regular silhouette as the base for male half-zip, while increasing the share of fast-growing Active Fit.">男款半拉链的廓形升级重点，是在常规合体稳盘基础上，明显增加 Active 运动版型占比承接增量</p>
+                  <div class="strategy-pillar-module-value" data-zh="70% Regular × Regular，30% Active × Regular" data-en="60% Regular × Regular, 40% Active × Regular">70% Regular × Regular，30% Active × Regular</div>
+                  <p class="strategy-pillar-module-copy" data-zh="男款半拉链的廓形升级重点，是在常规合体稳盘基础上，明显增加 Active 运动版型占比承接增量。" data-en="Keep Regular silhouette as the base for male half-zip, while increasing the share of fast-growing Active Fit.">男款半拉链的廓形升级重点，是在常规合体稳盘基础上，明显增加 Active 运动版型占比承接增量。</p>
                 </div>
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="功能策略" data-en="Function Strategy">功能策略</div>
-                  <div class="strategy-pillar-module-value" data-rich="true" data-zh="<span class='strategy-pillar-module-line'>45% 2功能组合：吸湿速干+弹力/轻量</span><span class='strategy-pillar-module-line'>30% 3功能组合：吸湿速干+弹力+抑菌/保暖/轻量，15% 3+功能组合</span>" data-en="<span class='strategy-pillar-module-line'>45% 2-Func: Quick-Dry + Stretchable / Lightweight</span><span class='strategy-pillar-module-line'>30% 3-Func: Quick-Dry + Stretchable + Antibacterial / Warmth / Lightweight; 15% 3+ Functions</span>"><span class="strategy-pillar-module-line">45% 2功能组合：吸湿速干+弹力/轻量</span><span class="strategy-pillar-module-line">30% 3功能组合：吸湿速干+弹力+抑菌/保暖/轻量，15% 3+功能组合</span></div>
-                  <p class="strategy-pillar-module-copy" data-zh="27FW 应在保暖基础上补入弹力、速干与抑菌等核心功能，建立“基础双功能 + 升级三功能”的男款功能梯度。" data-en="Increase male function mix by adding Stretchable, Quick-Dry or Antibacterial beyond Warmth, building '2-Func basics' and '3-Func upgrades' structure.">27FW 应在保暖基础上补入弹力、速干与抑菌等核心功能，建立“基础双功能 + 升级三功能”的男款功能梯度。</p>
+                  <div class="strategy-pillar-module-value" data-rich="true" data-zh="&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;40% 2功能组合：吸湿速干+弹力/轻量&lt;/span&gt;&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;20% 3功能组合：吸湿速干+弹力+抑菌/轻量&lt;/span&gt;" data-en="&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;40% 2-Func: Quick-Dry + Stretchable / Lightweight&lt;/span&gt;&lt;span class=&quot;strategy-pillar-module-line&quot;&gt;20% 3-Func: Quick-Dry + Stretchable + Antibacterial / Lightweight&lt;/span&gt;"><span class="strategy-pillar-module-line">40% 2功能组合：吸湿速干+弹力/轻量</span><span class="strategy-pillar-module-line">20% 3功能组合：吸湿速干+弹力+抑菌/轻量</span></div>
+                  <p class="strategy-pillar-module-copy" data-zh="27FW DX男款应在吸湿速干基础上补入弹力、抑菌与轻量，建立“双功能为主流 + 三功能做升级”的功能结构。" data-en="Increase male function mix by adding Stretchable,  Antibacterial or Lightweight beyond Quick-Dry.">27FW DX男款应在吸湿速干基础上补入弹力、抑菌与轻量，建立“双功能为主流 + 三功能做升级”的功能结构。</p>
                 </div>
                 <div class="strategy-pillar-module">
                   <div class="strategy-pillar-module-label" data-zh="色彩语言" data-en="Suggested Color">色彩语言</div>
@@ -8101,12 +8175,12 @@ const FUNCTION_RECOMMENDED_COMBOS = {
   },
   女: {
     two: [
-      ["quick-dry", "stretch"],
-      ["warmth", "stretch"],
+      ["stretch", "quick-dry"],
+      ["stretch", "warmth"],
       ["stretch", "sun-protect"]
     ],
     three: [
-      ["quick-dry", "stretch", "breathable"]
+      ["stretch", "quick-dry", "breathable"]
     ]
   }
 };
@@ -8512,6 +8586,7 @@ const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.values())
     const innerYoy = isDiscovery ? null : computeYoy(item.innerGmv, previous.innerGmv);
     const halfZipYoy = isDiscovery ? null : computeYoy(item.halfZipGmv, previous.halfZipGmv);
     const halfZipShareOfInner = item.innerGmv ? (item.halfZipGmv / item.innerGmv) * 100 : 0;
+    const brandSummary = HALFZIP_BRAND_SUMMARY_Y25.get(brand) ?? { count: 0 };
 
     return {
       brand,
@@ -8523,6 +8598,7 @@ const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.values())
       halfZipGmv24: previous.halfZipGmv,
       halfZipShareOfInner,
       halfZipShareLabel: `${Math.round(halfZipShareOfInner)}%`,
+      halfZipStyleCount: brandSummary.count,
       halfZipYoy,
       halfZipYoyLabel: isDiscovery ? "" : formatPercent(halfZipYoy)
     };
@@ -10333,32 +10409,41 @@ function getContentRenderLanguage() {
   return document.body?.dataset.lang === "en" ? "en" : "zh";
 }
 
-function renderShareCell(label, value) {
+function renderShareCell(label, value, note = "") {
   const safeValue = Math.max(0, Math.min(100, Math.round(value ?? 0)));
   const lang = getContentRenderLanguage();
   const ariaLabel = lang === "en" ? `Half-Zipper share in TTL Inner ${label}` : `半拉链占内搭总体 ${label}`;
 
   return `
-    <div class="share-meter" aria-label="${ariaLabel}">
-      <div class="share-meter-track">
-        <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
+    <div class="share-meter-stack" aria-label="${ariaLabel}">
+      <div class="share-meter">
+        <div class="share-meter-track">
+          <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
+        </div>
+        <span class="share-meter-value">${label}</span>
       </div>
-      <span class="share-meter-value">${label}</span>
+      ${note ? `<div class="share-meter-note">${note}</div>` : ""}
     </div>
   `;
 }
 
 function getDiscoverySkuNote(brand) {
-  return String(brand).toUpperCase().includes("DISCOVERY")
-    ? "(仅 4 SKU，Y24FW 仅 1 SKU)"
-    : "";
+  return "";
 }
 
 function renderMarketScopeBrandCell(brand) {
   const note = getDiscoverySkuNote(brand);
+  const isPlan = brand === "DISCOVERY_PLAN";
+  const displayBrand = String(brand).toUpperCase().includes("DISCOVERY") ? "Discovery 25FW" : brand;
   return `
     <div class="brand-name">
-      <div class="market-scope-brand-main">${brand}</div>
+      <div class="market-scope-brand-main">
+        ${
+          isPlan
+            ? `Discovery 26FW <span class="market-scope-brand-plan">(Plan)</span>`
+            : displayBrand
+        }
+      </div>
       ${note ? `<div class="market-scope-brand-sub">${note}</div>` : ""}
     </div>
   `;
@@ -10586,19 +10671,35 @@ function renderBrandCompareTable(container, rows) {
   const header = `
     <thead>
       <tr>
-        <th>${lang === "en" ? "Brand" : "品牌"}</th>
-        <th>${lang === "en" ? "TTL Inner<br>YOY%" : "内搭整体<br>YoY%"}</th>
-        <th>${lang === "en" ? "Half-Zipper%<br>In TTL Inner" : "半拉链占<br>内搭总体"}</th>
-        <th>${lang === "en" ? "Half-Zipper YOY%" : "半拉链<br>YoY%"}</th>
+        <th>Brand</th>
+        <th>Inner TTL<br>YOY%</th>
+        <th>ZT<br>STY</th>
+        <th>ZT GMV%<br>in TTL Inner</th>
+        <th>ZT<br>YOY%</th>
       </tr>
     </thead>
   `;
 
-  const body = rows
+  const rowsWithPlan = [
+    ...rows,
+    {
+      brand: "DISCOVERY_PLAN",
+      innerYoy: null,
+      innerYoyLabel: "",
+      halfZipStyleCount: 7,
+      halfZipShareOfInner: 32,
+      halfZipShareLabel: "32%",
+      halfZipShareNote: "(Order Value% in TTL Inner)",
+      halfZipYoy: null,
+      halfZipYoyLabel: ""
+    }
+  ];
+
+  const body = rowsWithPlan
     .map(
       (row) => `
         <tr
-          class="market-scope-row${row.brand === "DISCOVERY" ? " is-discovery" : ""}"
+          class="market-scope-row${row.brand === "DISCOVERY" ? " is-discovery" : ""}${row.brand === "DISCOVERY_PLAN" ? " is-plan" : ""}"
           data-brand="${row.brand}"
           data-share="${row.halfZipShareLabel}"
           data-yoy="${row.halfZipYoyLabel}"
@@ -10606,7 +10707,8 @@ function renderBrandCompareTable(container, rows) {
         >
           <td>${renderMarketScopeBrandCell(row.brand)}</td>
           <td class="${getMetricClass(row.innerYoy)}">${row.innerYoyLabel}</td>
-          <td class="metric-cell share-cell">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner)}</td>
+          <td class="metric-cell">${row.halfZipStyleCount}</td>
+          <td class="metric-cell share-cell${row.halfZipShareNote ? " has-note" : ""}">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner, row.halfZipShareNote ?? "")}</td>
           <td class="${getMetricClass(row.halfZipYoy)}">${row.halfZipYoyLabel}</td>
         </tr>
       `
@@ -10651,9 +10753,17 @@ function getGenderFillClass(gender) {
 
 function renderGenderBreakdownBrand(row) {
   const note = getDiscoverySkuNote(row.brand);
+  const isPlan = row.brand === "DISCOVERY_PLAN";
+  const displayBrand = String(row.brand).toUpperCase().includes("DISCOVERY") ? "DISCOVERY 25FW" : row.brand;
   return `
-    <div class="gender-breakdown-brand-main">${row.brand}</div>
-    ${note ? `<div class="gender-breakdown-brand-sub">${note}</div>` : ""}
+    <div class="gender-breakdown-brand-main">
+      ${
+        isPlan
+          ? `DISCOVERY 26FW <span class="gender-breakdown-brand-plan">(Plan)</span>`
+          : displayBrand
+      }
+    </div>
+    ${isPlan ? `<div class="gender-breakdown-brand-sub">(Order Value%)</div>` : note ? `<div class="gender-breakdown-brand-sub">${note}</div>` : ""}
   `;
 }
 
@@ -10670,8 +10780,16 @@ function getGenderLegendLabel(gender) {
 }
 
 function renderGenderBreakdownYoy(row, cell, width) {
-  if (String(row.brand).toUpperCase().includes("DISCOVERY") && cell.gender === "女" && width >= 10) {
+  if (row.brand === "DISCOVERY_PLAN" && cell.yoyLabel) {
+    return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">${cell.yoyLabel}</span>`;
+  }
+
+  if (row.brand !== "DISCOVERY_PLAN" && String(row.brand).toUpperCase().includes("DISCOVERY") && cell.gender === "女" && width >= 10) {
     return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">new</span>`;
+  }
+
+  if (!cell.yoyLabel) {
+    return "";
   }
 
   if (width < 10) {
@@ -10707,7 +10825,18 @@ function renderFemaleOpportunityGenderMatrix(container, rows) {
     </div>
   `;
 
-  const body = rows
+  const rowsWithPlan = [
+    ...rows,
+    {
+      brand: "DISCOVERY_PLAN",
+      cells: [
+        { gender: "女", share: 54, shareLabel: "54%", yoyLabel: "" },
+        { gender: "男", share: 46, shareLabel: "46%", yoyLabel: "" }
+      ]
+    }
+  ];
+
+  const body = rowsWithPlan
     .map((row) => {
       const orderedCells = ["女", "男", "男女"]
         .map((gender) => row.cells.find((cell) => cell.gender === gender))
@@ -10745,9 +10874,11 @@ function renderFemaleOpportunityGenderMatrix(container, rows) {
         .join("");
 
       return `
-        <div class="gender-breakdown-row">
+        <div class="gender-breakdown-row${row.brand === "DISCOVERY_PLAN" ? " is-plan" : ""}">
           <div class="gender-breakdown-brand">${renderGenderBreakdownBrand(row)}</div>
-          <div class="gender-breakdown-track">${segments}</div>
+          <div class="gender-breakdown-track-stack">
+            <div class="gender-breakdown-track">${segments}</div>
+          </div>
         </div>
       `;
     })

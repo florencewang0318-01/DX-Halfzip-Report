@@ -726,12 +726,12 @@ const FUNCTION_RECOMMENDED_COMBOS = {
   },
   女: {
     two: [
-      ["quick-dry", "stretch"],
-      ["warmth", "stretch"],
+      ["stretch", "quick-dry"],
+      ["stretch", "warmth"],
       ["stretch", "sun-protect"]
     ],
     three: [
-      ["quick-dry", "stretch", "breathable"]
+      ["stretch", "quick-dry", "breathable"]
     ]
   }
 };
@@ -1137,6 +1137,7 @@ export const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.value
     const innerYoy = isDiscovery ? null : computeYoy(item.innerGmv, previous.innerGmv);
     const halfZipYoy = isDiscovery ? null : computeYoy(item.halfZipGmv, previous.halfZipGmv);
     const halfZipShareOfInner = item.innerGmv ? (item.halfZipGmv / item.innerGmv) * 100 : 0;
+    const brandSummary = HALFZIP_BRAND_SUMMARY_Y25.get(brand) ?? { count: 0 };
 
     return {
       brand,
@@ -1148,6 +1149,7 @@ export const MARKET_SCOPE_BRAND_COMPARE = Array.from(BRAND_PERFORMANCE_Y25.value
       halfZipGmv24: previous.halfZipGmv,
       halfZipShareOfInner,
       halfZipShareLabel: `${Math.round(halfZipShareOfInner)}%`,
+      halfZipStyleCount: brandSummary.count,
       halfZipYoy,
       halfZipYoyLabel: isDiscovery ? "" : formatPercent(halfZipYoy)
     };
