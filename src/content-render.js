@@ -22,32 +22,41 @@ function getContentRenderLanguage() {
   return document.body?.dataset.lang === "en" ? "en" : "zh";
 }
 
-function renderShareCell(label, value) {
+function renderShareCell(label, value, note = "") {
   const safeValue = Math.max(0, Math.min(100, Math.round(value ?? 0)));
   const lang = getContentRenderLanguage();
   const ariaLabel = lang === "en" ? `Half-Zipper share in TTL Inner ${label}` : `半拉链占内搭总体 ${label}`;
 
   return `
-    <div class="share-meter" aria-label="${ariaLabel}">
-      <div class="share-meter-track">
-        <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
+    <div class="share-meter-stack" aria-label="${ariaLabel}">
+      <div class="share-meter">
+        <div class="share-meter-track">
+          <div class="share-meter-fill" style="width: ${safeValue}%;"></div>
+        </div>
+        <span class="share-meter-value">${label}</span>
       </div>
-      <span class="share-meter-value">${label}</span>
+      ${note ? `<div class="share-meter-note">${note}</div>` : ""}
     </div>
   `;
 }
 
 function getDiscoverySkuNote(brand) {
-  return String(brand).toUpperCase().includes("DISCOVERY")
-    ? "(仅 4 SKU，Y24FW 仅 1 SKU)"
-    : "";
+  return "";
 }
 
 function renderMarketScopeBrandCell(brand) {
   const note = getDiscoverySkuNote(brand);
+  const isPlan = brand === "DISCOVERY_PLAN";
+  const displayBrand = String(brand).toUpperCase().includes("DISCOVERY") ? "Discovery 25FW" : brand;
   return `
     <div class="brand-name">
-      <div class="market-scope-brand-main">${brand}</div>
+      <div class="market-scope-brand-main">
+        ${
+          isPlan
+            ? `Discovery 26FW <span class="market-scope-brand-plan">(Plan)</span>`
+            : displayBrand
+        }
+      </div>
       ${note ? `<div class="market-scope-brand-sub">${note}</div>` : ""}
     </div>
   `;
@@ -275,19 +284,35 @@ export function renderBrandCompareTable(container, rows) {
   const header = `
     <thead>
       <tr>
-        <th>${lang === "en" ? "Brand" : "品牌"}</th>
-        <th>${lang === "en" ? "TTL Inner<br>YOY%" : "内搭整体<br>YoY%"}</th>
-        <th>${lang === "en" ? "Half-Zipper%<br>In TTL Inner" : "半拉链占<br>内搭总体"}</th>
-        <th>${lang === "en" ? "Half-Zipper YOY%" : "半拉链<br>YoY%"}</th>
+        <th>Brand</th>
+        <th>Inner TTL<br>YOY%</th>
+        <th>ZT<br>STY</th>
+        <th>ZT GMV%<br>in TTL Inner</th>
+        <th>ZT<br>YOY%</th>
       </tr>
     </thead>
   `;
 
-  const body = rows
+  const rowsWithPlan = [
+    ...rows,
+    {
+      brand: "DISCOVERY_PLAN",
+      innerYoy: null,
+      innerYoyLabel: "",
+      halfZipStyleCount: 7,
+      halfZipShareOfInner: 32,
+      halfZipShareLabel: "32%",
+      halfZipShareNote: "(Order Value% in TTL Inner)",
+      halfZipYoy: null,
+      halfZipYoyLabel: ""
+    }
+  ];
+
+  const body = rowsWithPlan
     .map(
       (row) => `
         <tr
-          class="market-scope-row${row.brand === "DISCOVERY" ? " is-discovery" : ""}"
+          class="market-scope-row${row.brand === "DISCOVERY" ? " is-discovery" : ""}${row.brand === "DISCOVERY_PLAN" ? " is-plan" : ""}"
           data-brand="${row.brand}"
           data-share="${row.halfZipShareLabel}"
           data-yoy="${row.halfZipYoyLabel}"
@@ -295,7 +320,8 @@ export function renderBrandCompareTable(container, rows) {
         >
           <td>${renderMarketScopeBrandCell(row.brand)}</td>
           <td class="${getMetricClass(row.innerYoy)}">${row.innerYoyLabel}</td>
-          <td class="metric-cell share-cell">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner)}</td>
+          <td class="metric-cell">${row.halfZipStyleCount}</td>
+          <td class="metric-cell share-cell${row.halfZipShareNote ? " has-note" : ""}">${renderShareCell(row.halfZipShareLabel, row.halfZipShareOfInner, row.halfZipShareNote ?? "")}</td>
           <td class="${getMetricClass(row.halfZipYoy)}">${row.halfZipYoyLabel}</td>
         </tr>
       `
@@ -340,9 +366,17 @@ function getGenderFillClass(gender) {
 
 function renderGenderBreakdownBrand(row) {
   const note = getDiscoverySkuNote(row.brand);
+  const isPlan = row.brand === "DISCOVERY_PLAN";
+  const displayBrand = String(row.brand).toUpperCase().includes("DISCOVERY") ? "DISCOVERY 25FW" : row.brand;
   return `
-    <div class="gender-breakdown-brand-main">${row.brand}</div>
-    ${note ? `<div class="gender-breakdown-brand-sub">${note}</div>` : ""}
+    <div class="gender-breakdown-brand-main">
+      ${
+        isPlan
+          ? `DISCOVERY 26FW <span class="gender-breakdown-brand-plan">(Plan)</span>`
+          : displayBrand
+      }
+    </div>
+    ${isPlan ? `<div class="gender-breakdown-brand-sub">(Order Value%)</div>` : note ? `<div class="gender-breakdown-brand-sub">${note}</div>` : ""}
   `;
 }
 
@@ -359,8 +393,16 @@ function getGenderLegendLabel(gender) {
 }
 
 function renderGenderBreakdownYoy(row, cell, width) {
+  if (row.brand === "DISCOVERY_PLAN" && cell.yoyLabel) {
+    return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">${cell.yoyLabel}</span>`;
+  }
+
   if (String(row.brand).toUpperCase().includes("DISCOVERY") && cell.gender === "女" && width >= 10) {
     return `<span class="gender-cell-yoy is-neutral gender-segment-yoy-inline">new</span>`;
+  }
+
+  if (!cell.yoyLabel) {
+    return "";
   }
 
   if (width < 10) {
@@ -396,7 +438,18 @@ export function renderFemaleOpportunityGenderMatrix(container, rows) {
     </div>
   `;
 
-  const body = rows
+  const rowsWithPlan = [
+    ...rows,
+    {
+      brand: "DISCOVERY_PLAN",
+      cells: [
+        { gender: "女", share: 54, shareLabel: "54%", yoyLabel: "4 STY" },
+        { gender: "男", share: 46, shareLabel: "46%", yoyLabel: "3 STY" }
+      ]
+    }
+  ];
+
+  const body = rowsWithPlan
     .map((row) => {
       const orderedCells = ["女", "男", "男女"]
         .map((gender) => row.cells.find((cell) => cell.gender === gender))
@@ -434,9 +487,11 @@ export function renderFemaleOpportunityGenderMatrix(container, rows) {
         .join("");
 
       return `
-        <div class="gender-breakdown-row">
+        <div class="gender-breakdown-row${row.brand === "DISCOVERY_PLAN" ? " is-plan" : ""}">
           <div class="gender-breakdown-brand">${renderGenderBreakdownBrand(row)}</div>
-          <div class="gender-breakdown-track">${segments}</div>
+          <div class="gender-breakdown-track-stack">
+            <div class="gender-breakdown-track">${segments}</div>
+          </div>
         </div>
       `;
     })
