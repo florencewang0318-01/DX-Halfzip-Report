@@ -1,5 +1,10 @@
 :root {
   --page-inner-width: 1360px;
+  --page-fit-width: 1480px;
+  --page-fit-height: 832.5px;
+  --page-fit-scale: 1;
+  --page-fit-shell-width: 1480px;
+  --page-fit-shell-height: 832.5px;
   --page-inner-pad-x: 28px;
   --page-inner-pad-top: 30px;
   --page-inner-pad-bottom: 18px;
@@ -355,6 +360,12 @@ a {
   flex-direction: column;
 }
 
+.page-fit-shell {
+  width: 100%;
+  max-width: var(--page-fit-width);
+  margin: 0 auto;
+}
+
 .page {
   max-width: 1480px;
   width: 100%;
@@ -383,6 +394,31 @@ a {
 .cover-page .page {
   background: #1a2139;
   border-color: #1b2442;
+}
+
+body.page-fit-mode .sheet {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+body.page-fit-mode .page-fit-shell {
+  position: relative;
+  width: var(--page-fit-shell-width);
+  max-width: none;
+  height: var(--page-fit-shell-height);
+}
+
+body.page-fit-mode .page-fit-shell > .page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--page-fit-width);
+  max-width: none;
+  height: var(--page-fit-height);
+  margin: 0;
+  aspect-ratio: auto;
+  transform: scale(var(--page-fit-scale));
+  transform-origin: top left;
 }
 
 .cover-page-shell {
@@ -5994,6 +6030,63 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
   }
 }
 
+body.page-fit-mode .two-up,
+body.page-fit-mode .page-competitor-scope .evidence-grid.two-up {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.page-fit-mode .page-gender-breakdown .chart-grid.emphasis-left {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+body.page-fit-mode .emphasis-left {
+  grid-template-columns: 1.4fr 0.8fr;
+}
+
+body.page-fit-mode .emphasis-right {
+  grid-template-columns: 0.8fr 1.4fr;
+}
+
+body.page-fit-mode .board-layout {
+  grid-template-columns: 1.35fr 0.9fr;
+}
+
+body.page-fit-mode .compare-main {
+  grid-template-columns: minmax(0, 1.92fr) minmax(260px, 0.64fr);
+}
+
+body.page-fit-mode .compare-radar-chart {
+  height: 100%;
+}
+
+body.page-fit-mode #product-direction .strategy-main {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.page-fit-mode .strategy-main {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.page-fit-mode .strategy-pillar-head {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+body.page-fit-mode .strategy-pillar-metrics {
+  justify-content: flex-end;
+}
+
+body.page-fit-mode .competitor-layout-two {
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 0.94fr) minmax(0, 0.94fr);
+}
+
+body.page-fit-mode .competitor-layout-three {
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 0.9fr);
+}
+
+body.page-fit-mode .page-competitor-scope .data-table-card {
+  max-width: 620px;
+}
+
 @media print {
   .topbar,
   .scroll-progress {
@@ -6004,9 +6097,19 @@ article[data-brand="LULULEMON/露露乐蒙"] .competitor-fit-list.is-filled {
     padding: 0;
   }
 
+  .page-fit-shell {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+  }
+
   .page {
     aspect-ratio: auto !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
     height: auto;
+    transform: none !important;
     overflow: visible;
     border: none;
     border-radius: 0;

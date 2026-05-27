@@ -18,6 +18,11 @@ function computeEditableKey(node) {
   const segments = [];
   let current = node;
   while (current && current !== document.body) {
+    if (current.dataset.inlineKeySkip === "true") {
+      current = current.parentElement;
+      continue;
+    }
+
     const parent = current.parentElement;
     const siblings = parent ? Array.from(parent.children).filter((child) => child.tagName === current.tagName) : [];
     const index = siblings.indexOf(current);
