@@ -10537,13 +10537,13 @@ function getDiscoverySkuNote(brand) {
 function renderMarketScopeBrandCell(brand) {
   const note = getDiscoverySkuNote(brand);
   const isPlan = brand === "DISCOVERY_PLAN";
-  const displayBrand = String(brand).toUpperCase().includes("DISCOVERY") ? "Discovery 25FW" : brand;
+  const displayBrand = String(brand).toUpperCase().includes("DISCOVERY") ? "DISCOVERY 25FW" : brand;
   return `
     <div class="brand-name">
       <div class="market-scope-brand-main">
         ${
           isPlan
-            ? `Discovery 26FW <span class="market-scope-brand-plan">(Plan)</span>`
+            ? `DISCOVERY 26FW <span class="market-scope-brand-plan">(Plan)</span>`
             : displayBrand
         }
       </div>
