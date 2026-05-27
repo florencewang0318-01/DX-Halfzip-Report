@@ -46,6 +46,93 @@ import {
 const SECTION_SELECTOR = ".report-section[id]";
 const GENDER_BREAKDOWN_SELECTOR = "#female-opportunity";
 const ALL_GENDERS = ["女", "男", "男女"];
+const MOBILE_LAYOUT_MAX_WIDTH = 960;
+const PAGE_DESIGN_WIDTH = 1480;
+const PAGE_DESIGN_HEIGHT = PAGE_DESIGN_WIDTH / (16 / 9);
+const PAGE_FIT_SHELL_SELECTOR = ".page-fit-shell";
+
+let pageFitResizeFrame = 0;
+
+function ensurePageFitShells() {
+  document.querySelectorAll(".sheet.report-section > .page").forEach((page) => {
+    const parent = page.parentElement;
+    if (!(parent instanceof HTMLElement)) {
+      return;
+    }
+
+    if (parent.matches(PAGE_FIT_SHELL_SELECTOR)) {
+      return;
+    }
+
+    const shell = document.createElement("div");
+    shell.className = "page-fit-shell";
+    shell.dataset.inlineKeySkip = "true";
+    parent.insertBefore(shell, page);
+    shell.appendChild(page);
+  });
+}
+
+function updatePageFitLayout() {
+  const body = document.body;
+  const root = document.documentElement;
+  if (!(body instanceof HTMLBodyElement)) {
+    return;
+  }
+
+  const firstSection = document.querySelector(".sheet.report-section");
+  if (!(firstSection instanceof HTMLElement)) {
+    return;
+  }
+
+  const shouldUseFitMode = window.innerWidth > MOBILE_LAYOUT_MAX_WIDTH;
+  body.classList.toggle("page-fit-mode", shouldUseFitMode);
+
+  if (!shouldUseFitMode) {
+    root.style.setProperty("--page-fit-scale", "1");
+    root.style.setProperty("--page-fit-shell-width", `${PAGE_DESIGN_WIDTH}px`);
+    root.style.setProperty("--page-fit-shell-height", `${PAGE_DESIGN_HEIGHT}px`);
+    return;
+  }
+
+  const sectionStyles = window.getComputedStyle(firstSection);
+  const paddingLeft = Number.parseFloat(sectionStyles.paddingLeft) || 0;
+  const paddingRight = Number.parseFloat(sectionStyles.paddingRight) || 0;
+  const availableWidth = Math.max(0, firstSection.clientWidth - paddingLeft - paddingRight);
+  const scale = Math.min(1, availableWidth / PAGE_DESIGN_WIDTH);
+
+  root.style.setProperty("--page-fit-scale", scale.toFixed(4));
+  root.style.setProperty("--page-fit-shell-width", `${(PAGE_DESIGN_WIDTH * scale).toFixed(2)}px`);
+  root.style.setProperty("--page-fit-shell-height", `${(PAGE_DESIGN_HEIGHT * scale).toFixed(2)}px`);
+}
+
+function queuePageFitLayoutUpdate() {
+  if (pageFitResizeFrame) {
+    window.cancelAnimationFrame(pageFitResizeFrame);
+  }
+
+  pageFitResizeFrame = window.requestAnimationFrame(() => {
+    updatePageFitLayout();
+    pageFitResizeFrame = 0;
+  });
+}
+
+function setupPageFitLayout() {
+  ensurePageFitShells();
+  queuePageFitLayoutUpdate();
+
+  window.addEventListener("resize", queuePageFitLayoutUpdate, { passive: true });
+  window.addEventListener("orientationchange", queuePageFitLayoutUpdate);
+
+  if ("ResizeObserver" in window) {
+    const report = document.querySelector("#report");
+    if (report instanceof HTMLElement) {
+      const observer = new ResizeObserver(() => {
+        queuePageFitLayoutUpdate();
+      });
+      observer.observe(report);
+    }
+  }
+}
 
 function getTopbarHeight() {
   const topbar = document.querySelector("#topbar");
@@ -1346,13 +1433,14 @@ function createMarketScopeTooltipContent(target) {
   const brand = rawBrand.split("/")[0];
   const share = target.dataset.share ?? "n/a";
   const yoy = target.dataset.yoy ?? "n/a";
+  const shouldShowYoy = rawBrand !== "DISCOVERY" && rawBrand !== "DISCOVERY_PLAN";
   const yoyClass =
     yoy === "n/a" ? "is-neutral" : yoy.startsWith("+") ? "is-positive" : yoy.startsWith("-") ? "is-negative" : "is-neutral";
 
   return `
     <div class="gender-breakdown-tooltip-title">${brand}</div>
     <div class="gender-breakdown-tooltip-line">% in inner TTL <strong>${share}</strong></div>
-    <div class="gender-breakdown-tooltip-line">Half-zip YOY <strong class="${yoyClass}">${yoy}</strong></div>
+    ${shouldShowYoy ? `<div class="gender-breakdown-tooltip-line">Half-zip YOY <strong class="${yoyClass}">${yoy}</strong></div>` : ""}
   `;
 }
 
@@ -1940,6 +2028,7 @@ window.addEventListener("DOMContentLoaded", () => {
     history.replaceState(null, "", window.location.pathname + window.location.search);
   }
 
+  setupPageFitLayout();
   setupLanguageSwitch();
   setupNavigation();
   setupRevealEffects();
